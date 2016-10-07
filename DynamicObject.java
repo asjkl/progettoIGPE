@@ -9,5 +9,5 @@ public interface DynamicObject extends StaticObject {
 
 	int getHealth();
 
-	void update();
+	void update(); //update
 }
