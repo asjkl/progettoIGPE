@@ -10,4 +10,6 @@ public interface DynamicObject extends StaticObject {
 	int getHealth();
 
 	void update(); //update
+	
+	void destroy();
 }

@@ -39,21 +39,17 @@ public class Rocket extends AbstractDynamicObject {
 			getWorld().world[getX()][getY()] = curr;
 			setRocket(null);
 			
-			if(next instanceof BrickWall)
-				if(((BrickWall) next).getHealth() == 0)
-					destroyWall();
-			
-			if(next instanceof SteelWall)
-				if(((SteelWall) next).getHealth() == 0)
-					destroyWall();
+			if(next instanceof Wall)
+				if(((Wall) next).getHealth() == 0)
+					destroy();		
 		}
 	}
 
 	@Override
 	public boolean sameObject(AbstractStaticObject tmp) {
 		// a differenza di quello Dynamic questo object passa sull acqua
-		if (!(tmp instanceof BrickWall) && !(tmp instanceof SteelWall) 
-				&& !(tmp instanceof PlayerTank) && !(tmp instanceof Rocket)) {
+		if (!(tmp instanceof Wall) && !(tmp instanceof PlayerTank) && !(tmp instanceof Rocket)
+				&& !(tmp instanceof EnemyTank)) {
 			if (tmp == curr) {
 				getWorld().world[getX()][getY()] = tmp;
 			} else {
@@ -71,7 +67,7 @@ public class Rocket extends AbstractDynamicObject {
 		if (bordo || next instanceof Rocket)
 			return true;
 		
-		if(next instanceof BrickWall || next instanceof SteelWall)
+		if(next instanceof Wall)
 		{
 			damage();
 			shot=false;
@@ -89,30 +85,24 @@ public class Rocket extends AbstractDynamicObject {
 	
 	private void damage()
 	{
-		if(next instanceof BrickWall)     
-		{	
-			switch(PlayerTank.getLevel())
-			{
-				case 3:
-				((BrickWall) next).setHealth(((BrickWall) next).getHealth()-2);
-				break;
-				default: // livello 1 o livello 2
-				((BrickWall) next).setHealth(((BrickWall) next).getHealth()-1);
-				break;
-			}
-		}
-		else if(next instanceof SteelWall && PlayerTank.getLevel() == 3) //entro solo se player è di livello 3
+		switch(PlayerTank.getLevel())
 		{
-			((SteelWall) next).setHealth(((SteelWall) next).getHealth()-2);
+			case 3: //livello 3
+			((Wall) next).setHealth(((Wall) next).getHealth()-2);
+			break;
+			default: // livello 1 o livello 2
+				if(!(next instanceof SteelWall)) //e non è steelwall
+					((Wall) next).setHealth(((Wall) next).getHealth()-1);
+			break;
 		}
 	}
 	
-	private void destroyWall(){
-		
+	//distrugge WALL
+	public void destroy(){
 		switch(getDirection())
 		{
 		case UP:
-			getWorld().world[getX()-1][getY()]=null;
+			getWorld().world[getX()-1][getY()]=null; 
 			break;
 		case DOWN:
 			getWorld().world[getX()+1][getY()]=null;

@@ -244,4 +244,30 @@ public class EnemyTank extends AbstractDynamicObject {
 	public void setTempY(int tempY) {
 		this.tempY = tempY;
 	}
+
+	@Override
+	public void destroy() {
+		// TODO
+		/*
+		switch(getDirection())
+		{
+		case UP:
+			getWorld().world[getX()-1][getY()]=null; 
+			break;
+		case DOWN:
+			getWorld().world[getX()+1][getY()]=null;
+			break;
+		case RIGHT:
+			getWorld().world[getX()][getY()+1]=null;
+			break;
+		case LEFT:
+			getWorld().world[getX()][getY()-1]=null;
+			break;
+		default:
+			break;
+		}
+		*/
+	}
+
+	
 }

@@ -66,7 +66,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	public void setHealth(int health) {
 		this.health = health;
 	}
-	
+
 	@Override
 	public void update() {
 		switch (getDirection()) {
@@ -110,7 +110,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	public boolean sameObject(AbstractStaticObject tmp) 
 	{
 		if (!(tmp instanceof BrickWall) && !(tmp instanceof SteelWall) && !(tmp instanceof EnemyTank)
-				&& !(tmp instanceof PlayerTank) && !(tmp instanceof Rocket) && !(tmp instanceof Water)) {
+				&& !(tmp instanceof PlayerTank) && !(tmp instanceof Water)) {
 			if (tmp == curr) {
 				getWorld().world[getX()][getY()] = tmp;
 			} else {
