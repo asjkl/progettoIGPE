@@ -30,7 +30,7 @@ public class Rocket extends AbstractDynamicObject {
 	}
 
 	@Override
-	public void update() {
+	public void update() { //update
 		
 		super.update();
 		getWorld().world[getX()][getY()] = this;
