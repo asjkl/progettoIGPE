@@ -66,7 +66,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	public void setHealth(int health) {
 		this.health = health;
 	}
-
+	
 	@Override
 	public void update() {
 		switch (getDirection()) {
