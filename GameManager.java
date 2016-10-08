@@ -18,6 +18,7 @@ public class GameManager {
 	private ArrayList<AllWall> wall;
 	private Flag flag;
 	private Direction tmp = Direction.STOP;
+	private ArrayList<Rocket> allRocket;
 
 	public static void main(String[] args) {
 		GameManager game = new GameManager();
@@ -68,7 +69,7 @@ public class GameManager {
 			System.out.println("---->  Numero Nemici rimasti: " + game.enemies().size());
 
 			if (GameManager.player.getRocket().isShot())
-				GameManager.player.getRocket().update();
+				game.update();
 
 			game.enemyPositionRandom();
 			GameManager.player.update();
@@ -98,6 +99,7 @@ public class GameManager {
 		player = new PlayerTank((matrix.getRow() - 1), (matrix.getColumn() / 2) - 2, matrix);
 		matrix.world[(matrix.getRow() - 1)][(matrix.getColumn() / 2) - 2] = player;
 		enemy = new ArrayList<>();
+		allRocket = new ArrayList<>();
 
 		// crea protezione intorno Flag
 		int r = matrix.getRow() - 1;
@@ -149,6 +151,12 @@ public class GameManager {
 		}
 	}
 
+	public void update() {
+		for (int a = 0; a < allRocket.size(); a++) {
+			allRocket.get(a).update();
+		}
+	}
+
 	public void moveRocket() {
 		switch (tmp) {
 		case UP:
@@ -169,6 +177,7 @@ public class GameManager {
 		default:
 			break;
 		}
+		allRocket.add(player.getRocket());
 	}
 
 	public void randomEnemy(int value) {
@@ -285,6 +294,10 @@ public class GameManager {
 		}
 	}
 
+	public void updateGame() {
+
+	}
+
 	public ArrayList<EnemyTank> enemies() {
 		return enemy;
 	}
@@ -387,5 +400,13 @@ public class GameManager {
 
 	public void setTmp(Direction tmp) {
 		this.tmp = tmp;
+	}
+
+	public ArrayList<Rocket> getAllRocket() {
+		return allRocket;
+	}
+
+	public void setAllRocket(ArrayList<Rocket> allRocket) {
+		this.allRocket = allRocket;
 	}
 }

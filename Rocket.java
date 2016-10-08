@@ -33,7 +33,6 @@ public class Rocket extends AbstractDynamicObject {
 
 	@Override
 	public void update() {
-
 		super.update();
 		getWorld().world[getX()][getY()] = this;
 
