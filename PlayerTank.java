@@ -65,10 +65,4 @@ public class PlayerTank extends AbstractDynamicObject {
 		return " ** ";
 	}
 
-	@Override
-	public void destroy() {
-		
-		// da gestire
-	}
-
 }

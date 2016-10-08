@@ -16,9 +16,4 @@ public class Wall extends AllWall {
 		this.health = health;
 	}
 	
-	public void damage() {
-		
-	}
-	
-	
 }

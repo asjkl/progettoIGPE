@@ -1,6 +1,6 @@
 package progettoIGPE.davide.giovanni.unical2016;
 
-public abstract class AbstractStaticObject implements StaticObject {
+	public abstract class AbstractStaticObject implements StaticObject {
 	private int x;
 	private int y;
 	protected World world;

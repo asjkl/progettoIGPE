@@ -13,16 +13,16 @@ public class GameManager {
 	private Random random = new Random();
 	private World matrix;
 	private static PlayerTank player;
-	private ArrayList<EnemyTank> enemy;
+	private static ArrayList<EnemyTank> enemy;
 	private ArrayList<PowerUp> power;
-	private ArrayList<AllWall> wall;
+	private static ArrayList<AllWall> wall;
 	private Flag flag;
 	private Direction tmp = Direction.STOP;
 	
 	public static void main(String[] args) {
 
 		GameManager game = new GameManager();
-		game.randomEnemy(5); // quanti soldati generare
+		game.randomEnemy(10); // quanti soldati generare
 		updateObjects(game); // muovi playerTank
 	}
 
@@ -65,12 +65,23 @@ public class GameManager {
 				break;
 			}
 			
+			System.out.println("---->  Numero Nemici rimasti: " + enemy.size());
+			
 			if (GameManager.player.getRocket().isShot())
 				GameManager.player.getRocket().update();
 				
 			game.enemyPositionRandom();
 			GameManager.player.update();
+			
+			if( enemy.size() > 0)
 			game.matrix.stampa();
+			else
+			{
+				System.out.println();System.out.println();System.out.println();System.out.println();
+				System.out.println(" ---------------------------  GAME OVER  -------------------------- ");
+				System.out.println();System.out.println();System.out.println();System.out.println();
+				break;
+			}
 			c = s.nextLine();
 		}
 	}
@@ -260,6 +271,12 @@ public class GameManager {
 			}
 		}
 	}
+	
+	public static ArrayList<EnemyTank> enemies()
+	{
+		return enemy;
+	}
+	
 
 	public int getX() {
 		return x;
@@ -322,7 +339,7 @@ public class GameManager {
 	}
 
 	public void setEnemy(ArrayList<EnemyTank> enemy) {
-		this.enemy = enemy;
+		GameManager.enemy = enemy;
 	}
 
 	public ArrayList<PowerUp> getPower() {
@@ -338,7 +355,7 @@ public class GameManager {
 	}
 
 	public void setWall(ArrayList<AllWall> wall) {
-		this.wall = wall;
+		GameManager.wall = wall;
 	}
 
 	public Flag getFlag() {

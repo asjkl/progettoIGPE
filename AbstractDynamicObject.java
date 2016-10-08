@@ -9,7 +9,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	protected AbstractStaticObject curr;
 	protected AbstractStaticObject next;
 	private Rocket rocket;
-
+	
 	public AbstractDynamicObject(int x, int y, World mondo, Speed speed, Speed speedShot, Direction direction,
 			int health) {
 		super(x, y, mondo);
@@ -67,7 +67,6 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		this.health = health;
 	}
 
-	@Override
 	public void update() {
 		switch (getDirection()) {
 		case UP:
@@ -109,8 +108,8 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 
 	public boolean sameObject(AbstractStaticObject tmp) 
 	{
-		if (!(tmp instanceof BrickWall) && !(tmp instanceof SteelWall) && !(tmp instanceof EnemyTank)
-				&& !(tmp instanceof PlayerTank) && !(tmp instanceof Water)) {
+		if (!(tmp instanceof Wall) && !(tmp instanceof EnemyTank)
+				&& !(tmp instanceof PlayerTank) && !(tmp instanceof Water) && !(tmp instanceof Rocket)) {
 			if (tmp == curr) {
 				getWorld().world[getX()][getY()] = tmp;
 			} else {

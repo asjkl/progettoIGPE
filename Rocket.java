@@ -28,28 +28,34 @@ public class Rocket extends AbstractDynamicObject {
 	public String toString() {
 		return " -- ";
 	}
-
+	
+	//TODO	 SPOSTARE FUNZIONI IN CLASSI E FARE EVENTUALI OVERRIDE
+	
 	@Override
-	public void update() { //update
+	public void update() { 
 		
 		super.update();
 		getWorld().world[getX()][getY()] = this;
 		
-		if(destroyRocket()) {
+		if(destroyRocket())
+		{	//distruzione Rocket
 			getWorld().world[getX()][getY()] = curr;
 			setRocket(null);
 			
-			if(next instanceof Wall)
+			if(next instanceof Wall)                  //viene settato a null nell matrice ma non distrutto del tutto
 				if(((Wall) next).getHealth() == 0)
-					destroy();		
+					destroyWall();	
+			
+			if(next instanceof EnemyTank)
+				if(((EnemyTank) next).getHealth() == 0 )
+					destroyTank();
 		}
 	}
 
 	@Override
 	public boolean sameObject(AbstractStaticObject tmp) {
 		// a differenza di quello Dynamic questo object passa sull acqua
-		if (!(tmp instanceof Wall) && !(tmp instanceof PlayerTank) && !(tmp instanceof Rocket)
-				&& !(tmp instanceof EnemyTank)) {
+		if (!(tmp instanceof Wall) && !(tmp instanceof PlayerTank) && !(tmp instanceof Rocket) && !(tmp instanceof EnemyTank)) {
 			if (tmp == curr) {
 				getWorld().world[getX()][getY()] = tmp;
 			} else {
@@ -63,16 +69,23 @@ public class Rocket extends AbstractDynamicObject {
 	
 	public boolean destroyRocket() {
 
-		// se mi trovo al bordo oppure incontro questi oggetti...
 		if (bordo || next instanceof Rocket)
 			return true;
 		
 		if(next instanceof Wall)
 		{
-			damage();
+			damageWall();
 			shot=false;
 				return true;
 		}
+		
+		if(next instanceof EnemyTank)
+		{
+			damageTank();
+			shot=false;
+				return true;
+		}
+		
 		// se Rocket tocca bordo
 		if ((getX() == 0 && this.getDirection() == Direction.UP)
 				|| (getX() == getWorld().getRow() - 1 && this.getDirection() == Direction.DOWN)
@@ -83,22 +96,27 @@ public class Rocket extends AbstractDynamicObject {
 		return false;
 	}
 	
-	private void damage()
+	//TODO spostare in Wall e fare override
+	private void damageWall()
 	{
-		switch(PlayerTank.getLevel())
+		if(PlayerTank.getLevel() == 3)
 		{
-			case 3: //livello 3
 			((Wall) next).setHealth(((Wall) next).getHealth()-2);
-			break;
-			default: // livello 1 o livello 2
-				if(!(next instanceof SteelWall)) //e non è steelwall
-					((Wall) next).setHealth(((Wall) next).getHealth()-1);
-			break;
+		}
+		else if(!(next instanceof SteelWall)) //e non è steelwall
+		{
+			((Wall) next).setHealth(((Wall) next).getHealth()-1);
 		}
 	}
 	
-	//distrugge WALL
-	public void destroy(){
+	//TODO spostare e fare override in EnemyTank
+	private void damageTank()
+	{
+			((EnemyTank) next).setHealth(((EnemyTank) next).getHealth()-1);
+	}
+	
+	//TODO spostare in WALL
+	public void destroyWall(){ 
 		switch(getDirection())
 		{
 		case UP:
@@ -115,6 +133,34 @@ public class Rocket extends AbstractDynamicObject {
 			break;
 		default:
 			break;
+		}
+	}
+	
+	//TODO spostare in EnemyTank
+	public void destroyTank(){
+		switch(getDirection())
+		{
+		case UP:
+			getWorld().world[getX()-1][getY()]=curr; 
+			break;
+		case DOWN:
+			getWorld().world[getX()+1][getY()]=curr;
+			break;
+		case RIGHT:
+			getWorld().world[getX()][getY()+1]=curr;
+			break;
+		case LEFT:
+			getWorld().world[getX()][getY()-1]=curr;
+			break;
+		default:
+			break;
+		}
+		
+		//trovo l oggetto e lo elimino
+		for(int i=0;i < GameManager.enemies().size();i++)
+		{
+			if (GameManager.enemies().get(i).getHealth() == 0)
+				GameManager.enemies().remove(i);
 		}
 	}
 }
