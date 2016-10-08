@@ -13,14 +13,13 @@ public class GameManager {
 	private Random random = new Random();
 	private World matrix;
 	private static PlayerTank player;
-	private static ArrayList<EnemyTank> enemy;
+	private ArrayList<EnemyTank> enemy;
 	private ArrayList<PowerUp> power;
-	private static ArrayList<AllWall> wall;
+	private ArrayList<AllWall> wall;
 	private Flag flag;
 	private Direction tmp = Direction.STOP;
-	
-	public static void main(String[] args) {
 
+	public static void main(String[] args) {
 		GameManager game = new GameManager();
 		game.randomEnemy(10); // quanti soldati generare
 		updateObjects(game); // muovi playerTank
@@ -40,7 +39,8 @@ public class GameManager {
 			switch (c) {
 			case "w": // up
 				GameManager.player.setDirection(Direction.UP);
-				game.tmp = Direction.UP; // IN TMP RIMANE LA DIREZIONE PRECEDENTE PERCHè ABBIAMO SETTATO
+				game.tmp = Direction.UP; // IN TMP RIMANE LA DIREZIONE
+											// PRECEDENTE PERCHè ABBIAMO SETTATO
 											// AD OGNI CICLO LO STOP DEL PLAYER
 				break;
 			case "a": // sx
@@ -64,22 +64,27 @@ public class GameManager {
 			default:
 				break;
 			}
-			
-			System.out.println("---->  Numero Nemici rimasti: " + enemy.size());
-			
+
+			System.out.println("---->  Numero Nemici rimasti: " + game.enemies().size());
+
 			if (GameManager.player.getRocket().isShot())
 				GameManager.player.getRocket().update();
-				
+
 			game.enemyPositionRandom();
 			GameManager.player.update();
-			
-			if( enemy.size() > 0)
-			game.matrix.stampa();
-			else
-			{
-				System.out.println();System.out.println();System.out.println();System.out.println();
+
+			if (game.enemy.size() > 0)
+				game.matrix.stampa();
+			else {
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println();
 				System.out.println(" ---------------------------  GAME OVER  -------------------------- ");
-				System.out.println();System.out.println();System.out.println();System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println();
 				break;
 			}
 			c = s.nextLine();
@@ -227,56 +232,62 @@ public class GameManager {
 
 	void enemyPositionRandom() {
 		for (int a = 0; a < enemy.size(); a++) {
-			if (enemy.get(a).getContatorePassi() == 0 || enemy.get(a).isRiprendoValori()) {
-				enemy.get(a).setPositionDirection();
-				do {
-					enemy.get(a).directionEnemyRandom();
-				} while (!enemy.get(a).positionCorrect() && !enemy.get(a).notSamePosition() && !enemy.get(a).allTrue());
-				// System.out.println("direzione decisa--->" +
-				// enemy.get(a).getDirection());
-				// System.out.println("DOWN->" +
-				// enemy.get(a).isDirectionDown());
-				// System.out.println("LEFT->" +
-				// enemy.get(a).isDirectionLeft());
-				// System.out.println("RIGHT->" +
-				// enemy.get(a).isDirectionRight());
-				// System.out.println("UP->" + enemy.get(a).isDirectionUp());
-				int tempCont;
-				tempCont = random.nextInt(size);
-				enemy.get(a).setPassi(tempCont);
-				// enemy.get(a).setPositionDirection(); //
-			}
-
-			if (enemy.get(a).getPassi() >= enemy.get(a).getContatorePassi()) {
-				enemy.get(a).update();
-				if (enemy.get(a).getX() == enemy.get(a).getTempX() && enemy.get(a).getY() == enemy.get(a).getTempY()) {
-					enemy.get(a).setRiprendoValori(true);
-					// System.out.println("DIREZIONE UGUALE A QUELLA
-					// PRECEDENTE");
-					// enemy.get(a).setPositionDirection(enemy.get(a).getDirection());
-				} else {
-					enemy.get(a).setPositionXY();
-					matrix.world[enemy.get(a).getX()][enemy.get(a).getY()] = enemy.get(a);
-					enemy.get(a).setContatorePassi(enemy.get(a).getContatorePassi() + 1);
-					// System.out.println(enemy.get(a).getContatorePassi());
-					if (!enemy.get(a).positionCorrect()) {
-						enemy.get(a).setRiprendoValori(true);
-					} else {
-						enemy.get(a).setRiprendoValori(false);
-					}
-				}
+			if (enemy.get(a).getHealth() == 0) { // CANCELLO IL NEMICO CHE HA
+													// VITA 0
+				enemy.remove(a);
 			} else {
-				enemy.get(a).setContatorePassi(0);
-				// enemy.get(a).setPositionDirection(enemy.get(a).getDirection());
+				if (enemy.get(a).getContatorePassi() == 0 || enemy.get(a).isRiprendoValori()) {
+					enemy.get(a).setPositionDirection();
+					do {
+						enemy.get(a).directionEnemyRandom();
+					} while (!enemy.get(a).positionCorrect() && !enemy.get(a).notSamePosition()
+							&& !enemy.get(a).allTrue());
+					// System.out.println("direzione decisa--->" +
+					// enemy.get(a).getDirection());
+					// System.out.println("DOWN->" +
+					// enemy.get(a).isDirectionDown());
+					// System.out.println("LEFT->" +
+					// enemy.get(a).isDirectionLeft());
+					// System.out.println("RIGHT->" +
+					// enemy.get(a).isDirectionRight());
+					// System.out.println("UP->" +
+					// enemy.get(a).isDirectionUp());
+					int tempCont;
+					tempCont = random.nextInt(size);
+					enemy.get(a).setPassi(tempCont);
+					// enemy.get(a).setPositionDirection(); //
+				}
+
+				if (enemy.get(a).getPassi() >= enemy.get(a).getContatorePassi()) {
+					enemy.get(a).update();
+					if (enemy.get(a).getX() == enemy.get(a).getTempX()
+							&& enemy.get(a).getY() == enemy.get(a).getTempY()) {
+						enemy.get(a).setRiprendoValori(true);
+						// System.out.println("DIREZIONE UGUALE A QUELLA
+						// PRECEDENTE");
+						// enemy.get(a).setPositionDirection(enemy.get(a).getDirection());
+					} else {
+						enemy.get(a).setPositionXY();
+						matrix.world[enemy.get(a).getX()][enemy.get(a).getY()] = enemy.get(a);
+						enemy.get(a).setContatorePassi(enemy.get(a).getContatorePassi() + 1);
+						// System.out.println(enemy.get(a).getContatorePassi());
+						if (!enemy.get(a).positionCorrect()) {
+							enemy.get(a).setRiprendoValori(true);
+						} else {
+							enemy.get(a).setRiprendoValori(false);
+						}
+					}
+				} else {
+					enemy.get(a).setContatorePassi(0);
+					// enemy.get(a).setPositionDirection(enemy.get(a).getDirection());
+				}
 			}
 		}
 	}
-	
-	public static ArrayList<EnemyTank> enemies()
-	{
+
+	public ArrayList<EnemyTank> enemies() {
 		return enemy;
 	}
-	
 
 	public int getX() {
 		return x;
@@ -339,7 +350,7 @@ public class GameManager {
 	}
 
 	public void setEnemy(ArrayList<EnemyTank> enemy) {
-		GameManager.enemy = enemy;
+		this.enemy = enemy;
 	}
 
 	public ArrayList<PowerUp> getPower() {
@@ -355,7 +366,7 @@ public class GameManager {
 	}
 
 	public void setWall(ArrayList<AllWall> wall) {
-		GameManager.wall = wall;
+		this.wall = wall;
 	}
 
 	public Flag getFlag() {
