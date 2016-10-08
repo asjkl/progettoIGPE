@@ -28,7 +28,6 @@ public class GameManager {
 
 	public static void updateObjects(GameManager game) {
 
-		// lo scanner deve essere chiuso alla fine
 		@SuppressWarnings("resource")
 		Scanner s = new Scanner(System.in);
 		String c;
@@ -66,11 +65,9 @@ public class GameManager {
 				break;
 			}
 
-			System.out.println("---->  Numero Nemici rimasti: " + game.enemies().size());
-
 			if (GameManager.player.getRocket().isShot())
-				game.update();
-
+				game.update();	
+		
 			game.enemyPositionRandom();
 			GameManager.player.update();
 
@@ -152,9 +149,11 @@ public class GameManager {
 	}
 
 	public void update() {
+		
 		for (int a = 0; a < allRocket.size(); a++) {
 			allRocket.get(a).update();
 		}
+		
 	}
 
 	public void moveRocket() {

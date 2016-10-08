@@ -6,10 +6,10 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	private Speed speedShot;
 	private Direction direction;
 	private int health;
-	protected AbstractStaticObject curr;
-	protected AbstractStaticObject next;
+	private AbstractStaticObject curr; //oggetto corrente
+	private AbstractStaticObject next; //oggetto successivo
 	private Rocket rocket;
-	
+
 	public AbstractDynamicObject(int x, int y, World mondo, Speed speed, Speed speedShot, Direction direction,
 			int health) {
 		super(x, y, mondo);
@@ -24,6 +24,22 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		this.direction = direction;
 	}
 
+	public AbstractStaticObject getCurr() {
+		return curr;
+	}
+
+	public void setCurr(AbstractStaticObject curr) {
+		this.curr = curr;
+	}
+
+	public AbstractStaticObject getNext() {
+		return next;
+	}
+
+	public void setNext(AbstractStaticObject next) {
+		this.next = next;
+	}
+	
 	public Rocket getRocket() {
 		return rocket;
 	}
@@ -72,7 +88,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		case UP:
 			if (getX() - 1 >= 0) {
 				next = getWorld().world[getX() - 1][getY()];
-				if (sameObject(next)) {
+				if (sameObject()) {
 					setX(getX() - 1);
 				}
 			}
@@ -80,7 +96,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		case DOWN:
 			if (getX() + 1 < getWorld().getRow()) {
 				next = getWorld().world[getX() + 1][getY()];
-				if (sameObject(next)) {
+				if (sameObject()) {
 					setX(getX() + 1);
 				}
 			}
@@ -88,7 +104,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		case LEFT:
 			if (getY() - 1 >= 0) {
 				next = getWorld().world[getX()][getY() - 1];
-				if (sameObject(next)) {
+				if (sameObject()) {
 					setY(getY() - 1);
 				}
 			}
@@ -96,25 +112,27 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		case RIGHT:
 			if (getY() + 1 < getWorld().getColumn()) {
 				next = getWorld().world[getX()][getY() + 1];
-				if (sameObject(next)) {
+				if (sameObject()) {
 					setY(getY() + 1);
 				}
 			}
 			break;
 		default:
 			break;
+			
 		}
 	}
 
-	public boolean sameObject(AbstractStaticObject tmp) 
+	public boolean sameObject() 
 	{
-		if (!(tmp instanceof Wall) && !(tmp instanceof EnemyTank)
-				&& !(tmp instanceof PlayerTank) && !(tmp instanceof Water) && !(tmp instanceof Rocket)) {
-			if (tmp == curr) {
-				getWorld().world[getX()][getY()] = tmp;
+		if (!(next instanceof Wall) && !(next instanceof PlayerTank) && !(next instanceof EnemyTank) 
+				&& !(next instanceof Water) && !(next instanceof Rocket)) {
+			
+			if (next == curr) {
+				getWorld().world[getX()][getY()] = next;
 			} else {
 				getWorld().world[getX()][getY()] = curr;
-				curr = tmp;
+				curr = next;
 			}
 			return true;
 		}
