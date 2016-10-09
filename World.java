@@ -50,7 +50,7 @@ public class World {
 		int i = 0;// indice di riga
 
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("C:/Users/Giovanni/Desktop/prova.txt"));// Cambiare
+			BufferedReader reader = new BufferedReader(new FileReader("C:/Users/Giovanni/Desktop/mappa.txt"));// Cambiare
 																												// percorso
 																												// file
 																												// in
@@ -67,8 +67,6 @@ public class World {
 				while (st.hasMoreTokens()) {
 					if (tmp.equals("null"))
 						world[i][j] = null;
-					else if (tmp.equals("****"))
-						world[i][j] = new PlayerTank(i, j, this);
 					else if (tmp.equals("[//]"))
 						world[i][j] = new SteelWall(i, j, this, 4);
 					else if (tmp.equals("@@@@"))

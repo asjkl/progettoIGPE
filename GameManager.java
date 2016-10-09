@@ -95,6 +95,7 @@ public class GameManager {
 		enemy = new ArrayList<>();
 		allRocket = new ArrayList<>();
 		player = new PlayerTank((size - 1), ((size / 2) - 3), matrix);
+		matrix.world[size - 1][((size / 2) - 3)] = player;
 
 	}
 
