@@ -10,7 +10,7 @@ public class AllWall extends AbstractStaticObject {
 		this.shot = shot;
 		this.tank = tank;
 	}
-
+	
 	public boolean isShot() {
 		return shot;
 	}

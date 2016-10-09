@@ -4,7 +4,7 @@ public class Ice extends AllWall {
 
 	@Override
 	public String toString() {
-		return " <> ";
+		return "@@@@";
 	}
 
 	public Ice(int x, int y, World world) {

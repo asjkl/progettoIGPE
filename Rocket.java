@@ -3,7 +3,7 @@ package progettoIGPE.davide.giovanni.unical2016;
 public class Rocket extends AbstractDynamicObject {
 
 	private boolean bordo; // se trovo bordo
-	private boolean shot;
+	private boolean shot; //se è stato sparato un colpo
 
 	public Rocket(int x, int y, World world, Direction direction) {
 		super(x, y, world, direction);
@@ -29,38 +29,35 @@ public class Rocket extends AbstractDynamicObject {
 		return " -- ";
 	}
 
-	// TODO SPOSTARE FUNZIONI IN CLASSI E FARE EVENTUALI OVERRIDE
-
 	@Override
 	public void update() {
 		super.update();
 		getWorld().world[getX()][getY()] = this;
 
 		if (destroyRocket()) { // distruzione Rocket
-			getWorld().world[getX()][getY()] = curr;
+			getWorld().world[getX()][getY()] = getCurr();
 			setRocket(null);
 
-			if (next instanceof Wall) // viene settato a null nell matrice ma
-										// non distrutto del tutto
-				if (((Wall) next).getHealth() == 0)
+			if (getNext() instanceof Wall) 
+				if (((Wall) getNext()).getHealth() == 0)
 					destroyWall();
 
-			if (next instanceof EnemyTank)
-				if (((EnemyTank) next).getHealth() == 0)
+			if (getNext() instanceof EnemyTank)
+				if (((EnemyTank) getNext()).getHealth() == 0)
 					destroyTank();
 		}
 	}
 
 	@Override
-	public boolean sameObject(AbstractStaticObject tmp) {
+	public boolean sameObject() {
 		// a differenza di quello Dynamic questo object passa sull acqua
-		if (!(tmp instanceof Wall) && !(tmp instanceof PlayerTank) && !(tmp instanceof Rocket)
-				&& !(tmp instanceof EnemyTank)) {
-			if (tmp == curr) {
-				getWorld().world[getX()][getY()] = tmp;
+		if (!(getNext() instanceof Wall) && !(getNext() instanceof PlayerTank) && !(getNext() instanceof Rocket)
+				&& !(getNext() instanceof EnemyTank)) {
+			if (getNext() == getCurr()) {
+				getWorld().world[getX()][getY()] = getNext();
 			} else {
-				getWorld().world[getX()][getY()] = curr;
-				curr = tmp;
+				getWorld().world[getX()][getY()] = getCurr();
+				setCurr(getNext());
 			}
 			return true;
 		}
@@ -69,16 +66,16 @@ public class Rocket extends AbstractDynamicObject {
 
 	public boolean destroyRocket() {
 
-		if (bordo || next instanceof Rocket)
+		if (bordo || getNext() instanceof Rocket)
 			return true;
 
-		if (next instanceof Wall) {
+		if (getNext() instanceof Wall) {
 			damageWall();
 			shot = false;
 			return true;
 		}
-
-		if (next instanceof EnemyTank) {
+		
+		if (getNext() instanceof EnemyTank) {
 			damageTank();
 			shot = false;
 			return true;
@@ -92,21 +89,6 @@ public class Rocket extends AbstractDynamicObject {
 			bordo = true;
 		}
 		return false;
-	}
-
-	// TODO spostare in Wall e fare override
-	private void damageWall() {
-		if (PlayerTank.getLevel() == 3) {
-			((Wall) next).setHealth(((Wall) next).getHealth() - 2);
-		} else if (!(next instanceof SteelWall)) // e non è steelwall
-		{
-			((Wall) next).setHealth(((Wall) next).getHealth() - 1);
-		}
-	}
-
-	// TODO spostare e fare override in EnemyTank
-	private void damageTank() {
-		((EnemyTank) next).setHealth(((EnemyTank) next).getHealth() - 1);
 	}
 
 	// TODO spostare in WALL
@@ -132,20 +114,36 @@ public class Rocket extends AbstractDynamicObject {
 	// TODO spostare in EnemyTank
 	public void destroyTank() {
 		switch (getDirection()) {
-		case UP:
-			getWorld().world[getX() - 1][getY()] = curr;
+		case UP:                                  
+			getWorld().world[getX() - 1][getY()] = null;
 			break;
 		case DOWN:
-			getWorld().world[getX() + 1][getY()] = curr;
+			getWorld().world[getX() + 1][getY()] = null;
 			break;
 		case RIGHT:
-			getWorld().world[getX()][getY() + 1] = curr;
+			getWorld().world[getX()][getY() + 1] = null;
 			break;
 		case LEFT:
-			getWorld().world[getX()][getY() - 1] = curr;
+			getWorld().world[getX()][getY() - 1] = null;
 			break;
 		default:
 			break;
 		}
+	}
+	
+	// TODO spostare in Wall e fare override
+	private void damageWall() {
+		if (PlayerTank.getLevel() == 3) {
+			((Wall) getNext()).setHealth(((Wall) getNext()).getHealth() - 2);
+		} else if (!(getNext() instanceof SteelWall)) // e non è steelwall
+		{
+			((Wall) getNext()).setHealth(((Wall) getNext()).getHealth() - 1);
+		}
+	}
+
+	
+	// TODO spostare e fare override in EnemyTank
+	private void damageTank() {
+		((EnemyTank) getNext()).setHealth(((EnemyTank) getNext()).getHealth() - 1);
 	}
 }

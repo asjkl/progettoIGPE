@@ -4,7 +4,7 @@ public class Water extends AllWall {
 
 	@Override
 	public String toString() {
-		return " ~~ ";
+		return "~~~~";
 	}			
 
 	public Water(int x, int y, World world) {

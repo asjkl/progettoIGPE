@@ -3,7 +3,7 @@ package progettoIGPE.davide.giovanni.unical2016;
 	public abstract class AbstractStaticObject implements StaticObject {
 	private int x;
 	private int y;
-	protected World world;
+	private World world;
 
 	public AbstractStaticObject(int x, int y, World world) {
 		this.x = x;

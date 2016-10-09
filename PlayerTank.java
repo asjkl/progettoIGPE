@@ -62,7 +62,7 @@ public class PlayerTank extends AbstractDynamicObject {
 
 	@Override
 	public String toString() {
-		return " ** ";
+		return "****";
 	}
 
 }
