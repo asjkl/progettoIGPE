@@ -8,7 +8,7 @@ public class BrickWall extends Wall {
 
 	@Override
 	public String toString() {
-		return "[  ]";
+		return "[||]";
 	}
 
 }

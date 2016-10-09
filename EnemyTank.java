@@ -3,6 +3,7 @@ package progettoIGPE.davide.giovanni.unical2016;
 import java.util.Random;
 
 public class EnemyTank extends AbstractDynamicObject {
+	
 	private int point;
 	private int passi;
 	private int contatorePassi;
@@ -74,7 +75,7 @@ public class EnemyTank extends AbstractDynamicObject {
 		AbstractStaticObject tmp;
 
 		if (getDirection() == Direction.UP && x - 1 >= 0) {
-			tmp = world.world[x - 1][y];
+			tmp = getWorld().world[x - 1][y];
 			if (getX() == 0) {
 				return false;
 			}
@@ -82,9 +83,9 @@ public class EnemyTank extends AbstractDynamicObject {
 				return false;
 			}
 
-		} else if (getDirection() == Direction.DOWN && x + 1 < world.getRow()) {
-			tmp = world.world[x + 1][y];
-			if (getX() == world.getRow() - 1) {
+		} else if (getDirection() == Direction.DOWN && x + 1 < getWorld().getRow()) {
+			tmp = getWorld().world[x + 1][y];
+			if (getX() == getWorld().getRow() - 1) {
 				return false;
 			}
 			if (tmp instanceof BrickWall || tmp instanceof SteelWall || tmp instanceof EnemyTank) {
@@ -92,16 +93,16 @@ public class EnemyTank extends AbstractDynamicObject {
 			}
 
 		} else if (getDirection() == Direction.LEFT && y - 1 >= 0) {
-			tmp = world.world[x][y - 1];
+			tmp = getWorld().world[x][y - 1];
 			if (getY() == 0) {
 				return false;
 			}
 			if (tmp instanceof BrickWall || tmp instanceof SteelWall || tmp instanceof EnemyTank) {
 				return false;
 			}
-		} else if (getDirection() == Direction.RIGHT && y + 1 < world.getColumn()) {
-			tmp = world.world[x][y + 1];
-			if (getY() == world.getColumn() - 1) {
+		} else if (getDirection() == Direction.RIGHT && y + 1 < getWorld().getColumn()) {
+			tmp = getWorld().world[x][y + 1];
+			if (getY() == getWorld().getColumn() - 1) {
 				return false;
 			}
 			if (tmp instanceof BrickWall || tmp instanceof SteelWall || tmp instanceof EnemyTank) {
