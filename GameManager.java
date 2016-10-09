@@ -66,7 +66,7 @@ public class GameManager {
 				break;
 			}
 
-			if (game.player.getRocket().isShot())
+			if (game.player.getRocket() != null && game.player.getRocket().isShot())
 				game.update();
 
 			game.enemyPositionRandom();
@@ -100,33 +100,43 @@ public class GameManager {
 	}
 
 	public void update() {
-
 		for (int a = 0; a < allRocket.size(); a++) {
-			allRocket.get(a).update();
+			if (!allRocket.get(a).destroyRocket())
+				allRocket.get(a).update();
+			else {
+				if (allRocket.get(a).isEnemy() == false) {
+					player.setContRocket(player.getContRocket() - 1);
+				}
+				allRocket.remove(a);
+			}
 		}
 	}
 
 	public void moveRocket() {
-		switch (tmp) {
-		case UP:
-			player.setRocket(new Rocket(player.getX(), player.getY(), player.getWorld(), Direction.UP));
-			break;
-		case DOWN:
-			player.setRocket(new Rocket(player.getX(), player.getY(), player.getWorld(), Direction.DOWN));
-			break;
-		case LEFT:
-			player.setRocket(new Rocket(player.getX(), player.getY(), player.getWorld(), Direction.LEFT));
-			break;
-		case RIGHT:
-			player.setRocket(new Rocket(player.getX(), player.getY(), player.getWorld(), Direction.RIGHT));
-			break;
-		case STOP:
-			player.setRocket(new Rocket(player.getX(), player.getY(), player.getWorld(), Direction.UP));
-			break;
-		default:
-			break;
+		if ((player.getLevel() == 3 && player.getContRocket() < 2)
+				|| (player.getLevel() < 3 && player.getContRocket() == 0)) {
+			switch (tmp) {
+			case UP:
+				player.setRocket(new Rocket(player.getX(), player.getY(), player.getWorld(), Direction.UP, false));
+				break;
+			case DOWN:
+				player.setRocket(new Rocket(player.getX(), player.getY(), player.getWorld(), Direction.DOWN, false));
+				break;
+			case LEFT:
+				player.setRocket(new Rocket(player.getX(), player.getY(), player.getWorld(), Direction.LEFT, false));
+				break;
+			case RIGHT:
+				player.setRocket(new Rocket(player.getX(), player.getY(), player.getWorld(), Direction.RIGHT, false));
+				break;
+			case STOP:
+				player.setRocket(new Rocket(player.getX(), player.getY(), player.getWorld(), Direction.UP, false));
+				break;
+			default:
+				break;
+			}
+			allRocket.add(player.getRocket());
+			player.setContRocket(player.getContRocket() + 1);
 		}
-		allRocket.add(player.getRocket());
 	}
 
 	public void randomEnemy(int value) {
@@ -241,10 +251,6 @@ public class GameManager {
 				}
 			}
 		}
-	}
-
-	public void updateGame() {
-
 	}
 
 	public ArrayList<EnemyTank> enemies() {

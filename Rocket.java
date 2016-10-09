@@ -3,12 +3,14 @@ package progettoIGPE.davide.giovanni.unical2016;
 public class Rocket extends AbstractDynamicObject {
 
 	private boolean bordo; // se trovo bordo
-	private boolean shot; //se è stato sparato un colpo
+	private boolean shot; // se è stato sparato un colpo
+	private boolean enemy;
 
-	public Rocket(int x, int y, World world, Direction direction) {
+	public Rocket(int x, int y, World world, Direction direction, boolean enemy) {
 		super(x, y, world, direction);
 		bordo = false;
 		shot = false;
+		this.enemy = enemy;
 	}
 
 	public boolean isShot() {
@@ -38,7 +40,7 @@ public class Rocket extends AbstractDynamicObject {
 			getWorld().world[getX()][getY()] = getCurr();
 			setRocket(null);
 
-			if (getNext() instanceof Wall) 
+			if (getNext() instanceof Wall)
 				if (((Wall) getNext()).getHealth() == 0)
 					destroyWall();
 
@@ -74,7 +76,7 @@ public class Rocket extends AbstractDynamicObject {
 			shot = false;
 			return true;
 		}
-		
+
 		if (getNext() instanceof EnemyTank) {
 			damageTank();
 			shot = false;
@@ -114,7 +116,7 @@ public class Rocket extends AbstractDynamicObject {
 	// TODO spostare in EnemyTank
 	public void destroyTank() {
 		switch (getDirection()) {
-		case UP:                                  
+		case UP:
 			getWorld().world[getX() - 1][getY()] = null;
 			break;
 		case DOWN:
@@ -130,7 +132,7 @@ public class Rocket extends AbstractDynamicObject {
 			break;
 		}
 	}
-	
+
 	// TODO spostare in Wall e fare override
 	private void damageWall() {
 		if (PlayerTank.getLevel() == 3) {
@@ -141,9 +143,16 @@ public class Rocket extends AbstractDynamicObject {
 		}
 	}
 
-	
 	// TODO spostare e fare override in EnemyTank
 	private void damageTank() {
 		((EnemyTank) getNext()).setHealth(((EnemyTank) getNext()).getHealth() - 1);
+	}
+
+	public boolean isEnemy() {
+		return enemy;
+	}
+
+	public void setEnemy(boolean enemy) {
+		this.enemy = enemy;
 	}
 }
