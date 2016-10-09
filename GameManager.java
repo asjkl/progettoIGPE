@@ -12,7 +12,7 @@ public class GameManager {
 	private static final int size = 20; // non modificare
 	private Random random = new Random();
 	private World matrix;
-	private static PlayerTank player;
+	private PlayerTank player;
 	private ArrayList<EnemyTank> enemy;
 	private ArrayList<PowerUp> power;
 	private ArrayList<AllWall> wall;
@@ -32,47 +32,47 @@ public class GameManager {
 		Scanner s = new Scanner(System.in);
 		String c;
 
-		game.matrix.stampa();
+		game.matrix.print();
 		c = s.nextLine();
 		while (true) {
 
 			switch (c) {
 			case "w": // up
-				GameManager.player.setDirection(Direction.UP);
+				game.player.setDirection(Direction.UP);
 				game.tmp = Direction.UP; // IN TMP RIMANE LA DIREZIONE
 											// PRECEDENTE PERCHè ABBIAMO SETTATO
 											// AD OGNI CICLO LO STOP DEL PLAYER
 				break;
 			case "a": // sx
-				GameManager.player.setDirection(Direction.LEFT);
+				game.player.setDirection(Direction.LEFT);
 				game.tmp = Direction.LEFT;
 				break;
 			case "d": // dx
-				GameManager.player.setDirection(Direction.RIGHT);
+				game.player.setDirection(Direction.RIGHT);
 				game.tmp = Direction.RIGHT;
 				break;
 			case "s": // down
-				GameManager.player.setDirection(Direction.DOWN);
+				game.player.setDirection(Direction.DOWN);
 				game.tmp = Direction.DOWN;
 				break;
 
 			case "r": // ROCKET
 				game.moveRocket();
-				GameManager.player.getRocket().setShot(true);
+				game.player.getRocket().setShot(true);
 				break;
 
 			default:
 				break;
 			}
 
-			if (GameManager.player.getRocket().isShot())
+			if (game.player.getRocket().isShot())
 				game.update();	
 		
 			game.enemyPositionRandom();
-			GameManager.player.update();
+			game.player.update();
 
 			if (game.enemy.size() > 0)
-				game.matrix.stampa();
+				game.matrix.print();
 			else {
 				System.out.println();
 				System.out.println();
@@ -91,61 +91,8 @@ public class GameManager {
 
 	public GameManager() {
 		matrix = new World(size, size);
-		flag = new Flag(size - 1, size / 2, matrix, true);
-		matrix.world[size - 1][size / 2] = flag;
-		player = new PlayerTank((matrix.getRow() - 1), (matrix.getColumn() / 2) - 2, matrix);
-		matrix.world[(matrix.getRow() - 1)][(matrix.getColumn() / 2) - 2] = player;
 		enemy = new ArrayList<>();
 		allRocket = new ArrayList<>();
-
-		// crea protezione intorno Flag
-		int r = matrix.getRow() - 1;
-		int c = (matrix.getColumn() / 2);
-		for (int a = 0; a < 2; a++) {
-			matrix.world[r - a][c - 1] = new BrickWall(r - a, c - 1, matrix, 2);
-			matrix.world[r - a][c + 1] = new BrickWall(r - a, c + 1, matrix, 2);
-		}
-		matrix.world[size - 2][size / 2] = new BrickWall(size - 2, size / 2, matrix, 2);
-
-		// BRICK WALL
-		for (int i = 0; i < 5; i++) {
-			matrix.world[10][i] = new BrickWall(10, i, matrix, 2);
-			matrix.world[11][i] = new BrickWall(11, i, matrix, 2);
-			matrix.world[12][i] = new BrickWall(12, i, matrix, 2);
-		}
-		// STEEL WALL
-		for (int i = 0; i < 8; i++) {
-			matrix.world[2][19 - i] = new SteelWall(2, 19 - i, matrix, 4);
-			matrix.world[3][19 - i] = new SteelWall(3, 19 - i, matrix, 4);
-			matrix.world[4][19 - i] = new SteelWall(7, 19 - i, matrix, 4);
-
-		}
-		// WATER
-		for (int i = 0; i < 5; i++) {
-			matrix.world[14][18 - i] = new Water(14, 18 - i, matrix);
-			matrix.world[15][18 - i] = new Water(15, 18 - i, matrix);
-			matrix.world[16][18 - i] = new Water(16, 18 - i, matrix);
-		}
-		// TREES
-		for (int i = 0; i < 5; i++) {
-			matrix.world[3][3 + i] = new Trees(3, 3 + i, matrix);
-			matrix.world[4][3 + i] = new Trees(4, 3 + i, matrix);
-			matrix.world[5][3 + i] = new Trees(5, 3 + i, matrix);
-			matrix.world[6][3 + i] = new Trees(6, 3 + i, matrix);
-			matrix.world[17][1 + i] = new Trees(6, 3 + i, matrix);
-			matrix.world[13][1 + i] = new Trees(13, 3 + i, matrix);
-			matrix.world[14][1 + i] = new Trees(14, 3 + i, matrix);
-			matrix.world[15][1 + i] = new Trees(15, 3 + i, matrix);
-			matrix.world[16][1 + i] = new Trees(16, 3 + i, matrix);
-			matrix.world[17][1 + i] = new Trees(17, 3 + i, matrix);
-		}
-		// ICE
-		for (int i = 0; i < 5; i++) {
-			matrix.world[9][7 + i] = new Ice(9, 3 + i, matrix);
-			matrix.world[10][7 + i] = new Ice(10, 3 + i, matrix);
-			matrix.world[11][7 + i] = new Ice(11, 3 + i, matrix);
-			matrix.world[12][7 + i] = new Ice(12, 3 + i, matrix);
-		}
 	}
 
 	public void update() {
@@ -153,7 +100,6 @@ public class GameManager {
 		for (int a = 0; a < allRocket.size(); a++) {
 			allRocket.get(a).update();
 		}
-		
 	}
 
 	public void moveRocket() {
@@ -354,7 +300,7 @@ public class GameManager {
 	}
 
 	public void setPlayer(PlayerTank player) {
-		GameManager.player = player;
+			this.player = player;
 	}
 
 	public ArrayList<EnemyTank> getEnemy() {

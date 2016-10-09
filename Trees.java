@@ -4,7 +4,7 @@ public class Trees extends AllWall {
 
 	@Override
 	public String toString() {
-		return " TT ";
+		return "TTTT";
 	}          
 
 	public Trees(int x, int y, World world) {
