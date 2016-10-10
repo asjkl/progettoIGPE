@@ -27,7 +27,6 @@ public class GameManager {
 		GameManager game = new GameManager();
 		game.randomEnemy(2); // quanti soldati generare
 		updateObjects(game); // muovi playerTank
-		System.out.println("CIAO");
 	}
 
 	public static void updateObjects(GameManager game) {
