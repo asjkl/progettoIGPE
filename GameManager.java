@@ -15,21 +15,21 @@ public class GameManager {
 	private static final int size = 20; // non modificare
 	private Random random = new Random();
 	private World matrix;
-	private static PlayerTank player;
-	private static ArrayList<EnemyTank> enemy;
+	private PlayerTank player;
+	private ArrayList<EnemyTank> enemy;
 	private ArrayList<PowerUp> power;
-	private ArrayList<AllWall> wall;
+	private ArrayList<Rocket> rocket;
 	private Flag flag;
 	private Direction tmp = Direction.STOP;
-	
+
 	public static void main(String[] args) {
 
 		GameManager game = new GameManager();
 		game.randomEnemy(2); // quanti soldati generare
-		updateObjects(game); // muovi playerTank
+		game.updateObjects(game); // muovi playerTank
 	}
 
-	public static void updateObjects(GameManager game) {
+	public void updateObjects(GameManager game) {
 
 		// lo scanner deve essere chiuso alla fine
 		@SuppressWarnings("resource")
@@ -42,63 +42,169 @@ public class GameManager {
 
 			switch (c) {
 			case "w": // up
-				GameManager.player.setDirection(Direction.UP);
-				game.tmp = Direction.UP; // IN TMP RIMANE LA DIREZIONE PRECEDENTE PERCHè ABBIAMO SETTATO
+				game.player.setDirection(Direction.UP);
+				game.tmp = Direction.UP; // IN TMP RIMANE LA DIREZIONE
+											// PRECEDENTE PERCHè ABBIAMO SETTATO
 											// AD OGNI CICLO LO STOP DEL PLAYER
 				break;
 			case "a": // sx
-				GameManager.player.setDirection(Direction.LEFT);
+				game.player.setDirection(Direction.LEFT);
 				game.tmp = Direction.LEFT;
 				break;
 			case "d": // dx
-				GameManager.player.setDirection(Direction.RIGHT);
+				game.player.setDirection(Direction.RIGHT);
 				game.tmp = Direction.RIGHT;
 				break;
 			case "s": // down
-				GameManager.player.setDirection(Direction.DOWN);
+				game.player.setDirection(Direction.DOWN);
 				game.tmp = Direction.DOWN;
 				break;
 
 			case "r": // ROCKET
 				game.moveRocket();
-				GameManager.player.getRocket().setShot(true);
 				break;
 
 			default:
 				break;
 			}
-			
-			if (GameManager.player.getRocket().isShot())
-				GameManager.player.getRocket().update();
-				
-			game.enemyPositionRandom();
-			GameManager.player.update();
-			
 
-			 			if( enemy.size() > 0)
-			 			game.matrix.stampa();
-			 			else
-			 			{
-			 				System.out.println();
-			 				System.out.println();
-			 				System.out.println();
-			 				System.out.println();System.out.println();System.out.println();System.out.println();
-			 				System.out.println(" ---------------------------  GAME OVER  -------------------------- ");
-			 				System.out.println();System.out.println();System.out.println();System.out.println();
-			 				System.out.println();
-			 				System.out.println();
-			 				System.out.println();
-			 				break;
-			 			}
-			  			c = s.nextLine();
+			game.updateGame();
+			game.enemyPositionRandom();
+			game.player.update();
+
+			if (enemy.size() > 0)
+				game.matrix.stampa();
+			else {
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println(" ---------------------------  GAME OVER  -------------------------- ");
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				break;
+			}
+			c = s.nextLine();
 		}
 	}
 
 	public GameManager() {
 		matrix = new World(size, size);
 		enemy = new ArrayList<>();
+		rocket = new ArrayList<>();
 		importMatrix();
 
+	}
+
+	public void updateGame() {
+		System.out.println(rocket.size());
+		for (int a = 0; a < rocket.size(); a++) {
+			if (rocket.get(a).isShot()) {
+				rocket.get(a).update();
+				if (destroyRocket(rocket.get(a))) { // distruzione Rocket
+					matrix.world[rocket.get(a).getX()][rocket.get(a).getY()] = rocket.get(a).getCurr();
+					rocket.get(a).setShot(false);
+
+					if (rocket.get(a).getNext() instanceof Wall)
+						if (((Wall) rocket.get(a).getNext()).getHealth() == 0)
+							destroyWall(rocket.get(a));
+
+					if (rocket.get(a).getNext() instanceof EnemyTank)
+						if (((EnemyTank) rocket.get(a).getNext()).getHealth() == 0)
+							destroyTank(rocket.get(a), (EnemyTank) rocket.get(a).getNext());
+				}
+			}
+		}
+	}
+
+	public boolean destroyRocket(Rocket rocket) {
+		if (rocket.isBordo() || rocket.getNext() instanceof Rocket) {
+			return true;
+		}
+
+		if (rocket.getNext() instanceof Wall) {
+			damageWall(rocket);
+			return true;
+		}
+
+		if (rocket.getNext() instanceof EnemyTank) {
+			damageTank(rocket);
+			return true;
+		}
+
+		// se Rocket tocca bordo
+		if ((rocket.getX() == 0 && rocket.getDirection() == Direction.UP)
+				|| (rocket.getX() == matrix.getRow() - 1 && rocket.getDirection() == Direction.DOWN)
+				|| (rocket.getY() == 0 && rocket.getDirection() == Direction.LEFT)
+				|| (rocket.getY() == matrix.getColumn() - 1 && rocket.getDirection() == Direction.RIGHT)) {
+			rocket.setBordo(true);
+		}
+		return false;
+	}
+
+	public void destroyWall(Rocket rocket) {
+		switch (rocket.getDirection()) {
+		case UP:
+			matrix.world[rocket.getX() - 1][rocket.getY()] = null;
+			break;
+		case DOWN:
+			matrix.world[rocket.getX() + 1][rocket.getY()] = null;
+			break;
+		case RIGHT:
+			matrix.world[rocket.getX()][rocket.getY() + 1] = null;
+			break;
+		case LEFT:
+			matrix.world[rocket.getX()][rocket.getY() - 1] = null;
+			break;
+		default:
+			break;
+		}
+	}
+
+	public void destroyTank(Rocket rocket, EnemyTank enemyT) {
+		switch (rocket.getDirection()) {
+		case UP:
+			matrix.world[rocket.getX() - 1][rocket.getY()] = enemyT.getCurr();
+			break;
+		case DOWN:
+			matrix.world[rocket.getX() + 1][rocket.getY()] = enemyT.getCurr();
+			break;
+		case RIGHT:
+			matrix.world[rocket.getX()][rocket.getY() + 1] = enemyT.getCurr();
+			break;
+		case LEFT:
+			matrix.world[rocket.getX()][rocket.getY() - 1] = enemyT.getCurr();
+			break;
+		default:
+			break;
+		}
+
+		for (int i = 0; i < enemy.size(); i++) {
+			if (enemy.get(i).getHealth() == 0)
+				enemy.remove(i);
+		}
+	}
+
+	private void damageWall(Rocket rocket) {
+		if (player.getLevel() == 3) {
+			((Wall) rocket.getNext()).setHealth(((Wall) rocket.getNext()).getHealth() - 2);
+		} else if (!(rocket.getNext() instanceof SteelWall)) // e non è
+																// steelwall
+		{
+			((Wall) rocket.getNext()).setHealth(((Wall) rocket.getNext()).getHealth() - 1);
+		}
+	}
+
+	private void damageTank(Rocket rocket) {
+		((EnemyTank) rocket.getNext()).setHealth(((EnemyTank) rocket.getNext()).getHealth() - 1);
 	}
 
 	public void importMatrix() {
@@ -108,14 +214,14 @@ public class GameManager {
 			BufferedReader reader = new BufferedReader(new FileReader("src/mappa.txt"));
 			String line = reader.readLine();
 			while (line != null) {
-				
+
 				StringTokenizer st = new StringTokenizer(line, " ");
 				int j = 0;// indice di colonna
-				String tmp ;
+				String tmp;
 				while (st.hasMoreTokens()) {
-					
+
 					tmp = st.nextToken();
-					
+
 					if (tmp.equals("null"))
 						getMatrix().world[i][j] = null;
 					else if (tmp.equals("[//]"))
@@ -128,17 +234,16 @@ public class GameManager {
 						getMatrix().world[i][j] = new BrickWall(i, j, getMatrix(), 2);
 					else if (tmp.equals("~~~~"))
 						getMatrix().world[i][j] = new Water(i, j, getMatrix());
-					else if(tmp.equals("****")){
-						player=new PlayerTank(i, j, matrix);
-						getMatrix().world[i][j]=player;
-					}
-					else if(tmp.equals("FLAG")){
-						flag=new Flag(i, j, matrix,true);
-						getMatrix().world[i][j]=flag;
+					else if (tmp.equals("****")) {
+						player = new PlayerTank(i, j, matrix);
+						getMatrix().world[i][j] = player;
+					} else if (tmp.equals("FLAG")) {
+						flag = new Flag(i, j, matrix, true);
+						getMatrix().world[i][j] = flag;
 					}
 					j++;
 				} // while
-		
+
 				i++;
 				line = reader.readLine();
 			} // while
@@ -149,23 +254,23 @@ public class GameManager {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void moveRocket() {
 		switch (tmp) {
 		case UP:
-			player.setRocket(new Rocket(player.getX(), player.getY(), player.getWorld(), Direction.UP));
+			rocket.add(new Rocket(player.getX(), player.getY(), player.getWorld(), Direction.UP, true));
 			break;
 		case DOWN:
-			player.setRocket(new Rocket(player.getX(), player.getY(), player.getWorld(), Direction.DOWN));
+			rocket.add(new Rocket(player.getX(), player.getY(), player.getWorld(), Direction.DOWN, true));
 			break;
 		case LEFT:
-			player.setRocket(new Rocket(player.getX(), player.getY(), player.getWorld(), Direction.LEFT));
+			rocket.add(new Rocket(player.getX(), player.getY(), player.getWorld(), Direction.LEFT, true));
 			break;
 		case RIGHT:
-			player.setRocket(new Rocket(player.getX(), player.getY(), player.getWorld(), Direction.RIGHT));
+			rocket.add(new Rocket(player.getX(), player.getY(), player.getWorld(), Direction.RIGHT, true));
 			break;
 		case STOP:
-			player.setRocket(new Rocket(player.getX(), player.getY(), player.getWorld(), Direction.UP));
+			rocket.add(new Rocket(player.getX(), player.getY(), player.getWorld(), Direction.UP, true));
 			break;
 		default:
 			break;
@@ -331,15 +436,15 @@ public class GameManager {
 	}
 
 	public void setPlayer(PlayerTank player) {
-		GameManager.player = player;
+		this.player = player;
 	}
 
-	public static ArrayList<EnemyTank> getEnemy() {
+	public ArrayList<EnemyTank> getEnemy() {
 		return enemy;
 	}
 
 	public void setEnemy(ArrayList<EnemyTank> enemy) {
-		GameManager.enemy = enemy;
+		this.enemy = enemy;
 	}
 
 	public ArrayList<PowerUp> getPower() {
@@ -348,14 +453,6 @@ public class GameManager {
 
 	public void setPower(ArrayList<PowerUp> power) {
 		this.power = power;
-	}
-
-	public ArrayList<AllWall> getWall() {
-		return wall;
-	}
-
-	public void setWall(ArrayList<AllWall> wall) {
-		this.wall = wall;
 	}
 
 	public Flag getFlag() {
@@ -376,5 +473,13 @@ public class GameManager {
 
 	public void setTmp(Direction tmp) {
 		this.tmp = tmp;
+	}
+
+	public ArrayList<Rocket> getRocket() {
+		return rocket;
+	}
+
+	public void setRocket(ArrayList<Rocket> rocket) {
+		this.rocket = rocket;
 	}
 }

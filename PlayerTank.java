@@ -8,7 +8,6 @@ public class PlayerTank extends AbstractDynamicObject {
 
 	public PlayerTank(int x, int y, World world) {
 		super(x, y, world, Speed.NORMAL, Speed.NORMAL, Direction.STOP, 1);
-		setRocket(new Rocket(x, y, world, Direction.STOP));
 	}
 
 	@Override
@@ -28,7 +27,7 @@ public class PlayerTank extends AbstractDynamicObject {
 		super.setDirection(direction);
 	}
 
-	public static int getLevel() {
+	public int getLevel() {
 		return level;
 	}
 

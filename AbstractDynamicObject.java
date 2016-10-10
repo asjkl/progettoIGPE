@@ -1,14 +1,12 @@
 package progettoIGPE.davide.giovanni.unical2016;
 
 public abstract class AbstractDynamicObject extends AbstractStaticObject implements DynamicObject {
-
 	private Speed speed;
 	private Speed speedShot;
 	private Direction direction;
 	private int health;
 	private AbstractStaticObject curr;
 	private AbstractStaticObject next;
-	private Rocket rocket;
 
 	public AbstractDynamicObject(int x, int y, World mondo, Speed speed, Speed speedShot, Direction direction,
 			int health) {
@@ -22,14 +20,6 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	public AbstractDynamicObject(int x, int y, World mondo, Direction direction) {
 		super(x, y, mondo);
 		this.direction = direction;
-	}
-
-	public Rocket getRocket() {
-		return rocket;
-	}
-
-	public void setRocket(Rocket rocket) {
-		this.rocket = rocket;
 	}
 
 	@Override
@@ -66,6 +56,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	public void setHealth(int health) {
 		this.health = health;
 	}
+
 	public AbstractStaticObject getCurr() {
 		return curr;
 	}
@@ -121,8 +112,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		}
 	}
 
-	public boolean sameObject() 
-	{
+	public boolean sameObject() {
 		if (!(next instanceof BrickWall) && !(next instanceof SteelWall) && !(next instanceof EnemyTank)
 				&& !(next instanceof PlayerTank) && !(next instanceof Water) && !(next instanceof Rocket)) {
 			if (next == curr) {
