@@ -6,8 +6,8 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	private Speed speedShot;
 	private Direction direction;
 	private int health;
-	private AbstractStaticObject curr; //oggetto corrente
-	private AbstractStaticObject next; //oggetto successivo
+	private AbstractStaticObject curr;
+	private AbstractStaticObject next;
 	private Rocket rocket;
 
 	public AbstractDynamicObject(int x, int y, World mondo, Speed speed, Speed speedShot, Direction direction,
@@ -24,22 +24,6 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		this.direction = direction;
 	}
 
-	public AbstractStaticObject getCurr() {
-		return curr;
-	}
-
-	public void setCurr(AbstractStaticObject curr) {
-		this.curr = curr;
-	}
-
-	public AbstractStaticObject getNext() {
-		return next;
-	}
-
-	public void setNext(AbstractStaticObject next) {
-		this.next = next;
-	}
-	
 	public Rocket getRocket() {
 		return rocket;
 	}
@@ -82,6 +66,21 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	public void setHealth(int health) {
 		this.health = health;
 	}
+	public AbstractStaticObject getCurr() {
+		return curr;
+	}
+
+	public void setCurr(AbstractStaticObject curr) {
+		this.curr = curr;
+	}
+
+	public AbstractStaticObject getNext() {
+		return next;
+	}
+
+	public void setNext(AbstractStaticObject next) {
+		this.next = next;
+	}
 
 	public void update() {
 		switch (getDirection()) {
@@ -119,15 +118,13 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 			break;
 		default:
 			break;
-			
 		}
 	}
 
 	public boolean sameObject() 
 	{
-		if (!(next instanceof Wall) && !(next instanceof PlayerTank) && !(next instanceof EnemyTank) 
-				&& !(next instanceof Water) && !(next instanceof Rocket)) {
-			
+		if (!(next instanceof BrickWall) && !(next instanceof SteelWall) && !(next instanceof EnemyTank)
+				&& !(next instanceof PlayerTank) && !(next instanceof Water) && !(next instanceof Rocket)) {
 			if (next == curr) {
 				getWorld().world[getX()][getY()] = next;
 			} else {

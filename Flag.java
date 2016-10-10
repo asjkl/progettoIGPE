@@ -27,7 +27,7 @@ public class Flag extends AbstractStaticObject {
 
 	@Override
 	public String toString() {
-		return "FLAG";
+		return " && ";
 	}
 
 }

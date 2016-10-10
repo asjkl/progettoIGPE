@@ -1,9 +1,9 @@
 package progettoIGPE.davide.giovanni.unical2016;
 
-	public abstract class AbstractStaticObject implements StaticObject {
+public abstract class AbstractStaticObject implements StaticObject {
 	private int x;
 	private int y;
-	private World world;
+	protected World world;
 
 	public AbstractStaticObject(int x, int y, World world) {
 		this.x = x;
