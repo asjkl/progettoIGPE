@@ -27,6 +27,7 @@ public class GameManager {
 		GameManager game = new GameManager();
 		game.randomEnemy(2); // quanti soldati generare
 		game.updateObjects(game); // muovi playerTank
+		game.randomPowerUp();
 	}
 
 	public void updateObjects(GameManager game) {
@@ -102,7 +103,6 @@ public class GameManager {
 		rocket = new ArrayList<>();
 		power = new ArrayList<>();
 		importMatrix();
-		randomPowerUp();
 	}
 
 	public void randomPowerUp() {
