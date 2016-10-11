@@ -7,6 +7,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	private int health;
 	private AbstractStaticObject curr;
 	private AbstractStaticObject next;
+	private int contRocket = 0;
 
 	public AbstractDynamicObject(int x, int y, World mondo, Speed speed, Speed speedShot, Direction direction,
 			int health) {
@@ -15,6 +16,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		this.direction = direction;
 		this.speedShot = speedShot;
 		this.health = health;
+		this.setContRocket(0);
 	}
 
 	public AbstractDynamicObject(int x, int y, World mondo, Direction direction) {
@@ -115,19 +117,27 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	public boolean sameObject() {
 		if (!(next instanceof BrickWall) && !(next instanceof SteelWall) && !(next instanceof EnemyTank)
 				&& !(next instanceof PlayerTank) && !(next instanceof Water) && !(next instanceof Rocket)) {
-			
-			if (next == curr) 
+
+			if (next == curr)
 				getWorld().world[getX()][getY()] = next;
 			else {
 				getWorld().world[getX()][getY()] = curr;
 				curr = next;
 			}
-			if(next instanceof PowerUp){
+			if (next instanceof PowerUp) {
 				curr = ((PowerUp) next).getBefore();
-				
+
 			}
 			return true;
 		}
 		return false;
+	}
+
+	public int getContRocket() {
+		return contRocket;
+	}
+
+	public void setContRocket(int contRocket) {
+		this.contRocket = contRocket;
 	}
 }

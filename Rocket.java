@@ -4,11 +4,13 @@ public class Rocket extends AbstractDynamicObject {
 
 	private boolean bordo; // se trovo bordo
 	private boolean shot; // se è stato sparato un colpo
+	private AbstractDynamicObject tank;
 
-	public Rocket(int x, int y, World world, Direction direction, boolean shot) {
+	public Rocket(int x, int y, World world, Direction direction, boolean shot, AbstractDynamicObject tank) {
 		super(x, y, world, direction);
 		this.bordo = false;
 		this.shot = shot;
+		this.tank = tank;
 
 	}
 
@@ -58,5 +60,13 @@ public class Rocket extends AbstractDynamicObject {
 
 	public void setBordo(boolean bordo) {
 		this.bordo = bordo;
+	}
+
+	public AbstractDynamicObject getTank() {
+		return tank;
+	}
+
+	public void setTank(AbstractDynamicObject tank) {
+		this.tank = tank;
 	}
 }
