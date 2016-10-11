@@ -206,11 +206,15 @@ public class GameManager {
 
 		if (player.intersectPowerUp(player.getNext())) {
 			for (int i = 0; i < power.size(); i++)
-				if (power.get(i).getX() == player.getNext().getX() && power.get(i).getY() == player.getNext().getY()) {
+				if (power.get(i) != null && power.get(i).getX() == player.getNext().getX()
+						&& power.get(i).getY() == player.getNext().getY()) {
 					System.out.println("entra");
-					// TODO RICHIAMRE IL METODO USE-POWERUP
+					// TODO RICHIAMRE IL METODO USE-POWERUP E NON SI CANCELLANO
+					// DALLA MATRICE
+					// power.remove(i);
+					matrix.world[power.get(i).getX()][power.get(i).getY()] = player;
 					power.remove(i);
-					matrix.world[player.getX()][player.getY()] = null;
+					break;
 				}
 		}
 	}
