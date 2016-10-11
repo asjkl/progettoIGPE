@@ -27,7 +27,7 @@ public class GameManager {
 		GameManager game = new GameManager();
 		game.randomEnemy(2); // quanti soldati generare
 		game.updateObjects(game); // muovi playerTank
-		game.randomPowerUp();
+		//game.randomPowerUp();
 	}
 
 	public void updateObjects(GameManager game) {
@@ -103,6 +103,7 @@ public class GameManager {
 		rocket = new ArrayList<>();
 		power = new ArrayList<>();
 		importMatrix();
+		randomPowerUp();
 	}
 
 	public void randomPowerUp() {
@@ -121,69 +122,60 @@ public class GameManager {
 
 	}
 
-	/** Uso un arrayList per salvarmi le posizioni i e j in modo tale da inserirla nella matrice **/
 	public void addPowerUp(int t) {
-
-
-		ArrayList<Integer> position = new ArrayList<>();
 
 		switch(t)
 		{
 			case 0:
-				foundPosition(position);
-				power.add(new PowerUp(position.get(0),position.get(1),getMatrix(),Power.GRANADE));
-				getMatrix().world[position.get(0)][position.get(1)] = new PowerUp(position.get(0),position.get(1),getMatrix(),Power.GRANADE);
+				foundPosition();
+				power.add(new PowerUp(getX(),getY(),getMatrix(),Power.GRANADE));
+				getMatrix().world[getX()][getY()] = new PowerUp(getX(),getY(),getMatrix(),Power.GRANADE);
 				break;
 			case 1:
-				foundPosition(position);
-				power.add(new PowerUp(position.get(0),position.get(1),getMatrix(),Power.HELMET));
-				getMatrix().world[position.get(0)][position.get(1)] = new PowerUp(position.get(0),position.get(1),getMatrix(),Power.HELMET);
+				foundPosition();
+				power.add(new PowerUp(getX(),getY(),getMatrix(),Power.HELMET));
+				getMatrix().world[getX()][getY()] = new PowerUp(getX(),getY(),getMatrix(),Power.HELMET);
 				break;
 			case 2:
-				foundPosition(position);
-				power.add(new PowerUp(position.get(0),position.get(1),getMatrix(),Power.SHOVEL));
-				getMatrix().world[position.get(0)][position.get(1)] = new PowerUp(position.get(0),position.get(1),getMatrix(),Power.SHOVEL);
+				foundPosition();
+				power.add(new PowerUp(getX(),getY(),getMatrix(),Power.SHOVEL));
+				getMatrix().world[getX()][getY()] = new PowerUp(getX(),getY(),getMatrix(),Power.SHOVEL);
 				break;
 			case 3:
-				foundPosition(position);
-				power.add(new PowerUp(position.get(0),position.get(1),getMatrix(),Power.STAR));
-				getMatrix().world[position.get(0)][position.get(1)] = new PowerUp(position.get(0),position.get(1),getMatrix(),Power.STAR);
+				foundPosition();
+				power.add(new PowerUp(getX(),getY(),getMatrix(),Power.STAR));
+				getMatrix().world[getX()][getY()] = new PowerUp(getX(),getY(),getMatrix(),Power.STAR);
 				break;
 			case 4:
-				foundPosition(position);
-				power.add(new PowerUp(position.get(0),position.get(1),getMatrix(),Power.TANK));
-				getMatrix().world[position.get(0)][position.get(1)] = new PowerUp(position.get(0),position.get(1),getMatrix(),Power.TANK);
+				foundPosition();
+				power.add(new PowerUp(getX(),getY(),getMatrix(),Power.TANK));
+				getMatrix().world[getX()][getY()] = new PowerUp(getX(),getY(),getMatrix(),Power.TANK);
 				break;
 			case 5:
-				foundPosition(position);
-				power.add(new PowerUp(position.get(0),position.get(1),getMatrix(),Power.TIMER));
-				getMatrix().world[position.get(0)][position.get(1)] = new PowerUp(position.get(0),position.get(1),getMatrix(),Power.TIMER);
+				foundPosition();
+				power.add(new PowerUp(getX(),getY(),getMatrix(),Power.TIMER));
+				getMatrix().world[getX()][getY()] = new PowerUp(getX(),getY(),getMatrix(),Power.TIMER);
 				break;
 			default:
 				break;
 		}
 	}
 
-	public void foundPosition(ArrayList<Integer> positions) {
+	public void foundPosition() {
 
 		boolean flag = false;
-		int i=0,j=0;
 
 		while(!flag) {
 
-			i = random.nextInt(size);
-			j = random.nextInt(size);
+			x = random.nextInt(size);
+			y = random.nextInt(size);
 
-			if(!(getMatrix().world[i][j] instanceof SteelWall) && !(getMatrix().world[i][j] instanceof PlayerTank)
-					&& !(getMatrix().world[i][j] instanceof EnemyTank) && !(getMatrix().world[i][j] instanceof PowerUp)
-					&& !(getMatrix().world[i][j] instanceof Rocket))
+			if(!(getMatrix().world[x][y] instanceof Wall) && !(getMatrix().world[x][y] instanceof PlayerTank)
+					&& !(getMatrix().world[x][y] instanceof EnemyTank) && !(getMatrix().world[x][y] instanceof PowerUp)
+					&& !(getMatrix().world[x][y] instanceof Rocket))
 
 					flag = true;
 		}
-
-		positions.add(i);
-		positions.add(j);
-
 	}
 
 
@@ -203,7 +195,8 @@ public class GameManager {
 					if (rocket.get(a).getNext() instanceof EnemyTank)
 						if (((EnemyTank) rocket.get(a).getNext()).getHealth() == 0)
 							destroyTank(rocket.get(a), (EnemyTank) rocket.get(a).getNext());
-							//remove
+					rocket.remove(a);
+					a--;
 				}
 			}
 		}
@@ -305,26 +298,36 @@ public class GameManager {
 				while (st.hasMoreTokens()) {
 
 					tmp = st.nextToken();
-
-					if (tmp.equals("null"))
+					
+					switch(tmp){
+					case ("null"):
 						getMatrix().world[i][j] = null;
-					else if (tmp.equals("[//]"))
+						break;
+					case("[//]"):
 						getMatrix().world[i][j] = new SteelWall(i, j, getMatrix(), 4);
-					else if (tmp.equals("@@@@"))
+						break;
+					case("@@@@"):
 						getMatrix().world[i][j] = new Ice(i, j, getMatrix());
-					else if (tmp.equals("TTTT"))
+						break;
+					case("TTTT"):
 						getMatrix().world[i][j] = new Trees(i, j, getMatrix());
-					else if (tmp.equals("[||]"))
+						break;
+					case("[||]"):
 						getMatrix().world[i][j] = new BrickWall(i, j, getMatrix(), 2);
-					else if (tmp.equals("~~~~"))
+						break;
+					case("~~~~"):
 						getMatrix().world[i][j] = new Water(i, j, getMatrix());
-					else if (tmp.equals("****")) {
+						break;
+					case("****"):
 						player = new PlayerTank(i, j, matrix);
 						getMatrix().world[i][j] = player;
-					} else if (tmp.equals("FLAG")) {
+						break;
+					case("FLAG"):
 						flag = new Flag(i, j, matrix, true);
 						getMatrix().world[i][j] = flag;
-					}
+						break;
+					}//switch
+					
 					j++;
 				} // while
 
