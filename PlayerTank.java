@@ -1,7 +1,7 @@
 package progettoIGPE.davide.giovanni.unical2016;
 
 public class PlayerTank extends AbstractDynamicObject {
-	private static int level = 1; // 1 stella...2 stella... 3 stella
+	private int level = 1; // 1 stella...2 stella... 3 stella
 	private int resume = 3;
 	private boolean protection;
 	private int point = 0;
@@ -32,7 +32,7 @@ public class PlayerTank extends AbstractDynamicObject {
 	}
 
 	public void setLevel(int level) {
-		PlayerTank.level = level;
+		this.level = level;
 	}
 
 	public int getResume() {
