@@ -12,7 +12,7 @@ public class GameManager {
 	private int y;
 	private int contEnemy = 0;
 	private Direction direction;
-	private static final int size = 20; // non modificare
+	private static final int size = 20;
 	private Random random = new Random();
 	private World matrix;
 	private PlayerTank player;
@@ -20,14 +20,12 @@ public class GameManager {
 	private ArrayList<PowerUp> power;
 	private ArrayList<Rocket> rocket;
 	private Flag flag;
-	private Direction tmp = Direction.STOP;
 
 	public static void main(String[] args) {
 
 		GameManager game = new GameManager();
 		game.randomEnemy(2); // quanti soldati generare
 		game.updateObjects(game); // muovi playerTank
-		//game.randomPowerUp();
 	}
 
 	public void updateObjects(GameManager game) {
@@ -36,7 +34,10 @@ public class GameManager {
 		@SuppressWarnings("resource")
 		Scanner s = new Scanner(System.in);
 		String c;
-
+		Direction tmp = Direction.STOP; // IN TMP RIMANE LA DIREZIONE
+								// PRECEDENTE PERCHE' ABBIAMO SETTATO
+								  // AD OGNI CICLO LO STOP DEL PLAYER
+		
 		game.matrix.stampa();
 		c = s.nextLine();
 		while (true) {
@@ -44,25 +45,23 @@ public class GameManager {
 			switch (c) {
 			case "w": // up
 				game.player.setDirection(Direction.UP);
-				game.tmp = Direction.UP; // IN TMP RIMANE LA DIREZIONE
-											// PRECEDENTE PERCHè ABBIAMO SETTATO
-											// AD OGNI CICLO LO STOP DEL PLAYER
+				tmp = Direction.UP; 
 				break;
 			case "a": // sx
 				game.player.setDirection(Direction.LEFT);
-				game.tmp = Direction.LEFT;
+				tmp = Direction.LEFT;
 				break;
 			case "d": // dx
 				game.player.setDirection(Direction.RIGHT);
-				game.tmp = Direction.RIGHT;
+				tmp = Direction.RIGHT;
 				break;
 			case "s": // down
 				game.player.setDirection(Direction.DOWN);
-				game.tmp = Direction.DOWN;
+				tmp = Direction.DOWN;
 				break;
 
 			case "r": // ROCKET
-				game.moveRocket();
+				game.moveRocket(tmp);
 				break;
 
 			default:
@@ -73,6 +72,7 @@ public class GameManager {
 			game.enemyPositionRandom();
 			game.player.update();
 
+			System.out.println("Numero Enemy: " + enemy.size());
 			if (enemy.size() > 0)
 				game.matrix.stampa();
 			else {
@@ -83,7 +83,7 @@ public class GameManager {
 				System.out.println();
 				System.out.println();
 				System.out.println();
-				System.out.println(" ---------------------------  YOU WIN  -------------------------- ");
+				System.out.println(" ---------------------------------  YOU WIN  ---------------------------------- ");
 				System.out.println();
 				System.out.println();
 				System.out.println();
@@ -170,20 +170,20 @@ public class GameManager {
 			x = random.nextInt(size);
 			y = random.nextInt(size);
 
-			if(!(getMatrix().world[x][y] instanceof Wall) && !(getMatrix().world[x][y] instanceof PlayerTank)
+			if(!(getMatrix().world[x][y] instanceof SteelWall) && !(getMatrix().world[x][y] instanceof PlayerTank)
 					&& !(getMatrix().world[x][y] instanceof EnemyTank) && !(getMatrix().world[x][y] instanceof PowerUp)
 					&& !(getMatrix().world[x][y] instanceof Rocket))
-
-					flag = true;
+					
+				flag = true;
 		}
 	}
-
 
 	public void updateGame() {
 		System.out.println(rocket.size());
 		for (int a = 0; a < rocket.size(); a++) {
 			if (rocket.get(a).isShot()) {
 				rocket.get(a).update();
+				
 				if (destroyRocket(rocket.get(a))) { // distruzione Rocket
 					matrix.world[rocket.get(a).getX()][rocket.get(a).getY()] = rocket.get(a).getCurr();
 					rocket.get(a).setShot(false);
@@ -195,6 +195,7 @@ public class GameManager {
 					if (rocket.get(a).getNext() instanceof EnemyTank)
 						if (((EnemyTank) rocket.get(a).getNext()).getHealth() == 0)
 							destroyTank(rocket.get(a), (EnemyTank) rocket.get(a).getNext());
+					//distruggi rocket
 					rocket.remove(a);
 					a--;
 				}
@@ -342,7 +343,7 @@ public class GameManager {
 		}
 	}
 
-	public void moveRocket() {
+	public void moveRocket(Direction tmp) {
 		switch (tmp) {
 		case UP:
 			rocket.add(new Rocket(player.getX(), player.getY(), player.getWorld(), Direction.UP, true));
@@ -552,14 +553,6 @@ public class GameManager {
 
 	public static int getSize() {
 		return size;
-	}
-
-	public Direction getTmp() {
-		return tmp;
-	}
-
-	public void setTmp(Direction tmp) {
-		this.tmp = tmp;
 	}
 
 	public ArrayList<Rocket> getRocket() {
