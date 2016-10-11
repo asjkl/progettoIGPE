@@ -25,8 +25,16 @@ public class GameManager {
 
 		GameManager game = new GameManager();
 		game.randomEnemy(2); // quanti soldati generare
+<<<<<<< HEAD
 		game.updateObjects(game); // muovi playerTank
 		//game.randomPowerUp();
+=======
+		game.updateObjects(game); // muovi playerTank
+<<<<<<< HEAD
+=======
+		//game.randomPowerUp();
+>>>>>>> branch 'master' of https://github.com/asjkl/progettoIGPE.git
+>>>>>>> branch 'master' of https://github.com/asjkl/progettoIGPE.git
 	}
 
 	public void updateObjects(GameManager game) {
@@ -169,6 +177,7 @@ public class GameManager {
 		while(!flag) {
 
 			x = random.nextInt(size);
+<<<<<<< HEAD
 			y = random.nextInt(size);
 			if(!(getMatrix().world[x][y] instanceof SteelWall) && !(getMatrix().world[x][y] instanceof PlayerTank)
 					&& !(getMatrix().world[x][y] instanceof EnemyTank) && !(getMatrix().world[x][y] instanceof PowerUp)
@@ -178,8 +187,27 @@ public class GameManager {
 			if(!(getMatrix().world[x][y] instanceof Wall) && !(getMatrix().world[x][y] instanceof PlayerTank)
 					&& !(getMatrix().world[x][y] instanceof EnemyTank) && !(getMatrix().world[x][y] instanceof PowerUp)
 					&& !(getMatrix().world[x][y] instanceof Rocket))
+=======
+			y = random.nextInt(size);
+>>>>>>> branch 'master' of https://github.com/asjkl/progettoIGPE.git
+
+<<<<<<< HEAD
+					flag = true;
+=======
+<<<<<<< HEAD
+			if(!(getMatrix().world[x][y] instanceof SteelWall) && !(getMatrix().world[x][y] instanceof PlayerTank)
+					&& !(getMatrix().world[x][y] instanceof EnemyTank) && !(getMatrix().world[x][y] instanceof PowerUp)
+					&& !(getMatrix().world[x][y] instanceof Rocket))
+					
+				flag = true;
+=======
+			if(!(getMatrix().world[x][y] instanceof Wall) && !(getMatrix().world[x][y] instanceof PlayerTank)
+					&& !(getMatrix().world[x][y] instanceof EnemyTank) && !(getMatrix().world[x][y] instanceof PowerUp)
+					&& !(getMatrix().world[x][y] instanceof Rocket))
 
 					flag = true;
+>>>>>>> branch 'master' of https://github.com/asjkl/progettoIGPE.git
+>>>>>>> branch 'master' of https://github.com/asjkl/progettoIGPE.git
 		}
 	}
 
@@ -199,7 +227,15 @@ public class GameManager {
 
 					if (rocket.get(a).getNext() instanceof EnemyTank)
 						if (((EnemyTank) rocket.get(a).getNext()).getHealth() == 0)
+<<<<<<< HEAD
 							destroyTank(rocket.get(a), (EnemyTank) rocket.get(a).getNext());
+=======
+							destroyTank(rocket.get(a), (EnemyTank) rocket.get(a).getNext());
+<<<<<<< HEAD
+					//distruggi rocket
+=======
+>>>>>>> branch 'master' of https://github.com/asjkl/progettoIGPE.git
+>>>>>>> branch 'master' of https://github.com/asjkl/progettoIGPE.git
 					rocket.remove(a);
 					a--;
 				}
