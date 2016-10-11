@@ -115,14 +115,16 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	public boolean sameObject() {
 		if (!(next instanceof BrickWall) && !(next instanceof SteelWall) && !(next instanceof EnemyTank)
 				&& !(next instanceof PlayerTank) && !(next instanceof Water) && !(next instanceof Rocket)) {
-			if(next instanceof PowerUp)
-				getWorld().world[getX()][getY()] = curr;
-			else
+			
 			if (next == curr) 
 				getWorld().world[getX()][getY()] = next;
-				else {
+			else {
 				getWorld().world[getX()][getY()] = curr;
 				curr = next;
+			}
+			if(next instanceof PowerUp){
+				curr = ((PowerUp) next).getBefore();
+				
 			}
 			return true;
 		}

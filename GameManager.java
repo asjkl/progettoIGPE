@@ -123,42 +123,55 @@ public class GameManager {
 	}
 
 	public void addPowerUp(int t) {
-
+		PowerUp tmp = null;
 		switch(t)
 		{
 			case 0:
 				foundPosition();
-				power.add(new PowerUp(getX(),getY(),getMatrix(),Power.GRANADE));
-				getMatrix().world[getX()][getY()] = new PowerUp(getX(),getY(),getMatrix(),Power.GRANADE);
+				tmp = new PowerUp(getX(),getY(),getMatrix(),Power.GRANADE);
+				tmp.setBefore(getMatrix().world[getX()][getY()]); //salvo oggetto su cui cade PowerUp
+				power.add(tmp); //aggiungi in list
+				getMatrix().world[getX()][getY()] = tmp; //posiziono PowerUp
 				break;
 			case 1:
 				foundPosition();
-				power.add(new PowerUp(getX(),getY(),getMatrix(),Power.HELMET));
-				getMatrix().world[getX()][getY()] = new PowerUp(getX(),getY(),getMatrix(),Power.HELMET);
+				tmp = new PowerUp(getX(),getY(),getMatrix(),Power.HELMET);
+				tmp.setBefore(getMatrix().world[getX()][getY()]); //salvo oggetto su cui cade PowerUp
+				power.add(tmp); //aggiungi in list
+				getMatrix().world[getX()][getY()] = tmp; //posiziono PowerUp
 				break;
 			case 2:
 				foundPosition();
-				power.add(new PowerUp(getX(),getY(),getMatrix(),Power.SHOVEL));
-				getMatrix().world[getX()][getY()] = new PowerUp(getX(),getY(),getMatrix(),Power.SHOVEL);
+				tmp = new PowerUp(getX(),getY(),getMatrix(),Power.SHOVEL);
+				tmp.setBefore(getMatrix().world[getX()][getY()]); //salvo oggetto su cui cade PowerUp
+				power.add(tmp); //aggiungi in list
+				getMatrix().world[getX()][getY()] = tmp; //posiziono PowerUp
 				break;
 			case 3:
 				foundPosition();
-				power.add(new PowerUp(getX(),getY(),getMatrix(),Power.STAR));
-				getMatrix().world[getX()][getY()] = new PowerUp(getX(),getY(),getMatrix(),Power.STAR);
+				tmp = new PowerUp(getX(),getY(),getMatrix(),Power.STAR);
+				tmp.setBefore(getMatrix().world[getX()][getY()]); //salvo oggetto su cui cade PowerUp
+				power.add(tmp); //aggiungi in list
+				getMatrix().world[getX()][getY()] = tmp; //posiziono PowerUp
 				break;
 			case 4:
 				foundPosition();
-				power.add(new PowerUp(getX(),getY(),getMatrix(),Power.TANK));
-				getMatrix().world[getX()][getY()] = new PowerUp(getX(),getY(),getMatrix(),Power.TANK);
+				tmp = new PowerUp(getX(),getY(),getMatrix(),Power.TANK);
+				tmp.setBefore(getMatrix().world[getX()][getY()]); //salvo oggetto su cui cade PowerUp
+				power.add(tmp); //aggiungi in list
+				getMatrix().world[getX()][getY()] = tmp; //posiziono PowerUp
 				break;
 			case 5:
 				foundPosition();
-				power.add(new PowerUp(getX(),getY(),getMatrix(),Power.TIMER));
-				getMatrix().world[getX()][getY()] = new PowerUp(getX(),getY(),getMatrix(),Power.TIMER);
+				tmp = new PowerUp(getX(),getY(),getMatrix(),Power.TIMER);
+				tmp.setBefore(getMatrix().world[getX()][getY()]); //salvo oggetto su cui cade PowerUp
+				power.add(tmp); //aggiungi in list
+				getMatrix().world[getX()][getY()] = tmp; //posiziono PowerUp
 				break;
 			default:
 				break;
 		}
+		System.out.println(tmp.getBefore());
 	}
 
 	public void foundPosition() {
@@ -170,7 +183,7 @@ public class GameManager {
 			x = random.nextInt(size);
 			y = random.nextInt(size);
 
-			if(!(getMatrix().world[x][y] instanceof SteelWall) && !(getMatrix().world[x][y] instanceof PlayerTank)
+			if(!(getMatrix().world[x][y] instanceof Wall) && !(getMatrix().world[x][y] instanceof PlayerTank)
 					&& !(getMatrix().world[x][y] instanceof EnemyTank) && !(getMatrix().world[x][y] instanceof PowerUp)
 					&& !(getMatrix().world[x][y] instanceof Rocket))
 					

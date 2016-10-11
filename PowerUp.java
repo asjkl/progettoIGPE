@@ -2,6 +2,7 @@ package progettoIGPE.davide.giovanni.unical2016;
 
 public class PowerUp extends AbstractStaticObject {
 
+	private AbstractStaticObject before;
 	@Override
 	public String toString() {
 		return " $$ ";
@@ -14,6 +15,14 @@ public class PowerUp extends AbstractStaticObject {
 		this.powerUp = powerUp;
 	}
 
+	public AbstractStaticObject getBefore() {
+		return before;
+	}
+
+	public void setBefore(AbstractStaticObject before) {
+		this.before = before;
+	}
+
 	public Power getPowerUp() {
 		return powerUp;
 	}
@@ -22,21 +31,5 @@ public class PowerUp extends AbstractStaticObject {
 		this.powerUp = powerUp;
 	}
 
-	void usePower(Power power) {
-		switch (power) {
-		case GRANADE:
-			break;
-		case HELMET:
-			break;
-		case SHOVEL:
-			break;
-		case STAR:
-			break;
-		case TANK:
-			break;
-		case TIMER:
-			break;
 
-		}
-	}
 }
