@@ -21,22 +21,4 @@ public class PowerUp extends AbstractStaticObject {
 	public void setPowerUp(Power powerUp) {
 		this.powerUp = powerUp;
 	}
-
-	void usePower(Power power) {
-		switch (power) {
-		case GRANADE:
-			break;
-		case HELMET:
-			break;
-		case SHOVEL:
-			break;
-		case STAR:
-			break;
-		case TANK:
-			break;
-		case TIMER:
-			break;
-
-		}
-	}
 }
