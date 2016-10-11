@@ -17,13 +17,6 @@ public class PlayerTank extends AbstractDynamicObject {
 		setDirection(Direction.STOP); // serve altrimenti giocatore non si ferma
 	}
 
-	public boolean intersectPowerUp(AbstractStaticObject power){
-		if(power instanceof PowerUp){
-			return true;
-		}
-		return false;
-	}
-	
 	@Override
 	public Direction getDirection() {
 		return super.getDirection();

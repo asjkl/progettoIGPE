@@ -99,10 +99,10 @@ public class GameManager {
 
 	public GameManager() {
 		matrix = new World(size, size);
+		importMatrix();
 		enemy = new ArrayList<>();
 		rocket = new ArrayList<>();
 		power = new ArrayList<>();
-		importMatrix();
 		randomPowerUp();
 	}
 
@@ -204,25 +204,27 @@ public class GameManager {
 			}
 		}
 
-		if (player.intersectPowerUp(player.getNext())) {
-			for (int i = 0; i < power.size(); i++)
-				if (power.get(i) != null && power.get(i).getX() == player.getNext().getX()
-						&& power.get(i).getY() == player.getNext().getY()) {
-					System.out.println("entra");
-					// TODO RICHIAMRE IL METODO USE-POWERUP E NON SI CANCELLANO
-					// DALLA MATRICE
-					// power.remove(i);
-					matrix.world[power.get(i).getX()][power.get(i).getY()] = player;
-					power.remove(i);
-					break;
-				}
-		}
+		// if (player.intersectPowerUp(player.getNext())) {
+		// for (int x = 0; x < power.size(); x++) {
+		// if (power.get(x).getX() == player.getNext().getX() &&
+		// power.get(x).getY() == player.getNext().getY()) {
+		// System.out.println("entra");
+		// // TODO RICHIAMRE IL METODO USE-POWERUP E NON SI CANCELLANO
+		// // DALLA MATRICE
+		// // matrix.world[power.get(x).getX()][power.get(x).getY()] =
+		// // null;
+		// power.remove(x);
+		// break;
+		// }
+		// }
+		// }
 	}
 
 	public void usePower(Power power) {
 		switch (power) {
 		case GRANADE:
 			for (int i = 0; i < enemy.size(); i++)
+				// TODO PER OGNI NEMICO RIMOSSO VA MESSO IL CURR
 				enemy.remove(i);
 			break;
 		case HELMET:
@@ -234,14 +236,14 @@ public class GameManager {
 				for (int j = (size / 2) - 2; j <= size / 2; j++)
 
 					if (!(getMatrix().world[i][j] instanceof Flag))
-						getMatrix().world[i][j] = new BrickWall(i, j, getMatrix(), 4);
+						getMatrix().world[i][j] = new SteelWall(i, j, getMatrix(), 4);
 			break;
 		case STAR:
 			if (player.getLevel() < 3)
 				player.setLevel(player.getLevel() + 1);
 			break;
 		case TANK:
-			player.setLevel(player.getResume() + 1);
+			player.setResume(player.getResume() + 1);
 			break;
 		case TIMER:
 			for (int i = 0; i < enemy.size(); i++)
@@ -334,7 +336,6 @@ public class GameManager {
 
 	public void importMatrix() {
 		int i = 0;// indice di riga
-
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader("src/mappa.txt"));
 			String line = reader.readLine();
