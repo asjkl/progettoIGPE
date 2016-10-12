@@ -4,11 +4,6 @@ public class PowerUp extends AbstractStaticObject {
 
 	private AbstractStaticObject before;
 	private Power powerUp;
-	
-	@Override
-	public String toString() {
-		return " $$ ";
-	}
 
 	public PowerUp(int x, int y, World world, Power powerUp) {
 		super(x, y, world);
@@ -31,7 +26,32 @@ public class PowerUp extends AbstractStaticObject {
 		this.powerUp = powerUp;
 	}
 	
-	
-	
-	
+	@Override
+	public String toString(){
+		switch(powerUp)
+		{
+			case GRANADE:
+				return " $G ";
+				break;
+			case HELMET:
+				return " $H ";
+				break;
+			case SHOVEL:
+				return " $SH";
+				break;
+			case STAR:
+				return " $ST";
+				break;
+			case TANK:
+				return " $T ";
+				break;
+			case TIMER:
+				return  " $TI" ;
+				break;
+			default:
+				return null;
+				break;
+		}
+	}
+
 }

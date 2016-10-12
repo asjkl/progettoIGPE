@@ -70,7 +70,7 @@ public class GameManager {
 			}
 			game.updateRocket();
 			
-			if(enter){ // 
+			if(enter){ 
 				game.moveRocket(tmp, game.player);
 				enter=false;
 			}
@@ -202,10 +202,12 @@ public class GameManager {
 			for(int i=0;i < enemy.size();i++)
 				enemy.remove(i);
 			break;
+			//TODO gestire secondi poi deve sparire oppure illimitato e sparisce dopo sparo
 		case HELMET:
-			player.setProtection(true);
+			player.setProtection(true); 
 			break;
-		case SHOVEL:
+			//TODO deve duare tot secondi e poi si deve ripristinare come era prima con i brickwall
+		case SHOVEL:                   
 			for(int i=size-2;i < size;i++)
 
 				for(int j=(size/2) - 2;j <= size/2;j++)
@@ -213,6 +215,7 @@ public class GameManager {
 					if(!(getMatrix().world[i][j] instanceof Flag))
 						getMatrix().world[i][j] = new BrickWall(i,j,getMatrix(),4);
 			break;
+			//TODO dopo esser stato colpito si riparte da livello 1
 		case STAR:
 			if(player.getLevel() < 3)
 				player.setLevel(player.getLevel() + 1);		
@@ -221,6 +224,7 @@ public class GameManager {
 			player.setLevel(player.getResume() + 1);
 			break;
 		case TIMER:
+			//TODO gestire secondi blocco
 			for(int i=0;i < enemy.size();i++)
 				enemy.get(i).setDirection(Direction.STOP);
 			break;
