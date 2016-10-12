@@ -25,32 +25,24 @@ public class PowerUp extends AbstractStaticObject {
 	public void setPowerUp(Power powerUp) {
 		this.powerUp = powerUp;
 	}
-	
+
 	@Override
-	public String toString(){
-		switch(powerUp)
-		{
-			case GRANADE:
-				return " $G ";
-				break;
-			case HELMET:
-				return " $H ";
-				break;
-			case SHOVEL:
-				return " $SH";
-				break;
-			case STAR:
-				return " $ST";
-				break;
-			case TANK:
-				return " $T ";
-				break;
-			case TIMER:
-				return  " $TI" ;
-				break;
-			default:
-				return null;
-				break;
+	public String toString() {
+		switch (powerUp) {
+		case GRANADE:
+			return " $G ";
+		case HELMET:
+			return " $H ";
+		case SHOVEL:
+			return " $SH ";
+		case STAR:
+			return " $ST ";
+		case TANK:
+			return " $T ";
+		case TIMER:
+			return " $TI ";
+		default:
+			return null;
 		}
 	}
 
