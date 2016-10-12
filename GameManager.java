@@ -8,7 +8,7 @@ import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class GameManager {
-	private int x;
+	private int x;		//commento
 	private int y;
 	private int contEnemy = 0;
 	private Direction direction;
