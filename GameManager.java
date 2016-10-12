@@ -78,7 +78,7 @@ public class GameManager {
 			game.enemyPositionRandom();
 			
 			//aggiorna posizione enemy
-			game.enemieUpdate();
+			game.enemyUpdate();
 			//aggiorna posizione player
 			game.player.update();
 			//stampa vittoria
@@ -195,6 +195,38 @@ public class GameManager {
 		}
 	}
 
+	public void usePowerUp (Power power) {
+		
+		switch (power) {
+		case GRANADE:
+			for(int i=0;i < enemy.size();i++)
+				enemy.remove(i);
+			break;
+		case HELMET:
+			player.setProtection(true);
+			break;
+		case SHOVEL:
+			for(int i=size-2;i < size;i++)
+
+				for(int j=(size/2) - 2;j <= size/2;j++)
+				
+					if(!(getMatrix().world[i][j] instanceof Flag))
+						getMatrix().world[i][j] = new BrickWall(i,j,getMatrix(),4);
+			break;
+		case STAR:
+			if(player.getLevel() < 3)
+				player.setLevel(player.getLevel() + 1);		
+			break;
+		case TANK:
+			player.setLevel(player.getResume() + 1);
+			break;
+		case TIMER:
+			for(int i=0;i < enemy.size();i++)
+				enemy.get(i).setDirection(Direction.STOP);
+			break;
+		}
+	}
+	
 	public void updateRocket() {
 		
 		System.out.println("numero rocket: " + rocket.size());
@@ -487,7 +519,7 @@ public class GameManager {
 		}
 	}
 
-	public void enemieUpdate(){
+	public void enemyUpdate(){
 		
 		for(int a=0;a<enemy.size();a++)
 		{
