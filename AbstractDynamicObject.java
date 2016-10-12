@@ -113,7 +113,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 			break;
 		}
 	}
-
+	
 	public boolean sameObject() {
 		if (!(next instanceof BrickWall) && !(next instanceof SteelWall) && !(next instanceof EnemyTank)
 				&& !(next instanceof PlayerTank) && !(next instanceof Water) && !(next instanceof Rocket)) {
@@ -124,6 +124,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 				getWorld().world[getX()][getY()] = curr;
 				curr = next;
 			}
+			//TODO nemici non tutti powerup
 			if (next instanceof PowerUp) {
 				curr = ((PowerUp) next).getBefore();
 

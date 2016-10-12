@@ -9,7 +9,7 @@ public class ArmorTank extends EnemyTank {
 
 	@Override
 	public String toString() {
-		return " A  ";
+		return " AT ";
 	}
 
 }

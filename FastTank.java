@@ -8,7 +8,7 @@ public class FastTank extends EnemyTank {
 
 	@Override
 	public String toString() {
-		return " F  ";
+		return " FT ";
 	}
 
 }

@@ -3,12 +3,12 @@ package progettoIGPE.davide.giovanni.unical2016;
 public class PowerUp extends AbstractStaticObject {
 
 	private AbstractStaticObject before;
+	private Power powerUp;
+	
 	@Override
 	public String toString() {
 		return " $$ ";
 	}
-
-	private Power powerUp;
 
 	public PowerUp(int x, int y, World world, Power powerUp) {
 		super(x, y, world);
@@ -30,6 +30,8 @@ public class PowerUp extends AbstractStaticObject {
 	public void setPowerUp(Power powerUp) {
 		this.powerUp = powerUp;
 	}
-
-
+	
+	
+	
+	
 }

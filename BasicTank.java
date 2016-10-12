@@ -9,7 +9,7 @@ public class BasicTank extends EnemyTank {
 
 	@Override
 	public String toString() {
-		return " B  ";
+		return " BT ";
 	}
 
 }

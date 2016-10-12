@@ -54,7 +54,7 @@ public class EnemyTank extends AbstractDynamicObject {
 		}
 
 	}
-
+	
 	public boolean notSamePosition() {
 		if (getDirection() == Direction.UP && isDirectionUp()) {
 			return false;
@@ -141,6 +141,7 @@ public class EnemyTank extends AbstractDynamicObject {
 			break;
 		default:
 			break;
+			
 		}
 	}
 

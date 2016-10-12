@@ -8,6 +8,6 @@ public class PowerTank extends EnemyTank {
 
 	@Override
 	public String toString() {
-		return " P  ";
+		return " PT ";
 	}
 }
