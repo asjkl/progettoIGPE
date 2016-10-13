@@ -114,9 +114,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		}
 	}
 	
-	public boolean sameObject() {
-		return true;
-	}
+	public abstract boolean sameObject();
 
 	public int getContRocket() {
 		return contRocket;

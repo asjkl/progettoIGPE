@@ -3,24 +3,14 @@ package progettoIGPE.davide.giovanni.unical2016;
 public class Rocket extends AbstractDynamicObject {
 
 	private boolean bordo; // se trovo bordo
-	private boolean shot; // se è stato sparato un colpo
 	private AbstractDynamicObject tank; //rocket appartenenza
 
-	public Rocket(int x, int y, World world, Direction direction, boolean shot, AbstractDynamicObject tank) {
+	public Rocket(int x, int y, World world, Direction direction, AbstractDynamicObject tank) {
 		super(x, y, world, direction);
 		this.bordo = false;
-		this.shot = shot;
 		this.tank = tank;
 	}
-
-	public boolean isShot() {
-		return shot;
-	}
-
-	public void setShot(boolean shot) {
-		this.shot = shot;
-	}
-
+	
 	@Override
 	public void setDirection(Direction direction) {
 		super.setDirection(direction);

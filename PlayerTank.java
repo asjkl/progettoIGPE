@@ -20,8 +20,8 @@ public class PlayerTank extends AbstractDynamicObject {
 
 	@Override
 	public boolean sameObject() {
-		if (!(next instanceof BrickWall) && !(next instanceof SteelWall) && !(next instanceof EnemyTank)
-				&& !(next instanceof PlayerTank) && !(next instanceof Water) && !(next instanceof Rocket && !(next instanceof Flag))) {
+		if (!(next instanceof Wall) && !(next instanceof EnemyTank)
+				&& !(next instanceof PlayerTank) && !(next instanceof Water) && !(next instanceof Rocket) && !(next instanceof Flag)) {
 
 			if (next == curr)
 				getWorld().world[getX()][getY()] = next;
