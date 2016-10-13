@@ -40,13 +40,13 @@ public class Rocket extends AbstractDynamicObject {
 	@Override
 	public boolean sameObject() {
 		// a differenza di quello Dynamic questo object passa sull acqua
-		if (!(getNext() instanceof Wall) && !(getNext() instanceof PlayerTank) && !(getNext() instanceof Rocket)
-				&& !(getNext() instanceof EnemyTank)) {
-			if (getNext() == getCurr()) {
-				getWorld().world[getX()][getY()] = getNext();
+		if (!(next instanceof Wall) && !(next instanceof PlayerTank) && !(next instanceof Rocket)
+				&& !(next instanceof EnemyTank)  && !(next instanceof Flag)) {
+			if (next == curr) {
+				getWorld().world[getX()][getY()] = next;
 			} else {
-				getWorld().world[getX()][getY()] = getCurr();
-				setCurr(getNext());
+				getWorld().world[getX()][getY()] = curr;
+				curr = next;
 			}
 			return true;
 		}

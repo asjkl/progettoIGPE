@@ -30,17 +30,17 @@ public class PowerUp extends AbstractStaticObject {
 	public String toString() {
 		switch (powerUp) {
 		case GRANADE:
-			return " $G ";
+			return " $1 ";
 		case HELMET:
-			return " $H ";
+			return " $2 ";
 		case SHOVEL:
-			return " $SH ";
+			return " $3 ";
 		case STAR:
-			return " $ST ";
+			return " $4 ";
 		case TANK:
-			return " $T ";
+			return " $5 ";
 		case TIMER:
-			return " $TI ";
+			return " $6 ";
 		default:
 			return null;
 		}

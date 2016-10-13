@@ -7,8 +7,8 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
-public class GameManager {
-	private int x;	//cosentino
+public class GameManager { 
+	private int x;
 	private int y;
 	private int contEnemy = 0;
 	private Direction direction;
@@ -34,7 +34,7 @@ public class GameManager {
 	public static void main(String[] args) {
 
 		GameManager game = new GameManager();
-		game.randomEnemy(1); // quanti soldati generare
+		game.randomEnemy(5); // quanti soldati generare
 		Scanner s = new Scanner(System.in);
 		String c;
 		Direction tmp = Direction.STOP; // IN TMP RIMANE LA DIREZIONE
@@ -82,13 +82,15 @@ public class GameManager {
 			//aggiorna posizione player
 			game.player.update();
 			//stampa vittoria
-			game.print();
+			game.printWin();
+			//stampa sconfitta
+			if(game.printGameOver())
+				break;
 			c = s.nextLine();
 		}	
 	}
 	
-	public void print(){
-		System.out.println("Numero Enemy: " + enemy.size());
+	public void printWin(){
 		if (enemy.size() > 0)
 			matrix.stampa();
 		else {
@@ -110,6 +112,30 @@ public class GameManager {
 		}
 	}
 
+	public boolean printGameOver()
+	{
+		if( flag.isHit())
+		{
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println(" ---------------------------------  Game Over  ---------------------------------- ");
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				System.out.println();
+				return true;
+			}
+		return false;
+	}
+	
 	public void randomPowerUp() {
 
 		int cont = 0;
@@ -233,15 +259,13 @@ public class GameManager {
 	
 	public void updateRocket() {
 		
-		System.out.println("numero rocket: " + rocket.size());
 		for (int a = 0; a < rocket.size(); a++) {
 			if (rocket.get(a).isShot()) {
 				rocket.get(a).update();
 				
-				
 				if (destroyRocket(rocket.get(a))) 
 				{ 
-						//contstore rocket presenti
+						//contatore rocket presenti
 						if (!(rocket.get(a).getTank() instanceof EnemyTank))
 							player.setContRocket(player.getContRocket() - 1);
 						else {
@@ -264,7 +288,9 @@ public class GameManager {
 						if (rocket.get(a).getNext() instanceof EnemyTank)
 							if (((EnemyTank) rocket.get(a).getNext()).getHealth() == 0)
 								destroyTank(rocket.get(a), (EnemyTank) rocket.get(a).getNext());
-						//TODO distruggere player
+						//distruggi Flag
+						if(rocket.get(a).getNext() instanceof Flag)
+							flag.setHit(true);
 						//distruggi Rocket
 						rocket.remove(a);
 						a--;
@@ -274,7 +300,8 @@ public class GameManager {
 	}
 
 	public boolean destroyRocket(Rocket rocket) {
-		if (rocket.isBordo() || rocket.getNext() instanceof Rocket) {
+		
+		if (rocket.isBordo() || rocket.getNext() instanceof Rocket || rocket.getNext() instanceof Flag) {
 			return true;
 		}
 
@@ -394,7 +421,7 @@ public class GameManager {
 						getMatrix().world[i][j] = player;
 						break;
 					case ("FLAG"):
-						flag = new Flag(i, j, matrix, true);
+						flag = new Flag(i, j, matrix);
 						getMatrix().world[i][j] = flag;
 						break;
 					}// switch
@@ -529,7 +556,7 @@ public class GameManager {
 		{
 			if (enemy.get(a).getPassi() >= enemy.get(a).getContatorePassi()) {
 				enemy.get(a).update();
-				//moveRocket(enemy.get(a).getDirection(), enemy.get(a));
+				moveRocket(enemy.get(a).getDirection(), enemy.get(a));
 				
 				if (enemy.get(a).getX() == enemy.get(a).getTempX() && enemy.get(a).getY() == enemy.get(a).getTempY()) {
 					enemy.get(a).setRiprendoValori(true);

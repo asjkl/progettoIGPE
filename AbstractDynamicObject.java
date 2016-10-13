@@ -5,8 +5,8 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	private Speed speedShot;
 	private Direction direction;
 	private int health;
-	private AbstractStaticObject curr;
-	private AbstractStaticObject next;
+	protected AbstractStaticObject curr;
+	protected AbstractStaticObject next;
 	private int contRocket = 0;
 
 	public AbstractDynamicObject(int x, int y, World mondo, Speed speed, Speed speedShot, Direction direction,
@@ -115,23 +115,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	}
 	
 	public boolean sameObject() {
-		if (!(next instanceof BrickWall) && !(next instanceof SteelWall) && !(next instanceof EnemyTank)
-				&& !(next instanceof PlayerTank) && !(next instanceof Water) && !(next instanceof Rocket)) {
-
-			if (next == curr)
-				getWorld().world[getX()][getY()] = next;
-			else {
-				getWorld().world[getX()][getY()] = curr;
-				curr = next;
-			}
-			//TODO nemici non tutti powerup
-			if (next instanceof PowerUp) {
-				curr = ((PowerUp) next).getBefore();
-
-			}
-			return true;
-		}
-		return false;
+		return true;
 	}
 
 	public int getContRocket() {

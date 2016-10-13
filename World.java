@@ -9,17 +9,11 @@ public class World {
 		this.row = row;
 		this.column = column;
 		world = new AbstractStaticObject[row][column];
-		for (int a = 0; a < row; a++) {
-			for (int b = 0; b < column; b++) {
-				world[a][b] = null;
-			}
-		}
 	}
 
 	public World() {
 		row = 10;
 		column = 10;
-
 	}
 
 	public int getRow() {

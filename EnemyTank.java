@@ -28,7 +28,33 @@ public class EnemyTank extends AbstractDynamicObject {
 		directionLeft = false;
 		directionRight = false;
 	}
+	
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		super.update();
+	}
+	
+	@Override
+	public boolean sameObject() {
+		if (!(next instanceof BrickWall) && !(next instanceof SteelWall) && !(next instanceof EnemyTank)
+				&& !(next instanceof PlayerTank) && !(next instanceof Water) && !(next instanceof Rocket && !(next instanceof Flag))) {
 
+			if (next == curr)
+				getWorld().world[getX()][getY()] = next;
+			else {
+				getWorld().world[getX()][getY()] = curr;
+				curr = next;
+			}
+			//prendo solo Helmet
+			if (next instanceof PowerUp && ((PowerUp) next).getPowerUp() == Power.HELMET){
+				curr = ((PowerUp) next).getBefore();
+			}
+			return true;
+		}
+		return false;
+	}
+	
 	public void setPositionXY() {
 		this.tempX = getX();
 		this.tempY = getY();
