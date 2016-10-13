@@ -28,33 +28,41 @@ public class EnemyTank extends AbstractDynamicObject {
 		directionLeft = false;
 		directionRight = false;
 	}
-	
+
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
 		super.update();
 	}
-	
+
 	@Override
 	public boolean sameObject() {
-		if (!(next instanceof Wall) && !(next instanceof EnemyTank) && !(next instanceof PlayerTank) 
+		if (!(next instanceof Wall) && !(next instanceof EnemyTank) && !(next instanceof PlayerTank)
 				&& !(next instanceof Water) && !(next instanceof Rocket) && !(next instanceof Flag)) {
-
 			if (next == curr)
 				getWorld().world[getX()][getY()] = next;
 			else {
 				getWorld().world[getX()][getY()] = curr;
 				curr = next;
 			}
-			//prendo solo Helmet
-			if (next instanceof PowerUp && ((PowerUp) next).getPowerUp() == Power.HELMET){
+			// prendo solo Helmet
+			if (next instanceof PowerUp && ((PowerUp) next).getPowerUp() == Power.HELMET) {
 				curr = ((PowerUp) next).getBefore();
 			}
 			return true;
 		}
+
+		// ECCO IL PROBLEMA
+		// L'ENEMY NON VIENE AGGIORNATO QUANDO SPARA PERCHè IL SUO NEXT è UN
+		// ROCKET E RETURN FALSE PERò QUANDO AGGIORNA CI METTE CURR CHE è NULL
+		if (next instanceof Rocket) {
+			world.world[getX()][getY()] = this;
+			return false;
+		}
+
 		return false;
 	}
-	
+
 	public void setPositionXY() {
 		this.tempX = getX();
 		this.tempY = getY();
@@ -80,7 +88,7 @@ public class EnemyTank extends AbstractDynamicObject {
 		}
 
 	}
-	
+
 	public boolean notSamePosition() {
 		if (getDirection() == Direction.UP && isDirectionUp()) {
 			return false;
@@ -167,7 +175,7 @@ public class EnemyTank extends AbstractDynamicObject {
 			break;
 		default:
 			break;
-			
+
 		}
 	}
 
@@ -271,5 +279,5 @@ public class EnemyTank extends AbstractDynamicObject {
 	public void setTempY(int tempY) {
 		this.tempY = tempY;
 	}
-	
+
 }
