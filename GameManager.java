@@ -21,6 +21,7 @@ public class GameManager {
 	private ArrayList<Rocket> rocket;
 	private Flag flag;
 	private boolean exit = false;
+	private boolean timer = false; 
 
 	public GameManager() {
 		matrix = new World(size, size);
@@ -231,6 +232,7 @@ public class GameManager {
 		// dopo sparo
 		case HELMET:
 			player.setProtection(true);
+			lenghtPowerUp(5);
 			break;
 		// TODO deve duare tot secondi e poi si deve ripristinare come era prima
 		// con i brickwall
@@ -252,12 +254,35 @@ public class GameManager {
 			break;
 		case TIMER:
 			// TODO gestire secondi blocco
+			System.out.println("POWERUP");
 			for (int i = 0; i < enemy.size(); i++)
 				enemy.get(i).setDirection(Direction.STOP);
+			lenghtPowerUp(10);
 			break;
 		}
 	}
 
+	public void lenghtPowerUp(int t) {
+		if(timer)
+			timer=false;
+		//DAVIDE NON CAMBIARE IL FORMATO DELLA VARIABILE IN INT PERCHè NON FUNZIONA!
+		long second = (System.currentTimeMillis()/1000)%60;
+		long tmp = second+t;	
+		
+			if(tmp >= 59)
+				
+				tmp-=59;
+			
+			while(!timer) {
+				
+				second = (System.currentTimeMillis()/1000)%60;
+				
+				if(second==tmp)
+					
+					timer = true;
+			}
+	}
+	
 	public void updateRocket() {
 
 		for (int a = 0; a < rocket.size(); a++) {
@@ -595,7 +620,8 @@ public class GameManager {
 
 		for (int a = 0; a < enemy.size(); a++) {
 			if (enemy.get(a).getPassi() >= enemy.get(a).getContatorePassi()) {
-				enemy.get(a).update();
+				if(!timer)
+					enemy.get(a).update();
 				createRocketEnemy(enemy.get(a));
 
 				if (enemy.get(a).getX() == enemy.get(a).getTempX() && enemy.get(a).getY() == enemy.get(a).getTempY()) {
