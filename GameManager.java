@@ -21,7 +21,7 @@ public class GameManager {
 	private ArrayList<Rocket> rocket;
 	private Flag flag;
 	private boolean exit = false;
-	private boolean timer = false; 
+	private boolean timer = false;
 
 	public GameManager() {
 		matrix = new World(size, size);
@@ -72,7 +72,8 @@ public class GameManager {
 			}
 			game.updateRocket();
 
-			if (enter) { // spara il doppio rocket al livello 2 o 3
+			// spara il doppio rocket al livello > 1
+			if (enter && game.player.getLevel()>1) { 
 				game.createRocketPlayer(tmp);
 				enter = false;
 			}
@@ -82,21 +83,25 @@ public class GameManager {
 
 			// aggiorna posizione player
 			game.player.update();
-
-			// stampa vittoria
-			game.printWin();
-
-			// stampa sconfitta
-			game.printGameOver();
-
+			
+			//GAME OVER / WIN
+			if(game.flag.isHit() || game.player.getResume() == 0) { //se è stato colpito bandiera o player ha perso le vite
+				game.printGameOver();// stampa sconfitta
+				game.exit=true;
+			}
+			else if (game.enemy.size() == 0) {
+					game.printWin(); //se non ci sono piu nemici stampa vittoria
+					game.exit=true;
+			}
+			
+			if(game.exit==false){	
+			game.matrix.stampa();	
 			c = s.nextLine();
+			}
 		}
 	}
-
-	public void printWin() {
-		if (enemy.size() > 0)
-			matrix.stampa();
-		else {
+		public void printWin() {
+			
 			System.out.println();
 			System.out.println();
 			System.out.println();
@@ -112,11 +117,9 @@ public class GameManager {
 			System.out.println();
 			System.out.println();
 			System.out.println();
-		}
 	}
 
 	public void printGameOver() {
-		if (flag.isHit() || exit) {
 			System.out.println();
 			System.out.println();
 			System.out.println();
@@ -132,8 +135,6 @@ public class GameManager {
 			System.out.println();
 			System.out.println();
 			System.out.println();
-			exit = true;
-		}
 	}
 
 	public void randomPowerUp() {
@@ -263,26 +264,24 @@ public class GameManager {
 	}
 
 	public void lenghtPowerUp(int t) {
-		if(timer)
-			timer=false;
-		//DAVIDE NON CAMBIARE IL FORMATO DELLA VARIABILE IN INT PERCHè NON FUNZIONA!
-		long second = (System.currentTimeMillis()/1000)%60;
-		long tmp = second+t;	
-		
-			if(tmp >= 59)
-				
-				tmp-=59;
-			
-			while(!timer) {
-				
-				second = (System.currentTimeMillis()/1000)%60;
-				
-				if(second==tmp)
-					
-					timer = true;
-			}
-	}
 	
+		long second = (System.currentTimeMillis() / 1000) % 60;
+		long tmp = second + t;
+
+		if (tmp >= 59)
+
+			tmp -= 59;
+
+		while (!timer) {
+
+			second = (System.currentTimeMillis() / 1000) % 60;
+
+			if (second == tmp)
+
+				timer = true;
+		}
+	}
+
 	public void updateRocket() {
 
 		for (int a = 0; a < rocket.size(); a++) {
@@ -315,11 +314,7 @@ public class GameManager {
 				if (rocket.get(a).getNext() instanceof Flag)
 					flag.setHit(true);
 				// distruggi Player
-				if (rocket.get(a).getNext() instanceof PlayerTank)
-					if (((PlayerTank) rocket.get(a).getNext()).getResume() == 0) {
-						exit = true;
-						printGameOver();
-					}
+				//per il momento viene terminato il gioco senza cancellare
 				// distruggi Rocket
 				rocket.remove(a);
 				a--;
@@ -620,8 +615,7 @@ public class GameManager {
 
 		for (int a = 0; a < enemy.size(); a++) {
 			if (enemy.get(a).getPassi() >= enemy.get(a).getContatorePassi()) {
-				if(!timer)
-					enemy.get(a).update();
+				enemy.get(a).update();
 				createRocketEnemy(enemy.get(a));
 
 				if (enemy.get(a).getX() == enemy.get(a).getTempX() && enemy.get(a).getY() == enemy.get(a).getTempY()) {
