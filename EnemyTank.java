@@ -33,6 +33,8 @@ public class EnemyTank extends AbstractDynamicObject {
 	public void update() {
 		// TODO Auto-generated method stub
 		super.update();
+		System.out.println(this.getX()+" "+this.getY());
+		getWorld().world[getX()][getY()] = this;
 	}
 
 	@Override
@@ -48,18 +50,10 @@ public class EnemyTank extends AbstractDynamicObject {
 			// prendo solo Helmet
 			if (next instanceof PowerUp && ((PowerUp) next).getPowerUp() == Power.HELMET) {
 				curr = ((PowerUp) next).getBefore();
+				
 			}
 			return true;
 		}
-
-		// ECCO IL PROBLEMA
-		// L'ENEMY NON VIENE AGGIORNATO QUANDO SPARA PERCHè IL SUO NEXT è UN
-		// ROCKET E RETURN FALSE PERò QUANDO AGGIORNA CI METTE CURR CHE è NULL
-		if (next instanceof Rocket) {
-			world.world[getX()][getY()] = this;
-			return false;
-		}
-
 		return false;
 	}
 

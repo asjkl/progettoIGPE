@@ -70,8 +70,7 @@ public class GameManager {
 			default:
 				break;
 			}
-			game.updateRocket();
-
+			
 			// spara il doppio rocket al livello > 1
 			if (enter && game.player.getLevel()>1) { 
 				game.createRocketPlayer(tmp);
@@ -80,7 +79,7 @@ public class GameManager {
 
 			// aggiorna posizione enemy
 			game.enemyUpdate();
-
+			
 			// aggiorna posizione player
 			game.player.update();
 			
@@ -100,7 +99,8 @@ public class GameManager {
 			}
 		}
 	}
-		public void printWin() {
+
+	public void printWin() {
 			
 			System.out.println();
 			System.out.println();
@@ -615,8 +615,10 @@ public class GameManager {
 
 		for (int a = 0; a < enemy.size(); a++) {
 			if (enemy.get(a).getPassi() >= enemy.get(a).getContatorePassi()) {
-				enemy.get(a).update();
+				//soluzione don t touch
 				createRocketEnemy(enemy.get(a));
+				updateRocket();
+				enemy.get(a).update();
 
 				if (enemy.get(a).getX() == enemy.get(a).getTempX() && enemy.get(a).getY() == enemy.get(a).getTempY()) {
 					enemy.get(a).setRiprendoValori(true);

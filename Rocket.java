@@ -9,6 +9,7 @@ public class Rocket extends AbstractDynamicObject {
 		super(x, y, world, direction);
 		this.bordo = false;
 		this.tank = tank;
+		System.out.println("direction:"+direction);
 	}
 	
 	@Override
