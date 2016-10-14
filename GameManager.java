@@ -64,7 +64,7 @@ public class GameManager {
 				tmp = Direction.DOWN;
 				break;
 			case "r": // ROCKET
-				game.createRocketPlayer(tmp);
+				game.createRocketTank(tmp, game.player);
 				enter = true;
 				break;
 			default:
@@ -73,7 +73,7 @@ public class GameManager {
 
 			// spara il doppio rocket al livello > 1
 			if (enter && game.player.getLevel() > 1) {
-				game.createRocketPlayer(tmp);
+				game.createRocketTank(tmp, game.player);
 				enter = false;
 			}
 
@@ -486,51 +486,30 @@ public class GameManager {
 		}
 	}
 
-	public void createRocketPlayer(Direction tmp) {
-		if ((player.getLevel() < 3 && player.getContRocket() == 0)
-				|| (player.getLevel() > 1 && player.getContRocket() < 2)) {
+	public void createRocketTank(Direction tmp, AbstractDynamicObject tank) {
+		if ((tank instanceof PlayerTank && player.getLevel() < 3 && player.getContRocket() == 0)
+				|| (tank instanceof PlayerTank && player.getLevel() > 1 && player.getContRocket() < 2)
+				|| (tank instanceof EnemyTank && tank.getContRocket() == 0)) {
 			switch (tmp) {
 			case UP:
-				rocket.add(new Rocket(player.getX(), player.getY(), matrix, Direction.UP, player));
+				rocket.add(new Rocket(tank.getX(), tank.getY(), matrix, Direction.UP, tank));
 				break;
 			case DOWN:
-				rocket.add(new Rocket(player.getX(), player.getY(), matrix, Direction.DOWN, player));
+				rocket.add(new Rocket(tank.getX(), tank.getY(), matrix, Direction.DOWN, tank));
 				break;
 			case LEFT:
-				rocket.add(new Rocket(player.getX(), player.getY(), matrix, Direction.LEFT, player));
+				rocket.add(new Rocket(tank.getX(), tank.getY(), matrix, Direction.LEFT, tank));
 				break;
 			case RIGHT:
-				rocket.add(new Rocket(player.getX(), player.getY(), matrix, Direction.RIGHT, player));
+				rocket.add(new Rocket(tank.getX(), tank.getY(), matrix, Direction.RIGHT, tank));
 				break;
 			case STOP:
-				rocket.add(new Rocket(player.getX(), player.getY(), matrix, Direction.UP, player));
+				rocket.add(new Rocket(tank.getX(), tank.getY(), matrix, Direction.UP, tank));
 				break;
 			default:
 				break;
 			}
-			player.setContRocket(player.getContRocket() + 1); // conta rocket
-		}
-	}
-
-	public void createRocketEnemy(AbstractDynamicObject enemy) {
-		if ((enemy.getContRocket() == 0)) {
-			switch (enemy.getDirection()) {
-			case UP:
-				rocket.add(new Rocket(enemy.getX(), enemy.getY(), matrix, Direction.UP, enemy));
-				break;
-			case DOWN:
-				rocket.add(new Rocket(enemy.getX(), enemy.getY(), matrix, Direction.DOWN, enemy));
-				break;
-			case LEFT:
-				rocket.add(new Rocket(enemy.getX(), enemy.getY(), matrix, Direction.LEFT, enemy));
-				break;
-			case RIGHT:
-				rocket.add(new Rocket(enemy.getX(), enemy.getY(), matrix, Direction.RIGHT, enemy));
-				break;
-			default:
-				break;
-			}
-			enemy.setContRocket(enemy.getContRocket() + 1); // conta rocket
+			tank.setContRocket(tank.getContRocket() + 1); // conta rocket
 		}
 	}
 
@@ -625,7 +604,7 @@ public class GameManager {
 		for (int a = 0; a < enemy.size(); a++) {
 			if (enemy.get(a).getPassi() >= enemy.get(a).getContatorePassi()) {
 				// soluzione don t touch
-				createRocketEnemy(enemy.get(a));
+				createRocketTank(enemy.get(a).getDirection(), enemy.get(a));
 				updateRocket();
 				if (!controlDestroyEnemyInArrayList(enemy.get(a))) { // FUNZIONE
 																		// AGGIUNTA
