@@ -83,6 +83,12 @@ public class GameManager {
 			// aggiorna posizione player
 			game.player.update();
 			
+			//powerup player
+			//1.cattura powerup
+			//2.entità tank
+			//3.sapere tipo powerUp
+			//4...
+			
 			//GAME OVER / WIN
 			if(game.flag.isHit() || game.player.getResume() == 0) { //se è stato colpito bandiera o player ha perso le vite
 				game.printGameOver();// stampa sconfitta

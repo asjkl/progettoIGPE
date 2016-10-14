@@ -4,10 +4,17 @@ public class PowerUp extends AbstractStaticObject {
 
 	private AbstractStaticObject before;
 	private Power powerUp;
+	private AbstractDynamicObject tank; //powerup appartenenza
 
 	public PowerUp(int x, int y, World world, Power powerUp) {
 		super(x, y, world);
 		this.powerUp = powerUp;
+	}
+	
+	public PowerUp(int x, int y, World world, Power powerUp, AbstractDynamicObject  tank) {
+		super(x, y, world);
+		this.powerUp = powerUp;
+		this.tank=tank;
 	}
 
 	public AbstractStaticObject getBefore() {
@@ -24,6 +31,15 @@ public class PowerUp extends AbstractStaticObject {
 
 	public void setPowerUp(Power powerUp) {
 		this.powerUp = powerUp;
+	}
+	
+
+	public AbstractDynamicObject getTank() {
+		return tank;
+	}
+
+	public void setTank(AbstractDynamicObject tank) {
+		this.tank = tank;
 	}
 
 	@Override
