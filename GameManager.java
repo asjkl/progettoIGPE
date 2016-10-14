@@ -70,77 +70,85 @@ public class GameManager {
 			default:
 				break;
 			}
-			
+
 			// spara il doppio rocket al livello > 1
-			if (enter && game.player.getLevel()>1) { 
+			if (enter && game.player.getLevel() > 1) {
 				game.createRocketPlayer(tmp);
 				enter = false;
 			}
 
 			// aggiorna posizione enemy
 			game.enemyUpdate();
-			
+
 			// aggiorna posizione player
 			game.player.update();
-			
-			//powerup player
-			//1.cattura powerup
-			//2.entità tank
-			//3.sapere tipo powerUp
-			//4...
-			
-			//GAME OVER / WIN
-			if(game.flag.isHit() || game.player.getResume() == 0) { //se è stato colpito bandiera o player ha perso le vite
+
+			// powerup player
+			// 1.cattura powerup
+			// 2.entità tank
+			// 3.sapere tipo powerUp
+			// 4...
+
+			// GAME OVER / WIN
+			if (game.flag.isHit() || game.player.getResume() == 0) { // se è
+																		// stato
+																		// colpito
+																		// bandiera
+																		// o
+																		// player
+																		// ha
+																		// perso
+																		// le
+																		// vite
 				game.printGameOver();// stampa sconfitta
-				game.exit=true;
+				game.exit = true;
+			} else if (game.enemy.size() == 0) {
+				game.printWin(); // se non ci sono piu nemici stampa vittoria
+				game.exit = true;
 			}
-			else if (game.enemy.size() == 0) {
-					game.printWin(); //se non ci sono piu nemici stampa vittoria
-					game.exit=true;
-			}
-			
-			if(game.exit==false){	
-			game.matrix.stampa();	
-			c = s.nextLine();
+
+			if (game.exit == false) {
+				game.matrix.stampa();
+				c = s.nextLine();
 			}
 		}
 	}
 
 	public void printWin() {
-			
-			System.out.println();
-			System.out.println();
-			System.out.println();
-			System.out.println();
-			System.out.println();
-			System.out.println();
-			System.out.println();
-			System.out.println(" ---------------------------------  YOU WIN  ---------------------------------- ");
-			System.out.println();
-			System.out.println();
-			System.out.println();
-			System.out.println();
-			System.out.println();
-			System.out.println();
-			System.out.println();
+
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println(" ---------------------------------  YOU WIN  ---------------------------------- ");
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
 	}
 
 	public void printGameOver() {
-			System.out.println();
-			System.out.println();
-			System.out.println();
-			System.out.println();
-			System.out.println();
-			System.out.println();
-			System.out.println();
-			System.out.println(" ---------------------------------  Game Over  ---------------------------------- ");
-			System.out.println();
-			System.out.println();
-			System.out.println();
-			System.out.println();
-			System.out.println();
-			System.out.println();
-			System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println(" ---------------------------------  Game Over  ---------------------------------- ");
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
 	}
 
 	public void randomPowerUp() {
@@ -270,7 +278,7 @@ public class GameManager {
 	}
 
 	public void lenghtPowerUp(int t) {
-	
+
 		long second = (System.currentTimeMillis() / 1000) % 60;
 		long tmp = second + t;
 
@@ -320,7 +328,7 @@ public class GameManager {
 				if (rocket.get(a).getNext() instanceof Flag)
 					flag.setHit(true);
 				// distruggi Player
-				//per il momento viene terminato il gioco senza cancellare
+				// per il momento viene terminato il gioco senza cancellare
 				// distruggi Rocket
 				rocket.remove(a);
 				a--;
@@ -394,11 +402,6 @@ public class GameManager {
 			break;
 		default:
 			break;
-		}
-
-		for (int i = 0; i < enemy.size(); i++) {
-			if (enemy.get(i).getHealth() == 0)
-				enemy.remove(i);
 		}
 	}
 
@@ -621,25 +624,35 @@ public class GameManager {
 
 		for (int a = 0; a < enemy.size(); a++) {
 			if (enemy.get(a).getPassi() >= enemy.get(a).getContatorePassi()) {
-				//soluzione don t touch
+				// soluzione don t touch
 				createRocketEnemy(enemy.get(a));
 				updateRocket();
-				enemy.get(a).update();
+				if (!controlDestroyEnemyInArrayList(enemy.get(a))) { // FUNZIONE
+																		// AGGIUNTA
+																		// SOTTO...IL
+																		// FOR
+																		// PRIMA
+																		// ERA
+																		// IN
+																		// destroyTank
+					enemy.get(a).update();
 
-				if (enemy.get(a).getX() == enemy.get(a).getTempX() && enemy.get(a).getY() == enemy.get(a).getTempY()) {
-					enemy.get(a).setRiprendoValori(true);
-					// System.out.println("DIREZIONE UGUALE A QUELLA
-					// PRECEDENTE");
-					// enemy.get(a).setPositionDirection(enemy.get(a).getDirection());
-				} else {
-					enemy.get(a).setPositionXY();
-					matrix.world[enemy.get(a).getX()][enemy.get(a).getY()] = enemy.get(a);
-					enemy.get(a).setContatorePassi(enemy.get(a).getContatorePassi() + 1);
-					// System.out.println(enemy.get(a).getContatorePassi());
-					if (!enemy.get(a).positionCorrect()) {
+					if (enemy.get(a).getX() == enemy.get(a).getTempX()
+							&& enemy.get(a).getY() == enemy.get(a).getTempY()) {
 						enemy.get(a).setRiprendoValori(true);
+						// System.out.println("DIREZIONE UGUALE A QUELLA
+						// PRECEDENTE");
+						// enemy.get(a).setPositionDirection(enemy.get(a).getDirection());
 					} else {
-						enemy.get(a).setRiprendoValori(false);
+						enemy.get(a).setPositionXY();
+						matrix.world[enemy.get(a).getX()][enemy.get(a).getY()] = enemy.get(a);
+						enemy.get(a).setContatorePassi(enemy.get(a).getContatorePassi() + 1);
+						// System.out.println(enemy.get(a).getContatorePassi());
+						if (!enemy.get(a).positionCorrect()) {
+							enemy.get(a).setRiprendoValori(true);
+						} else {
+							enemy.get(a).setRiprendoValori(false);
+						}
 					}
 				}
 			} else {
@@ -647,6 +660,16 @@ public class GameManager {
 				// enemy.get(a).setPositionDirection(enemy.get(a).getDirection());
 			}
 		}
+	}
+
+	private boolean controlDestroyEnemyInArrayList(EnemyTank enemyTank) {
+		for (int i = 0; i < enemy.size(); i++) {
+			if (enemy.get(i).getHealth() == 0 && enemy.get(i) == enemyTank) {
+				enemy.remove(i);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public int getX() {
