@@ -13,7 +13,7 @@ public class GameManager {
 	private int contEnemy = 0;
 	private Direction direction;
 	private static final int size = 20;
-	private Random random = new Random();
+	private Random random;
 	private World matrix;
 	private PlayerTank player;
 	private ArrayList<EnemyTank> enemy;
@@ -28,6 +28,7 @@ public class GameManager {
 		enemy = new ArrayList<>();
 		rocket = new ArrayList<>();
 		power = new ArrayList<>();
+		random = new Random();
 		importMatrix();
 		randomPowerUp();
 	}
