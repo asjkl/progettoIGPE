@@ -113,7 +113,8 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 			break;
 		}
 	}
-	
+	//funzione che tiene conto del oggetto corrente e successivo
+	//del oggetto in questione
 	public abstract boolean sameObject();
 
 	public int getContRocket() {
