@@ -287,6 +287,22 @@ public class GameManager {
 		}
 	}
 
+	private void countRockets(Rocket r)
+	{
+		if (!(r.getTank() instanceof EnemyTank))
+			
+			player.setContRocket(player.getContRocket() - 1);
+		else {
+			for (int b = 0; b < enemy.size(); b++) {
+				if (enemy.get(b) == r.getTank()) {
+					
+					enemy.get(b).setContRocket(enemy.get(b).getContRocket() - 1);
+					break;
+				}
+			}
+		}
+	}
+	
 	public void updateRocket() {
 		
 		for (int a = 0; a < rocket.size(); a++) {
@@ -295,18 +311,7 @@ public class GameManager {
 			if (destroyRocket(rocket.get(a))) {
 				
 				// contatore rocket presenti
-				if (!(rocket.get(a).getTank() instanceof EnemyTank))
-				
-					player.setContRocket(player.getContRocket() - 1);
-				else {
-					for (int b = 0; b < enemy.size(); b++) {
-						if (enemy.get(b) == rocket.get(a).getTank()) {
-							
-							enemy.get(b).setContRocket(enemy.get(b).getContRocket() - 1);
-							break;
-						}
-					}
-				}
+				countRockets(rocket.get(a));
 					
 				matrix.world[rocket.get(a).getX()][rocket.get(a).getY()] = rocket.get(a).getCurr();
 
@@ -326,10 +331,24 @@ public class GameManager {
 				
 				// distruggi Player
 				// per il momento viene terminato il gioco senza cancellare
-					
+				
+				
+				//TODO da finire
+				//distruggi Rocket next
+				if(rocket.get(a).getNext() instanceof Rocket)
+				{
+					for(int i=0;i<rocket.size();i++)
+						if(rocket.get(a).getNext() == rocket.get(i))
+							{
+								matrix.world[rocket.get(i).getX()][rocket.get(i).getY()] = rocket.get(i).getCurr();
+								break;
+							}
+				}
+				
 				//distruggi rocket alla fine
 				rocket.remove(a);
 				a--;
+				
 			}
 		}
 	}
