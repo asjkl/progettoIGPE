@@ -22,6 +22,7 @@ public class GameManager {
 	private Flag flag;
 	private boolean exit = false;
 	private boolean timer = false;
+	private Rocket r=null; //rocket temporaneo
 
 	public GameManager() {
 		matrix = new World(size, size);
@@ -305,9 +306,6 @@ public class GameManager {
 	
 	public void updateRocket() {
 		
-		//rocket temporaneo
-		Rocket r=null;
-		
 		for (int a = 0; a < rocket.size(); a++) {
 			rocket.get(a).update();
 
@@ -337,18 +335,17 @@ public class GameManager {
 				
 				
 				//distruggi Rocket ( NEXT )
-				//mi salvo  secondo Rocket da distruggere
+				//mi salvo  secondo Rocket da distruggere in 'r'
 				if(rocket.get(a).getNext() instanceof Rocket)
 					r = ((Rocket)rocket.get(a).getNext());
 				
 				//distruggi rocket alla fine
 				rocket.remove(a);
 				a--;
-				
 			}
 		}
 		
-		//se cè uno scontro tra Rockets distruggi l altro...
+		//se cè uno scontro tra Rockets distruggi r...
 		if( r != null)
 		{
 			for (int a = 0; a < rocket.size(); a++) {
