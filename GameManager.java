@@ -305,6 +305,9 @@ public class GameManager {
 	
 	public void updateRocket() {
 		
+		//rocket temporaneo
+		Rocket r=null;
+		
 		for (int a = 0; a < rocket.size(); a++) {
 			rocket.get(a).update();
 
@@ -333,22 +336,29 @@ public class GameManager {
 				// per il momento viene terminato il gioco senza cancellare
 				
 				
-				//TODO da finire
-				//distruggi Rocket next
+				//distruggi Rocket ( NEXT )
+				//mi salvo  secondo Rocket da distruggere
 				if(rocket.get(a).getNext() instanceof Rocket)
-				{
-					for(int i=0;i<rocket.size();i++)
-						if(rocket.get(a).getNext() == rocket.get(i))
-							{
-								matrix.world[rocket.get(i).getX()][rocket.get(i).getY()] = rocket.get(i).getCurr();
-								break;
-							}
-				}
+					r = ((Rocket)rocket.get(a).getNext());
 				
 				//distruggi rocket alla fine
 				rocket.remove(a);
 				a--;
 				
+			}
+		}
+		
+		//se cè uno scontro tra Rockets distruggi l altro...
+		if( r != null)
+		{
+			for (int a = 0; a < rocket.size(); a++) {
+				
+				if( r == rocket.get(a)){
+					countRockets(rocket.get(a));
+					matrix.world[rocket.get(a).getX()][rocket.get(a).getY()] = rocket.get(a).getCurr();
+					rocket.remove(a);
+					a--;
+				}
 			}
 		}
 	}
