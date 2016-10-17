@@ -79,31 +79,32 @@ public class GameManager {
 			}
 
 			// aggiorna posizione enemy
-			//contiene pure funzione che aggiorna tutti rocket
+			// contiene pure funzione che aggiorna tutti rocket
 				game.enemyUpdate();
 
 			// aggiorna rocket del player
 				game.updateRocket(game.player);
+			
 			// aggiorna posizione player
 				game.player.update();
 			
-			System.out.println("Player "+ game.player.getContRocket());
-			for(int i=0;i<game.enemy.size();i++)
-				System.out.println("Enemy "+ game.enemy.get(i).getContRocket());
+//			System.out.println("Player "+ game.player.getContRocket());
+//			for(int i=0;i<game.enemy.size();i++)
+//				System.out.println("Enemy "+ game.enemy.get(i).getContRocket());
 			
 			// GAME OVER / WIN
-			if (game.flag.isHit() || game.player.getResume() == 0) { 
-				game.printGameOver();// stampa sconfitta
-				game.exit = true;
-			} else if (game.enemy.size() == 0) {
-				game.printWin(); // se non ci sono piu nemici stampa vittoria
-				game.exit = true;
-			}
-
-			if (game.exit == false) {
-				game.matrix.stampa();
-				c = s.nextLine();
-			}
+				if (game.flag.isHit() || game.player.getResume() == 0) { 
+					game.printGameOver();// stampa sconfitta
+					game.exit = true;
+				} else if (game.enemy.size() == 0) {
+					game.printWin(); // se non ci sono piu nemici stampa vittoria
+					game.exit = true;
+				}
+	
+				if (game.exit == false) {
+					game.matrix.stampa();
+					c = s.nextLine();
+				}
 		}
 	}
 
@@ -313,7 +314,8 @@ public class GameManager {
 			
 			//aggiorna rockets del paramtero passato ( nemico o player) 
 			//cosi riolviamo il problema del dpppio update
-			if(rocket.get(a).getTank() == tmp){
+			if(rocket.get(a).getTank() == tmp ){ 
+				
 					rocket.get(a).update();
 				
 				if (destroyRocket(rocket.get(a))) {
@@ -328,10 +330,11 @@ public class GameManager {
 						if (((Wall) rocket.get(a).getNext()).getHealth() == 0)
 							destroyWall(rocket.get(a));
 					
-					// distruggi EnemyTank
-					if (rocket.get(a).getNext() instanceof EnemyTank)
+					// distruggi EnemyTank solo se rocket proveniente dal player
+					if (rocket.get(a).getNext() instanceof EnemyTank && rocket.get(a).getTank() instanceof PlayerTank){
 						if (((EnemyTank) rocket.get(a).getNext()).getHealth() == 0)
 							destroyTank(rocket.get(a), (EnemyTank) rocket.get(a).getNext());
+					}
 					
 					// distruggi Flag
 					if (rocket.get(a).getNext() instanceof Flag)
@@ -339,9 +342,8 @@ public class GameManager {
 					
 					// distruggi Player
 					// per il momento viene terminato il gioco senza cancellare
+					// tra players danneggiamento non gestito
 					
-					
-					//distruggi Rocket ( NEXT )
 					//mi salvo  secondo Rocket da distruggere in 'r'
 					if(rocket.get(a).getNext() instanceof Rocket)
 						r = ((Rocket)rocket.get(a).getNext());
@@ -352,12 +354,9 @@ public class GameManager {
 				}
 			}
 		}
-		
 		//se cè uno scontro tra Rockets distruggi r...
-		if( r != null)
-		{
+		if( r != null){
 			for (int a = 0; a < rocket.size(); a++) {
-				
 				if( r == rocket.get(a)){
 					countRockets(rocket.get(a));
 					matrix.world[rocket.get(a).getX()][rocket.get(a).getY()] = rocket.get(a).getCurr();
@@ -382,12 +381,14 @@ public class GameManager {
 		}
 
 		if (rocket.getNext() instanceof EnemyTank) {
-			damageEnemyTank(rocket);
+			if( rocket.getTank() instanceof PlayerTank) //danneggia solo se proveniente dal playerTank
+				damageEnemyTank(rocket);
 			return true;
 		}
 
 		if (rocket.getNext() instanceof PlayerTank) {
-			damagePlayerTank(rocket);
+			if(rocket.getTank() instanceof EnemyTank) //danneggia solo se proveniente dal playerTank
+				damagePlayerTank(rocket);
 			return true;
 		}
 		
@@ -400,21 +401,7 @@ public class GameManager {
 		}
 		return false;
 	}
-	
-	public void destroyR(Rocket r)
-	{
-		matrix.world[r.getX()][r.getY()] = r.getCurr();
-		
-		for(int i=0;i<rocket.size();i++)
-		{
-			if(rocket.get(i).equals(r))
-			{
-				rocket.remove(i);
-				i--;
-			}
-		}
-	}
-	
+
 	public void destroyWall(Rocket rocket) {
 		switch (rocket.getDirection()) {
 		case UP:

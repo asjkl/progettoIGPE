@@ -31,9 +31,8 @@ public class EnemyTank extends AbstractDynamicObject {
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
 		super.update();
-		System.out.println(this.getX()+" "+this.getY());
+		//System.out.println(this.getX()+" "+this.getY());
 		getWorld().world[getX()][getY()] = this;
 	}
 
@@ -50,7 +49,6 @@ public class EnemyTank extends AbstractDynamicObject {
 			// prendo solo Helmet
 			if (next instanceof PowerUp && ((PowerUp) next).getPowerUp() == Power.HELMET) {
 				curr = ((PowerUp) next).getBefore();
-				
 			}
 			return true;
 		}
