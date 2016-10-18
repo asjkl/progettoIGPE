@@ -19,6 +19,4 @@ public class Wall extends AllWall {
 	public void damage() {
 		
 	}
-	
-	
 }

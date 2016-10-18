@@ -10,5 +10,4 @@ public class Water extends AllWall {
 	public Water(int x, int y, World world) {
 		super(x, y, world, true, false);
 	}
-
 }

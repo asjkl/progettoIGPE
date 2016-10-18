@@ -4,7 +4,6 @@ public class ArmorTank extends EnemyTank {
 
 	public ArmorTank(int x, int y, World mondo, Direction direction) {
 		super(x, y, mondo, Speed.NORMAL, Speed.NORMAL, direction, 4, 400);
-
 	}
 
 	@Override

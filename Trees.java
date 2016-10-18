@@ -10,5 +10,4 @@ public class Trees extends AllWall {
 	public Trees(int x, int y, World world) {
 		super(x, y, world, true, true);
 	}
-
 }

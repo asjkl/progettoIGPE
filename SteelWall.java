@@ -10,7 +10,4 @@ public class SteelWall extends Wall {
 	public String toString() {
 		return "[//]";
 	}           
-
-	
-
 }
