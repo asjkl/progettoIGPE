@@ -3,14 +3,17 @@ package progettoIGPE.davide.giovanni.unical2016;
 public class Rocket extends AbstractDynamicObject {
 
 	private boolean bordo; // se trovo bordo
-	private AbstractDynamicObject tank; //rocket appartenenza
+	private AbstractDynamicObject tank; // rocket appartenenza
+	private boolean destroyEnemy; // SERVE PER AGGIORNARE IL ROCKET ANCHE QUANDO
+									// IL SUO TANK è STATO DISTRUTTO
 
 	public Rocket(int x, int y, World world, Direction direction, AbstractDynamicObject tank) {
 		super(x, y, world, direction);
 		this.bordo = false;
 		this.tank = tank;
+		this.destroyEnemy = false;
 	}
-	
+
 	@Override
 	public void setDirection(Direction direction) {
 		super.setDirection(direction);
@@ -31,7 +34,7 @@ public class Rocket extends AbstractDynamicObject {
 	public boolean sameObject() {
 		// a differenza di quello Dynamic questo object passa sull acqua
 		if (!(next instanceof Wall) && !(next instanceof PlayerTank) && !(next instanceof Rocket)
-				&& !(next instanceof EnemyTank)  && !(next instanceof Flag)) {
+				&& !(next instanceof EnemyTank) && !(next instanceof Flag)) {
 			if (next == curr) {
 				getWorld().world[getX()][getY()] = next;
 			} else {
@@ -57,5 +60,13 @@ public class Rocket extends AbstractDynamicObject {
 
 	public void setTank(AbstractDynamicObject tank) {
 		this.tank = tank;
+	}
+
+	public boolean isDestroyEnemy() {
+		return destroyEnemy;
+	}
+
+	public void setDestroyEnemy(boolean destroyEnemy) {
+		this.destroyEnemy = destroyEnemy;
 	}
 }
