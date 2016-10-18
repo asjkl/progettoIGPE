@@ -4,14 +4,11 @@ public class Rocket extends AbstractDynamicObject {
 
 	private boolean bordo; // se trovo bordo
 	private AbstractDynamicObject tank; // rocket appartenenza
-	private boolean destroyEnemy; // SERVE PER AGGIORNARE IL ROCKET ANCHE QUANDO
-									// IL SUO TANK è STATO DISTRUTTO
 
 	public Rocket(int x, int y, World world, Direction direction, AbstractDynamicObject tank) {
 		super(x, y, world, direction);
 		this.bordo = false;
 		this.tank = tank;
-		this.destroyEnemy = false;
 	}
 
 	@Override
@@ -62,11 +59,4 @@ public class Rocket extends AbstractDynamicObject {
 		this.tank = tank;
 	}
 
-	public boolean isDestroyEnemy() {
-		return destroyEnemy;
-	}
-
-	public void setDestroyEnemy(boolean destroyEnemy) {
-		this.destroyEnemy = destroyEnemy;
-	}
 }

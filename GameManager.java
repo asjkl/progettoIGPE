@@ -80,18 +80,19 @@ public class GameManager {
 
 			// aggiorna posizione enemy
 			// contiene pure funzione che aggiorna tutti rocket
-			game.enemyUpdate();
 
+			game.enemyPositionRandom(); // CREAZIONE ENEMY
+			game.updateRocket(); // AGGIORNAMENTO DI TUTTI I ROCKET
+			game.enemyUpdate(); // AGGIORNAMENTO ENEMY
 			// aggiorna rocket del player
-			game.updateRocket(game.player);
 
 			// aggiorna posizione player
+
 			game.player.update();
 
 			// System.out.println("Player "+ game.player.getContRocket());
 			// for(int i=0;i<game.enemy.size();i++)
 			// System.out.println("Enemy "+ game.enemy.get(i).getContRocket());
-
 			// GAME OVER / WIN
 			if (game.flag.isHit() || game.player.getResume() == 0) {
 				game.printGameOver();// stampa sconfitta
@@ -305,7 +306,7 @@ public class GameManager {
 		}
 	}
 
-	public void updateRocket(AbstractDynamicObject tmp) {
+	public void updateRocket() {
 
 		Rocket r = null; // rocket temporaneo
 
@@ -314,54 +315,44 @@ public class GameManager {
 			// aggiorna rockets del paramtero passato ( nemico o player)
 			// cosi riolviamo il problema del dpppio update
 
-			if (rocket.get(a).getTank() == tmp || rocket.get(a).isDestroyEnemy()) {
+			rocket.get(a).update();
 
-				rocket.get(a).update();
+			if (destroyRocket(rocket.get(a))) {
 
-				if (destroyRocket(rocket.get(a))) {
+				// contatore rocket presenti
+				countRockets(rocket.get(a));
 
-					// contatore rocket presenti
-					countRockets(rocket.get(a));
+				matrix.world[rocket.get(a).getX()][rocket.get(a).getY()] = rocket.get(a).getCurr();
 
-					matrix.world[rocket.get(a).getX()][rocket.get(a).getY()] = rocket.get(a).getCurr();
+				// distruggi Wall
+				if (rocket.get(a).getNext() instanceof Wall)
+					if (((Wall) rocket.get(a).getNext()).getHealth() == 0)
+						destroyWall(rocket.get(a));
 
-					// distruggi Wall
-					if (rocket.get(a).getNext() instanceof Wall)
-						if (((Wall) rocket.get(a).getNext()).getHealth() == 0)
-							destroyWall(rocket.get(a));
-
-					// distruggi EnemyTank solo se rocket proveniente dal player
-					if (rocket.get(a).getNext() instanceof EnemyTank && rocket.get(a).getTank() instanceof PlayerTank) {
-						if (((EnemyTank) rocket.get(a).getNext()).getHealth() == 0) {
-							rocket.get(a).setDestroyEnemy(true); // ANCHE SE IL
-																	// NEMICO è
-																	// STATO
-																	// UCCISO,
-																	// IL ROCKET
-																	// CONTINUA
-																	// AD
-																	// AGGIORNARSI
-							destroyTank(rocket.get(a), (EnemyTank) rocket.get(a).getNext());
-						}
+				// distruggi EnemyTank solo se rocket proveniente dal player
+				if (rocket.get(a).getNext() instanceof EnemyTank && rocket.get(a).getTank() instanceof PlayerTank) {
+					if (((EnemyTank) rocket.get(a).getNext()).getHealth() == 0) {
+						destroyTank(rocket.get(a), (EnemyTank) rocket.get(a).getNext());
 					}
-
-					// distruggi Flag
-					if (rocket.get(a).getNext() instanceof Flag)
-						flag.setHit(true);
-
-					// distruggi Player
-					// per il momento viene terminato il gioco senza cancellare
-					// tra players danneggiamento non gestito
-
-					// mi salvo secondo Rocket da distruggere in 'r'
-					if (rocket.get(a).getNext() instanceof Rocket)
-						r = ((Rocket) rocket.get(a).getNext());
-
-					// distruggi rocket alla fine
-					rocket.remove(a);
-					a--;
 				}
+
+				// distruggi Flag
+				if (rocket.get(a).getNext() instanceof Flag)
+					flag.setHit(true);
+
+				// distruggi Player
+				// per il momento viene terminato il gioco senza cancellare
+				// tra players danneggiamento non gestito
+
+				// mi salvo secondo Rocket da distruggere in 'r'
+				if (rocket.get(a).getNext() instanceof Rocket)
+					r = ((Rocket) rocket.get(a).getNext());
+
+				// distruggi rocket alla fine
+				rocket.remove(a);
+				a--;
 			}
+
 		}
 		// se cè uno scontro tra Rockets distruggi r...
 		if (r != null) {
@@ -391,16 +382,16 @@ public class GameManager {
 
 		if (rocket.getNext() instanceof EnemyTank) {
 			if (rocket.getTank() instanceof PlayerTank) // danneggia solo se
-														// proveniente dal
-														// playerTank
+				// proveniente dal
+				// playerTank
 				damageEnemyTank(rocket);
 			return true;
 		}
 
 		if (rocket.getNext() instanceof PlayerTank) {
 			if (rocket.getTank() instanceof EnemyTank) // danneggia solo se
-														// proveniente dal
-														// playerTank
+				// proveniente dal
+				// playerTank
 				damagePlayerTank(rocket);
 			return true;
 		}
@@ -480,7 +471,7 @@ public class GameManager {
 		int i = 0;// indice di riga
 
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("src/mappa3.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader("src/mappa2.txt"));
 			String line = reader.readLine();
 			while (line != null) {
 
@@ -643,22 +634,21 @@ public class GameManager {
 				enemy.get(a).setPassi(tempCont);
 				// enemy.get(a).setPositionDirection(); //
 			}
+			createRocketTank(enemy.get(a).getDirection(), enemy.get(a));
 		}
 
 	}
 
 	public void enemyUpdate() {
 
-		enemyPositionRandom(); // genera pos enemy
+		// enemyPositionRandom(); // genera pos enemy
 
 		for (int a = 0; a < enemy.size(); a++) {
 			if (enemy.get(a).getPassi() >= enemy.get(a).getContatorePassi()) {
-				createRocketTank(enemy.get(a).getDirection(), enemy.get(a)); // crea
-																				// rocket
-																				// nemico
-				updateRocket(enemy.get(a)); // passo enemy cosi aggiorno i suoi
-											// rockets
-
+				// createRocketTank(enemy.get(a).getDirection(), enemy.get(a));
+				// // crea
+				// rocket
+				// nemico
 				if (!controlDestroyEnemyInArrayList(enemy.get(a))) {
 					enemy.get(a).update();
 
@@ -682,7 +672,7 @@ public class GameManager {
 				}
 			} else {
 				enemy.get(a).setContatorePassi(0);
-				updateRocket(enemy.get(a));
+				// updateRocket(enemy.get(a));
 				matrix.world[enemy.get(a).getX()][enemy.get(a).getY()] = enemy.get(a);
 				// enemy.get(a).setPositionDirection(enemy.get(a).getDirection());
 			}
