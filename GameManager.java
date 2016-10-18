@@ -71,16 +71,15 @@ public class GameManager {
 			default:
 				break;
 			}
-
+			
+			game.enemyPositionRandom(); // CREAZIONE ENEMY
+			game.updateRocket(); // AGGIORNAMENTO DI TUTTI I ROCKET
+			game.enemyUpdate(); // AGGIORNAMENTO ENEMY
 			// spara il doppio rocket al livello > 1
 			if (enter && game.player.getLevel() > 1) {
 				game.createRocketTank(tmp, game.player);
 				enter = false;
 			}
-
-			game.enemyPositionRandom(); // CREAZIONE ENEMY
-			game.updateRocket(); // AGGIORNAMENTO DI TUTTI I ROCKET
-			game.enemyUpdate(); // AGGIORNAMENTO ENEMY
 			game.player.update(); // AGGIORNAMENTO PLAYER
 
 			// GAME OVER / WIN
