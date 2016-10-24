@@ -100,28 +100,26 @@ public class EnemyTank extends AbstractDynamicObject {
 		AbstractStaticObject tmp;
 		if (getDirection() == Direction.UP && x - 1 >= 0) {
 			tmp = world.world[x - 1][y];
-			if (tmp instanceof BrickWall || tmp instanceof SteelWall || tmp instanceof EnemyTank
-					|| tmp instanceof PlayerTank || getX() == 0) {
+			if (tmp instanceof Wall || tmp instanceof EnemyTank || tmp instanceof PlayerTank || getX() == 0) {
 				return false;
 			}
 
 		} else if (getDirection() == Direction.DOWN && x + 1 < world.getRow()) {
 			tmp = world.world[x + 1][y];
-			if (tmp instanceof BrickWall || tmp instanceof SteelWall || tmp instanceof EnemyTank
-					|| tmp instanceof PlayerTank || getX() == world.getRow() - 1) {
+			if (tmp instanceof Wall || tmp instanceof EnemyTank || tmp instanceof PlayerTank
+					|| getX() == world.getRow() - 1) {
 				return false;
 			}
 
 		} else if (getDirection() == Direction.LEFT && y - 1 >= 0) {
 			tmp = world.world[x][y - 1];
-			if (tmp instanceof BrickWall || tmp instanceof SteelWall || tmp instanceof EnemyTank
-					|| tmp instanceof PlayerTank || getY() == 0) {
+			if (tmp instanceof Wall || tmp instanceof EnemyTank || tmp instanceof PlayerTank || getY() == 0) {
 				return false;
 			}
 		} else if (getDirection() == Direction.RIGHT && y + 1 < world.getColumn()) {
 			tmp = world.world[x][y + 1];
-			if (tmp instanceof BrickWall || tmp instanceof SteelWall || tmp instanceof EnemyTank
-					|| tmp instanceof PlayerTank || getY() == world.getColumn() - 1) {
+			if (tmp instanceof Wall || tmp instanceof EnemyTank || tmp instanceof PlayerTank
+					|| getY() == world.getColumn() - 1) {
 				return false;
 			}
 		}

@@ -37,7 +37,7 @@ public class GameManager {
 	public static void main(String[] args) {
 
 		GameManager game = new GameManager();
-		game.randomEnemy(1); // quanti soldati generare
+		game.randomEnemy(20); // quanti soldati generare
 		Scanner s = new Scanner(System.in);
 		String c;
 		Direction tmp = Direction.STOP; // IN TMP RIMANE LA DIREZIONE
@@ -463,7 +463,7 @@ public class GameManager {
 		int i = 0;// indice di riga
 
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("src/mappa.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader("src/mappaStrana.txt"));
 			String line = reader.readLine();
 			while (line != null) {
 
