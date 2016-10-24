@@ -1,7 +1,7 @@
 package progettoIGPE.davide.giovanni.unical2016;
 
 public class PlayerTank extends AbstractDynamicObject {
-	
+
 	private static int level = 1; // 1 stella...2 stella... 3 stella
 	private int resume = 3;
 	private boolean protection;
@@ -15,13 +15,14 @@ public class PlayerTank extends AbstractDynamicObject {
 	public void update() {
 		super.update();
 		getWorld().world[getX()][getY()] = this;
-		setDirection(Direction.STOP); // serve altrimenti il giocatore non si ferma
+		setDirection(Direction.STOP); // serve altrimenti il giocatore non si
+										// ferma
 	}
 
 	@Override
 	public boolean sameObject() {
-		if (!(next instanceof Wall) && !(next instanceof EnemyTank)
-				&& !(next instanceof PlayerTank) && !(next instanceof Water) && !(next instanceof Rocket) && !(next instanceof Flag)) {
+		if (!(next instanceof Wall) && !(next instanceof EnemyTank) && !(next instanceof PlayerTank)
+				&& !(next instanceof Water) && !(next instanceof Rocket) && !(next instanceof Flag)) {
 
 			if (next == curr)
 				getWorld().world[getX()][getY()] = next;
@@ -37,6 +38,7 @@ public class PlayerTank extends AbstractDynamicObject {
 		}
 		return false;
 	}
+
 	@Override
 	public Direction getDirection() {
 		return super.getDirection();
@@ -46,7 +48,7 @@ public class PlayerTank extends AbstractDynamicObject {
 	public void setDirection(Direction direction) {
 		super.setDirection(direction);
 	}
-	
+
 	public int getLevel() {
 		return level;
 	}

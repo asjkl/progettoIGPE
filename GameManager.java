@@ -37,7 +37,7 @@ public class GameManager {
 	public static void main(String[] args) {
 
 		GameManager game = new GameManager();
-		game.randomEnemy(10); // quanti soldati generare
+		game.randomEnemy(1); // quanti soldati generare
 		Scanner s = new Scanner(System.in);
 		String c;
 		Direction tmp = Direction.STOP; // IN TMP RIMANE LA DIREZIONE
@@ -71,16 +71,17 @@ public class GameManager {
 			default:
 				break;
 			}
-			
+
 			game.enemyPositionRandom(); // CREAZIONE ENEMY
 			game.updateRocket(); // AGGIORNAMENTO DI TUTTI I ROCKET
 			game.enemyUpdate(); // AGGIORNAMENTO ENEMY
+			game.player.update(); // AGGIORNAMENTO PLAYER
+
 			// spara il doppio rocket al livello > 1
 			if (enter && game.player.getLevel() > 1) {
 				game.createRocketTank(tmp, game.player);
 				enter = false;
 			}
-			game.player.update(); // AGGIORNAMENTO PLAYER
 
 			// GAME OVER / WIN
 			if (game.flag.isHit() || game.player.getResume() == 0) {
@@ -358,7 +359,8 @@ public class GameManager {
 
 	public boolean destroyRocket(Rocket rocket) {
 
-		// se rocket si trova al bordo o tocca flag o si scontra con altro rocket
+		// se rocket si trova al bordo o tocca flag o si scontra con altro
+		// rocket
 		if (rocket.isBordo() || rocket.getNext() instanceof Flag || rocket.getNext() instanceof Rocket) {
 			return true;
 		}
@@ -369,13 +371,17 @@ public class GameManager {
 		}
 
 		if (rocket.getNext() instanceof EnemyTank) {
-			if (rocket.getTank() instanceof PlayerTank) // danneggia solo se proveniente dal playerTank
+			if (rocket.getTank() instanceof PlayerTank) // danneggia solo se
+														// proveniente dal
+														// playerTank
 				damageEnemyTank(rocket);
 			return true;
 		}
 
 		if (rocket.getNext() instanceof PlayerTank) {
-			if (rocket.getTank() instanceof EnemyTank) // danneggia solo se proveniente dal playerTank
+			if (rocket.getTank() instanceof EnemyTank) // danneggia solo se
+														// proveniente dal
+														// playerTank
 				damagePlayerTank(rocket);
 			return true;
 		}
@@ -429,13 +435,12 @@ public class GameManager {
 	}
 
 	private void damageWall(Rocket rocket) {
-		
-		if (player.getLevel() == 3) 
+
+		if (player.getLevel() == 3)
 			((Wall) rocket.getNext()).setHealth(((Wall) rocket.getNext()).getHealth() - 2);
-		 else 
-			 if (!(rocket.getNext() instanceof SteelWall)) // e non è SteelWall			
+		else if (!(rocket.getNext() instanceof SteelWall)) // e non è SteelWall
 			((Wall) rocket.getNext()).setHealth(((Wall) rocket.getNext()).getHealth() - 1);
-		
+
 	}
 
 	private void damageEnemyTank(Rocket rocket) {
@@ -443,11 +448,11 @@ public class GameManager {
 	}
 
 	private void damagePlayerTank(Rocket rocket) {
-		
+
 		((PlayerTank) rocket.getNext()).setResume(((PlayerTank) rocket.getNext()).getResume() - 1);
 		getMatrix().world[size - 1][size / 2 - 3] = player;
 		getMatrix().world[player.getX()][player.getY()] = player.getCurr();
-		//TODO risolto 
+		// TODO risolto
 		player.setCurr(null);
 		player.setX(size - 1);
 		player.setY(size / 2 - 3);
@@ -541,7 +546,8 @@ public class GameManager {
 	}
 
 	public void randomEnemy(int value) {
-		while (enemy.size() < value) { //TODO BISOGNA INSERIRE IL TEMPO PER OGNI
+		while (enemy.size() < value) { // TODO BISOGNA INSERIRE IL TEMPO PER
+										// OGNI
 										// CARRO NEMICO COSI CHE SI POSSONO
 										// SPOSTARE DALLO SPOWN
 			selectPosition(value);
@@ -626,7 +632,7 @@ public class GameManager {
 	}
 
 	public void enemyUpdate() {
-		
+
 		for (int a = 0; a < enemy.size(); a++) {
 			if (enemy.get(a).getPassi() >= enemy.get(a).getContatorePassi()) {
 				if (!controlDestroyEnemyInArrayList(enemy.get(a))) {

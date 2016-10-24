@@ -32,7 +32,7 @@ public class EnemyTank extends AbstractDynamicObject {
 	@Override
 	public void update() {
 		super.update();
-		//System.out.println(this.getX()+" "+this.getY());
+		// System.out.println(this.getX()+" "+this.getY());
 		getWorld().world[getX()][getY()] = this;
 	}
 
@@ -98,39 +98,30 @@ public class EnemyTank extends AbstractDynamicObject {
 		int x = getX();
 		int y = getY();
 		AbstractStaticObject tmp;
-
 		if (getDirection() == Direction.UP && x - 1 >= 0) {
 			tmp = world.world[x - 1][y];
-			if (getX() == 0) {
-				return false;
-			}
-			if (tmp instanceof BrickWall || tmp instanceof SteelWall || tmp instanceof EnemyTank) {
+			if (tmp instanceof BrickWall || tmp instanceof SteelWall || tmp instanceof EnemyTank
+					|| tmp instanceof PlayerTank || getX() == 0) {
 				return false;
 			}
 
 		} else if (getDirection() == Direction.DOWN && x + 1 < world.getRow()) {
 			tmp = world.world[x + 1][y];
-			if (getX() == world.getRow() - 1) {
-				return false;
-			}
-			if (tmp instanceof BrickWall || tmp instanceof SteelWall || tmp instanceof EnemyTank) {
+			if (tmp instanceof BrickWall || tmp instanceof SteelWall || tmp instanceof EnemyTank
+					|| tmp instanceof PlayerTank || getX() == world.getRow() - 1) {
 				return false;
 			}
 
 		} else if (getDirection() == Direction.LEFT && y - 1 >= 0) {
 			tmp = world.world[x][y - 1];
-			if (getY() == 0) {
-				return false;
-			}
-			if (tmp instanceof BrickWall || tmp instanceof SteelWall || tmp instanceof EnemyTank) {
+			if (tmp instanceof BrickWall || tmp instanceof SteelWall || tmp instanceof EnemyTank
+					|| tmp instanceof PlayerTank || getY() == 0) {
 				return false;
 			}
 		} else if (getDirection() == Direction.RIGHT && y + 1 < world.getColumn()) {
 			tmp = world.world[x][y + 1];
-			if (getY() == world.getColumn() - 1) {
-				return false;
-			}
-			if (tmp instanceof BrickWall || tmp instanceof SteelWall || tmp instanceof EnemyTank) {
+			if (tmp instanceof BrickWall || tmp instanceof SteelWall || tmp instanceof EnemyTank
+					|| tmp instanceof PlayerTank || getY() == world.getColumn() - 1) {
 				return false;
 			}
 		}
