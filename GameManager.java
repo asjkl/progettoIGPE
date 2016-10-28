@@ -37,7 +37,7 @@ public class GameManager {
 	public static void main(String[] args) {
 
 		GameManager game = new GameManager();
-		game.randomEnemy(20); // quanti soldati generare
+		game.randomEnemy(2); // quanti soldati generare
 		Scanner s = new Scanner(System.in);
 		String c;
 		Direction tmp = Direction.STOP; // IN TMP RIMANE LA DIREZIONE
@@ -322,7 +322,7 @@ public class GameManager {
 				// distruggi EnemyTank solo se rocket proveniente dal player
 				if (rocket.get(a).getNext() instanceof EnemyTank && rocket.get(a).getTank() instanceof PlayerTank) {
 					if (((EnemyTank) rocket.get(a).getNext()).getHealth() == 0) {
-						destroyTank(rocket.get(a), (EnemyTank) rocket.get(a).getNext());
+						destroyEnemyTank(rocket.get(a), (EnemyTank) rocket.get(a).getNext());
 					}
 				}
 
@@ -415,7 +415,7 @@ public class GameManager {
 		}
 	}
 
-	public void destroyTank(Rocket rocket, EnemyTank enemyT) {
+	public void destroyEnemyTank(Rocket rocket, EnemyTank enemyT) {
 		switch (rocket.getDirection()) {
 		case UP:
 			matrix.world[rocket.getX() - 1][rocket.getY()] = enemyT.getCurr();
@@ -450,12 +450,11 @@ public class GameManager {
 	private void damagePlayerTank(Rocket rocket) {
 
 		((PlayerTank) rocket.getNext()).setResume(((PlayerTank) rocket.getNext()).getResume() - 1);
-		getMatrix().world[size - 1][size / 2 - 3] = player;
+		getMatrix().world[size - 1][(size / 2) - 3] = player;
 		getMatrix().world[player.getX()][player.getY()] = player.getCurr();
-		// TODO risolto
 		player.setCurr(null);
 		player.setX(size - 1);
-		player.setY(size / 2 - 3);
+		player.setY((size / 2) - 3);
 
 	}
 
@@ -463,7 +462,7 @@ public class GameManager {
 		int i = 0;// indice di riga
 
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("src/mappaStrana.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader("src/mappa.txt"));
 			String line = reader.readLine();
 			while (line != null) {
 
@@ -494,7 +493,7 @@ public class GameManager {
 						getMatrix().world[i][j] = new Water(i, j, getMatrix());
 						break;
 					case ("****"):
-						player = new PlayerTank(i, j, matrix);
+						player = new PlayerTank(i, j, getMatrix());
 						getMatrix().world[i][j] = player;
 						break;
 					case ("FLAG"):
@@ -626,7 +625,8 @@ public class GameManager {
 				enemy.get(a).setPassi(tempCont);
 				// enemy.get(a).setPositionDirection(); //
 			}
-			createRocketTank(enemy.get(a).getDirection(), enemy.get(a));
+			if (!(enemy.get(a).getNext() instanceof EnemyTank))
+				createRocketTank(enemy.get(a).getDirection(), enemy.get(a));
 		}
 
 	}

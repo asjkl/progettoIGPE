@@ -9,16 +9,7 @@ public class Rocket extends AbstractDynamicObject {
 		super(x, y, world, direction);
 		this.bordo = false;
 		this.tank = tank;
-	}
-
-	@Override
-	public void setDirection(Direction direction) {
-		super.setDirection(direction);
-	}
-
-	@Override
-	public String toString() {
-		return " -- ";
+		curr=getWorld().world[getX()][getY()];
 	}
 
 	@Override
@@ -29,18 +20,22 @@ public class Rocket extends AbstractDynamicObject {
 
 	@Override
 	public boolean sameObject() {
-		// a differenza di quello Dynamic questo object passa sull acqua
 		if (!(next instanceof Wall) && !(next instanceof PlayerTank) && !(next instanceof Rocket)
 				&& !(next instanceof EnemyTank) && !(next instanceof Flag)) {
-			if (next == curr) {
-				getWorld().world[getX()][getY()] = next;
-			} else {
-				getWorld().world[getX()][getY()] = curr;
-				curr = next;
-			}
+			curr=next;
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public void setDirection(Direction direction) {
+		super.setDirection(direction);
+	}
+
+	@Override
+	public String toString() {
+		return " -- ";
 	}
 
 	public boolean isBordo() {
@@ -58,5 +53,4 @@ public class Rocket extends AbstractDynamicObject {
 	public void setTank(AbstractDynamicObject tank) {
 		this.tank = tank;
 	}
-
 }

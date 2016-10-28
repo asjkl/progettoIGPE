@@ -16,6 +16,8 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		this.speedShot = speedShot;
 		this.health = health;
 		this.setContRocket(0);
+		curr=null;
+		next=null;
 	}
 
 	public AbstractDynamicObject(int x, int y, World mondo, Direction direction) {
@@ -23,6 +25,53 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		this.direction = direction;
 	}
 
+	public void update() {
+		
+		//rimette l oggetto di prima 
+		getWorld().world[getX()][getY()] = curr;
+		
+		switch (getDirection()) {
+		case UP:
+			if (getX() - 1 >= 0) {	
+				next = getWorld().world[getX() - 1][getY()];
+				if (sameObject()) {
+					setX(getX() - 1);
+				}
+			}
+			break;
+		case DOWN:
+			if (getX() + 1 < getWorld().getRow()) {
+				next = getWorld().world[getX() + 1][getY()];
+				if (sameObject()) {
+					setX(getX() + 1);
+				}
+			}
+			break;
+		case LEFT:
+			if (getY() - 1 >= 0) {
+				next = getWorld().world[getX()][getY() - 1];
+				if (sameObject()) {
+					setY(getY() - 1);
+				}
+			}
+			break;
+		case RIGHT:
+			if (getY() + 1 < getWorld().getColumn()) {
+				next = getWorld().world[getX()][getY() + 1];
+				if (sameObject()) {
+					setY(getY() + 1);
+				}
+			}
+			break;
+		default:
+			break;
+		}
+	}
+	//funzione che tiene conto del oggetto corrente e successivo
+	//del oggetto in questione
+	public abstract boolean sameObject();
+
+	
 	@Override
 	public Speed getSpeed() {
 		return speed;
@@ -73,48 +122,6 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	public void setNext(AbstractStaticObject next) {
 		this.next = next;
 	}
-
-	public void update() {
-		switch (getDirection()) {
-		case UP:
-			if (getX() - 1 >= 0) {
-				next = getWorld().world[getX() - 1][getY()];
-				if (sameObject()) {
-					setX(getX() - 1);
-				}
-			}
-			break;
-		case DOWN:
-			if (getX() + 1 < getWorld().getRow()) {
-				next = getWorld().world[getX() + 1][getY()];
-				if (sameObject()) {
-					setX(getX() + 1);
-				}
-			}
-			break;
-		case LEFT:
-			if (getY() - 1 >= 0) {
-				next = getWorld().world[getX()][getY() - 1];
-				if (sameObject()) {
-					setY(getY() - 1);
-				}
-			}
-			break;
-		case RIGHT:
-			if (getY() + 1 < getWorld().getColumn()) {
-				next = getWorld().world[getX()][getY() + 1];
-				if (sameObject()) {
-					setY(getY() + 1);
-				}
-			}
-			break;
-		default:
-			break;
-		}
-	}
-	//funzione che tiene conto del oggetto corrente e successivo
-	//del oggetto in questione
-	public abstract boolean sameObject();
 
 	public int getContRocket() {
 		return contRocket;

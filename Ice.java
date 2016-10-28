@@ -10,5 +10,4 @@ public class Ice extends AllWall {
 	public Ice(int x, int y, World world) {
 		super(x, y, world, true, true);
 	}
-
 }
