@@ -418,16 +418,16 @@ public class GameManager {
 	public void destroyEnemyTank(Rocket rocket, EnemyTank enemyT) {
 		switch (rocket.getDirection()) {
 		case UP:
-			matrix.world[rocket.getX() - 1][rocket.getY()] = enemyT.getCurr();
+			matrix.world[rocket.getX() - 1][rocket.getY()] = enemyT.getBefore();
 			break;
 		case DOWN:
-			matrix.world[rocket.getX() + 1][rocket.getY()] = enemyT.getCurr();
+			matrix.world[rocket.getX() + 1][rocket.getY()] = enemyT.getBefore();
 			break;
 		case RIGHT:
-			matrix.world[rocket.getX()][rocket.getY() + 1] = enemyT.getCurr();
+			matrix.world[rocket.getX()][rocket.getY() + 1] = enemyT.getBefore();
 			break;
 		case LEFT:
-			matrix.world[rocket.getX()][rocket.getY() - 1] = enemyT.getCurr();
+			matrix.world[rocket.getX()][rocket.getY() - 1] = enemyT.getBefore();
 			break;
 		default:
 			break;
