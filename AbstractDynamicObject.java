@@ -9,15 +9,16 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	protected AbstractStaticObject next;
 	private int contRocket = 0;
 
-	public AbstractDynamicObject(int x, int y, World mondo, Speed speed, Speed speedShot, Direction direction,int health) {
+	public AbstractDynamicObject(int x, int y, World mondo, Speed speed, Speed speedShot, Direction direction,
+			int health) {
 		super(x, y, mondo);
 		this.speed = speed;
 		this.direction = direction;
 		this.speedShot = speedShot;
 		this.health = health;
 		this.setContRocket(0);
-		curr=null;
-		next=null;
+		curr = null;
+		next = null;
 	}
 
 	public AbstractDynamicObject(int x, int y, World mondo, Direction direction) {
@@ -26,13 +27,13 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	}
 
 	public void update() {
-		
-		//rimette l oggetto di prima 
+
+		// rimette l oggetto di prima
 		getWorld().world[getX()][getY()] = curr;
-		
+
 		switch (getDirection()) {
 		case UP:
-			if (getX() - 1 >= 0) {	
+			if (getX() - 1 >= 0) {
 				next = getWorld().world[getX() - 1][getY()];
 				if (sameObject()) {
 					setX(getX() - 1);
@@ -67,11 +68,11 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 			break;
 		}
 	}
-	//funzione che tiene conto del oggetto corrente e successivo
-	//del oggetto in questione
+
+	// funzione che tiene conto del oggetto corrente e successivo
+	// del oggetto in questione
 	public abstract boolean sameObject();
 
-	
 	@Override
 	public Speed getSpeed() {
 		return speed;

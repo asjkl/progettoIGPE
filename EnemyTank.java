@@ -13,7 +13,6 @@ public class EnemyTank extends AbstractDynamicObject {
 	private boolean directionDown;
 	private boolean directionLeft;
 	private boolean directionRight;
-	private AbstractStaticObject before;
 
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health,
 			int point) {
@@ -28,7 +27,6 @@ public class EnemyTank extends AbstractDynamicObject {
 		directionDown = false;
 		directionLeft = false;
 		directionRight = false;
-		before=null;
 	}
 
 	@Override
@@ -44,11 +42,9 @@ public class EnemyTank extends AbstractDynamicObject {
 			// prendo solo Helmet
 			if (next instanceof PowerUp && ((PowerUp) next).getPowerUp() == Power.HELMET) {
 				curr = ((PowerUp) next).getBefore();
-			}
-			else
-				curr=next;
-				before=next; //se non si aggiorna l' enemy ( cioe sta fermo ), non si aggiorna e il curr lo perde
-			
+			} else
+				curr = next;
+
 			return true;
 		}
 		return false;
@@ -258,12 +254,5 @@ public class EnemyTank extends AbstractDynamicObject {
 
 	public void setTempY(int tempY) {
 		this.tempY = tempY;
-	}
-	public AbstractStaticObject getBefore() {
-		return before;
-	}
-
-	public void setBefore(AbstractStaticObject before) {
-		this.before = before;
 	}
 }
