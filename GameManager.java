@@ -33,11 +33,69 @@ public class GameManager {
 		randomPowerUp();
 	}
 
+	public void importMatrix() {
+		int i = 0;// indice di riga
+
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader("src/mappa.txt"));
+			String line = reader.readLine();
+			while (line != null) {
+
+				StringTokenizer st = new StringTokenizer(line, " ");
+				int j = 0;// indice di colonna
+				String tmp;
+				while (st.hasMoreTokens()) {
+
+					tmp = st.nextToken();
+
+					switch (tmp) {
+					case ("null"):
+						getMatrix().world[i][j] = null;
+						break;
+					case ("[//]"):
+						getMatrix().world[i][j] = new SteelWall(i, j, getMatrix(), 4);
+						break;
+					case ("@@@@"):
+						getMatrix().world[i][j] = new Ice(i, j, getMatrix());
+						break;
+					case ("TTTT"):
+						getMatrix().world[i][j] = new Trees(i, j, getMatrix());
+						break;
+					case ("[||]"):
+						getMatrix().world[i][j] = new BrickWall(i, j, getMatrix(), 2);
+						break;
+					case ("~~~~"):
+						getMatrix().world[i][j] = new Water(i, j, getMatrix());
+						break;
+					case ("****"):
+						player = new PlayerTank(i, j, getMatrix());
+						getMatrix().world[i][j] = player;
+						break;
+					case ("FLAG"):
+						flag = new Flag(i, j, matrix);
+						getMatrix().world[i][j] = flag;
+						break;
+					}// switch
+
+					j++;
+				} // while
+
+				i++;
+				line = reader.readLine();
+			} // while
+			reader.close();
+		} // try
+		catch (Exception e) {
+
+			e.printStackTrace();
+		}
+	}
+	
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 
 		GameManager game = new GameManager();
-		game.randomEnemy(2); // quanti soldati generare
+		game.randomEnemy(6); // quanti soldati generare
 		Scanner s = new Scanner(System.in);
 		String c;
 		Direction tmp = Direction.STOP; // IN TMP RIMANE LA DIREZIONE
@@ -136,20 +194,18 @@ public class GameManager {
 		System.out.println();
 	}
 
+	//---------------------------------------------POWER UP------------------------------------------------
+	
 	public void randomPowerUp() {
 
 		int cont = 0;
 		int tmp;
 
 		while (cont < 5) {
-
 			tmp = random.nextInt(6);
-
 			addPowerUp(tmp);
-
 			cont++;
 		}
-
 	}
 
 	public void addPowerUp(int t) {
@@ -215,7 +271,7 @@ public class GameManager {
 
 			if (!(getMatrix().world[x][y] instanceof Wall) && !(getMatrix().world[x][y] instanceof PlayerTank)
 					&& !(getMatrix().world[x][y] instanceof EnemyTank) && !(getMatrix().world[x][y] instanceof PowerUp)
-					&& !(getMatrix().world[x][y] instanceof Rocket))
+					&& !(getMatrix().world[x][y] instanceof Rocket) && !(getMatrix().world[x][y] instanceof Water))
 
 				flag = true;
 		}
@@ -281,112 +337,74 @@ public class GameManager {
 		}
 	}
 
+	//---------------------------------------------ROCKET-----------------------------------------------
+	
 	private void countRockets(Rocket r) {
+		
 		if (!(r.getTank() instanceof EnemyTank))
-
 			player.setContRocket(player.getContRocket() - 1);
 		else {
-			for (int b = 0; b < enemy.size(); b++) {
+			for (int b = 0; b < enemy.size(); b++) 
 				if (enemy.get(b) == r.getTank()) {
-
 					enemy.get(b).setContRocket(enemy.get(b).getContRocket() - 1);
 					break;
 				}
-			}
 		}
 	}
 
 	public void updateRocket() {
-
+		
 		Rocket r = null; // rocket temporaneo
-
+		
 		for (int a = 0; a < rocket.size(); a++) {
-
-			// aggiorna rockets del paramtero passato ( nemico o player)
-			// cosi riolviamo il problema del dpppio update
-
+			
 			rocket.get(a).update();
 
-			if (destroyRocket(rocket.get(a))) {
-
-				// contatore rocket presenti
-				countRockets(rocket.get(a));
-
+			if (rocket.get(a).getNext() instanceof Rocket)
+				r = ((Rocket) rocket.get(a).getNext());
+			
+			if (destroy(rocket.get(a))) {	//se ce qualcosa da distruggere
+				countRockets(rocket.get(a));		
 				matrix.world[rocket.get(a).getX()][rocket.get(a).getY()] = rocket.get(a).getCurr();
-
-				// distruggi Wall
-				if (rocket.get(a).getNext() instanceof Wall)
-					if (((Wall) rocket.get(a).getNext()).getHealth() == 0)
-						destroyWall(rocket.get(a));
-
-				// distruggi EnemyTank solo se rocket proveniente dal player
-				if (rocket.get(a).getNext() instanceof EnemyTank && rocket.get(a).getTank() instanceof PlayerTank) {
-					if (((EnemyTank) rocket.get(a).getNext()).getHealth() == 0) {
-						destroyEnemyTank(rocket.get(a), (EnemyTank) rocket.get(a).getNext());
-					}
-				}
-
-				// distruggi Flag
-				if (rocket.get(a).getNext() instanceof Flag)
-					flag.setHit(true);
-
-				// distruggi Player
-				// per il momento viene terminato il gioco senza cancellare
-				// tra players danneggiamento non gestito
-
-				// mi salvo secondo Rocket da distruggere in 'r'
-				if (rocket.get(a).getNext() instanceof Rocket)
-					r = ((Rocket) rocket.get(a).getNext());
-
-				// distruggi rocket alla fine
 				rocket.remove(a);
 				a--;
 			}
-
 		}
-		// se cè uno scontro tra Rockets distruggi r...
-		if (r != null) {
-			for (int a = 0; a < rocket.size(); a++) {
-				if (r == rocket.get(a)) {
-					countRockets(rocket.get(a));
-					matrix.world[rocket.get(a).getX()][rocket.get(a).getY()] = rocket.get(a).getCurr();
-					rocket.remove(a);
-					a--;
-				}
-			}
-		}
+		if(r!=null)
+			destroySecondRocket(r);
 	}
 
-	public boolean destroyRocket(Rocket rocket) {
+	public boolean destroy(Rocket rocket) {
 
-		// se rocket si trova al bordo o tocca flag o si scontra con altro
-		// rocket
-		if (rocket.isBordo() || rocket.getNext() instanceof Flag || rocket.getNext() instanceof Rocket) {
+		if (rocket.isBordo())
+			return true;
+			
+		if( rocket.getNext() instanceof Flag){
+			flag.setHit(true);
 			return true;
 		}
-
-		if (rocket.getNext() instanceof Wall) {
+		
+		if (rocket.getNext() instanceof Wall){
 			damageWall(rocket);
+			if (((Wall) rocket.getNext()).getHealth() == 0)
+				destroyWall(rocket);
 			return true;
 		}
 
-		if (rocket.getNext() instanceof EnemyTank) {
-			if (rocket.getTank() instanceof PlayerTank) // danneggia solo se
-														// proveniente dal
-														// playerTank
+		if (rocket.getNext() instanceof EnemyTank && rocket.getTank() instanceof PlayerTank){
 				damageEnemyTank(rocket);
+			if (((EnemyTank) rocket.getNext()).getHealth() == 0)
+				destroyEnemyTank(rocket, (EnemyTank) rocket.getNext());
 			return true;
 		}
 
-		if (rocket.getNext() instanceof PlayerTank) {
-			if (rocket.getTank() instanceof EnemyTank) // danneggia solo se
-														// proveniente dal
-														// playerTank
-				damagePlayerTank(rocket);
+		if (rocket.getNext() instanceof PlayerTank){
+			if (rocket.getTank() instanceof EnemyTank)
+				damageAndDestroyPlayerTank(rocket);
 			return true;
 		}
 
-		// se Rocket tocca bordo ( è collegato al primo if )
+		// se Rocket tocca bordo ( è legato al  al primo if )
 		if ((rocket.getX() == 0 && rocket.getDirection() == Direction.UP)
 				|| (rocket.getX() == matrix.getRow() - 1 && rocket.getDirection() == Direction.DOWN)
 				|| (rocket.getY() == 0 && rocket.getDirection() == Direction.LEFT)
@@ -394,6 +412,29 @@ public class GameManager {
 			rocket.setBordo(true);
 		}
 		return false;
+	}
+
+	private void damageWall(Rocket rocket) {
+
+		if (player.getLevel() == 3)
+			((Wall) rocket.getNext()).setHealth(((Wall) rocket.getNext()).getHealth() - 2);
+		else if (!(rocket.getNext() instanceof SteelWall)) // e non è SteelWall
+			((Wall) rocket.getNext()).setHealth(((Wall) rocket.getNext()).getHealth() - 1);
+	}
+
+	private void damageEnemyTank(Rocket rocket) {
+		((EnemyTank) rocket.getNext()).setHealth(((EnemyTank) rocket.getNext()).getHealth() - 1);
+	}
+	
+	private void destroySecondRocket(Rocket r)
+	{
+		for (int a = 0; a < rocket.size(); a++) 
+			if (r == rocket.get(a)) {
+				countRockets(rocket.get(a));
+				matrix.world[rocket.get(a).getX()][rocket.get(a).getY()] = rocket.get(a).getCurr();
+				rocket.remove(a);
+				a--;
+			}
 	}
 
 	public void destroyWall(Rocket rocket) {
@@ -416,106 +457,18 @@ public class GameManager {
 	}
 
 	public void destroyEnemyTank(Rocket rocket, EnemyTank enemyT) {
-		switch (rocket.getDirection()) {
-		case UP:
-			matrix.world[rocket.getX() - 1][rocket.getY()] = enemyT.getBefore();
-			break;
-		case DOWN:
-			matrix.world[rocket.getX() + 1][rocket.getY()] = enemyT.getBefore();
-			break;
-		case RIGHT:
-			matrix.world[rocket.getX()][rocket.getY() + 1] = enemyT.getBefore();
-			break;
-		case LEFT:
-			matrix.world[rocket.getX()][rocket.getY() - 1] = enemyT.getBefore();
-			break;
-		default:
-			break;
-		}
+			matrix.world[enemyT.getX()][enemyT.getY()] = enemyT.getCurr();
 	}
 
-	private void damageWall(Rocket rocket) {
-
-		if (player.getLevel() == 3)
-			((Wall) rocket.getNext()).setHealth(((Wall) rocket.getNext()).getHealth() - 2);
-		else if (!(rocket.getNext() instanceof SteelWall)) // e non è SteelWall
-			((Wall) rocket.getNext()).setHealth(((Wall) rocket.getNext()).getHealth() - 1);
-
-	}
-
-	private void damageEnemyTank(Rocket rocket) {
-		((EnemyTank) rocket.getNext()).setHealth(((EnemyTank) rocket.getNext()).getHealth() - 1);
-	}
-
-	private void damagePlayerTank(Rocket rocket) {
+	private void damageAndDestroyPlayerTank(Rocket rocket) {
 
 		((PlayerTank) rocket.getNext()).setResume(((PlayerTank) rocket.getNext()).getResume() - 1);
-		getMatrix().world[size - 1][(size / 2) - 3] = player;
 		getMatrix().world[player.getX()][player.getY()] = player.getCurr();
-		player.setCurr(null);
-		player.setX(size - 1);
-		player.setY((size / 2) - 3);
-
+		player = new PlayerTank(size - 1, (size / 2) - 3, getMatrix());
 	}
 
-	public void importMatrix() {
-		int i = 0;// indice di riga
-
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader("src/mappa.txt"));
-			String line = reader.readLine();
-			while (line != null) {
-
-				StringTokenizer st = new StringTokenizer(line, " ");
-				int j = 0;// indice di colonna
-				String tmp;
-				while (st.hasMoreTokens()) {
-
-					tmp = st.nextToken();
-
-					switch (tmp) {
-					case ("null"):
-						getMatrix().world[i][j] = null;
-						break;
-					case ("[//]"):
-						getMatrix().world[i][j] = new SteelWall(i, j, getMatrix(), 4);
-						break;
-					case ("@@@@"):
-						getMatrix().world[i][j] = new Ice(i, j, getMatrix());
-						break;
-					case ("TTTT"):
-						getMatrix().world[i][j] = new Trees(i, j, getMatrix());
-						break;
-					case ("[||]"):
-						getMatrix().world[i][j] = new BrickWall(i, j, getMatrix(), 2);
-						break;
-					case ("~~~~"):
-						getMatrix().world[i][j] = new Water(i, j, getMatrix());
-						break;
-					case ("****"):
-						player = new PlayerTank(i, j, getMatrix());
-						getMatrix().world[i][j] = player;
-						break;
-					case ("FLAG"):
-						flag = new Flag(i, j, matrix);
-						getMatrix().world[i][j] = flag;
-						break;
-					}// switch
-
-					j++;
-				} // while
-
-				i++;
-				line = reader.readLine();
-			} // while
-			reader.close();
-		} // try
-		catch (Exception e) {
-
-			e.printStackTrace();
-		}
-	}
-
+	//--------------------------------------------ENEMY----------------------------------------------------
+	
 	public void createRocketTank(Direction tmp, AbstractDynamicObject tank) {
 
 		if ((tank instanceof PlayerTank && player.getLevel() < 3 && player.getContRocket() == 0)
@@ -673,6 +626,8 @@ public class GameManager {
 		return false;
 	}
 
+	//------------------------------ SET & GET--------------------------------------------------------------
+	
 	public int getX() {
 		return x;
 	}
