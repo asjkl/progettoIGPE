@@ -90,12 +90,12 @@ public class GameManager {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 
 		GameManager game = new GameManager();
-		game.randomEnemy(6); // quanti soldati generare
+		game.randomEnemy(2); // quanti soldati generare
 		Scanner s = new Scanner(System.in);
 		String c;
 		Direction tmp = Direction.STOP; // IN TMP RIMANE LA DIREZIONE
@@ -195,8 +195,9 @@ public class GameManager {
 		System.out.println();
 	}
 
-	//----------------------------------------POWER UP-------------------------------------
-	
+	// ----------------------------------------POWER
+	// UP-------------------------------------
+
 	public void randomPowerUp() {
 
 		int cont = 0;
@@ -357,8 +358,8 @@ public class GameManager {
 		}
 	}
 
-	//---------------------------------------ROCKET----------------------------------------
-	
+	// ---------------------------------------ROCKET----------------------------------------
+
 	public void updateRocket() {
 		Rocket r = null; // rocket temporaneo
 
@@ -369,10 +370,10 @@ public class GameManager {
 				countRockets(rocket.get(a));
 				matrix.world[rocket.get(a).getX()][rocket.get(a).getY()] = rocket.get(a).getCurr();
 
-				// distruggi EnemyTank 
+				// distruggi EnemyTank
 				// TODO se sposto non va piu
-				if (rocket.get(a).getNext() instanceof EnemyTank && rocket.get(a).getTank() instanceof PlayerTank) 
-					if (((EnemyTank) rocket.get(a).getNext()).getHealth() == 0) 
+				if (rocket.get(a).getNext() instanceof EnemyTank && rocket.get(a).getTank() instanceof PlayerTank)
+					if (((EnemyTank) rocket.get(a).getNext()).getHealth() == 0)
 						destroyEnemyTank((EnemyTank) rocket.get(a).getNext());
 
 				if (rocket.get(a).getNext() instanceof Rocket)
@@ -382,16 +383,16 @@ public class GameManager {
 				a--;
 			}
 		}
-		if (r != null) //distruggi Rocket2
+		if (r != null) // distruggi Rocket2
 			destroyOtherRocket(r);
 	}
 
 	private boolean destroyRocket(Rocket rocket) {
 
-		if (rocket.isBordo() || rocket.getNext() instanceof Rocket) 
+		if (rocket.isBordo() || rocket.getNext() instanceof Rocket)
 			return true;
-		
-		if(rocket.getNext() instanceof Flag ){
+
+		if (rocket.getNext() instanceof Flag) {
 			flag.setHit(true);
 			return true;
 		}
@@ -410,7 +411,7 @@ public class GameManager {
 		}
 
 		if (rocket.getNext() instanceof PlayerTank) {
-			if (rocket.getTank() instanceof EnemyTank) 
+			if (rocket.getTank() instanceof EnemyTank)
 				damageAndDestroyPlayerTank();
 			return true;
 		}
@@ -425,9 +426,9 @@ public class GameManager {
 		return false;
 	}
 
-	private void destroyOtherRocket(Rocket r){
-		
-		for (int a = 0; a < rocket.size(); a++) 
+	private void destroyOtherRocket(Rocket r) {
+
+		for (int a = 0; a < rocket.size(); a++)
 			if (r == rocket.get(a)) {
 				countRockets(rocket.get(a));
 				matrix.world[rocket.get(a).getX()][rocket.get(a).getY()] = rocket.get(a).getCurr();
@@ -435,20 +436,20 @@ public class GameManager {
 				a--;
 			}
 	}
-	
+
 	private void damageEnemyTank(Rocket rocket) {
 		((EnemyTank) rocket.getNext()).setHealth(((EnemyTank) rocket.getNext()).getHealth() - 1);
 	}
 
 	private void damageAndDestroyPlayerTank() {
 
-		player.setResume(player.getResume()-1);
+		player.setResume(player.getResume() - 1);
 		getMatrix().world[size - 1][(size / 2) - 3] = player;
 		getMatrix().world[player.getX()][player.getY()] = player.getCurr();
 		player.setCurr(null);
 		player.setX(size - 1);
 		player.setY((size / 2) - 3);
-		
+
 	}
 
 	private void destroyWall(Rocket rocket) {
@@ -483,8 +484,8 @@ public class GameManager {
 
 	}
 
-	//-------------------------------------ENEMY-------------------------------------------
-	
+	// -------------------------------------ENEMY-------------------------------------------
+
 	public void createRocketTank(Direction tmp, AbstractDynamicObject tank) {
 
 		if ((tank instanceof PlayerTank && player.getLevel() < 3 && player.getContRocket() == 0)
@@ -635,6 +636,7 @@ public class GameManager {
 	private boolean controlDestroyEnemyInArrayList(EnemyTank enemyTank) {
 		for (int i = 0; i < enemy.size(); i++) {
 			if (enemy.get(i).getHealth() == 0 && enemy.get(i) == enemyTank) {
+				matrix.world[enemy.get(i).getX()][enemy.get(i).getY()] = enemy.get(i).getCurr();
 				enemy.remove(i);
 				return true;
 			}
@@ -642,8 +644,9 @@ public class GameManager {
 		return false;
 	}
 
-	//-----------------------------SET & GET-----------------------------------------------
-	
+	// -----------------------------SET &
+	// GET-----------------------------------------------
+
 	public int getX() {
 		return x;
 	}
