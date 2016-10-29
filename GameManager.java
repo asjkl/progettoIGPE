@@ -134,13 +134,14 @@ public class GameManager {
 			game.updateRocket(); // AGGIORNAMENTO DI TUTTI I ROCKET
 			game.enemyUpdate(); // AGGIORNAMENTO ENEMY
 			game.player.update(); // AGGIORNAMENTO PLAYER
-
+			System.out.println(game.player.getCurr());
 			// spara il doppio rocket al livello > 1
 			if (enter && game.player.getLevel() > 1) {
 				game.createRocketTank(tmp, game.player);
 				enter = false;
 			}
 
+			System.out.println(game.player.getResume());
 			// GAME OVER / WIN
 			if (game.flag.isHit() || game.player.getResume() == 0) {
 				game.printGameOver();// stampa sconfitta
@@ -410,7 +411,7 @@ public class GameManager {
 
 		if (rocket.getNext() instanceof PlayerTank) {
 			if (rocket.getTank() instanceof EnemyTank) 
-				damageAndDestroyPlayerTank(rocket);
+				damageAndDestroyPlayerTank();
 			return true;
 		}
 
@@ -439,11 +440,15 @@ public class GameManager {
 		((EnemyTank) rocket.getNext()).setHealth(((EnemyTank) rocket.getNext()).getHealth() - 1);
 	}
 
-	private void damageAndDestroyPlayerTank(Rocket rocket) {
+	private void damageAndDestroyPlayerTank() {
 
-		((PlayerTank) rocket.getNext()).setResume(((PlayerTank) rocket.getNext()).getResume() - 1);
+		player.setResume(player.getResume()-1);
+		getMatrix().world[size - 1][(size / 2) - 3] = player;
 		getMatrix().world[player.getX()][player.getY()] = player.getCurr();
-		player = new PlayerTank(size-1,(size / 2) - 3, getMatrix());
+		player.setCurr(null);
+		player.setX(size - 1);
+		player.setY((size / 2) - 3);
+		
 	}
 
 	private void destroyWall(Rocket rocket) {
