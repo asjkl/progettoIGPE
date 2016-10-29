@@ -69,8 +69,6 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		}
 	}
 
-	// funzione che tiene conto del oggetto corrente e successivo
-	// del oggetto in questione
 	public abstract boolean sameObject();
 
 	@Override
