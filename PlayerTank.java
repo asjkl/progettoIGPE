@@ -14,6 +14,7 @@ public class PlayerTank extends AbstractDynamicObject {
 	@Override
 	public void update() {
 		super.update();
+		
 		getWorld().world[getX()][getY()] = this;
 		setDirection(Direction.STOP); // serve altrimenti il giocatore non si ferma
 	}

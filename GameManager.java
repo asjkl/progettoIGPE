@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
 public class GameManager {
 	private int x;
 	private int y;
-	private int contEnemy = 0;
+	private int contEnemy = 0; 
 	private Direction direction;
 	private static final int size = 20;
 	private Random random;
@@ -369,6 +369,7 @@ public class GameManager {
 			if (destroyRocket(rocket.get(a))) {
 				countRockets(rocket.get(a));
 				
+				System.out.println("------"+rocket.get(a).getCurr());
 				matrix.world[rocket.get(a).getX()][rocket.get(a).getY()] = rocket.get(a).getCurr();
 
 				if (rocket.get(a).getNext() instanceof EnemyTank && rocket.get(a).getTank() instanceof PlayerTank)
@@ -451,9 +452,9 @@ public class GameManager {
 
 	private void damageAndDestroyPlayerTank() {
 
+		getMatrix().world[player.getX()][player.getY()] = player.getCurr();
 		player.setResume(player.getResume() - 1);
 		getMatrix().world[size - 1][(size / 2) - 3] = player;
-		getMatrix().world[player.getX()][player.getY()] = player.getCurr();
 		player.setCurr(null);
 		player.setX(size - 1);
 		player.setY((size / 2) - 3);
