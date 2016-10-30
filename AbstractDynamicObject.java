@@ -29,8 +29,9 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	public void update() {
 
 		// rimette l oggetto di prima
+		//TODO 
 		getWorld().world[getX()][getY()] = curr;
-
+	
 		switch (getDirection()) {
 		case UP:
 			if (getX() - 1 >= 0) {

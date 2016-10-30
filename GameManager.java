@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
 public class GameManager {
 	private int x;
 	private int y;
-	private int contEnemy = 0; 
+	private int contEnemy = 0;
 	private Direction direction;
 	private static final int size = 20;
 	private Random random;
@@ -37,7 +37,7 @@ public class GameManager {
 		int i = 0;// indice di riga
 
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("src/mappa.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader("src/ice.txt"));
 			String line = reader.readLine();
 			while (line != null) {
 
@@ -95,7 +95,7 @@ public class GameManager {
 	public static void main(String[] args) {
 
 		GameManager game = new GameManager();
-		game.randomEnemy(6); // quanti soldati generare
+		game.randomEnemy(10); // quanti soldati generare
 		Scanner s = new Scanner(System.in);
 		String c;
 		Direction tmp = Direction.STOP; // IN TMP RIMANE LA DIREZIONE
@@ -135,6 +135,7 @@ public class GameManager {
 			game.player.update(); // AGGIORNAMENTO PLAYER
 			game.enemyUpdate(); // AGGIORNAMENTO ENEMY
 		
+			System.out.println();
 			// spara il doppio rocket al livello > 1
 			if (enter && game.player.getLevel() > 1) {
 				game.createRocketTank(tmp, game.player);
@@ -369,7 +370,6 @@ public class GameManager {
 			if (destroyRocket(rocket.get(a))) {
 				countRockets(rocket.get(a));
 				
-				System.out.println("------"+rocket.get(a).getCurr());
 				matrix.world[rocket.get(a).getX()][rocket.get(a).getY()] = rocket.get(a).getCurr();
 
 				if (rocket.get(a).getNext() instanceof EnemyTank && rocket.get(a).getTank() instanceof PlayerTank)
@@ -453,8 +453,8 @@ public class GameManager {
 	private void damageAndDestroyPlayerTank() {
 
 		getMatrix().world[player.getX()][player.getY()] = player.getCurr();
-		player.setResume(player.getResume() - 1);
 		getMatrix().world[size - 1][(size / 2) - 3] = player;
+		player.setResume(player.getResume() - 1);
 		player.setCurr(null);
 		player.setX(size - 1);
 		player.setY((size / 2) - 3);
