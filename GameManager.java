@@ -95,7 +95,7 @@ public class GameManager {
 	public static void main(String[] args) {
 
 		GameManager game = new GameManager();
-		game.randomEnemy(2); // quanti soldati generare
+		game.randomEnemy(6); // quanti soldati generare
 		Scanner s = new Scanner(System.in);
 		String c;
 		Direction tmp = Direction.STOP; // IN TMP RIMANE LA DIREZIONE
@@ -132,22 +132,25 @@ public class GameManager {
 
 			game.enemyPositionRandom(); // CREAZIONE ENEMY
 			game.updateRocket(); // AGGIORNAMENTO DI TUTTI I ROCKET
-			game.enemyUpdate(); // AGGIORNAMENTO ENEMY
 			game.player.update(); // AGGIORNAMENTO PLAYER
-			System.out.println(game.player.getCurr());
+			game.enemyUpdate(); // AGGIORNAMENTO ENEMY
+		
 			// spara il doppio rocket al livello > 1
 			if (enter && game.player.getLevel() > 1) {
 				game.createRocketTank(tmp, game.player);
 				enter = false;
 			}
 
-			System.out.println(game.player.getResume());
-			// GAME OVER / WIN
+			// GAME OVER 
 			if (game.flag.isHit() || game.player.getResume() == 0) {
-				game.printGameOver();// stampa sconfitta
+				game.matrix.stampa();
+				game.printGameOver();
 				game.exit = true;
-			} else if (game.enemy.size() == 0) {
-				game.printWin(); // se non ci sono piu nemici stampa vittoria
+			}
+			// WIN
+			if (game.enemy.size() == 0) {
+				game.matrix.stampa();
+				game.printWin();
 				game.exit = true;
 			}
 
@@ -195,8 +198,7 @@ public class GameManager {
 		System.out.println();
 	}
 
-	// ----------------------------------------POWER
-	// UP-------------------------------------
+	// ----------------------------------------POWERUP-------------------------------------
 
 	public void randomPowerUp() {
 
@@ -345,12 +347,10 @@ public class GameManager {
 
 	private void countRockets(Rocket r) {
 		if (!(r.getTank() instanceof EnemyTank))
-
 			player.setContRocket(player.getContRocket() - 1);
 		else {
 			for (int b = 0; b < enemy.size(); b++) {
 				if (enemy.get(b) == r.getTank()) {
-
 					enemy.get(b).setContRocket(enemy.get(b).getContRocket() - 1);
 					break;
 				}
@@ -368,10 +368,9 @@ public class GameManager {
 
 			if (destroyRocket(rocket.get(a))) {
 				countRockets(rocket.get(a));
+				
 				matrix.world[rocket.get(a).getX()][rocket.get(a).getY()] = rocket.get(a).getCurr();
 
-				// distruggi EnemyTank
-				// TODO se sposto non va piu
 				if (rocket.get(a).getNext() instanceof EnemyTank && rocket.get(a).getTank() instanceof PlayerTank)
 					if (((EnemyTank) rocket.get(a).getNext()).getHealth() == 0)
 						destroyEnemyTank((EnemyTank) rocket.get(a).getNext());
@@ -441,6 +440,15 @@ public class GameManager {
 		((EnemyTank) rocket.getNext()).setHealth(((EnemyTank) rocket.getNext()).getHealth() - 1);
 	}
 
+	private void damageWall(Rocket rocket) {
+
+		if (player.getLevel() == 3)
+			((Wall) rocket.getNext()).setHealth(((Wall) rocket.getNext()).getHealth() - 2);
+		else if (!(rocket.getNext() instanceof SteelWall)) // e non è SteelWall
+			((Wall) rocket.getNext()).setHealth(((Wall) rocket.getNext()).getHealth() - 1);
+
+	}
+
 	private void damageAndDestroyPlayerTank() {
 
 		player.setResume(player.getResume() - 1);
@@ -472,16 +480,15 @@ public class GameManager {
 	}
 
 	private void destroyEnemyTank(EnemyTank enemyT) {
+		
 		matrix.world[enemyT.getX()][enemyT.getY()] = enemyT.getCurr();
-	}
-
-	private void damageWall(Rocket rocket) {
-
-		if (player.getLevel() == 3)
-			((Wall) rocket.getNext()).setHealth(((Wall) rocket.getNext()).getHealth() - 2);
-		else if (!(rocket.getNext() instanceof SteelWall)) // e non è SteelWall
-			((Wall) rocket.getNext()).setHealth(((Wall) rocket.getNext()).getHealth() - 1);
-
+		
+		//distruggi enemy dalla lista
+		for (int i = 0; i < enemy.size(); i++) 
+			if (enemy.get(i) == enemyT) {
+					enemy.remove(i);
+					i--;
+			}
 	}
 
 	// -------------------------------------ENEMY-------------------------------------------
@@ -605,7 +612,6 @@ public class GameManager {
 
 		for (int a = 0; a < enemy.size(); a++) {
 			if (enemy.get(a).getPassi() >= enemy.get(a).getContatorePassi()) {
-				if (!controlDestroyEnemyInArrayList(enemy.get(a))) {
 					enemy.get(a).update();
 
 					if (enemy.get(a).getX() == enemy.get(a).getTempX()
@@ -625,7 +631,6 @@ public class GameManager {
 							enemy.get(a).setRiprendoValori(false);
 						}
 					}
-				}
 			} else {
 				enemy.get(a).setContatorePassi(0);
 				matrix.world[enemy.get(a).getX()][enemy.get(a).getY()] = enemy.get(a);
@@ -633,19 +638,7 @@ public class GameManager {
 		}
 	}
 
-	private boolean controlDestroyEnemyInArrayList(EnemyTank enemyTank) {
-		for (int i = 0; i < enemy.size(); i++) {
-			if (enemy.get(i).getHealth() == 0 && enemy.get(i) == enemyTank) {
-				matrix.world[enemy.get(i).getX()][enemy.get(i).getY()] = enemy.get(i).getCurr();
-				enemy.remove(i);
-				return true;
-			}
-		}
-		return false;
-	}
-
-	// -----------------------------SET &
-	// GET-----------------------------------------------
+	// -----------------------------SET & GET-----------------------------------------------
 
 	public int getX() {
 		return x;

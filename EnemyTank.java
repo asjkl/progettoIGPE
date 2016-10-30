@@ -14,8 +14,7 @@ public class EnemyTank extends AbstractDynamicObject {
 	private boolean directionLeft;
 	private boolean directionRight;
 
-	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health,
-			int point) {
+	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health,int point) {
 		super(x, y, world, speed, speedShot, direction, health);
 		this.point = point;
 		passi = 0;
