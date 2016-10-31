@@ -492,8 +492,6 @@ public class GameManager {
 			}
 	}
 
-	// -------------------------------------ENEMY-------------------------------------------
-
 	public void createRocketTank(Direction tmp, AbstractDynamicObject tank) {
 
 		if ((tank instanceof PlayerTank && player.getLevel() < 3 && player.getContRocket() == 0)
@@ -521,7 +519,9 @@ public class GameManager {
 			tank.setContRocket(tank.getContRocket() + 1); // conta rocket
 		}
 	}
-
+	
+	// -------------------------------------ENEMY-------------------------------------------
+	
 	public void randomEnemy(int value) {
 		while (enemy.size() < value) { // TODO BISOGNA INSERIRE IL TEMPO PER
 										// OGNI
