@@ -9,7 +9,7 @@ public class Rocket extends AbstractDynamicObject {
 		super(x, y, world, direction);
 		this.bordo = false;
 		this.tank = tank;
-		curr=getWorld().world[getX()][getY()];
+		curr = tank.getCurr();
 	}
 
 	@Override
