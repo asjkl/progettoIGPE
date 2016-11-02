@@ -11,7 +11,6 @@ public class GameManager {
 	private int x;
 	private int y;
 	private int contEnemy = 0;
-	private Direction direction;
 	private static final int size = 20;
 	private Random random;
 	private World matrix;
@@ -20,8 +19,8 @@ public class GameManager {
 	private ArrayList<PowerUp> power;
 	private ArrayList<Rocket> rocket;
 	private Flag flag;
+	private Direction direction;
 	private boolean exit = false;
-	private boolean timer = false;
 
 	public GameManager() {
 		matrix = new World(size, size);
@@ -37,7 +36,7 @@ public class GameManager {
 		int i = 0;// indice di riga
 
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("src/ice.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader("src/mappa.txt"));
 			String line = reader.readLine();
 			while (line != null) {
 
@@ -95,7 +94,7 @@ public class GameManager {
 	public static void main(String[] args) {
 
 		GameManager game = new GameManager();
-		game.randomEnemy(10); // quanti soldati generare
+		game.randomEnemy(6); // quanti soldati generare
 		Scanner s = new Scanner(System.in);
 		String c;
 		Direction tmp = Direction.STOP; // IN TMP RIMANE LA DIREZIONE
@@ -284,18 +283,18 @@ public class GameManager {
 
 		switch (power) {
 		case GRANADE:
+			
 			for (int i = 0; i < enemy.size(); i++)
 				enemy.remove(i);
 			break;
-		// TODO gestire secondi poi deve sparire oppure illimitato e sparisce
-		// dopo sparo
+		
 		case HELMET:
 			player.setProtection(true);
 			lenghtPowerUp(5);
 			break;
-		// TODO deve duare tot secondi e poi si deve ripristinare come era prima
-		// con i brickwall
+			
 		case SHOVEL:
+			
 			for (int i = size - 2; i < size; i++)
 
 				for (int j = (size / 2) - 2; j <= size / 2; j++)
@@ -303,20 +302,25 @@ public class GameManager {
 					if (!(getMatrix().world[i][j] instanceof Flag))
 						getMatrix().world[i][j] = new BrickWall(i, j, getMatrix(), 4);
 			break;
-		// TODO dopo esser stato colpito si riparte da livello 1
+			
 		case STAR:
+			
 			if (player.getLevel() < 3)
 				player.setLevel(player.getLevel() + 1);
+			
 			break;
 		case TANK:
+			
 			player.setLevel(player.getResume() + 1);
 			break;
+			
 		case TIMER:
-			// TODO gestire secondi blocco
+		
 			System.out.println("POWERUP");
 			for (int i = 0; i < enemy.size(); i++)
 				enemy.get(i).setDirection(Direction.STOP);
 			lenghtPowerUp(10);
+			
 			break;
 		}
 	}
@@ -326,15 +330,10 @@ public class GameManager {
 		long second = (System.currentTimeMillis() / 1000) % 60;
 		long tmp = second + t;
 
-		if (tmp >= 59)
+		tmp = (tmp + 1)%60; //ritorna a capo
 
-			tmp -= 59;
-
-		while (!timer) {
+		while (second < tmp) {
 			second = (System.currentTimeMillis() / 1000) % 60;
-
-			if (second == tmp)
-				timer = true;
 		}
 	}
 
@@ -354,11 +353,18 @@ public class GameManager {
 					matrix.world[rocket.get(a).getX()][rocket.get(a).getY()] = rocket.get(a).getCurr();
 				
 				//distruggi enemy
-				//TODO sposatre in destroyRocket
 				if (rocket.get(a).getNext() instanceof EnemyTank && rocket.get(a).getTank() instanceof PlayerTank)
-					if (((EnemyTank) rocket.get(a).getNext()).getHealth() == 0)
+					if (((EnemyTank) rocket.get(a).getNext()).getHealth() == 0){
+						switchCurrEnemyTank(rocket.get(a).getNext());
 						destroyEnemyTank((EnemyTank) rocket.get(a).getNext());
-
+					}
+				
+				//distruggi player
+				if (rocket.get(a).getNext() instanceof PlayerTank && rocket.get(a).getTank() instanceof EnemyTank){
+						switchCurrPlayerTank();
+						damageAndDestroyPlayerTank();
+				}
+				
 				if (rocket.get(a).getNext() instanceof Rocket)
 					r = ((Rocket) rocket.get(a).getNext());
 
@@ -385,7 +391,7 @@ public class GameManager {
 
 	private boolean destroyRocket(Rocket rocket) {
 
-		if (rocket.isBordo() || rocket.getNext() instanceof Rocket)
+		if (rocket.isBordo() || rocket.getNext() instanceof Rocket || rocket.getNext() instanceof PlayerTank)
 			return true;
 
 		if (rocket.getNext() instanceof Flag) {
@@ -403,12 +409,6 @@ public class GameManager {
 		if (rocket.getNext() instanceof EnemyTank) {
 			if (rocket.getTank() instanceof PlayerTank)
 				damageEnemyTank(rocket);
-			return true;
-		}
-
-		if (rocket.getNext() instanceof PlayerTank) {
-			if (rocket.getTank() instanceof EnemyTank)
-				damageAndDestroyPlayerTank();
 			return true;
 		}
 
@@ -447,15 +447,7 @@ public class GameManager {
 	}
 
 	private void damageAndDestroyPlayerTank() {
-	
-		getMatrix().world[player.getX()][player.getY()] = player.getCurr();
-		
-		//TODO
-		//imposta il corrente del rocket a quello del player appena ucciso
-		for(int a=0; a<rocket.size(); a++)
-			if(rocket.get(a).getTank() instanceof PlayerTank)
-				rocket.get(a).setCurr(player.getCurr());
-		
+		getMatrix().world[player.getX()][player.getY()] = player.getCurr();	
 		getMatrix().world[size - 1][(size / 2) - 3] = player;
 		player.setResume(player.getResume() - 1);
 		player.setX(size - 1);
@@ -463,7 +455,7 @@ public class GameManager {
 		player.setDirection(Direction.STOP);
 		player.setCurr(null);
 	}
-
+	
 	private void destroyWall(Rocket rocket) {
 		switch (rocket.getDirection()) {
 		case UP:
@@ -486,12 +478,6 @@ public class GameManager {
 	private void destroyEnemyTank(EnemyTank enemyT) {
 		
 		matrix.world[enemyT.getX()][enemyT.getY()] = enemyT.getCurr();
-		
-		//TODO
-		//imposta il corrente del rocket a quello del nemico appena ucciso
-		for(int a=0; a<rocket.size(); a++)
-			if(rocket.get(a).getTank() instanceof EnemyTank)
-				rocket.get(a).setCurr(enemyT.getCurr());
 		
 		//distruggi enemy dalla lista
 		for (int i = 0; i < enemy.size(); i++) 
@@ -529,6 +515,22 @@ public class GameManager {
 		}
 	}
 	
+	private void switchCurrEnemyTank(AbstractStaticObject eT)
+	{
+		for(int b=0;b<enemy.size();b++) //cerco il nemico
+			if(eT == enemy.get(b))
+				for(int a=0; a<rocket.size(); a++) //cerco il rocket
+					if(rocket.get(a).getTank() == rocket.get(b))
+						rocket.get(a).setCurr(rocket.get(b).getCurr()); //switch
+	}
+	
+	private void switchCurrPlayerTank()
+	{
+		for(int a=0; a<rocket.size(); a++)
+			if(rocket.get(a).getTank() instanceof PlayerTank)
+				rocket.get(a).setCurr(player.getCurr());
+	}
+	 
 	// -------------------------------------ENEMY-------------------------------------------
 	
 	public void randomEnemy(int value) {
@@ -648,7 +650,6 @@ public class GameManager {
 		}
 	}
 
-	
 	// -----------------------------SET & GET-----------------------------------------------
 
 	public int getX() {
