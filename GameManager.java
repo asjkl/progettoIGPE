@@ -134,8 +134,6 @@ public class GameManager {
 			game.updateRocket(); // AGGIORNAMENTO DI TUTTI I ROCKET
 			game.player.update(); // AGGIORNAMENTO PLAYER
 			game.enemyUpdate(); // AGGIORNAMENTO ENEMY
-		
-			System.out.println();
 			
 			// spara il doppio rocket al livello > 1
 			if (enter && game.player.getLevel() > 1) {
@@ -157,6 +155,7 @@ public class GameManager {
 			}
 
 			if (game.exit == false) {
+				System.out.println();
 				game.matrix.stampa();
 				c = s.nextLine();
 			}
@@ -206,16 +205,12 @@ public class GameManager {
 
 		int cont = 0;
 		int tmp;
-
+		
 		while (cont < 5) {
-
 			tmp = random.nextInt(6);
-
 			addPowerUp(tmp);
-
 			cont++;
 		}
-
 	}
 
 	public void addPowerUp(int t) {
@@ -271,11 +266,9 @@ public class GameManager {
 	}
 
 	public void foundPosition() {
-
 		boolean flag = false;
 
 		while (!flag) {
-
 			x = random.nextInt(size);
 			y = random.nextInt(size);
 
@@ -338,25 +331,10 @@ public class GameManager {
 			tmp -= 59;
 
 		while (!timer) {
-
 			second = (System.currentTimeMillis() / 1000) % 60;
 
 			if (second == tmp)
-
 				timer = true;
-		}
-	}
-
-	private void countRockets(Rocket r) {
-		if (!(r.getTank() instanceof EnemyTank))
-			player.setContRocket(player.getContRocket() - 1);
-		else {
-			for (int b = 0; b < enemy.size(); b++) {
-				if (enemy.get(b) == r.getTank()) {
-					enemy.get(b).setContRocket(enemy.get(b).getContRocket() - 1);
-					break;
-				}
-			}
 		}
 	}
 
@@ -390,6 +368,19 @@ public class GameManager {
 		}
 		if (r != null) // distruggi Rocket2
 			destroyOtherRocket(r);
+	}
+
+	private void countRockets(Rocket r) {
+		if (!(r.getTank() instanceof EnemyTank))
+			player.setContRocket(player.getContRocket() - 1);
+		else {
+			for (int b = 0; b < enemy.size(); b++) {
+				if (enemy.get(b) == r.getTank()) {
+					enemy.get(b).setContRocket(enemy.get(b).getContRocket() - 1);
+					break;
+				}
+			}
+		}
 	}
 
 	private boolean destroyRocket(Rocket rocket) {
@@ -538,8 +529,6 @@ public class GameManager {
 		}
 	}
 	
-	// ---------------------------------------ENEMYTANK----------------------------------------
-	
 	// -------------------------------------ENEMY-------------------------------------------
 	
 	public void randomEnemy(int value) {
@@ -659,7 +648,6 @@ public class GameManager {
 		}
 	}
 
-	// ---------------------------------------SET & GET----------------------------------------
 	
 	// -----------------------------SET & GET-----------------------------------------------
 
