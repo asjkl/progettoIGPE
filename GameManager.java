@@ -131,8 +131,16 @@ public class GameManager {
 			
 			game.enemyPositionRandom(); // CREAZIONE ENEMY
 			game.updateRocket(); // AGGIORNAMENTO DI TUTTI I ROCKET
+			
 			game.player.update(); // AGGIORNAMENTO PLAYER
 			game.enemyUpdate(); // AGGIORNAMENTO ENEMY
+			
+			//-------POWERUP
+			
+			if(game.player.getNext() instanceof PowerUp)
+				game.usePowerUp( ((PowerUp)(game.player.getNext())).getPowerUp() );
+			
+			//--------------------------------
 			
 			// spara il doppio rocket al livello > 1
 			if (enter && game.player.getLevel() > 1) {
@@ -283,24 +291,25 @@ public class GameManager {
 
 		switch (power) {
 		case GRANADE:
-			
-			for (int i = 0; i < enemy.size(); i++)
+			//ok
+			for (int i = 0; i < enemy.size(); i++){
+				System.out.println(enemy.get(i));
+				matrix.world[enemy.get(i).getX()][enemy.get(i).getY()] = enemy.get(i).getCurr();
 				enemy.remove(i);
+				i--;
+			}
 			break;
 		
 		case HELMET:
+			//ok
 			player.setProtection(true);
-			lenghtPowerUp(5);
 			break;
 			
 		case SHOVEL:
-			
 			for (int i = size - 2; i < size; i++)
-
 				for (int j = (size / 2) - 2; j <= size / 2; j++)
-
 					if (!(getMatrix().world[i][j] instanceof Flag))
-						getMatrix().world[i][j] = new BrickWall(i, j, getMatrix(), 4);
+						getMatrix().world[i][j] = new SteelWall(i, j, getMatrix(), 4);
 			break;
 			
 		case STAR:
@@ -360,9 +369,14 @@ public class GameManager {
 					}
 				
 				//distruggi player
-				if (rocket.get(a).getNext() instanceof PlayerTank && rocket.get(a).getTank() instanceof EnemyTank){
+				if (rocket.get(a).getNext() instanceof PlayerTank && rocket.get(a).getTank() instanceof EnemyTank ){
+					
+					if(!player.isProtection()){
 						switchCurrPlayerTank();
 						damageAndDestroyPlayerTank();
+					}else{
+						player.setProtection(false);
+					}
 				}
 				
 				if (rocket.get(a).getNext() instanceof Rocket)
