@@ -4,12 +4,12 @@ public class Rocket extends AbstractDynamicObject {
 
 	private boolean bordo; // se trovo bordo
 	private AbstractDynamicObject tank; // rocket appartenenza
-
+	
 	public Rocket(int x, int y, World world, Direction direction, AbstractDynamicObject tank) {
 		super(x, y, world, direction);
 		this.bordo = false;
 		this.tank = tank;
-		curr = getWorld().world[getX()][getY()];
+		curr = tank; //quando viene creato il Rocket il suo curr sarà il TANK
 	}
 
 	@Override
@@ -17,7 +17,7 @@ public class Rocket extends AbstractDynamicObject {
 		super.update();
 		getWorld().world[getX()][getY()] = this;
 	}
-
+	
 	@Override
 	public boolean sameObject() {
 		if (!(next instanceof Wall) && !(next instanceof PlayerTank) && !(next instanceof Rocket)

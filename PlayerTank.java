@@ -10,11 +10,11 @@ public class PlayerTank extends AbstractDynamicObject {
 	public PlayerTank(int x, int y, World world) {
 		super(x, y, world, Speed.NORMAL, Speed.NORMAL, Direction.STOP, 1);
 	}
-
+	
 	@Override
 	public void update() {
 		super.update();
-		getWorld().world[getX()][getY()] = this;
+		getWorld().world[getX()][getY()] = this;		
 		setDirection(Direction.STOP); // serve altrimenti il giocatore non si ferma
 	}
 
@@ -32,7 +32,7 @@ public class PlayerTank extends AbstractDynamicObject {
 		}
 		return false;
 	}
-
+	
 	@Override
 	public Direction getDirection() {
 		return super.getDirection();

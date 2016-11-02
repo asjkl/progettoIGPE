@@ -29,9 +29,9 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	public void update() {
 
 		// rimette l oggetto di prima
-		if (!(curr instanceof EnemyTank) && !(curr instanceof PlayerTank))
+		if( !(curr instanceof PlayerTank) && !(curr instanceof EnemyTank) ){
 			getWorld().world[getX()][getY()] = curr;
-
+		}
 		switch (getDirection()) {
 		case UP:
 			if (getX() - 1 >= 0) {
