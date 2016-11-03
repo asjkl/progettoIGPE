@@ -328,7 +328,7 @@ public class GameManager {
 			System.out.println("POWERUP");
 			for (int i = 0; i < enemy.size(); i++)
 				enemy.get(i).setDirection(Direction.STOP);
-			lenghtPowerUp(10);
+			//lenghtPowerUp(10);
 			
 			break;
 		}
@@ -364,7 +364,7 @@ public class GameManager {
 				//distruggi enemy
 				if (rocket.get(a).getNext() instanceof EnemyTank && rocket.get(a).getTank() instanceof PlayerTank)
 					if (((EnemyTank) rocket.get(a).getNext()).getHealth() == 0){
-						switchCurrEnemyTank(rocket.get(a).getNext());
+						switchCurrTank(((EnemyTank)rocket.get(a).getNext()));
 						destroyEnemyTank((EnemyTank) rocket.get(a).getNext());
 					}
 				
@@ -372,7 +372,7 @@ public class GameManager {
 				if (rocket.get(a).getNext() instanceof PlayerTank && rocket.get(a).getTank() instanceof EnemyTank ){
 					
 					if(!player.isProtection()){
-						switchCurrPlayerTank();
+						switchCurrTank(player);
 						damageAndDestroyPlayerTank();
 					}else{
 						player.setProtection(false);
@@ -497,7 +497,7 @@ public class GameManager {
 		for (int i = 0; i < enemy.size(); i++) 
 			if (enemy.get(i) == enemyT) {
 					enemy.remove(i);
-					i--;
+					break;
 			}
 	}
 
@@ -529,20 +529,11 @@ public class GameManager {
 		}
 	}
 	
-	private void switchCurrEnemyTank(AbstractStaticObject eT)
-	{
-		for(int b=0;b<enemy.size();b++) //cerco il nemico
-			if(eT == enemy.get(b))
-				for(int a=0; a<rocket.size(); a++) //cerco il rocket
-					if(rocket.get(a).getTank() == rocket.get(b))
-						rocket.get(a).setCurr(rocket.get(b).getCurr()); //switch
-	}
-	
-	private void switchCurrPlayerTank()
+	private void switchCurrTank(AbstractDynamicObject tank)
 	{
 		for(int a=0; a<rocket.size(); a++)
-			if(rocket.get(a).getTank() instanceof PlayerTank)
-				rocket.get(a).setCurr(player.getCurr());
+			if(rocket.get(a).getTank() == tank)
+				rocket.get(a).setCurr(tank.getCurr());	
 	}
 	 
 	// -------------------------------------ENEMY-------------------------------------------
