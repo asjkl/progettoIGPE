@@ -26,7 +26,6 @@ public class PlayerTank extends AbstractDynamicObject {
 			// prendo tutti i powerUp
 			if (next instanceof PowerUp) {
 				curr = ((PowerUp) next).getBefore();
-				
 			}
 			else
 				curr=next;

@@ -21,13 +21,16 @@ public class GameManager {
 	private Flag flag;
 	private Direction direction;
 	private boolean exit = false;
-
+	private ArrayList<AbstractStaticObject>recoveryWall;
+	private long currentTime;
+	
 	public GameManager() {
 		matrix = new World(size, size);
 		enemy = new ArrayList<>();
 		rocket = new ArrayList<>();
 		power = new ArrayList<>();
 		random = new Random();
+		recoveryWall=new ArrayList<>();
 		importMatrix();
 		randomPowerUp();
 	}
@@ -104,6 +107,10 @@ public class GameManager {
 		game.matrix.stampa();
 		c = s.nextLine();
 		while (!game.exit) {
+			
+			//aggiorna time in tempo reale
+			game.currentTime=(System.currentTimeMillis()/1000)%60; 
+			
 			switch (c) {
 			case "w": // up
 				game.player.setDirection(Direction.UP);
@@ -131,16 +138,19 @@ public class GameManager {
 			
 			game.enemyPositionRandom(); // CREAZIONE ENEMY
 			game.updateRocket(); // AGGIORNAMENTO DI TUTTI I ROCKET
-			
 			game.player.update(); // AGGIORNAMENTO PLAYER
 			game.enemyUpdate(); // AGGIORNAMENTO ENEMY
 			
 			//-------POWERUP
 			
-			if(game.player.getNext() instanceof PowerUp)
-				game.usePowerUp( ((PowerUp)(game.player.getNext())).getPowerUp() );
+			if(game.player.getNext() instanceof PowerUp){
+				((PowerUp)game.player.getNext()).setActivate(true); //powerUp è stato preso
+				((PowerUp)game.player.getNext()).setTimer((System.currentTimeMillis() / 1000) % 60);
+				game.usePowerUp(((PowerUp)game.player.getNext()).getPowerUp());
+			}
+			game.timeOut(); //controllare tempo corrente con tutti i powerUP
 			
-			//--------------------------------
+			//-----------------------------------------------------------------------------------------------------
 			
 			// spara il doppio rocket al livello > 1
 			if (enter && game.player.getLevel() > 1) {
@@ -208,6 +218,53 @@ public class GameManager {
 
 	// ----------------------------------------POWERUP-------------------------------------
 
+	private void timeOut()
+	{
+		for(int a=0; a<power.size(); a++)
+			if(power.get(a).isActivate()){ //se powerUp è attivato
+				long tmp = ((power.get(a).getTimer() + power.get(a).getDuration())%60);
+				if(tmp == currentTime){
+					managePowerUp(power.get(a));
+					power.get(a).setActivate(false);
+					power.remove(a);
+					a--;
+				}
+			}
+	}
+		
+	private void managePowerUp(PowerUp p){
+		
+		switch(p.getPowerUp()){
+		
+		case GRANADE:	
+			break;
+		
+		case HELMET:
+			break;
+			
+		case SHOVEL:
+			int x=0;
+				for (int i = size - 2; i < size; i++)
+					for (int j = (size / 2) - 2; j <= size / 2; j++)
+						if (!(getMatrix().world[i][j] instanceof Flag))
+							if(x<recoveryWall.size())
+								getMatrix().world[i][j] = recoveryWall.get(x++);
+				recoveryWall.clear();
+				break;
+		
+		case STAR:
+		
+			break;
+		case TANK:
+			
+			break;
+			
+		case TIMER:
+		
+			break;
+		}
+	}
+	
 	public void randomPowerUp() {
 
 		int cont = 0;
@@ -291,45 +348,33 @@ public class GameManager {
 
 		switch (power) {
 		case GRANADE:
-			//ok
 			for (int i = 0; i < enemy.size(); i++){
-				System.out.println(enemy.get(i));
 				matrix.world[enemy.get(i).getX()][enemy.get(i).getY()] = enemy.get(i).getCurr();
 				enemy.remove(i);
 				i--;
 			}
 			break;
-		
 		case HELMET:
-			//ok
 			player.setProtection(true);
 			break;
-			
 		case SHOVEL:
 			for (int i = size - 2; i < size; i++)
 				for (int j = (size / 2) - 2; j <= size / 2; j++)
-					if (!(getMatrix().world[i][j] instanceof Flag))
+					if (!(getMatrix().world[i][j] instanceof Flag)){
+						recoveryWall.add(getMatrix().world[i][j]); //salva wall precedente
 						getMatrix().world[i][j] = new SteelWall(i, j, getMatrix(), 4);
+			}
 			break;
-			
 		case STAR:
-			
 			if (player.getLevel() < 3)
-				player.setLevel(player.getLevel() + 1);
-			
+				player.setLevel(3);
 			break;
 		case TANK:
-			
 			player.setLevel(player.getResume() + 1);
 			break;
-			
 		case TIMER:
-		
-			System.out.println("POWERUP");
 			for (int i = 0; i < enemy.size(); i++)
 				enemy.get(i).setDirection(Direction.STOP);
-			//lenghtPowerUp(10);
-			
 			break;
 		}
 	}

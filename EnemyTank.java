@@ -41,7 +41,8 @@ public class EnemyTank extends AbstractDynamicObject {
 			// prendo solo Helmet
 			if (next instanceof PowerUp && ((PowerUp) next).getPowerUp() == Power.HELMET) {
 				curr = ((PowerUp) next).getBefore();
-			} else
+			} 
+			else
 				curr = next;
 
 			return true;

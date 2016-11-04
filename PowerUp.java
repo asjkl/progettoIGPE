@@ -5,16 +5,25 @@ public class PowerUp extends AbstractStaticObject {
 	private AbstractStaticObject before;
 	private Power powerUp;
 	private AbstractDynamicObject tank; //powerup appartenenza
+	private long timer;
+	private boolean activate;
+	private long duration;
 
 	public PowerUp(int x, int y, World world, Power powerUp) {
 		super(x, y, world);
 		this.powerUp = powerUp;
+		timer=0;
+		activate=false;
+		duration=5;
 	}
 	
 	public PowerUp(int x, int y, World world, Power powerUp, AbstractDynamicObject  tank) {
 		super(x, y, world);
 		this.powerUp = powerUp;
 		this.tank=tank;
+		timer=0;
+		activate=false;
+		duration=5;
 	}
 
 	public AbstractStaticObject getBefore() {
@@ -42,6 +51,30 @@ public class PowerUp extends AbstractStaticObject {
 		this.tank = tank;
 	}
 
+	public long getTimer() {
+		return timer;
+	}
+
+	public void setTimer(long timer) {
+		this.timer = timer;
+	}
+
+	public boolean isActivate() {
+		return activate;
+	}
+
+	public void setActivate(boolean activate) {
+		this.activate = activate;
+	}
+	
+	public long getDuration() {
+		return duration;
+	}
+
+	public void setDuration(long duration) {
+		this.duration = duration;
+	}
+	
 	@Override
 	public String toString() {
 		switch (powerUp) {
@@ -61,5 +94,4 @@ public class PowerUp extends AbstractStaticObject {
 			return null;
 		}
 	}
-
 }
