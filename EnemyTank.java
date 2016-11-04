@@ -13,8 +13,10 @@ public class EnemyTank extends AbstractDynamicObject {
 	private boolean directionDown;
 	private boolean directionLeft;
 	private boolean directionRight;
+	private boolean appearsInTheMap;
 
-	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health,int point) {
+	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health,
+			int point) {
 		super(x, y, world, speed, speedShot, direction, health);
 		this.point = point;
 		passi = 0;
@@ -26,6 +28,7 @@ public class EnemyTank extends AbstractDynamicObject {
 		directionDown = false;
 		directionLeft = false;
 		directionRight = false;
+		appearsInTheMap = false;
 	}
 
 	@Override
@@ -41,8 +44,7 @@ public class EnemyTank extends AbstractDynamicObject {
 			// prendo solo Helmet
 			if (next instanceof PowerUp && ((PowerUp) next).getPowerUp() == Power.HELMET) {
 				curr = ((PowerUp) next).getBefore();
-			} 
-			else
+			} else
 				curr = next;
 
 			return true;
@@ -254,5 +256,13 @@ public class EnemyTank extends AbstractDynamicObject {
 
 	public void setTempY(int tempY) {
 		this.tempY = tempY;
+	}
+
+	public boolean isappearsInTheMap() {
+		return appearsInTheMap;
+	}
+
+	public void setAppearsInTheMap(boolean appearsInTheMap) {
+		this.appearsInTheMap = appearsInTheMap;
 	}
 }
