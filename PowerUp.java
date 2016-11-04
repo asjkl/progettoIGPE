@@ -14,7 +14,7 @@ public class PowerUp extends AbstractStaticObject {
 		this.powerUp = powerUp;
 		timer=0;
 		activate=false;
-		duration=5;
+		duration=20;
 	}
 	
 	public PowerUp(int x, int y, World world, Power powerUp, AbstractDynamicObject  tank) {
@@ -26,6 +26,26 @@ public class PowerUp extends AbstractStaticObject {
 		duration=5;
 	}
 
+	@Override
+	public String toString() {
+		switch (powerUp) {
+		case GRANADE:
+			return " $1 ";
+		case HELMET:
+			return " $2 ";
+		case SHOVEL:
+			return " $3 ";
+		case STAR:
+			return " $4 ";
+		case TANK:
+			return " $5 ";
+		case TIMER:
+			return " $6 ";
+		default:
+			return null;
+		}
+	}
+	
 	public AbstractStaticObject getBefore() {
 		return before;
 	}
@@ -73,25 +93,5 @@ public class PowerUp extends AbstractStaticObject {
 
 	public void setDuration(long duration) {
 		this.duration = duration;
-	}
-	
-	@Override
-	public String toString() {
-		switch (powerUp) {
-		case GRANADE:
-			return " $1 ";
-		case HELMET:
-			return " $2 ";
-		case SHOVEL:
-			return " $3 ";
-		case STAR:
-			return " $4 ";
-		case TANK:
-			return " $5 ";
-		case TIMER:
-			return " $6 ";
-		default:
-			return null;
-		}
 	}
 }

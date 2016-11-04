@@ -137,8 +137,8 @@ public class GameManager {
 				break;
 			}
 
-			if (game.max3Enemy < 3) {// CONDIZIONE ENTRO NELLA FUNZIONE SOLO SE
-				// I
+			if (game.max3Enemy < 3) {
+				// CONDIZIONE ENTRO NELLA FUNZIONE SOLO SE I
 				// NEMICI SULLA MAPPA SONO MINORI DI 3
 				game.bringUpTheEnemyInTheMap();
 			}
@@ -148,19 +148,16 @@ public class GameManager {
 			game.player.update(); // AGGIORNAMENTO PLAYER
 			game.enemyUpdate(); // AGGIORNAMENTO ENEMY
 
-			// -------POWERUP
+			// -----------------POWERUP
 
 			if (game.player.getNext() instanceof PowerUp) {
-				((PowerUp) game.player.getNext()).setActivate(true); // powerUp
-																		// è
-																		// stato
-																		// preso
+				((PowerUp) game.player.getNext()).setActivate(true); 
 				((PowerUp) game.player.getNext()).setTimer((System.currentTimeMillis() / 1000) % 60);
-				game.usePowerUp(((PowerUp) game.player.getNext()).getPowerUp());
+				game.usePowerUp(((PowerUp) game.player.getNext()));
 			}
-			game.timeOut(); // controllare tempo corrente con tutti i powerUP
+			game.timeOut();
 
-			// -----------------------------------------------------------------------------------------------------
+			// -------------------------------------------------------------------------------------
 
 			// spara il doppio rocket al livello > 1
 			if (enter && game.player.getLevel() > 1) {
@@ -230,9 +227,12 @@ public class GameManager {
 
 	private void timeOut() {
 		for (int a = 0; a < power.size(); a++)
-			if (power.get(a).isActivate()) { // se powerUp è attivato
-				long tmp = ((power.get(a).getTimer() + power.get(a).getDuration()) % 60);
-				if (tmp == currentTime) {
+			if (power.get(a).isActivate()) { // se powerUp è attivo
+				System.out.println("attivo: "+power.get(a));
+				
+				long tmp =(power.get(a).getTimer() + power.get(a).getDuration())%60;
+				if ( tmp == currentTime) {
+					System.out.println("------timeOut");
 					managePowerUp(power.get(a));
 					power.get(a).setActivate(false);
 					power.remove(a);
@@ -242,15 +242,17 @@ public class GameManager {
 	}
 
 	private void managePowerUp(PowerUp p) {
-
+		
+	//TODO per il momento solo player....
+		
 		switch (p.getPowerUp()) {
 
 		case GRANADE:
 			break;
 
 		case HELMET:
+			player.setProtection(false);
 			break;
-
 		case SHOVEL:
 			int x = 0;
 			for (int i = size - 2; i < size; i++)
@@ -353,9 +355,9 @@ public class GameManager {
 		}
 	}
 
-	public void usePowerUp(Power power) {
+	public void usePowerUp(PowerUp power) {
 
-		switch (power) {
+		switch (power.getPowerUp()) {
 		case GRANADE:
 			for (int i = 0; i < enemy.size(); i++) {
 				matrix.world[enemy.get(i).getX()][enemy.get(i).getY()] = enemy.get(i).getCurr();
@@ -370,8 +372,7 @@ public class GameManager {
 			for (int i = size - 2; i < size; i++)
 				for (int j = (size / 2) - 2; j <= size / 2; j++)
 					if (!(getMatrix().world[i][j] instanceof Flag)) {
-						recoveryWall.add(getMatrix().world[i][j]); // salva wall
-																	// precedente
+						recoveryWall.add(getMatrix().world[i][j]); 
 						getMatrix().world[i][j] = new SteelWall(i, j, getMatrix(), 4);
 					}
 			break;
@@ -425,13 +426,10 @@ public class GameManager {
 
 				// distruggi player
 				if (rocket.get(a).getNext() instanceof PlayerTank && rocket.get(a).getTank() instanceof EnemyTank) {
-
-					if (!player.isProtection()) {
+					if (player.isProtection()==false) { //se non è protetto
 						switchCurrTank(player);
 						damageAndDestroyPlayerTank();
-					} else {
-						player.setProtection(false);
-					}
+					} 
 				}
 
 				if (rocket.get(a).getNext() instanceof Rocket)
@@ -728,8 +726,7 @@ public class GameManager {
 		}
 	}
 
-	// -----------------------------SET &
-	// GET-----------------------------------------------
+	// -----------------------------SET & GET-----------------------------------------------
 
 	public int getX() {
 		return x;

@@ -2,13 +2,17 @@ package progettoIGPE.davide.giovanni.unical2016;
 
 public class PlayerTank extends AbstractDynamicObject {
 
-	private static int level = 1; // 1 stella...2 stella... 3 stella
-	private int resume = 3;
+	private static int level; // 1 stella...2 stella... 3 stella
+	private int resume;
 	private boolean protection;
-	private int point = 0;
+	private int point;
 
 	public PlayerTank(int x, int y, World world) {
 		super(x, y, world, Speed.NORMAL, Speed.NORMAL, Direction.STOP, 1);
+		protection=false;
+		resume=3;
+		point=0;
+		level=1;
 	}
 	
 	@Override
