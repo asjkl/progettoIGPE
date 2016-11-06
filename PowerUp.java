@@ -14,16 +14,7 @@ public class PowerUp extends AbstractStaticObject {
 		this.powerUp = powerUp;
 		timer=0;
 		activate=false;
-		duration=20;
-	}
-	
-	public PowerUp(int x, int y, World world, Power powerUp, AbstractDynamicObject  tank) {
-		super(x, y, world);
-		this.powerUp = powerUp;
-		this.tank=tank;
-		timer=0;
-		activate=false;
-		duration=5;
+		duration=0;
 	}
 
 	@Override

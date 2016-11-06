@@ -24,6 +24,7 @@ public class GameManager {
 	private boolean exit = false;
 	private ArrayList<AbstractStaticObject> recoveryWall;
 	private long currentTime;
+	private boolean updateAll=true;
 
 	public GameManager() {
 		matrix = new World(size, size);
@@ -35,7 +36,6 @@ public class GameManager {
 		importMatrix();
 		randomPowerUp();
 	}
-
 	public void importMatrix() {
 		int i = 0;// indice di riga
 
@@ -93,7 +93,6 @@ public class GameManager {
 			e.printStackTrace();
 		}
 	}
-
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 
@@ -136,25 +135,24 @@ public class GameManager {
 			default:
 				break;
 			}
-
-			if (game.max3Enemy < 3) {
-				// CONDIZIONE ENTRO NELLA FUNZIONE SOLO SE I
-				// NEMICI SULLA MAPPA SONO MINORI DI 3
+			
+			// NUMERO NEMICI MAX SULLA MAPPA
+			if (game.max3Enemy < 3)
 				game.bringUpTheEnemyInTheMap();
-			}
 
 			game.enemyPositionRandom(); // CREAZIONE ENEMY
 			game.updateRocket(); // AGGIORNAMENTO DI TUTTI I ROCKET
 			game.player.update(); // AGGIORNAMENTO PLAYER
-			game.enemyUpdate(); // AGGIORNAMENTO ENEMY
+			game.enemyUpdate(); // AGGIORNAMENTO ENEMY + POWERUP CONDITION
 
-			// -----------------POWERUP
+			// --------------------------POWERUP----------------------------------------------------
 
 			if (game.player.getNext() instanceof PowerUp) {
 				((PowerUp) game.player.getNext()).setActivate(true); 
 				((PowerUp) game.player.getNext()).setTimer((System.currentTimeMillis() / 1000) % 60);
 				game.usePowerUp(((PowerUp) game.player.getNext()));
 			}
+			//CONTROLLA POWERUP
 			game.timeOut();
 
 			// -------------------------------------------------------------------------------------
@@ -177,7 +175,7 @@ public class GameManager {
 				game.printWin();
 				game.exit = true;
 			}
-
+			//STAMPE
 			if (game.exit == false) {
 				System.out.println();
 				game.matrix.stampa();
@@ -242,13 +240,9 @@ public class GameManager {
 	}
 
 	private void managePowerUp(PowerUp p) {
-		
-	//TODO per il momento solo player....
-		
+				
 		switch (p.getPowerUp()) {
 
-		case GRANADE:  //vuoto
-			break;
 		case HELMET:
 			player.setProtection(false);
 			break;
@@ -264,10 +258,10 @@ public class GameManager {
 		case STAR:
 			player.setLevel(player.getLevel()-1);
 			break;
-		case TANK: //vuoto
-			break;
 		case TIMER:
-
+			updateAll=true;
+			break;
+		default:
 			break;
 		}
 	}
@@ -371,6 +365,7 @@ public class GameManager {
 						recoveryWall.add(getMatrix().world[i][j]); 
 						getMatrix().world[i][j] = new SteelWall(i, j, getMatrix(), 4);
 					}
+			power.setDuration(20);
 			break;
 		case STAR:
 			if (player.getLevel() < 3)
@@ -380,8 +375,8 @@ public class GameManager {
 			player.setResume(player.getResume() + 1);
 			break;
 		case TIMER:
-			for (int i = 0; i < enemy.size(); i++)
-				enemy.get(i).setDirection(Direction.STOP);
+			updateAll=false;
+			power.setDuration(10);
 			break;
 		}
 	}
@@ -671,7 +666,7 @@ public class GameManager {
 					enemy.get(a).setPassi(tempCont);
 					// enemy.get(a).setPositionDirection(); //
 				}
-				if (!(enemy.get(a).getNext() instanceof EnemyTank))
+				if (!(enemy.get(a).getNext() instanceof EnemyTank) && updateAll==true)
 					createRocketTank(enemy.get(a).getDirection(), enemy.get(a));
 			}
 		}
@@ -680,34 +675,40 @@ public class GameManager {
 
 	public void enemyUpdate() {
 
-		for (int a = 0; a < enemy.size(); a++) {
-			if (enemy.get(a).isappearsInTheMap()) {
-				if (enemy.get(a).getPassi() >= enemy.get(a).getContatorePassi()) {
-					enemy.get(a).update();
+		//AGGIORNA NEMICI SOLO SE NON E' STATO PRESO POWERUP TIMER
+		if(updateAll == true){
+			
 
-					if (enemy.get(a).getX() == enemy.get(a).getTempX()
-							&& enemy.get(a).getY() == enemy.get(a).getTempY()) {
-						enemy.get(a).setRiprendoValori(true);
-						// System.out.println("DIREZIONE UGUALE A QUELLA
-						// PRECEDENTE");
-						// enemy.get(a).setPositionDirection(enemy.get(a).getDirection());
-					} else {
-						enemy.get(a).setPositionXY();
-						matrix.world[enemy.get(a).getX()][enemy.get(a).getY()] = enemy.get(a);
-						enemy.get(a).setContatorePassi(enemy.get(a).getContatorePassi() + 1);
-						// System.out.println(enemy.get(a).getContatorePassi());
-						if (!enemy.get(a).positionCorrect()) {
+			for (int a = 0; a < enemy.size(); a++) {
+				if (enemy.get(a).isappearsInTheMap()) {
+					if (enemy.get(a).getPassi() >= enemy.get(a).getContatorePassi()) {
+						enemy.get(a).update();
+	
+						if (enemy.get(a).getX() == enemy.get(a).getTempX()
+								&& enemy.get(a).getY() == enemy.get(a).getTempY()) {
 							enemy.get(a).setRiprendoValori(true);
+							// System.out.println("DIREZIONE UGUALE A QUELLA
+							// PRECEDENTE");
+							// enemy.get(a).setPositionDirection(enemy.get(a).getDirection());
 						} else {
-							enemy.get(a).setRiprendoValori(false);
+							enemy.get(a).setPositionXY();
+							matrix.world[enemy.get(a).getX()][enemy.get(a).getY()] = enemy.get(a);
+							enemy.get(a).setContatorePassi(enemy.get(a).getContatorePassi() + 1);
+							// System.out.println(enemy.get(a).getContatorePassi());
+							if (!enemy.get(a).positionCorrect()) {
+								enemy.get(a).setRiprendoValori(true);
+							} else {
+								enemy.get(a).setRiprendoValori(false);
+							}
 						}
+					} else {
+						enemy.get(a).setContatorePassi(0);
+						matrix.world[enemy.get(a).getX()][enemy.get(a).getY()] = enemy.get(a);
 					}
-				} else {
-					enemy.get(a).setContatorePassi(0);
-					matrix.world[enemy.get(a).getX()][enemy.get(a).getY()] = enemy.get(a);
 				}
 			}
-		}
+		} // POWERUP 
+		
 	}
 
 	private void bringUpTheEnemyInTheMap() {
@@ -759,59 +760,45 @@ public class GameManager {
 	public Random getRandom() {
 		return random;
 	}
-
 	public void setRandom(Random random) {
 		this.random = random;
 	}
-
 	public World getMatrix() {
 		return matrix;
 	}
-
 	public void setMatrix(World matrix) {
 		this.matrix = matrix;
 	}
-
 	public PlayerTank getPlayer() {
 		return player;
 	}
-
 	public void setPlayer(PlayerTank player) {
 		this.player = player;
 	}
-
 	public ArrayList<EnemyTank> getEnemy() {
 		return enemy;
 	}
-
 	public void setEnemy(ArrayList<EnemyTank> enemy) {
 		this.enemy = enemy;
 	}
-
 	public ArrayList<PowerUp> getPower() {
 		return power;
 	}
-
 	public void setPower(ArrayList<PowerUp> power) {
 		this.power = power;
 	}
-
 	public Flag getFlag() {
 		return flag;
 	}
-
 	public void setFlag(Flag flag) {
 		this.flag = flag;
 	}
-
 	public static int getSize() {
 		return size;
 	}
-
 	public ArrayList<Rocket> getRocket() {
 		return rocket;
 	}
-
 	public void setRocket(ArrayList<Rocket> rocket) {
 		this.rocket = rocket;
 	}
