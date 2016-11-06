@@ -232,7 +232,7 @@ public class GameManager {
 				
 				long tmp =(power.get(a).getTimer() + power.get(a).getDuration())%60;
 				if ( tmp == currentTime) {
-					System.out.println("------timeOut");
+					System.out.println("------timeOut: "+power.get(a));
 					managePowerUp(power.get(a));
 					power.get(a).setActivate(false);
 					power.remove(a);
@@ -247,9 +247,8 @@ public class GameManager {
 		
 		switch (p.getPowerUp()) {
 
-		case GRANADE:
+		case GRANADE:  //vuoto
 			break;
-
 		case HELMET:
 			player.setProtection(false);
 			break;
@@ -262,14 +261,11 @@ public class GameManager {
 							getMatrix().world[i][j] = recoveryWall.get(x++);
 			recoveryWall.clear();
 			break;
-
 		case STAR:
-
+			player.setLevel(player.getLevel()-1);
 			break;
-		case TANK:
-
+		case TANK: //vuoto
 			break;
-
 		case TIMER:
 
 			break;
@@ -378,10 +374,10 @@ public class GameManager {
 			break;
 		case STAR:
 			if (player.getLevel() < 3)
-				player.setLevel(3);
+				player.setLevel(player.getLevel()+1);
 			break;
 		case TANK:
-			player.setLevel(player.getResume() + 1);
+			player.setResume(player.getResume() + 1);
 			break;
 		case TIMER:
 			for (int i = 0; i < enemy.size(); i++)
