@@ -9,12 +9,12 @@ public class PowerUp extends AbstractStaticObject {
 	private boolean activate;
 	private long duration;
 
-	public PowerUp(int x, int y, World world, Power powerUp) {
+	public PowerUp(int x, int y, World world, Power powerUp, long duration) {
 		super(x, y, world);
 		this.powerUp = powerUp;
 		timer=0;
 		activate=false;
-		duration=0;
+		this.duration=duration;
 	}
 
 	@Override

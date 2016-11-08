@@ -36,6 +36,7 @@ public class GameManager {
 		importMatrix();
 		randomPowerUp();
 	}
+	
 	public void importMatrix() {
 		int i = 0;// indice di riga
 
@@ -93,6 +94,7 @@ public class GameManager {
 			e.printStackTrace();
 		}
 	}
+	
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 
@@ -110,6 +112,7 @@ public class GameManager {
 
 			// aggiorna time in tempo reale
 			game.currentTime = (System.currentTimeMillis() / 1000) % 60;
+			System.out.println("real time: " + game.currentTime);
 
 			switch (c) {
 			case "w": // up
@@ -149,7 +152,7 @@ public class GameManager {
 
 			if (game.player.getNext() instanceof PowerUp) {
 				((PowerUp) game.player.getNext()).setActivate(true); 
-				((PowerUp) game.player.getNext()).setTimer((System.currentTimeMillis() / 1000) % 60);
+				((PowerUp) game.player.getNext()).setTimer(game.currentTime); //salvo tempo corrente
 				game.usePowerUp(((PowerUp) game.player.getNext()));
 			}
 			//CONTROLLA POWERUP
@@ -226,11 +229,14 @@ public class GameManager {
 	private void timeOut() {
 		for (int a = 0; a < power.size(); a++)
 			if (power.get(a).isActivate()) { // se powerUp è attivo
-				System.out.println("attivo: "+power.get(a));
+				System.out.println(power.get(a) + "---------- attivo!");
 				
-				long tmp =(power.get(a).getTimer() + power.get(a).getDuration())%60;
+				long tmp =(power.get(a).getTimer() + power.get(a).getDuration()) % 60;
+				
+				System.out.println("tmp: "+tmp);
+			
 				if ( tmp == currentTime) {
-					System.out.println("------timeOut: "+power.get(a));
+					System.out.println(power.get(a) + "---------- disattivo!");
 					managePowerUp(power.get(a));
 					power.get(a).setActivate(false);
 					power.remove(a);
@@ -283,7 +289,7 @@ public class GameManager {
 		switch (t) {
 		case 0:
 			foundPosition();
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.GRANADE);
+			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.GRANADE,0);
 			tmp.setBefore(getMatrix().world[getX()][getY()]); // salvo oggetto
 																// su cui cade
 																// PowerUp
@@ -292,35 +298,35 @@ public class GameManager {
 			break;
 		case 1:
 			foundPosition();
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.HELMET);
+			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.HELMET, 15);
 			tmp.setBefore(getMatrix().world[getX()][getY()]);
 			power.add(tmp); // aggiungi in list
 			getMatrix().world[getX()][getY()] = tmp;
 			break;
 		case 2:
 			foundPosition();
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.SHOVEL);
+			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.SHOVEL, 20);
 			tmp.setBefore(getMatrix().world[getX()][getY()]);
 			power.add(tmp); // aggiungi in list
 			getMatrix().world[getX()][getY()] = tmp;
 			break;
 		case 3:
 			foundPosition();
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.STAR);
+			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.STAR, 0);
 			tmp.setBefore(getMatrix().world[getX()][getY()]);
 			power.add(tmp); // aggiungi in list
 			getMatrix().world[getX()][getY()] = tmp;
 			break;
 		case 4:
 			foundPosition();
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.TANK);
+			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.TANK, 0);
 			tmp.setBefore(getMatrix().world[getX()][getY()]);
 			power.add(tmp); // aggiungi in list
 			getMatrix().world[getX()][getY()] = tmp;
 			break;
 		case 5:
 			foundPosition();
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.TIMER);
+			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.TIMER, 10);
 			tmp.setBefore(getMatrix().world[getX()][getY()]);
 			power.add(tmp); // aggiungi in list
 			getMatrix().world[getX()][getY()] = tmp;
@@ -349,11 +355,13 @@ public class GameManager {
 
 		switch (power.getPowerUp()) {
 		case GRANADE:
-			for (int i = 0; i < enemy.size(); i++) {
+			for (int i = 0; i < enemy.size(); i++) 
+				if(enemy.get(i).isappearsInTheMap()){
 				matrix.world[enemy.get(i).getX()][enemy.get(i).getY()] = enemy.get(i).getCurr();
 				enemy.remove(i);
 				i--;
-			}
+				}
+			max3Enemy=0;
 			break;
 		case HELMET:
 			player.setProtection(true);
@@ -365,7 +373,6 @@ public class GameManager {
 						recoveryWall.add(getMatrix().world[i][j]); 
 						getMatrix().world[i][j] = new SteelWall(i, j, getMatrix(), 4);
 					}
-			power.setDuration(20);
 			break;
 		case STAR:
 			if (player.getLevel() < 3)
@@ -376,7 +383,6 @@ public class GameManager {
 			break;
 		case TIMER:
 			updateAll=false;
-			power.setDuration(10);
 			break;
 		}
 	}
