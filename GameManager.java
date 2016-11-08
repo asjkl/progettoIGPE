@@ -107,6 +107,7 @@ public class GameManager {
 		// AD OGNI CICLO LO STOP DEL PLAYER
 		boolean enter = false;
 		game.matrix.stampa();
+		System.out.println("----size:"+game.enemy.size());
 		c = s.nextLine();
 		while (!game.exit) {
 
@@ -143,10 +144,6 @@ public class GameManager {
 			if (game.max3Enemy < 3)
 				game.bringUpTheEnemyInTheMap();
 
-			for (int i = 0; i < game.enemy.size(); i++) {
-				System.out.println(game.enemy.get(i).isappearsInTheMap());
-			}
-
 			game.enemyPositionRandom(); // CREAZIONE ENEMY
 			game.updateRocket(); // AGGIORNAMENTO DI TUTTI I ROCKET
 			game.player.update(); // AGGIORNAMENTO PLAYER
@@ -156,9 +153,7 @@ public class GameManager {
 
 			if (game.player.getNext() instanceof PowerUp) {
 				((PowerUp) game.player.getNext()).setActivate(true);
-				((PowerUp) game.player.getNext()).setTimer(game.currentTime); // salvo
-																				// tempo
-																				// corrente
+				((PowerUp) game.player.getNext()).setTimer(game.currentTime); 
 				game.usePowerUp(((PowerUp) game.player.getNext()));
 			}
 			// CONTROLLA POWERUP
@@ -190,6 +185,7 @@ public class GameManager {
 				game.matrix.stampa();
 				c = s.nextLine();
 			}
+			System.out.println("----size:"+game.enemy.size());
 		}
 	}
 
@@ -234,11 +230,10 @@ public class GameManager {
 
 	private void timeOut() {
 		for (int a = 0; a < power.size(); a++)
-			if (power.get(a).isActivate()) { // se powerUp è attivo
+			if (power.get(a).isActivate()) { 
+				
 				System.out.println(power.get(a) + "---------- attivo!");
-
 				long tmp = (power.get(a).getTimer() + power.get(a).getDuration()) % 60;
-
 				System.out.println("tmp: " + tmp);
 
 				if (tmp == currentTime) {
@@ -364,7 +359,7 @@ public class GameManager {
 			for (int i = 0; i < enemy.size(); i++)
 				if (enemy.get(i).isappearsInTheMap()) {
 					matrix.world[enemy.get(i).getX()][enemy.get(i).getY()] = enemy.get(i).getCurr();
-					// enemy.get(i).setAppearsInTheMap(false);
+				    enemy.get(i).setAppearsInTheMap(false);
 					enemy.remove(i);
 					i--;
 				}
@@ -735,8 +730,7 @@ public class GameManager {
 		}
 	}
 
-	// -----------------------------SET &
-	// GET-----------------------------------------------
+	// -----------------------------SET & GET-----------------------------------------------
 
 	public int getX() {
 		return x;
