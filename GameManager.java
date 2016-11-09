@@ -10,7 +10,6 @@ import java.util.StringTokenizer;
 public class GameManager {
 	private int x;
 	private int y;
-	private int contEnemy = 0;
 	private int max3Enemy = 0;
 	private static final int size = 20;
 	private Random random;
@@ -34,7 +33,6 @@ public class GameManager {
 		random = new Random();
 		recoveryWall = new ArrayList<>();
 		importMatrix();
-		randomPowerUp();
 	}
 
 	public void importMatrix() {
@@ -143,10 +141,6 @@ public class GameManager {
 			if (game.max3Enemy < 3)
 				game.bringUpTheEnemyInTheMap();
 
-			for (int i = 0; i < game.enemy.size(); i++) {
-				System.out.println(game.enemy.get(i).isappearsInTheMap());
-			}
-
 			game.enemyPositionRandom(); // CREAZIONE ENEMY
 			game.updateRocket(); // AGGIORNAMENTO DI TUTTI I ROCKET
 			game.player.update(); // AGGIORNAMENTO PLAYER
@@ -240,6 +234,7 @@ public class GameManager {
 				long tmp = (power.get(a).getTimer() + power.get(a).getDuration()) % 60;
 
 				System.out.println("tmp: " + tmp);
+				System.out.println(power.get(a).getTimer());
 
 				if (tmp == currentTime) {
 					System.out.println(power.get(a) + "---------- disattivo!");
@@ -275,18 +270,6 @@ public class GameManager {
 			break;
 		default:
 			break;
-		}
-	}
-
-	public void randomPowerUp() {
-
-		int cont = 0;
-		int tmp;
-
-		while (cont < 5) {
-			tmp = random.nextInt(6);
-			addPowerUp(tmp);
-			cont++;
 		}
 	}
 
@@ -425,6 +408,10 @@ public class GameManager {
 				if (rocket.get(a).getNext() instanceof EnemyTank && rocket.get(a).getTank() instanceof PlayerTank)
 					if (((EnemyTank) rocket.get(a).getNext()).getHealth() == 0) {
 						switchCurrTank(((EnemyTank) rocket.get(a).getNext()));
+						if (((EnemyTank) rocket.get(a).getNext()).isPowerUpOn())
+							addPowerUp(new Random().nextInt(6));// PRIMA DI
+																// MORIRE GENERA
+																// UN POWERUP
 						destroyEnemyTank((EnemyTank) rocket.get(a).getNext());
 					}
 
@@ -652,7 +639,10 @@ public class GameManager {
 			break;
 		}
 		// matrix.world[0][y] = enemy.get(contEnemy);
-		contEnemy++;
+		// contEnemy++;
+		if ((enemy.size() % 4) == 0) {
+			enemy.get(enemy.size() - 1).setPowerUpOn(true);
+		}
 	}
 
 	public void enemyPositionRandom() {
@@ -752,14 +742,6 @@ public class GameManager {
 
 	public void setY(int y) {
 		this.y = y;
-	}
-
-	public int getContEnemy() {
-		return contEnemy;
-	}
-
-	public void setContEnemy(int contEnemy) {
-		this.contEnemy = contEnemy;
 	}
 
 	public Direction getDirection() {

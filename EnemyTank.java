@@ -15,6 +15,7 @@ public class EnemyTank extends AbstractDynamicObject {
 	private boolean directionRight;
 	private boolean appearsInTheMap;
 	private boolean protection;
+	private boolean powerUpOn;
 
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health,
 			int point) {
@@ -30,7 +31,8 @@ public class EnemyTank extends AbstractDynamicObject {
 		directionLeft = false;
 		directionRight = false;
 		appearsInTheMap = false;
-		protection=false;
+		protection = false;
+		powerUpOn = false;
 	}
 
 	@Override
@@ -267,12 +269,20 @@ public class EnemyTank extends AbstractDynamicObject {
 	public void setAppearsInTheMap(boolean appearsInTheMap) {
 		this.appearsInTheMap = appearsInTheMap;
 	}
-	
+
 	public boolean isProtection() {
 		return protection;
 	}
 
 	public void setProtection(boolean protection) {
 		this.protection = protection;
+	}
+
+	public boolean isPowerUpOn() {
+		return powerUpOn;
+	}
+
+	public void setPowerUpOn(boolean powerUpOn) {
+		this.powerUpOn = powerUpOn;
 	}
 }
