@@ -10,7 +10,6 @@ import java.util.StringTokenizer;
 public class GameManager {
 	private int x;
 	private int y;
-	private int contEnemy = 0;
 	private int max3Enemy = 0;
 	private static final int size = 20;
 	private Random random;
@@ -34,7 +33,6 @@ public class GameManager {
 		random = new Random();
 		recoveryWall = new ArrayList<>();
 		importMatrix();
-		randomPowerUp();
 	}
 
 	public void importMatrix() {
@@ -99,7 +97,7 @@ public class GameManager {
 	public static void main(String[] args) {
 
 		GameManager game = new GameManager();
-		game.randomEnemy(6); // quanti soldati generare
+		game.randomEnemy(5); // quanti soldati generare
 		Scanner s = new Scanner(System.in);
 		String c;
 		Direction tmp = Direction.STOP; // IN TMP RIMANE LA DIREZIONE
@@ -107,7 +105,6 @@ public class GameManager {
 		// AD OGNI CICLO LO STOP DEL PLAYER
 		boolean enter = false;
 		game.matrix.stampa();
-		System.out.println("----size:"+game.enemy.size());
 		c = s.nextLine();
 		while (!game.exit) {
 
@@ -153,7 +150,9 @@ public class GameManager {
 
 			if (game.player.getNext() instanceof PowerUp) {
 				((PowerUp) game.player.getNext()).setActivate(true);
-				((PowerUp) game.player.getNext()).setTimer(game.currentTime); 
+				((PowerUp) game.player.getNext()).setTimer(game.currentTime); // salvo
+																				// tempo
+																				// corrente
 				game.usePowerUp(((PowerUp) game.player.getNext()));
 			}
 			// CONTROLLA POWERUP
@@ -185,7 +184,6 @@ public class GameManager {
 				game.matrix.stampa();
 				c = s.nextLine();
 			}
-			System.out.println("----size:"+game.enemy.size());
 		}
 	}
 
@@ -230,11 +228,13 @@ public class GameManager {
 
 	private void timeOut() {
 		for (int a = 0; a < power.size(); a++)
-			if (power.get(a).isActivate()) { 
-				
+			if (power.get(a).isActivate()) { // se powerUp è attivo
 				System.out.println(power.get(a) + "---------- attivo!");
+
 				long tmp = (power.get(a).getTimer() + power.get(a).getDuration()) % 60;
+
 				System.out.println("tmp: " + tmp);
+				System.out.println(power.get(a).getTimer());
 
 				if (tmp == currentTime) {
 					System.out.println(power.get(a) + "---------- disattivo!");
@@ -270,18 +270,6 @@ public class GameManager {
 			break;
 		default:
 			break;
-		}
-	}
-
-	public void randomPowerUp() {
-
-		int cont = 0;
-		int tmp;
-
-		while (cont < 5) {
-			tmp = random.nextInt(6);
-			addPowerUp(tmp);
-			cont++;
 		}
 	}
 
@@ -359,7 +347,7 @@ public class GameManager {
 			for (int i = 0; i < enemy.size(); i++)
 				if (enemy.get(i).isappearsInTheMap()) {
 					matrix.world[enemy.get(i).getX()][enemy.get(i).getY()] = enemy.get(i).getCurr();
-				    enemy.get(i).setAppearsInTheMap(false);
+					// enemy.get(i).setAppearsInTheMap(false);
 					enemy.remove(i);
 					i--;
 				}
@@ -420,6 +408,10 @@ public class GameManager {
 				if (rocket.get(a).getNext() instanceof EnemyTank && rocket.get(a).getTank() instanceof PlayerTank)
 					if (((EnemyTank) rocket.get(a).getNext()).getHealth() == 0) {
 						switchCurrTank(((EnemyTank) rocket.get(a).getNext()));
+						if (((EnemyTank) rocket.get(a).getNext()).isPowerUpOn())
+							addPowerUp(new Random().nextInt(6));// PRIMA DI
+																// MORIRE GENERA
+																// UN POWERUP
 						destroyEnemyTank((EnemyTank) rocket.get(a).getNext());
 					}
 
@@ -647,7 +639,10 @@ public class GameManager {
 			break;
 		}
 		// matrix.world[0][y] = enemy.get(contEnemy);
-		contEnemy++;
+		// contEnemy++;
+		if ((enemy.size() % 4) == 0) {
+			enemy.get(enemy.size() - 1).setPowerUpOn(true);
+		}
 	}
 
 	public void enemyPositionRandom() {
@@ -674,7 +669,7 @@ public class GameManager {
 					enemy.get(a).setPassi(tempCont);
 					// enemy.get(a).setPositionDirection(); //
 				}
-				if (!(enemy.get(a).getNext() instanceof EnemyTank) && updateAll == true)
+				if (!(enemy.get(a).getNext() instanceof EnemyTank) && updateAll == true && enemy.get(a).notRocket())
 					createRocketTank(enemy.get(a).getDirection(), enemy.get(a));
 			}
 		}
@@ -730,7 +725,8 @@ public class GameManager {
 		}
 	}
 
-	// -----------------------------SET & GET-----------------------------------------------
+	// -----------------------------SET &
+	// GET-----------------------------------------------
 
 	public int getX() {
 		return x;
@@ -746,14 +742,6 @@ public class GameManager {
 
 	public void setY(int y) {
 		this.y = y;
-	}
-
-	public int getContEnemy() {
-		return contEnemy;
-	}
-
-	public void setContEnemy(int contEnemy) {
-		this.contEnemy = contEnemy;
 	}
 
 	public Direction getDirection() {
