@@ -150,14 +150,18 @@ public class GameManager {
 
 			// --------------------------POWERUP----------------------------------------------------
 
+			//ENEMYTANK
+			//gestito nella classe EnemyTank + destroyRocket, 
+			//dato che può prendere solo 1 powerUp
+			
+			//PLAYERTANK
 			if (game.player.getNext() instanceof PowerUp) {
 				((PowerUp) game.player.getNext()).setActivate(true);
-				((PowerUp) game.player.getNext()).setTimer(game.currentTime); // salvo
-																				// tempo
-																				// corrente
-				game.usePowerUp(((PowerUp) game.player.getNext()));
+				((PowerUp) game.player.getNext()).setTimer(game.currentTime);
+				game.usePowerUp(((PowerUp) game.player.getNext())); //solo player
 			}
-			// CONTROLLA POWERUP
+			
+			//CONTROLLA POWERUP
 			game.timeOut();
 
 			// -------------------------------------------------------------------------------------
@@ -253,7 +257,7 @@ public class GameManager {
 		switch (p.getPowerUp()) {
 
 		case HELMET:
-			player.setProtection(false);
+				player.setProtection(false);
 			break;
 		case SHOVEL:
 			int x = 0;
@@ -411,9 +415,7 @@ public class GameManager {
 					if (((EnemyTank) rocket.get(a).getNext()).getHealth() == 0) {
 						switchCurrTank(((EnemyTank) rocket.get(a).getNext()));
 						if (((EnemyTank) rocket.get(a).getNext()).isPowerUpOn())
-							addPowerUp(new Random().nextInt(6));// PRIMA DI
-																// MORIRE GENERA
-																// UN POWERUP
+							addPowerUp(new Random().nextInt(6));// PRIMA DI MORIRE GENERA UN POWERUP
 						destroyEnemyTank((EnemyTank) rocket.get(a).getNext());
 					}
 
@@ -469,7 +471,11 @@ public class GameManager {
 
 		if (rocket.getNext() instanceof EnemyTank) {
 			if (rocket.getTank() instanceof PlayerTank)
-				damageEnemyTank(rocket);
+				//se nemico non ha protezione
+				if( ((EnemyTank)rocket.getNext()).isProtection() == false )
+					damageEnemyTank(rocket);
+				else //caccio protezione
+					((EnemyTank)rocket.getNext()).setProtection(false);
 			return true;
 		}
 
