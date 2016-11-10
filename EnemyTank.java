@@ -4,9 +4,9 @@ import java.util.Random;
 
 public class EnemyTank extends AbstractDynamicObject {
 	private int point;
-	private int passi;
-	private int contatorePassi;
-	private boolean riprendoValori;
+	private int step;
+	private int countStep;
+	private boolean recoverValue;
 	private int tempX;
 	private int tempY;
 	private boolean directionUp;
@@ -21,9 +21,9 @@ public class EnemyTank extends AbstractDynamicObject {
 			int point) {
 		super(x, y, world, speed, speedShot, direction, health);
 		this.point = point;
-		passi = 0;
-		contatorePassi = 0;
-		riprendoValori = false;
+		step = 0;
+		countStep = 0;
+		recoverValue = false;
 		tempX = x;
 		tempY = y;
 		directionUp = false;
@@ -171,7 +171,7 @@ public class EnemyTank extends AbstractDynamicObject {
 		}
 		return false;
 	}
-
+/*
 	public boolean notRocket() {
 		if ((getDirection() == Direction.UP && ((getX() == 0 && getY() == 0) || getX() == 0)
 				|| (getDirection() == Direction.DOWN
@@ -181,7 +181,7 @@ public class EnemyTank extends AbstractDynamicObject {
 			return false;
 		return true;
 	}
-
+*/
 	@Override
 	public void setDirection(Direction direction) {
 		super.setDirection(direction);
@@ -224,20 +224,20 @@ public class EnemyTank extends AbstractDynamicObject {
 		this.directionRight = directionRight;
 	}
 
-	public int getPassi() {
-		return passi;
+	public int getStep() {
+		return step;
 	}
 
-	public void setPassi(int passi) {
-		this.passi = passi;
+	public void setStep(int step) {
+		this.step = step;
 	}
 
-	public int getContatorePassi() {
-		return contatorePassi;
+	public int getCountStep() {
+		return countStep;
 	}
 
-	public void setContatorePassi(int contatorePassi) {
-		this.contatorePassi = contatorePassi;
+	public void setCountStep(int countStep) {
+		this.countStep = countStep;
 	}
 
 	public int getPoint() {
@@ -248,12 +248,12 @@ public class EnemyTank extends AbstractDynamicObject {
 		this.point = point;
 	}
 
-	public boolean isRiprendoValori() {
-		return riprendoValori;
+	public boolean isRecoverValue() {
+		return recoverValue;
 	}
 
-	public void setRiprendoValori(boolean riprendoValori) {
-		this.riprendoValori = riprendoValori;
+	public void setRecoverValue(boolean recoverValue) {
+		this.recoverValue = recoverValue;
 	}
 
 	public int getTempX() {
@@ -272,7 +272,7 @@ public class EnemyTank extends AbstractDynamicObject {
 		this.tempY = tempY;
 	}
 
-	public boolean isappearsInTheMap() {
+	public boolean isAppearsInTheMap() {
 		return appearsInTheMap;
 	}
 

@@ -10,7 +10,8 @@ import java.util.StringTokenizer;
 public class GameManager {
 	private int x;
 	private int y;
-	private int max3Enemy = 0;
+	private int numEnemy = 4;
+	private int maxNumberOfEnemy = 0;
 	private static final int size = 20;
 	private Random random;
 	private World matrix;
@@ -110,7 +111,9 @@ public class GameManager {
 
 			// aggiorna time in tempo reale
 			game.currentTime = (System.currentTimeMillis() / 1000) % 60;
-			System.out.println("real time: " + game.currentTime);
+			System.out.println();
+			System.out.println("real time: | "
+					+ "" + game.currentTime+" |");
 
 			switch (c) {
 			case "w": // up
@@ -137,8 +140,7 @@ public class GameManager {
 				break;
 			}
 
-			// NUMERO NEMICI MAX SULLA MAPPA
-			if (game.max3Enemy < 3)
+			if (game.maxNumberOfEnemy < 3)
 				game.bringUpTheEnemyInTheMap();
 
 			game.enemyPositionRandom(); // CREAZIONE ENEMY
@@ -345,13 +347,13 @@ public class GameManager {
 		switch (power.getPowerUp()) {
 		case GRANADE:
 			for (int i = 0; i < enemy.size(); i++)
-				if (enemy.get(i).isappearsInTheMap()) {
+				if (enemy.get(i).isAppearsInTheMap()) {
 					matrix.world[enemy.get(i).getX()][enemy.get(i).getY()] = enemy.get(i).getCurr();
 					// enemy.get(i).setAppearsInTheMap(false);
 					enemy.remove(i);
 					i--;
 				}
-			max3Enemy = 0;
+			maxNumberOfEnemy = 0;
 			break;
 		case HELMET:
 			player.setProtection(true);
@@ -418,6 +420,7 @@ public class GameManager {
 				// distruggi player
 				if (rocket.get(a).getNext() instanceof PlayerTank && rocket.get(a).getTank() instanceof EnemyTank) {
 					if (player.isProtection() == false) { // se non è protetto
+						//quando ucciso, rimette il corrente nella posizione x, e quando rinasce il corrente sarà null
 						switchCurrTank(player);
 						damageAndDestroyPlayerTank();
 					}
@@ -541,7 +544,7 @@ public class GameManager {
 		for (int i = 0; i < enemy.size(); i++)
 			if (enemy.get(i) == enemyT) {
 				enemy.remove(i);
-				max3Enemy--;
+				maxNumberOfEnemy--;
 				break;
 			}
 	}
@@ -583,10 +586,7 @@ public class GameManager {
 	// -------------------------------------ENEMY-------------------------------------------
 
 	public void randomEnemy(int value) {
-		while (enemy.size() < value) { // TODO BISOGNA INSERIRE IL TEMPO PER
-										// OGNI
-										// CARRO NEMICO COSI CHE SI POSSONO
-										// SPOSTARE DALLO SPOWN
+		while (enemy.size() < value) { 
 			selectPosition(value);
 		}
 	}
@@ -647,8 +647,8 @@ public class GameManager {
 
 	public void enemyPositionRandom() {
 		for (int a = 0; a < enemy.size(); a++) {
-			if (enemy.get(a).isappearsInTheMap()) {
-				if (enemy.get(a).getContatorePassi() == 0 || enemy.get(a).isRiprendoValori()) {
+			if (enemy.get(a).isAppearsInTheMap()) {
+				if (enemy.get(a).getCountStep() == 0 || enemy.get(a).isRecoverValue()) {
 					enemy.get(a).setPositionDirection();
 					do {
 						enemy.get(a).directionEnemyRandom();
@@ -666,10 +666,11 @@ public class GameManager {
 					// enemy.get(a).isDirectionUp());
 					int tempCont;
 					tempCont = random.nextInt(size);
-					enemy.get(a).setPassi(tempCont);
+					enemy.get(a).setStep(tempCont);
 					// enemy.get(a).setPositionDirection(); //
 				}
-				if (!(enemy.get(a).getNext() instanceof EnemyTank) && updateAll == true && enemy.get(a).notRocket())
+				//TODO pezzo di codice commentato non fa sparare ai bordi
+				if (!(enemy.get(a).getNext() instanceof EnemyTank) && updateAll == true /*&& enemy.get(a).notRocket()*/)
 					createRocketTank(enemy.get(a).getDirection(), enemy.get(a));
 			}
 		}
@@ -679,32 +680,33 @@ public class GameManager {
 	public void enemyUpdate() {
 
 		// AGGIORNA NEMICI SOLO SE NON E' STATO PRESO POWERUP TIMER
-		if (updateAll == true) {
+		if (updateAll) {
 
 			for (int a = 0; a < enemy.size(); a++) {
-				if (enemy.get(a).isappearsInTheMap()) {
-					if (enemy.get(a).getPassi() >= enemy.get(a).getContatorePassi()) {
+				if (enemy.get(a).isAppearsInTheMap()) {
+					if (enemy.get(a).getStep() >= enemy.get(a).getCountStep()) {
 						enemy.get(a).update();
-
+						
+						//DECIDE SE CAMBIARE DIREZIONE E NUMERO PASSO
 						if (enemy.get(a).getX() == enemy.get(a).getTempX()
 								&& enemy.get(a).getY() == enemy.get(a).getTempY()) {
-							enemy.get(a).setRiprendoValori(true);
+							enemy.get(a).setRecoverValue(true);
 							// System.out.println("DIREZIONE UGUALE A QUELLA
 							// PRECEDENTE");
 							// enemy.get(a).setPositionDirection(enemy.get(a).getDirection());
 						} else {
 							enemy.get(a).setPositionXY();
 							matrix.world[enemy.get(a).getX()][enemy.get(a).getY()] = enemy.get(a);
-							enemy.get(a).setContatorePassi(enemy.get(a).getContatorePassi() + 1);
+							enemy.get(a).setCountStep(enemy.get(a).getCountStep() + 1);
 							// System.out.println(enemy.get(a).getContatorePassi());
 							if (!enemy.get(a).positionCorrect()) {
-								enemy.get(a).setRiprendoValori(true);
+								enemy.get(a).setRecoverValue(true);
 							} else {
-								enemy.get(a).setRiprendoValori(false);
+								enemy.get(a).setRecoverValue(false);
 							}
 						}
 					} else {
-						enemy.get(a).setContatorePassi(0);
+						enemy.get(a).setCountStep(0);
 						matrix.world[enemy.get(a).getX()][enemy.get(a).getY()] = enemy.get(a);
 					}
 				}
@@ -715,18 +717,17 @@ public class GameManager {
 
 	private void bringUpTheEnemyInTheMap() {
 		for (int a = 0; a < enemy.size(); a++) {
-			if (max3Enemy < 3 && !enemy.get(a).isappearsInTheMap()) {
+			if (maxNumberOfEnemy < numEnemy && !enemy.get(a).isAppearsInTheMap()) {
 				enemy.get(a).setAppearsInTheMap(true);
-				max3Enemy++;
+				maxNumberOfEnemy++;
 
-				if (max3Enemy == 3) // ESCO DAL CICLO
+				if (maxNumberOfEnemy == numEnemy) // ESCO DAL CICLO
 					break;
 			}
 		}
 	}
 
-	// -----------------------------SET &
-	// GET-----------------------------------------------
+	// -----------------------------SETTER & GETTER-----------------------------------------------
 
 	public int getX() {
 		return x;
