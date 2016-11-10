@@ -97,7 +97,7 @@ public class GameManager {
 	public static void main(String[] args) {
 
 		GameManager game = new GameManager();
-		game.randomEnemy(1); // quanti soldati generare
+		game.randomEnemy(5); // quanti soldati generare
 		Scanner s = new Scanner(System.in);
 		String c;
 		Direction tmp = Direction.STOP; // IN TMP RIMANE LA DIREZIONE
@@ -657,7 +657,7 @@ public class GameManager {
 					// System.out.println("direzione decisa--->" +
 					// enemy.get(a).getDirection());
 					// System.out.println("DOWN->" +
-					// enemy.get(a).isDi6rectionDown());
+					// enemy.get(a).isDirectionDown());
 					// System.out.println("LEFT->" +
 					// enemy.get(a).isDirectionLeft());
 					// System.out.println("RIGHT->" +
@@ -684,7 +684,6 @@ public class GameManager {
 			for (int a = 0; a < enemy.size(); a++) {
 				if (enemy.get(a).isappearsInTheMap()) {
 					if (enemy.get(a).getPassi() >= enemy.get(a).getContatorePassi()) {
-						System.out.println(enemy.get(a).getDirection());
 						enemy.get(a).update();
 
 						if (enemy.get(a).getX() == enemy.get(a).getTempX()
