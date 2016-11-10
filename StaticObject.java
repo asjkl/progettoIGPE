@@ -5,5 +5,4 @@ public interface StaticObject {
 	int getX();
 
 	int getY();
-
 }

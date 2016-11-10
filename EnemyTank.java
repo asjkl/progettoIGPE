@@ -172,6 +172,16 @@ public class EnemyTank extends AbstractDynamicObject {
 		return false;
 	}
 
+	public boolean notRocket() {
+		if ((getDirection() == Direction.UP && ((getX() == 0 && getY() == 0) || getX() == 0)
+				|| (getDirection() == Direction.DOWN
+						&& ((getX() == world.getRow() - 1 && getY() == 0) || getX() == world.getRow() - 1))
+				|| (getDirection() == Direction.LEFT && (getX() == 0))
+				|| (getDirection() == Direction.RIGHT && (getY() == world.getColumn() - 1))))
+			return false;
+		return true;
+	}
+
 	@Override
 	public void setDirection(Direction direction) {
 		super.setDirection(direction);
