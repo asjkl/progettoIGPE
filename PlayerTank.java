@@ -9,35 +9,35 @@ public class PlayerTank extends AbstractDynamicObject {
 
 	public PlayerTank(int x, int y, World world) {
 		super(x, y, world, Speed.NORMAL, Speed.NORMAL, Direction.STOP, 1);
-		protection=false;
-		resume=3;
-		point=0;
-		level=1;
+		protection = false;
+		resume = 3;
+		point = 0;
+		level = 1;
 	}
-	
+
 	@Override
 	public void update() {
 		super.update();
-		getWorld().world[getX()][getY()] = this;		
-		setDirection(Direction.STOP); // serve altrimenti il giocatore non si ferma
+		getWorld().world[getX()][getY()] = this;
+		setDirection(Direction.STOP); // serve altrimenti il giocatore non si
+										// ferma
 	}
 
 	@Override
 	public boolean sameObject() {
-		
+
 		if (!(next instanceof Wall) && !(next instanceof EnemyTank) && !(next instanceof PlayerTank)
 				&& !(next instanceof Water) && !(next instanceof Rocket) && !(next instanceof Flag)) {
 			// prendo tutti i powerUp
 			if (next instanceof PowerUp) {
 				curr = ((PowerUp) next).getBefore();
-			}
-			else
-				curr=next;
+			} else
+				curr = next;
 			return true;
 		}
 		return false;
 	}
-	
+
 	@Override
 	public Direction getDirection() {
 		return super.getDirection();
