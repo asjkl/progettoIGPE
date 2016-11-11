@@ -610,8 +610,6 @@ public class GameManager {
 			value = random.nextInt(2);
 		}
 
-		// TODO SPOSTATO LO SWITCH PERCHè OGNI NEMICO DEVE AVERE UN RANDOM
-		// DIVERSO DALL'ALTRO
 		int position;
 		while (value != 0) {
 			position = 0;
@@ -731,7 +729,8 @@ public class GameManager {
 		for (int a = 0; a < enemy.size(); a++) {
 			// TODO CAMBIARE POSIZIONE DI NASCITA DEL NEMICO SE SOPRA C'è UN
 			// ENEMY O UN PLAYER
-			if (maxNumberOfEnemy < numEnemy && !enemy.get(a).isAppearsInTheMap()) {
+			if (maxNumberOfEnemy < numEnemy && !enemy.get(a).isAppearsInTheMap()
+					&& matrix.world[enemy.get(a).getX()][enemy.get(a).getY()] == null) {
 				enemy.get(a).setAppearsInTheMap(true);
 				maxNumberOfEnemy++;
 			}
