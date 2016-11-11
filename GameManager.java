@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
 public class GameManager {
 	private int x;
 	private int y;
-	private int numEnemy = 4;
+	private int numEnemy = 3;
 	private int maxNumberOfEnemy = 0;
 	private static final int size = 20;
 	private Random random;
@@ -112,8 +112,7 @@ public class GameManager {
 			// aggiorna time in tempo reale
 			game.currentTime = (System.currentTimeMillis() / 1000) % 60;
 			System.out.println();
-			System.out.println("real time: | "
-					+ "" + game.currentTime+" |");
+			System.out.println("real time: | " + "" + game.currentTime + " |");
 
 			switch (c) {
 			case "w": // up
@@ -150,18 +149,19 @@ public class GameManager {
 
 			// --------------------------POWERUP----------------------------------------------------
 
-			//ENEMYTANK
-			//gestito nella classe EnemyTank + destroyRocket, 
-			//dato che può prendere solo 1 powerUp
-			
-			//PLAYERTANK
+			// ENEMYTANK
+			// gestito nella classe EnemyTank + destroyRocket,
+			// dato che può prendere solo 1 powerUp
+
+			// PLAYERTANK
 			if (game.player.getNext() instanceof PowerUp) {
 				((PowerUp) game.player.getNext()).setActivate(true);
 				((PowerUp) game.player.getNext()).setTimer(game.currentTime);
-				game.usePowerUp(((PowerUp) game.player.getNext())); //solo player
+				game.usePowerUp(((PowerUp) game.player.getNext())); // solo
+																	// player
 			}
-			
-			//CONTROLLA POWERUP
+
+			// CONTROLLA POWERUP
 			game.timeOut();
 
 			// -------------------------------------------------------------------------------------
@@ -257,7 +257,7 @@ public class GameManager {
 		switch (p.getPowerUp()) {
 
 		case HELMET:
-				player.setProtection(false);
+			player.setProtection(false);
 			break;
 		case SHOVEL:
 			int x = 0;
@@ -415,14 +415,17 @@ public class GameManager {
 					if (((EnemyTank) rocket.get(a).getNext()).getHealth() == 0) {
 						switchCurrTank(((EnemyTank) rocket.get(a).getNext()));
 						if (((EnemyTank) rocket.get(a).getNext()).isPowerUpOn())
-							addPowerUp(new Random().nextInt(6));// PRIMA DI MORIRE GENERA UN POWERUP
+							addPowerUp(new Random().nextInt(6));// PRIMA DI
+																// MORIRE GENERA
+																// UN POWERUP
 						destroyEnemyTank((EnemyTank) rocket.get(a).getNext());
 					}
 
 				// distruggi player
 				if (rocket.get(a).getNext() instanceof PlayerTank && rocket.get(a).getTank() instanceof EnemyTank) {
 					if (player.isProtection() == false) { // se non è protetto
-						//quando ucciso, rimette il corrente nella posizione x, e quando rinasce il corrente sarà null
+						// quando ucciso, rimette il corrente nella posizione x,
+						// e quando rinasce il corrente sarà null
 						switchCurrTank(player);
 						damageAndDestroyPlayerTank();
 					}
@@ -471,11 +474,11 @@ public class GameManager {
 
 		if (rocket.getNext() instanceof EnemyTank) {
 			if (rocket.getTank() instanceof PlayerTank)
-				//se nemico non ha protezione
-				if( ((EnemyTank)rocket.getNext()).isProtection() == false )
-					damageEnemyTank(rocket);
-				else //caccio protezione
-					((EnemyTank)rocket.getNext()).setProtection(false);
+				// se nemico non ha protezione
+				if (((EnemyTank) rocket.getNext()).isProtection() == false)
+				damageEnemyTank(rocket);
+				else // caccio protezione
+				((EnemyTank) rocket.getNext()).setProtection(false);
 			return true;
 		}
 
@@ -592,7 +595,7 @@ public class GameManager {
 	// -------------------------------------ENEMY-------------------------------------------
 
 	public void randomEnemy(int value) {
-		while (enemy.size() < value) { 
+		while (enemy.size() < value) {
 			selectPosition(value);
 		}
 	}
@@ -607,23 +610,25 @@ public class GameManager {
 			value = random.nextInt(2);
 		}
 
-		int position = 0;
-		switch (random.nextInt(3)) {
-		case 0:
-			position = 0;
-			break;
-		case 1:
-			position = size / 2;
-			break;
-		case 2:
-			position = size - 1;
-			break;
-		default:
-			position = 0;
-			break;
-		}
-
+		// TODO SPOSTATO LO SWITCH PERCHè OGNI NEMICO DEVE AVERE UN RANDOM
+		// DIVERSO DALL'ALTRO
+		int position;
 		while (value != 0) {
+			position = 0;
+			switch (random.nextInt(3)) {
+			case 0:
+				position = 0;
+				break;
+			case 1:
+				position = size / 2;
+				break;
+			case 2:
+				position = size - 1;
+				break;
+			default:
+				position = 0;
+				break;
+			}
 			selectEnemy(position);
 			value--;
 		}
@@ -675,8 +680,9 @@ public class GameManager {
 					enemy.get(a).setStep(tempCont);
 					// enemy.get(a).setPositionDirection(); //
 				}
-				//TODO pezzo di codice commentato non fa sparare ai bordi
-				if (!(enemy.get(a).getNext() instanceof EnemyTank) && updateAll == true /*&& enemy.get(a).notRocket()*/)
+				// TODO pezzo di codice commentato non fa sparare ai bordi
+				if (!(enemy.get(a).getNext() instanceof EnemyTank)
+						&& updateAll == true /* && enemy.get(a).notRocket() */)
 					createRocketTank(enemy.get(a).getDirection(), enemy.get(a));
 			}
 		}
@@ -692,8 +698,8 @@ public class GameManager {
 				if (enemy.get(a).isAppearsInTheMap()) {
 					if (enemy.get(a).getStep() >= enemy.get(a).getCountStep()) {
 						enemy.get(a).update();
-						
-						//DECIDE SE CAMBIARE DIREZIONE E NUMERO PASSO
+
+						// DECIDE SE CAMBIARE DIREZIONE E NUMERO PASSO
 						if (enemy.get(a).getX() == enemy.get(a).getTempX()
 								&& enemy.get(a).getY() == enemy.get(a).getTempY()) {
 							enemy.get(a).setRecoverValue(true);
@@ -723,17 +729,19 @@ public class GameManager {
 
 	private void bringUpTheEnemyInTheMap() {
 		for (int a = 0; a < enemy.size(); a++) {
+			// TODO CAMBIARE POSIZIONE DI NASCITA DEL NEMICO SE SOPRA C'è UN
+			// ENEMY O UN PLAYER
 			if (maxNumberOfEnemy < numEnemy && !enemy.get(a).isAppearsInTheMap()) {
 				enemy.get(a).setAppearsInTheMap(true);
 				maxNumberOfEnemy++;
-
-				if (maxNumberOfEnemy == numEnemy) // ESCO DAL CICLO
-					break;
 			}
+			if (maxNumberOfEnemy == numEnemy) // ESCO DAL CICLO
+				break;
 		}
 	}
 
-	// -----------------------------SETTER & GETTER-----------------------------------------------
+	// -----------------------------SETTER &
+	// GETTER-----------------------------------------------
 
 	public int getX() {
 		return x;
