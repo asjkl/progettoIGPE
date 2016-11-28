@@ -3,7 +3,7 @@ package progettoIGPE.davide.giovanni.unical2016;
 public class World {
 	private int row;
 	private int column;
-	AbstractStaticObject[][] world;
+	public AbstractStaticObject[][] world;
 
 	public World(int row, int column) {
 		this.row = row;

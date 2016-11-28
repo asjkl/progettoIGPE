@@ -13,20 +13,20 @@ public class GameManager {
 	private int finalScore = 0;
 	private int count[];
 	private int numEnemy = 3;
-	private int maxNumberOfEnemy = 0;
+	public int maxNumberOfEnemy = 0;
 	private static final int size = 20;
 	private Random random;
-	private World matrix;
+	public World matrix;
 	private PlayerTank player;
-	private ArrayList<EnemyTank> enemy;
+	public ArrayList<EnemyTank> enemy;
 	private ArrayList<PowerUp> power;
 	private ArrayList<Rocket> rocket;
-	private Flag flag;
+	public Flag flag;
 	private Direction direction;
 	private Direction old;
 	private boolean exit = false;
 	private ArrayList<AbstractStaticObject> recoveryWall;
-	private long currentTime;
+	public long currentTime;
 	private boolean updateAll = true;
 
 	public GameManager() {
@@ -126,30 +126,30 @@ public class GameManager {
 			case "w": // up
 				game.player.setDirection(Direction.UP);
 				tmp = Direction.UP;
-				
-				//perde controllo se sterzi bruscamente
-				if(game.player.getNext() instanceof Ice)
+
+				// perde controllo se sterzi bruscamente
+				if (game.player.getNext() instanceof Ice)
 					game.player.setDirection(game.old);
 				break;
 			case "a": // sx
 				game.player.setDirection(Direction.LEFT);
 				tmp = Direction.LEFT;
-				
-				if(game.player.getNext() instanceof Ice)
+
+				if (game.player.getNext() instanceof Ice)
 					game.player.setDirection(game.old);
 				break;
 			case "d": // dx
 				game.player.setDirection(Direction.RIGHT);
 				tmp = Direction.RIGHT;
-				
-				if(game.player.getNext() instanceof Ice)
+
+				if (game.player.getNext() instanceof Ice)
 					game.player.setDirection(game.old);
 				break;
 			case "s": // down
 				game.player.setDirection(Direction.DOWN);
 				tmp = Direction.DOWN;
-				
-				if(game.player.getNext() instanceof Ice)
+
+				if (game.player.getNext() instanceof Ice)
 					game.player.setDirection(game.old);
 				break;
 			case "r": // ROCKET
@@ -159,9 +159,9 @@ public class GameManager {
 			default:
 				break;
 			}
-			//salva direzione precedente (serve per ICE )
-			game.old=tmp;
-			
+			// salva direzione precedente (serve per ICE )
+			game.old = tmp;
+
 			if (game.maxNumberOfEnemy < 3)
 				game.bringUpTheEnemyInTheMap();
 
@@ -256,7 +256,7 @@ public class GameManager {
 
 	// ----------------------------------------POWERUP-------------------------------------
 
-	private void timeOut() {
+	public void timeOut() {
 		for (int a = 0; a < power.size(); a++)
 			if (power.get(a).isActivate()) { // se powerUp è attivo
 				System.out.println(power.get(a) + "---------- attivo!");
@@ -776,7 +776,7 @@ public class GameManager {
 
 	}
 
-	private void bringUpTheEnemyInTheMap() {
+	public void bringUpTheEnemyInTheMap() {
 		for (int a = 0; a < enemy.size(); a++) {
 			// TODO CAMBIARE POSIZIONE DI NASCITA DEL NEMICO SE SOPRA C'è UN
 			// ENEMY O UN PLAYER
