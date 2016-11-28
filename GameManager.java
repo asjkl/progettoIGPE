@@ -10,6 +10,8 @@ import java.util.StringTokenizer;
 public class GameManager {
 	private int x;
 	private int y;
+	private int finalScore = 0;
+	private int count[];
 	private int numEnemy = 3;
 	private int maxNumberOfEnemy = 0;
 	private static final int size = 20;
@@ -33,6 +35,11 @@ public class GameManager {
 		power = new ArrayList<>();
 		random = new Random();
 		recoveryWall = new ArrayList<>();
+		count = new int[4];
+		 
+		for(int i = 0;i < count.length;i++)
+			count[i] = 0;
+		
 		importMatrix();
 	}
 
@@ -182,6 +189,7 @@ public class GameManager {
 			if (game.enemy.size() == 0) {
 				game.matrix.stampa();
 				game.printWin();
+				game.scoreDisplay();
 				game.exit = true;
 			}
 			// STAMPE
@@ -552,10 +560,51 @@ public class GameManager {
 		// distruggi enemy dalla lista
 		for (int i = 0; i < enemy.size(); i++)
 			if (enemy.get(i) == enemyT) {
+
+				finalScore += enemyT.getPoint();
+				increaseCount(enemyT);
 				enemy.remove(i);
 				maxNumberOfEnemy--;
 				break;
 			}
+	}
+	
+	public void increaseCount(EnemyTank e) {
+			
+		//System.out.println(e);
+		//System.out.println(e.toString());
+		
+		if(e instanceof BasicTank) {
+			System.out.println("CIAO0");
+			count[0]++;
+		}
+		else
+		if(e instanceof FastTank){
+			System.out.println("CIAO1");
+			count[1]++;
+		}
+		else
+		if(e instanceof PowerTank){
+			System.out.println("CIAO2");
+			count[2]++;
+	}	
+		else
+		if(e instanceof ArmorTank){
+			System.out.println("CIAO3");
+			count[3]++;
+		}
+	}
+	
+	public void scoreDisplay() {
+		
+		for(int i = 0,j = 1;i < count.length;i++) {
+		
+			int tmp = 100*count[i];
+			System.out.println(tmp + " PTS " + count[i] + " -> " + "TANK " + j++);
+		}
+				
+		System.out.println("-----------------");
+		System.out.println("TOTAL " + finalScore);
 	}
 
 	public void createRocketTank(Direction tmp, AbstractDynamicObject tank) {
@@ -825,4 +874,5 @@ public class GameManager {
 	public void setRocket(ArrayList<Rocket> rocket) {
 		this.rocket = rocket;
 	}
+
 }
