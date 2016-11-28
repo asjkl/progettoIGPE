@@ -36,10 +36,10 @@ public class GameManager {
 		random = new Random();
 		recoveryWall = new ArrayList<>();
 		count = new int[4];
-		 
-		for(int i = 0;i < count.length;i++)
+
+		for (int i = 0; i < count.length; i++)
 			count[i] = 0;
-		
+
 		importMatrix();
 	}
 
@@ -105,7 +105,7 @@ public class GameManager {
 	public static void main(String[] args) {
 
 		GameManager game = new GameManager();
-		game.randomEnemy(5); // quanti soldati generare
+		game.randomEnemy(2); // quanti soldati generare
 		Scanner s = new Scanner(System.in);
 		String c;
 		Direction tmp = Direction.STOP; // IN TMP RIMANE LA DIREZIONE
@@ -568,41 +568,27 @@ public class GameManager {
 				break;
 			}
 	}
-	
+
 	public void increaseCount(EnemyTank e) {
-			
-		//System.out.println(e);
-		//System.out.println(e.toString());
-		
-		if(e instanceof BasicTank) {
-			System.out.println("CIAO0");
+		if (e instanceof BasicTank) {
 			count[0]++;
-		}
-		else
-		if(e instanceof FastTank){
-			System.out.println("CIAO1");
+		} else if (e instanceof FastTank) {
 			count[1]++;
-		}
-		else
-		if(e instanceof PowerTank){
-			System.out.println("CIAO2");
+		} else if (e instanceof PowerTank) {
 			count[2]++;
-	}	
-		else
-		if(e instanceof ArmorTank){
-			System.out.println("CIAO3");
+		} else if (e instanceof ArmorTank) {
 			count[3]++;
 		}
 	}
-	
+
 	public void scoreDisplay() {
-		
-		for(int i = 0,j = 1;i < count.length;i++) {
-		
-			int tmp = 100*count[i];
+
+		for (int i = 0, j = 1; i < count.length; i++) {
+
+			int tmp = 100 * count[i];
 			System.out.println(tmp + " PTS " + count[i] + " -> " + "TANK " + j++);
 		}
-				
+
 		System.out.println("-----------------");
 		System.out.println("TOTAL " + finalScore);
 	}
