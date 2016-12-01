@@ -308,7 +308,7 @@ public class GameManager {
 		switch (t) {
 		case 0:
 			foundPosition();
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.GRANADE, 0);
+			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.GRENADE, 0);
 			tmp.setBefore(getMatrix().world[getX()][getY()]); // salvo oggetto
 																// su cui cade
 																// PowerUp
@@ -373,7 +373,7 @@ public class GameManager {
 	public void usePowerUp(PowerUp power) {
 
 		switch (power.getPowerUp()) {
-		case GRANADE:
+		case GRENADE:
 			for (int i = 0; i < enemy.size(); i++)
 				if (enemy.get(i).isAppearsInTheMap()) {
 					matrix.world[enemy.get(i).getX()][enemy.get(i).getY()] = enemy.get(i).getCurr();

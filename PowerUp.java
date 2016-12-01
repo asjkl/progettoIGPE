@@ -20,18 +20,18 @@ public class PowerUp extends AbstractStaticObject {
 	@Override
 	public String toString() {
 		switch (powerUp) {
-		case GRANADE:
-			return " $1 ";
+		case GRENADE:
+			return "GRENADE";
 		case HELMET:
-			return " $2 ";
+			return "HELMET";
 		case SHOVEL:
-			return " $3 ";
+			return "SHOVEL";
 		case STAR:
-			return " $4 ";
+			return "STAR";
 		case TANK:
-			return " $5 ";
+			return "TANK";
 		case TIMER:
-			return " $6 ";
+			return "TIMER";
 		default:
 			return null;
 		}
