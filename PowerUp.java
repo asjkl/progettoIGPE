@@ -20,8 +20,13 @@ public class PowerUp extends AbstractStaticObject {
 	@Override
 	public String toString() {
 		switch (powerUp) {
+<<<<<<< HEAD
 		case GRENADE:
 			return "GRENADE";
+=======
+		case GRANADE:
+			return "GRANADE";
+>>>>>>> branch 'master' of https://github.com/asjkl/progettoIGPE.git
 		case HELMET:
 			return "HELMET";
 		case SHOVEL:
