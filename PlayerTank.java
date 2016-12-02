@@ -6,7 +6,7 @@ public class PlayerTank extends AbstractDynamicObject {
 	private int resume;
 	private boolean protection;
 	private int point;
-	private boolean died;
+	 private boolean died;
 
 	public PlayerTank(int x, int y, World world) {
 		super(x, y, world, Speed.NORMAL, Speed.NORMAL, Direction.STOP, 1);
