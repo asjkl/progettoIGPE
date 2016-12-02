@@ -548,6 +548,7 @@ public class GameManager {
 		player.setY((size / 2) - 3);
 		player.setDirection(Direction.STOP);
 		player.setCurr(null);
+		player.setDied(true);
 	}
 
 	private void destroyWall(Rocket rocket) {

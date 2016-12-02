@@ -6,6 +6,7 @@ public class PlayerTank extends AbstractDynamicObject {
 	private int resume;
 	private boolean protection;
 	private int point;
+	private boolean died;
 
 	public PlayerTank(int x, int y, World world) {
 		super(x, y, world, Speed.NORMAL, Speed.NORMAL, Direction.STOP, 1);
@@ -13,6 +14,7 @@ public class PlayerTank extends AbstractDynamicObject {
 		resume = 3;
 		point = 0;
 		level = 1;
+		died=false;
 	}
 
 	@Override
@@ -83,6 +85,14 @@ public class PlayerTank extends AbstractDynamicObject {
 	@Override
 	public String toString() {
 		return " ** ";
+	}
+
+	public boolean isDied() {
+		return died;
+	}
+
+	public void setDied(boolean died) {
+		this.died = died;
 	}
 
 }
