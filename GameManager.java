@@ -732,8 +732,8 @@ public class GameManager {
 				}
 				// TODO pezzo di codice commentato non fa sparare ai bordi
 				if (!(enemy.get(a).getNext() instanceof EnemyTank)
-						&& updateAll == true /* && enemy.get(a).notRocket() */)
-					createRocketTank(enemy.get(a).getDirection(), enemy.get(a));
+						&& updateAll == true /* && enemy.get(a).notRocket() */);
+					//createRocketTank(enemy.get(a).getDirection(), enemy.get(a));
 			}
 		}
 
