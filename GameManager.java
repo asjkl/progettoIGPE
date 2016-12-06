@@ -577,7 +577,6 @@ public class GameManager {
 		// distruggi enemy dalla lista
 		for (int i = 0; i < enemy.size(); i++)
 			if (enemy.get(i) == enemyT) {
-
 				finalScore += enemyT.getPoint();
 				increaseCount(enemyT);
 				enemy.remove(i);
