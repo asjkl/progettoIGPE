@@ -48,7 +48,7 @@ public class GameManager {
 		int i = 0;// indice di riga
 
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("src/mappa.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader("src/map04.txt"));
 			String line = reader.readLine();
 			while (line != null) {
 
