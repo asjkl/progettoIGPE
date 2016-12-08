@@ -8,6 +8,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	protected AbstractStaticObject curr;
 	protected AbstractStaticObject next;
 	private int contRocket = 0;
+	public boolean ok; //ok posso andare
 
 	public AbstractDynamicObject(int x, int y, World mondo, Speed speed, Speed speedShot, Direction direction,
 			int health) {
@@ -28,6 +29,8 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 
 	public void update() {
 		
+		ok=true;
+		
 		// rimette l oggetto di prima
 		if (!(curr instanceof PlayerTank) && !(curr instanceof EnemyTank)) {
 			getWorld().world[getX()][getY()] = curr;
@@ -38,39 +41,48 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 				next = getWorld().world[getX() - 1][getY()];
 				if (sameObject()) {
 					setX(getX() - 1);
-					
 				}
+				else
+					ok=false;
 			}
+			else 
+				ok=false;
 			break;
 		case DOWN:
 			if (getX() + 1 < getWorld().getRow()) {
 				next = getWorld().world[getX() + 1][getY()];
 				if (sameObject()) {
 					setX(getX() + 1);
-					
 				}
-				
+				else
+					ok=false;
 			}	
+			else 
+				ok=false;
 			break;
 		case LEFT:
 			if (getY() - 1 >= 0) {
 				next = getWorld().world[getX()][getY() - 1];
 				if (sameObject()) {
 					setY(getY() - 1);
-				
 				}
-				
+				else
+					ok=false;
 			}
+			else 
+				ok=false;
 			break;
 		case RIGHT:
 			if (getY() + 1 < getWorld().getColumn()) {
 				next = getWorld().world[getX()][getY() + 1];
 				if (sameObject()) {
 					setY(getY() + 1);
-				
 				}
-			
+				else
+					ok=false;
 			}
+			else 
+				ok=false;
 			break;
 		default:
 			break;
