@@ -579,7 +579,9 @@ public class GameManager {
 			if (enemy.get(i) == enemyT) {
 				finalScore += enemyT.getPoint();
 				increaseCount(enemyT);
-				enemy.remove(i);
+				enemy.get(i).setAppearsInTheMap(false);
+				enemy.get(i).setDestroy(true);
+				//enemy.remove(i);
 				maxNumberOfEnemy--;
 				break;
 			}
@@ -788,7 +790,7 @@ public class GameManager {
 			// TODO CAMBIARE POSIZIONE DI NASCITA DEL NEMICO SE SOPRA C'è UN
 			// ENEMY O UN PLAYER
 			if (maxNumberOfEnemy < numEnemy && !enemy.get(a).isAppearsInTheMap()
-					&& matrix.world[enemy.get(a).getX()][enemy.get(a).getY()] == null) {
+					&& matrix.world[enemy.get(a).getX()][enemy.get(a).getY()] == null && !enemy.get(a).isDestroy()) {
 				enemy.get(a).setAppearsInTheMap(true);
 				maxNumberOfEnemy++;
 			}

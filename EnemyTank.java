@@ -18,6 +18,7 @@ public class EnemyTank extends AbstractDynamicObject {
 	private boolean powerUpOn;
 	
 	private boolean noUpdateG=false;
+	private boolean destroy=false;
 
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health,
 			int point) {
@@ -305,5 +306,13 @@ public class EnemyTank extends AbstractDynamicObject {
 
 	public void setNoUpdateG(boolean noUpdateG) {
 		this.noUpdateG = noUpdateG;
+	}
+
+	public boolean isDestroy() {
+		return destroy;
+	}
+
+	public void setDestroy(boolean destroy) {
+		this.destroy = destroy;
 	}
 }
