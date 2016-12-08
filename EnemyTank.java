@@ -16,6 +16,8 @@ public class EnemyTank extends AbstractDynamicObject {
 	private boolean appearsInTheMap;
 	private boolean protection;
 	private boolean powerUpOn;
+	
+	private boolean noUpdateG=false;
 
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health,
 			int point) {
@@ -295,5 +297,13 @@ public class EnemyTank extends AbstractDynamicObject {
 
 	public void setPowerUpOn(boolean powerUpOn) {
 		this.powerUpOn = powerUpOn;
+	}
+	
+	public boolean isNoUpdateG() {
+		return noUpdateG;
+	}
+
+	public void setNoUpdateG(boolean noUpdateG) {
+		this.noUpdateG = noUpdateG;
 	}
 }

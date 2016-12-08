@@ -165,10 +165,10 @@ public class GameManager {
 			if (game.maxNumberOfEnemy < 3)
 				game.bringUpTheEnemyInTheMap();
 
-			game.enemyPositionRandom(); // CREAZIONE ENEMY
+			//game.enemyPositionRandom(); // CREAZIONE ENEMY
 			game.updateRocket(); // AGGIORNAMENTO DI TUTTI I ROCKET
 			game.player.update(); // AGGIORNAMENTO PLAYER
-			game.enemyUpdate(); // AGGIORNAMENTO ENEMY + POWERUP CONDITION
+			//game.enemyUpdate(); // AGGIORNAMENTO ENEMY + POWERUP CONDITION
 
 			// --------------------------POWERUP----------------------------------------------------
 
@@ -705,11 +705,15 @@ public class GameManager {
 		}
 	}
 
-	public void enemyPositionRandom() {
-		for (int a = 0; a < enemy.size(); a++) {
+	public void enemyPositionRandom(int a) {
+		//for (int a = 0; a < enemy.size(); a++) {
 			if (enemy.get(a).isAppearsInTheMap()) {
 				if (enemy.get(a).getCountStep() == 0 || enemy.get(a).isRecoverValue()) {
+					
 					enemy.get(a).setPositionDirection();
+					enemy.get(a).setCountStep(0);
+					enemy.get(a).setStep(0);
+					enemy.get(a).setNoUpdateG(false);
 					do {
 						enemy.get(a).directionEnemyRandom();
 					} while (!enemy.get(a).positionCorrect() && !enemy.get(a).notSamePosition()
@@ -725,7 +729,9 @@ public class GameManager {
 					// System.out.println("UP->" +
 					// enemy.get(a).isDirectionUp());
 					int tempCont;
+					do{
 					tempCont = random.nextInt(size);
+					}while(tempCont==matrix.getColumn());
 					enemy.get(a).setStep(tempCont);
 					// enemy.get(a).setPositionDirection(); //
 				}
@@ -734,20 +740,20 @@ public class GameManager {
 						&& updateAll == true /* && enemy.get(a).notRocket() */);
 					//createRocketTank(enemy.get(a).getDirection(), enemy.get(a));
 			}
-		}
+		//}
 
 	}
 
-	public void enemyUpdate() {
+	public void enemyUpdate(int a) {
 
 		// AGGIORNA NEMICI SOLO SE NON E' STATO PRESO POWERUP TIMER
 		if (updateAll) {
 
-			for (int a = 0; a < enemy.size(); a++) {
+			//for (int a = 0; a < enemy.size(); a++) {
 				if (enemy.get(a).isAppearsInTheMap()) {
 					if (enemy.get(a).getStep() >= enemy.get(a).getCountStep()) {
 						enemy.get(a).update();
-
+						//System.out.println(enemy.get(a).getStep()+" "+enemy.get(a).getCountStep());
 						// DECIDE SE CAMBIARE DIREZIONE E NUMERO PASSO
 						if (enemy.get(a).getX() == enemy.get(a).getTempX()
 								&& enemy.get(a).getY() == enemy.get(a).getTempY()) {
@@ -768,10 +774,11 @@ public class GameManager {
 						}
 					} else {
 						enemy.get(a).setCountStep(0);
+						enemy.get(a).setNoUpdateG(true);
 						matrix.world[enemy.get(a).getX()][enemy.get(a).getY()] = enemy.get(a);
 					}
 				}
-			}
+			
 		} // POWERUP
 
 	}
