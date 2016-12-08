@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
+//import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class GameManager {
@@ -23,11 +23,10 @@ public class GameManager {
 	private ArrayList<Rocket> rocket;
 	public Flag flag;
 	private Direction direction;
-	private Direction old;
-	private boolean exit = false;
 	private ArrayList<AbstractStaticObject> recoveryWall;
 	public long currentTime;
 	private boolean updateAll = true;
+	private int durationPowerUp = 20; 
 
 	public GameManager() {
 		matrix = new World(size, size);
@@ -102,120 +101,7 @@ public class GameManager {
 		}
 	}
 
-	@SuppressWarnings("resource")
-	public static void main(String[] args) {
-
-		GameManager game = new GameManager();
-		game.randomEnemy(2); // quanti soldati generare
-		Scanner s = new Scanner(System.in);
-		String c;
-		Direction tmp = Direction.STOP; // IN TMP RIMANE LA DIREZIONE
-		// PRECEDENTE PERCHE' ABBIAMO SETTATO
-		// AD OGNI CICLO LO STOP DEL PLAYER
-		boolean enter = false;
-		game.matrix.stampa();
-		c = s.nextLine();
-		while (!game.exit) {
-
-			// aggiorna time in tempo reale
-			game.currentTime = (System.currentTimeMillis() / 1000) % 60;
-			System.out.println();
-			System.out.println("real time: | " + "" + game.currentTime + " |");
-
-			switch (c) {
-			case "w": // up
-				game.player.setDirection(Direction.UP);
-				tmp = Direction.UP;
-
-				// perde controllo se sterzi bruscamente
-				if (game.player.getNext() instanceof Ice)
-					game.player.setDirection(game.old);
-				break;
-			case "a": // sx
-				game.player.setDirection(Direction.LEFT);
-				tmp = Direction.LEFT;
-
-				if (game.player.getNext() instanceof Ice)
-					game.player.setDirection(game.old);
-				break;
-			case "d": // dx
-				game.player.setDirection(Direction.RIGHT);
-				tmp = Direction.RIGHT;
-
-				if (game.player.getNext() instanceof Ice)
-					game.player.setDirection(game.old);
-				break;
-			case "s": // down
-				game.player.setDirection(Direction.DOWN);
-				tmp = Direction.DOWN;
-
-				if (game.player.getNext() instanceof Ice)
-					game.player.setDirection(game.old);
-				break;
-			case "r": // ROCKET
-				game.createRocketTank(tmp, game.player);
-				enter = true;
-				break;
-			default:
-				break;
-			}
-			// salva direzione precedente (serve per ICE )
-			game.old = tmp;
-
-			if (game.maxNumberOfEnemy < 3)
-				game.bringUpTheEnemyInTheMap();
-
-			//game.enemyPositionRandom(); // CREAZIONE ENEMY
-			game.updateRocket(); // AGGIORNAMENTO DI TUTTI I ROCKET
-			game.player.update(); // AGGIORNAMENTO PLAYER
-			//game.enemyUpdate(); // AGGIORNAMENTO ENEMY + POWERUP CONDITION
-
-			// --------------------------POWERUP----------------------------------------------------
-
-			// ENEMYTANK
-			// gestito nella classe EnemyTank + destroyRocket,
-			// dato che può prendere solo 1 powerUp
-
-			// PLAYERTANK
-			if (game.player.getNext() instanceof PowerUp) {
-				((PowerUp) game.player.getNext()).setActivate(true);
-				((PowerUp) game.player.getNext()).setTimer(game.currentTime);
-				game.usePowerUp(((PowerUp) game.player.getNext())); // solo
-																	// player
-			}
-
-			// CONTROLLA POWERUP
-			game.timeOut();
-
-			// -------------------------------------------------------------------------------------
-
-			// spara il doppio rocket al livello > 1
-			if (enter && game.player.getLevel() > 1) {
-				game.createRocketTank(tmp, game.player);
-				enter = false;
-			}
-
-			// GAME OVER
-			if (game.flag.isHit() || game.player.getResume() == 0) {
-				game.matrix.stampa();
-				game.printGameOver();
-				game.exit = true;
-			}
-			// WIN
-			if (game.enemy.size() == 0) {
-				game.matrix.stampa();
-				game.printWin();
-				game.scoreDisplay();
-				game.exit = true;
-			}
-			// STAMPE
-			if (game.exit == false) {
-				System.out.println();
-				game.matrix.stampa();
-				c = s.nextLine();
-			}
-		}
-	}
+	//main rimosso 
 
 	public void printWin() {
 
@@ -256,24 +142,42 @@ public class GameManager {
 
 	// ----------------------------------------POWERUP-------------------------------------
 
-	public void timeOut() {
-		for (int a = 0; a < power.size(); a++)
-			if (power.get(a).isActivate()) { // se powerUp è attivo
-				System.out.println(power.get(a) + "---------- attivo!");
-
-				long tmp = (power.get(a).getTimer() + power.get(a).getDuration()) % 60;
-
-				System.out.println("tmp: " + tmp);
-				System.out.println(power.get(a).getTimer());
-
-				if (tmp == currentTime) {
-					System.out.println(power.get(a) + "---------- disattivo!");
-					managePowerUp(power.get(a));
+	public void isDroppedOnTheMap(){
+		
+		for (int a = 0; a < power.size(); a++){		
+			if (power.get(a).isDrop()) {
+//				System.out.println(power.get(a).getCount());
+				if(power.get(a).getTime() != currentTime){ //se il tempo è cambiato incremeto contatore
+					power.get(a).setCount(power.get(a).getCount()+1);
+					power.get(a).setTime(currentTime);
+				}
+				if(power.get(a).getCount() > durationPowerUp) { //durata prima di autodistruggersi
 					power.get(a).setActivate(false);
+					power.get(a).setDrop(false);
 					power.remove(a);
 					a--;
 				}
 			}
+		}
+	}
+	
+	public void timeOut() {
+		for (int a = 0; a < power.size(); a++){
+		
+			if (power.get(a).isActivate()) {
+				
+				long tmp = (power.get(a).getTimer() + power.get(a).getDuration()) % 60;
+
+				if (tmp == currentTime) {
+					managePowerUp(power.get(a));
+					power.get(a).setActivate(false);
+					power.get(a).setDrop(false);
+					power.remove(a);
+					a--;
+				}
+			}
+			
+		}
 	}
 
 	private void managePowerUp(PowerUp p) {
@@ -308,46 +212,50 @@ public class GameManager {
 		switch (t) {
 		case 0:
 			foundPosition();
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.GRENADE, 0);
-			tmp.setBefore(getMatrix().world[getX()][getY()]); // salvo oggetto
-																// su cui cade
-																// PowerUp
-			power.add(tmp); // aggiungi in list
-			getMatrix().world[getX()][getY()] = tmp; // posiziono PowerUp
+			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.GRENADE, 0, true);
+			tmp.setBefore(getMatrix().world[getX()][getY()]); 
+			tmp.setTime(currentTime);
+			power.add(tmp); 
+			getMatrix().world[getX()][getY()] = tmp;
 			break;
 		case 1:
 			foundPosition();
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.HELMET, 15);
+			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.HELMET, 15, true);
 			tmp.setBefore(getMatrix().world[getX()][getY()]);
-			power.add(tmp); // aggiungi in list
+			tmp.setTime(currentTime);
+			power.add(tmp);
 			getMatrix().world[getX()][getY()] = tmp;
 			break;
 		case 2:
 			foundPosition();
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.SHOVEL, 20);
+			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.SHOVEL, 20, true);
 			tmp.setBefore(getMatrix().world[getX()][getY()]);
-			power.add(tmp); // aggiungi in list
+			tmp.setTime(currentTime);
+			power.add(tmp); 
 			getMatrix().world[getX()][getY()] = tmp;
 			break;
 		case 3:
 			foundPosition();
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.STAR, 0);
+			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.STAR, 0, true);
 			tmp.setBefore(getMatrix().world[getX()][getY()]);
-			power.add(tmp); // aggiungi in list
+			tmp.setTime(currentTime);
+			power.add(tmp); 
 			getMatrix().world[getX()][getY()] = tmp;
 			break;
 		case 4:
 			foundPosition();
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.TANK, 0);
+			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.TANK, 0, true);
 			tmp.setBefore(getMatrix().world[getX()][getY()]);
-			power.add(tmp); // aggiungi in list
+			tmp.setTime(currentTime);
+			power.add(tmp); 
 			getMatrix().world[getX()][getY()] = tmp;
 			break;
 		case 5:
 			foundPosition();
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.TIMER, 10);
+			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.TIMER, 10, true);
 			tmp.setBefore(getMatrix().world[getX()][getY()]);
-			power.add(tmp); // aggiungi in list
+			tmp.setTime(currentTime);
+			power.add(tmp); 
 			getMatrix().world[getX()][getY()] = tmp;
 			break;
 		default:
@@ -362,9 +270,9 @@ public class GameManager {
 			x = random.nextInt(size);
 			y = random.nextInt(size);
 
-			if (!(getMatrix().world[x][y] instanceof Wall) && !(getMatrix().world[x][y] instanceof PlayerTank)
+			if (!(getMatrix().world[x][y] instanceof SteelWall) && !(getMatrix().world[x][y] instanceof PlayerTank)
 					&& !(getMatrix().world[x][y] instanceof EnemyTank) && !(getMatrix().world[x][y] instanceof PowerUp)
-					&& !(getMatrix().world[x][y] instanceof Rocket) && !(getMatrix().world[x][y] instanceof Water))
+					&& !(getMatrix().world[x][y] instanceof Rocket))
 
 				flag = true;
 		}
@@ -404,18 +312,6 @@ public class GameManager {
 		case TIMER:
 			updateAll = false;
 			break;
-		}
-	}
-
-	public void lenghtPowerUp(int t) {
-
-		long second = (System.currentTimeMillis() / 1000) % 60;
-		long tmp = second + t;
-
-		tmp = (tmp + 1) % 60; // ritorna a capo
-
-		while (second < tmp) {
-			second = (System.currentTimeMillis() / 1000) % 60;
 		}
 	}
 
@@ -799,8 +695,7 @@ public class GameManager {
 		}
 	}
 
-	// -----------------------------SETTER &
-	// GETTER-----------------------------------------------
+	// -----------------------------SET&GET-----------------------------------------------
 
 	public int getX() {
 		return x;
