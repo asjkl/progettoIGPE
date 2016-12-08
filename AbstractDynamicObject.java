@@ -8,7 +8,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	protected AbstractStaticObject curr;
 	protected AbstractStaticObject next;
 	private int contRocket = 0;
-	public boolean ok; //ok posso andare
+	public boolean ok; //ok posso andare 
 
 	public AbstractDynamicObject(int x, int y, World mondo, Speed speed, Speed speedShot, Direction direction,
 			int health) {
