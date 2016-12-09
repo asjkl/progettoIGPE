@@ -2,11 +2,11 @@ package progettoIGPE.davide.giovanni.unical2016;
 
 public class BrickWall extends Wall {
 
-	private PowerUp before; //salvo powerUp che cade
+	private AbstractStaticObject before; //salvo powerUp che cade
 	
 	public BrickWall(int x, int y, World world, int health) {
 		super(x, y, world, 4, false, false);
-		setBefore(null);
+		before=null;
 	}
 
 	@Override
@@ -14,12 +14,11 @@ public class BrickWall extends Wall {
 		return "[  ]";
 	}
 
-	public PowerUp getBefore() {
+	public AbstractStaticObject getBefore() {
 		return before;
 	}
 
-	public void setBefore(PowerUp before) {
+	public void setBefore(AbstractStaticObject before) {
 		this.before = before;
 	}
-
 }

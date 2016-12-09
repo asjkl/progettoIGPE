@@ -30,10 +30,9 @@ public class PlayerTank extends AbstractDynamicObject {
 		if (!(next instanceof Wall) && !(next instanceof EnemyTank) && !(next instanceof PlayerTank)
 				&& !(next instanceof Water) && !(next instanceof Rocket) && !(next instanceof Flag)) {
 			// prendo tutti i powerUp
-			if (next instanceof PowerUp) {
-				//TODO curr = ((PowerUp) next).getBefore();
+			if (next instanceof PowerUp) 
 				curr = null;
-			} else
+			 else
 				curr = next;
 				
 			return true;

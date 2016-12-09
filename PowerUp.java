@@ -2,6 +2,7 @@ package progettoIGPE.davide.giovanni.unical2016;
 
 public class PowerUp extends AbstractStaticObject {
 
+	private AbstractStaticObject before; //salva oggetto su cui cade
 	private Power powerUp;
 	private AbstractDynamicObject tank; //powerup appartenenza
 	private long timer;
@@ -18,6 +19,7 @@ public class PowerUp extends AbstractStaticObject {
 		this.duration=duration;
 		this.drop=drop;
 		this.setDropTime(0);
+		before=null;
 	}
 
 	@Override
@@ -96,4 +98,12 @@ public class PowerUp extends AbstractStaticObject {
 		this.dropTime = dropTime;
 	}
 
+	public AbstractStaticObject getBefore() {
+		return before;
+	}
+
+	public void setBefore(AbstractStaticObject before) {
+		this.before = before;
+	}
+	
 }
