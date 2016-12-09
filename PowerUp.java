@@ -8,9 +8,8 @@ public class PowerUp extends AbstractStaticObject {
 	private long timer;
 	private boolean activate;
 	private long duration;
-	private long count;
-	private long time; //serve per geestire il cont ovvero durata powerUp prima di distruggersi
 	private boolean drop;
+	private long dropTime; //salva il tempo quando cade
 
 	public PowerUp(int x, int y, World world, Power powerUp, long duration, boolean drop) {
 		super(x, y, world);
@@ -18,9 +17,8 @@ public class PowerUp extends AbstractStaticObject {
 		timer=0;
 		activate=false;
 		this.duration=duration;
-		count=0;
-		time=0;
 		this.drop=drop;
+		this.setDropTime(0);
 	}
 
 	@Override
@@ -92,28 +90,20 @@ public class PowerUp extends AbstractStaticObject {
 		this.duration = duration;
 	}
 
-	public long getCount() {
-		return count;
-	}
-
-	public void setCount(long count) {
-		this.count = count;
-	}
-
-	public long getTime() {
-		return time;
-	}
-
-	public void setTime(long time) {
-		this.time = time;
-	}
-
 	public boolean isDrop() {
 		return drop;
 	}
 
 	public void setDrop(boolean drop) {
 		this.drop = drop;
+	}
+
+	public long getDropTime() {
+		return dropTime;
+	}
+
+	public void setDropTime(long dropTime) {
+		this.dropTime = dropTime;
 	}
 
 }

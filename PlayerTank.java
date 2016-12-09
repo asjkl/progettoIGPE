@@ -34,6 +34,7 @@ public class PlayerTank extends AbstractDynamicObject {
 				curr = ((PowerUp) next).getBefore();
 			} else
 				curr = next;
+				
 			return true;
 		}
 		return false;

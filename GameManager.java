@@ -30,6 +30,9 @@ public class GameManager {
 	private boolean updateAll = true;
 	private int durationPowerUp = 20;
 	private int numEnemyDropsPowerUp = 1;
+	private boolean first=false; //preso un powerUp deve diventare true
+	//serve per gestire quando viene preso un powerUp perke se si rimane
+	//sulla stessa cella si comporta in modo strano.
 
 	public GameManager() {
 		matrix = new World(size, size);
@@ -155,18 +158,25 @@ public class GameManager {
 		System.out.println("TOTAL " + finalScore);
 	}
 
+	public void verifyPlayerPosition(PlayerTank p){
+		//controllo se player si è mosso ( serve per PowerUp)
+		if(p.getX() != x || p.getY() != y)
+			setFirst(false);
+	}
+	
 	// ----------------------------------------POWERUP-------------------------------------
 
 	public void isDroppedOnTheMap(){
 		
 		for (int a = 0; a < power.size(); a++){		
-			if (power.get(a).isDrop()) {
-				if(power.get(a).getTime() != currentTime){ //se il tempo è cambiato incremeto contatore
-					power.get(a).setCount(power.get(a).getCount()+1);
-					power.get(a).setTime(currentTime);
-				}
-				if(power.get(a).getCount() > durationPowerUp) { //durata prima di autodistruggersi
-					power.get(a).setActivate(false);
+			if (power.get(a).isDrop() && !power.get(a).isActivate()) {
+				
+				long tmp = (power.get(a).getDropTime() + getDurationPowerUp()) % 60;
+				
+//				System.out.println("tmpDrop: " + tmp);
+//				System.out.println("getTimer"+power.get(a).getDropTime());
+
+				if(tmp == currentTime) { //countdown durata prima di sparire
 					power.get(a).setDrop(false);
 					matrix.world[power.get(a).getX()][power.get(a).getY()] = power.get(a).getBefore();
 					power.remove(a);
@@ -177,18 +187,18 @@ public class GameManager {
 	}
 	
 	public void timeOut() {
-		for (int a = 0; a < power.size(); a++){
-			System.out.println("current time"+getCurrentTime());
-			if (power.get(a).isActivate()) { // se powerUp è attivo
-				System.out.println(power.get(a) + "---------- attivo!");
 
+		for (int a = 0; a < power.size(); a++){			
+			if (power.get(a).isActivate()) { 
+//				System.out.println(power.get(a) + "---------- attivo!");
+				
 				long tmp = (power.get(a).getTimer() + power.get(a).getDuration()) % 60;
 
-				System.out.println("tmp: " + tmp);
-				System.out.println("getTimer"+power.get(a).getTimer());
+//				System.out.println("tmpTimeOut: " + tmp);
+//				System.out.println("getTimer"+power.get(a).getTimer());
 
 				if (tmp == currentTime) {
-					System.out.println(power.get(a) + "---------- disattivo!");
+//					System.out.println(power.get(a) + "---------- disattivo!");
 					managePowerUp(power.get(a));
 					power.get(a).setActivate(false);
 					power.remove(a);
@@ -232,7 +242,7 @@ public class GameManager {
 			foundPosition();
 			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.GRENADE, 0, true);
 			tmp.setBefore(getMatrix().world[getX()][getY()]); 
-			tmp.setTime(currentTime);
+			tmp.setDropTime(currentTime);
 			power.add(tmp); 
 			getMatrix().world[getX()][getY()] = tmp;
 			break;
@@ -240,7 +250,7 @@ public class GameManager {
 			foundPosition();
 			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.HELMET, 15, true);
 			tmp.setBefore(getMatrix().world[getX()][getY()]);
-			tmp.setTime(currentTime);
+			tmp.setDropTime(currentTime);
 			power.add(tmp);
 			getMatrix().world[getX()][getY()] = tmp;
 			break;
@@ -248,7 +258,7 @@ public class GameManager {
 			foundPosition();
 			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.SHOVEL, 20, true);
 			tmp.setBefore(getMatrix().world[getX()][getY()]);
-			tmp.setTime(currentTime);
+			tmp.setDropTime(currentTime);
 			power.add(tmp); 
 			getMatrix().world[getX()][getY()] = tmp;
 			break;
@@ -256,7 +266,7 @@ public class GameManager {
 			foundPosition();
 			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.STAR, 0, true);
 			tmp.setBefore(getMatrix().world[getX()][getY()]);
-			tmp.setTime(currentTime);
+			tmp.setDropTime(currentTime);
 			power.add(tmp); 
 			getMatrix().world[getX()][getY()] = tmp;
 			break;
@@ -264,7 +274,7 @@ public class GameManager {
 			foundPosition();
 			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.TANK, 0, true);
 			tmp.setBefore(getMatrix().world[getX()][getY()]);
-			tmp.setTime(currentTime);
+			tmp.setDropTime(currentTime);
 			power.add(tmp); 
 			getMatrix().world[getX()][getY()] = tmp;
 			break;
@@ -272,7 +282,7 @@ public class GameManager {
 			foundPosition();
 			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.TIMER, 10, true);
 			tmp.setBefore(getMatrix().world[getX()][getY()]);
-			tmp.setTime(currentTime);
+			tmp.setDropTime(currentTime);
 			power.add(tmp); 
 			getMatrix().world[getX()][getY()] = tmp;
 			break;
@@ -853,5 +863,14 @@ public class GameManager {
 	
 	public int getTotalNumberOfEnemies() {
 		return totalNumberOfEnemies;
+	}
+
+	
+	public boolean isFirst() {
+		return first;
+	}
+
+	public void setFirst(boolean first) {
+		this.first = first;
 	}
 }
