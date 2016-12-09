@@ -8,23 +8,25 @@ import java.util.Random;
 import java.util.StringTokenizer;
 
 public class GameManager {
+	
 	private int x;
 	private int y;
+	private static final int size = 20;
 	private int finalScore = 0;
 	private int count[];
-	private int numEnemy = 3;
-	public int maxNumberOfEnemy = 0;
-	private static final int size = 20;
+	private int currentNumEnemyOnMap = 3; 
+	private int maxNumEnemyOnMap = 0; 
+	private int totalNumberOfEnemies = 4;
 	private Random random;
-	public World matrix;
+	private World matrix;
 	private PlayerTank player;
-	public ArrayList<EnemyTank> enemy;
+	private ArrayList<EnemyTank> enemy;
 	private ArrayList<PowerUp> power;
 	private ArrayList<Rocket> rocket;
-	public Flag flag;
+	private Flag flag;
 	private Direction direction;
 	private ArrayList<AbstractStaticObject> recoveryWall;
-	public long currentTime;
+	private long currentTime;
 	private boolean updateAll = true;
 	private int durationPowerUp = 20; 
 
@@ -146,7 +148,6 @@ public class GameManager {
 		
 		for (int a = 0; a < power.size(); a++){		
 			if (power.get(a).isDrop()) {
-//				System.out.println(power.get(a).getCount());
 				if(power.get(a).getTime() != currentTime){ //se il tempo è cambiato incremeto contatore
 					power.get(a).setCount(power.get(a).getCount()+1);
 					power.get(a).setTime(currentTime);
@@ -289,7 +290,7 @@ public class GameManager {
 					enemy.remove(i);
 					i--;
 				}
-			maxNumberOfEnemy = 0;
+			maxNumEnemyOnMap = 0;
 			break;
 		case HELMET:
 			player.setProtection(true);
@@ -478,7 +479,7 @@ public class GameManager {
 				enemy.get(i).setAppearsInTheMap(false);
 				enemy.get(i).setDestroy(true);
 				//enemy.remove(i);
-				maxNumberOfEnemy--;
+				maxNumEnemyOnMap--;
 				break;
 			}
 	}
@@ -633,7 +634,7 @@ public class GameManager {
 					enemy.get(a).setStep(tempCont);
 					// enemy.get(a).setPositionDirection(); //
 				}
-				// TODO pezzo di codice commentato non fa sparare ai bordi
+				//  pezzo di codice commentato non fa sparare ai bordi
 				if (!(enemy.get(a).getNext() instanceof EnemyTank)
 						&& updateAll == true /* && enemy.get(a).notRocket() */);
 					//createRocketTank(enemy.get(a).getDirection(), enemy.get(a));
@@ -685,12 +686,12 @@ public class GameManager {
 		for (int a = 0; a < enemy.size(); a++) {
 			// TODO CAMBIARE POSIZIONE DI NASCITA DEL NEMICO SE SOPRA C'è UN
 			// ENEMY O UN PLAYER
-			if (maxNumberOfEnemy < numEnemy && !enemy.get(a).isAppearsInTheMap()
+			if (maxNumEnemyOnMap < currentNumEnemyOnMap && !enemy.get(a).isAppearsInTheMap()
 					&& matrix.world[enemy.get(a).getX()][enemy.get(a).getY()] == null && !enemy.get(a).isDestroy()) {
 				enemy.get(a).setAppearsInTheMap(true);
-				maxNumberOfEnemy++;
+				maxNumEnemyOnMap++;
 			}
-			if (maxNumberOfEnemy == numEnemy) // ESCO DAL CICLO
+			if (maxNumEnemyOnMap == currentNumEnemyOnMap) // ESCO DAL CICLO
 				break;
 		}
 	}
@@ -781,4 +782,71 @@ public class GameManager {
 		this.rocket = rocket;
 	}
 
+	public int getFinalScore() {
+		return finalScore;
+	}
+
+	public void setFinalScore(int finalScore) {
+		this.finalScore = finalScore;
+	}
+
+	public int[] getCount() {
+		return count;
+	}
+
+	public void setCount(int[] count) {
+		this.count = count;
+	}
+
+	public int getCurrentNumEnemyOnMap() {
+		return currentNumEnemyOnMap;
+	}
+
+	public void setCurrentNumEnemyOnMap(int currentNumEnemyOnMap) {
+		this.currentNumEnemyOnMap = currentNumEnemyOnMap;
+	}
+
+	public int getMaxNumEnemyOnMap() {
+		return maxNumEnemyOnMap;
+	}
+
+	public void setMaxNumEnemyOnMap(int maxNumEnemyOnMap) {
+		this.maxNumEnemyOnMap = maxNumEnemyOnMap;
+	}
+
+	public ArrayList<AbstractStaticObject> getRecoveryWall() {
+		return recoveryWall;
+	}
+
+	public void setRecoveryWall(ArrayList<AbstractStaticObject> recoveryWall) {
+		this.recoveryWall = recoveryWall;
+	}
+
+	public long getCurrentTime() {
+		return currentTime;
+	}
+
+	public void setCurrentTime(long currentTime) {
+		this.currentTime = currentTime;
+	}
+
+	public boolean isUpdateAll() {
+		return updateAll;
+	}
+
+	public void setUpdateAll(boolean updateAll) {
+		this.updateAll = updateAll;
+	}
+
+	public int getDurationPowerUp() {
+		return durationPowerUp;
+	}
+
+	public void setDurationPowerUp(int durationPowerUp) {
+		this.durationPowerUp = durationPowerUp;
+	}
+	
+	public int getTotalNumberOfEnemies() {
+		return totalNumberOfEnemies;
+	}
 }
