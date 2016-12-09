@@ -14,9 +14,9 @@ public class GameManager {
 	private static final int size = 20;
 	private int finalScore = 0;
 	private int count[];
-	private int currentNumEnemyOnMap = 3; 
+	private int currentNumEnemyOnMap = 4; 
 	private int maxNumEnemyOnMap = 0; 
-	private int totalNumberOfEnemies = 4;
+	private int totalNumberOfEnemies = 10;
 	private Random random;
 	private World matrix;
 	private PlayerTank player;
@@ -28,7 +28,8 @@ public class GameManager {
 	private ArrayList<AbstractStaticObject> recoveryWall;
 	private long currentTime;
 	private boolean updateAll = true;
-	private int durationPowerUp = 20; 
+	private int durationPowerUp = 20;
+	private int numEnemyDropsPowerUp = 1;
 
 	public GameManager() {
 		matrix = new World(size, size);
@@ -142,6 +143,18 @@ public class GameManager {
 		System.out.println();
 	}
 
+	public void scoreDisplay() {
+
+		for (int i = 0, j = 1; i < count.length; i++) {
+
+			int tmp = 100 * count[i];
+			System.out.println(tmp + " PTS " + count[i] + " -> " + "TANK " + j++);
+		}
+
+		System.out.println("-----------------");
+		System.out.println("TOTAL " + finalScore);
+	}
+
 	// ----------------------------------------POWERUP-------------------------------------
 
 	public void isDroppedOnTheMap(){
@@ -155,6 +168,7 @@ public class GameManager {
 				if(power.get(a).getCount() > durationPowerUp) { //durata prima di autodistruggersi
 					power.get(a).setActivate(false);
 					power.get(a).setDrop(false);
+					matrix.world[power.get(a).getX()][power.get(a).getY()] = power.get(a).getBefore();
 					power.remove(a);
 					a--;
 				}
@@ -164,20 +178,23 @@ public class GameManager {
 	
 	public void timeOut() {
 		for (int a = 0; a < power.size(); a++){
-		
-			if (power.get(a).isActivate()) {
-				
+			System.out.println("current time"+getCurrentTime());
+			if (power.get(a).isActivate()) { // se powerUp è attivo
+				System.out.println(power.get(a) + "---------- attivo!");
+
 				long tmp = (power.get(a).getTimer() + power.get(a).getDuration()) % 60;
 
+				System.out.println("tmp: " + tmp);
+				System.out.println("getTimer"+power.get(a).getTimer());
+
 				if (tmp == currentTime) {
+					System.out.println(power.get(a) + "---------- disattivo!");
 					managePowerUp(power.get(a));
 					power.get(a).setActivate(false);
-					power.get(a).setDrop(false);
 					power.remove(a);
 					a--;
 				}
 			}
-			
 		}
 	}
 
@@ -496,18 +513,6 @@ public class GameManager {
 		}
 	}
 
-	public void scoreDisplay() {
-
-		for (int i = 0, j = 1; i < count.length; i++) {
-
-			int tmp = 100 * count[i];
-			System.out.println(tmp + " PTS " + count[i] + " -> " + "TANK " + j++);
-		}
-
-		System.out.println("-----------------");
-		System.out.println("TOTAL " + finalScore);
-	}
-
 	public void createRocketTank(Direction tmp, AbstractDynamicObject tank) {
 
 		if ((tank instanceof PlayerTank && player.getLevel() < 3 && player.getContRocket() == 0)
@@ -599,7 +604,7 @@ public class GameManager {
 		}
 		// matrix.world[0][y] = enemy.get(contEnemy);
 		// contEnemy++;
-		if ((enemy.size() % 4) == 0) {
+		if ((enemy.size() % numEnemyDropsPowerUp) == 0) {
 			enemy.get(enemy.size() - 1).setPowerUpOn(true);
 		}
 	}
