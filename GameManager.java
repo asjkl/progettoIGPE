@@ -178,7 +178,6 @@ public class GameManager {
 
 				if(tmp == currentTime) { //countdown durata prima di sparire
 					power.get(a).setDrop(false);
-					matrix.world[power.get(a).getX()][power.get(a).getY()] = power.get(a).getBefore();
 					power.remove(a);
 					a--;
 				}
@@ -240,51 +239,66 @@ public class GameManager {
 		switch (t) {
 		case 0:
 			foundPosition();
+			if(getMatrix().world[getX()][getY()] instanceof BrickWall)
+				((BrickWall)getMatrix().world[getX()][getY()]).setBefore(tmp);
+			else
+				getMatrix().world[getX()][getY()] = tmp;
+			
 			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.GRENADE, 0, true);
-			tmp.setBefore(getMatrix().world[getX()][getY()]); 
 			tmp.setDropTime(currentTime);
 			power.add(tmp); 
-			getMatrix().world[getX()][getY()] = tmp;
+
 			break;
 		case 1:
 			foundPosition();
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.HELMET, 15, true);
-			tmp.setBefore(getMatrix().world[getX()][getY()]);
+			if(getMatrix().world[getX()][getY()] instanceof BrickWall)
+				((BrickWall)getMatrix().world[getX()][getY()]).setBefore(tmp);
+			else
+				getMatrix().world[getX()][getY()] = tmp;
+			
+			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.HELMET, 12, true);
 			tmp.setDropTime(currentTime);
 			power.add(tmp);
-			getMatrix().world[getX()][getY()] = tmp;
 			break;
 		case 2:
 			foundPosition();
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.SHOVEL, 20, true);
-			tmp.setBefore(getMatrix().world[getX()][getY()]);
+			if(getMatrix().world[getX()][getY()] instanceof BrickWall)
+				((BrickWall)getMatrix().world[getX()][getY()]).setBefore(tmp);
+			else
+				getMatrix().world[getX()][getY()] = tmp;
+			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.SHOVEL, 15, true);
 			tmp.setDropTime(currentTime);
-			power.add(tmp); 
-			getMatrix().world[getX()][getY()] = tmp;
+			power.add(tmp);
 			break;
 		case 3:
 			foundPosition();
+			if(getMatrix().world[getX()][getY()] instanceof BrickWall)
+				((BrickWall)getMatrix().world[getX()][getY()]).setBefore(tmp);
+			else
+				getMatrix().world[getX()][getY()] = tmp;
 			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.STAR, 0, true);
-			tmp.setBefore(getMatrix().world[getX()][getY()]);
 			tmp.setDropTime(currentTime);
-			power.add(tmp); 
-			getMatrix().world[getX()][getY()] = tmp;
+			power.add(tmp);
 			break;
 		case 4:
 			foundPosition();
+			if(getMatrix().world[getX()][getY()] instanceof BrickWall)
+				((BrickWall)getMatrix().world[getX()][getY()]).setBefore(tmp);
+			else
+				getMatrix().world[getX()][getY()] = tmp;
 			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.TANK, 0, true);
-			tmp.setBefore(getMatrix().world[getX()][getY()]);
 			tmp.setDropTime(currentTime);
-			power.add(tmp); 
-			getMatrix().world[getX()][getY()] = tmp;
+			power.add(tmp);
 			break;
 		case 5:
 			foundPosition();
+			if(getMatrix().world[getX()][getY()] instanceof BrickWall)
+				((BrickWall)getMatrix().world[getX()][getY()]).setBefore(tmp);
+			else
+				getMatrix().world[getX()][getY()] = tmp;
 			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.TIMER, 10, true);
-			tmp.setBefore(getMatrix().world[getX()][getY()]);
 			tmp.setDropTime(currentTime);
-			power.add(tmp); 
-			getMatrix().world[getX()][getY()] = tmp;
+			power.add(tmp);
 			break;
 		default:
 			break;
@@ -476,6 +490,7 @@ public class GameManager {
 	}
 
 	private void destroyWall(Rocket rocket) {
+		//TODO matrix.world[power.get(a).getX()][power.get(a).getY()] = power.get(a).getBefore(); se brickwall
 		switch (rocket.getDirection()) {
 		case UP:
 			matrix.world[rocket.getX() - 1][rocket.getY()] = null;

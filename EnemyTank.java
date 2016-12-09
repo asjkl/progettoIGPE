@@ -50,7 +50,8 @@ public class EnemyTank extends AbstractDynamicObject {
 				&& !(next instanceof Water) && !(next instanceof Rocket) && !(next instanceof Flag)) {
 			// prendo solo Helmet
 			if (next instanceof PowerUp && ((PowerUp) next).getPowerUp() == Power.HELMET) {
-				curr = ((PowerUp) next).getBefore();
+				//TODO
+				curr = null;
 				protection=true;
 			} else
 				curr = next;

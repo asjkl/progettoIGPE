@@ -2,7 +2,6 @@ package progettoIGPE.davide.giovanni.unical2016;
 
 public class PowerUp extends AbstractStaticObject {
 
-	private AbstractStaticObject before; //salvo oggetto su cui cade powerUp
 	private Power powerUp;
 	private AbstractDynamicObject tank; //powerup appartenenza
 	private long timer;
@@ -41,14 +40,6 @@ public class PowerUp extends AbstractStaticObject {
 		}
 	}
 	
-	public AbstractStaticObject getBefore() {
-		return before;
-	}
-
-	public void setBefore(AbstractStaticObject before) {
-		this.before = before;
-	}
-
 	public Power getPowerUp() {
 		return powerUp;
 	}
@@ -57,7 +48,6 @@ public class PowerUp extends AbstractStaticObject {
 		this.powerUp = powerUp;
 	}
 	
-
 	public AbstractDynamicObject getTank() {
 		return tank;
 	}
