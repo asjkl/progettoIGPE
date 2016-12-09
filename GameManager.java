@@ -505,7 +505,6 @@ public class GameManager {
 				increaseCount(enemyT);
 				enemy.get(i).setAppearsInTheMap(false);
 				enemy.get(i).setDestroy(true);
-				//enemy.remove(i);
 				maxNumEnemyOnMap--;
 				break;
 			}
