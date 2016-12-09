@@ -53,7 +53,7 @@ public class GameManager {
 		int i = 0;// indice di riga
 
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("src/map04.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader("mappe/mappa.txt"));
 			String line = reader.readLine();
 			while (line != null) {
 
@@ -656,6 +656,8 @@ public class GameManager {
 
 	public void enemyPositionRandom(int a) {
 		//for (int a = 0; a < enemy.size(); a++) {
+			
+		if (updateAll) {
 			if (enemy.get(a).isAppearsInTheMap()) {
 				if (enemy.get(a).getCountStep() == 0 || enemy.get(a).isRecoverValue()) {
 					
@@ -689,7 +691,7 @@ public class GameManager {
 						&& updateAll == true /* && enemy.get(a).notRocket() */);
 					//createRocketTank(enemy.get(a).getDirection(), enemy.get(a));
 			}
-		//}
+		}
 
 	}
 
