@@ -14,9 +14,9 @@ public class GameManager {
 	private static final int size = 20;
 	private int finalScore = 0;
 	private int count[];
-	private int currentNumEnemyOnMap = 4; 
+	private int currentNumEnemyOnMap = 20; 
 	private int maxNumEnemyOnMap = 0; 
-	private int totalNumberOfEnemies = 10;
+	private int totalNumberOfEnemies = 50;
 	private Random random;
 	private World matrix;
 	private PlayerTank player;
@@ -33,6 +33,8 @@ public class GameManager {
 	private boolean first=false; //preso un powerUp deve diventare true
 	//serve per gestire quando viene preso un powerUp perke se si rimane
 	//sulla stessa cella si comporta in modo strano.
+	private int xTmp = -9; //usato in addPowerUp
+	private int yTmp = -9; //usato in addPowerUp
 
 	public GameManager() {
 		matrix = new World(size, size);
@@ -53,7 +55,7 @@ public class GameManager {
 		int i = 0;// indice di riga
 
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("mappe/mappa.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader("maps/water.txt"));
 			String line = reader.readLine();
 			while (line != null) {
 
@@ -106,8 +108,6 @@ public class GameManager {
 			e.printStackTrace();
 		}
 	}
-
-	//main rimosso 
 
 	public void printWin() {
 
@@ -178,9 +178,19 @@ public class GameManager {
 
 				if(tmp == currentTime) { //countdown durata prima di sparire
 					power.get(a).setDrop(false);
-					getMatrix().world[power.get(a).getX()][power.get(a).getY()] = power.get(a).getBefore();
-					if(power.get(a).getBefore() instanceof BrickWall)
-					((BrickWall)power.get(a).getBefore()).setBefore(null); //se PowerUp scaduto deve essere cancellato
+					
+					System.out.println(power.get(a).getBefore());
+					if(power.get(a).getBefore() instanceof Water){
+						getMatrix().world[power.get(a).getX()][power.get(a).getY()] = null;
+						getMatrix().world [((Water)power.get(a).getBefore()).getX()]
+								          [((Water)power.get(a).getBefore()).getY()] = power.get(a).getBefore();
+						
+					}
+					else{
+						getMatrix().world[power.get(a).getX()][power.get(a).getY()] = power.get(a).getBefore();
+						if(power.get(a).getBefore() instanceof BrickWall)
+						((BrickWall)power.get(a).getBefore()).setBefore(null); //se PowerUp scaduto deve essere cancellato
+					}
 					power.remove(a);
 					a--;
 				}
@@ -237,80 +247,90 @@ public class GameManager {
 		}
 	}
 
+	private void extendAddPowerUp(PowerUp tmp){
+		
+		tmp.setDropTime(currentTime);
+		tmp.setBefore(getMatrix().world[getX()][getY()]);
+		if(tmp.getBefore() instanceof Water){
+			tmp.setX(xTmp); //powerUp viene spostato....
+			tmp.setY(yTmp);	
+		}
+	
+		power.add(tmp);
+		if(getMatrix().world[getX()][getY()] instanceof BrickWall)
+			((BrickWall)getMatrix().world[getX()][getY()]).setBefore(tmp);
+		else
+			getMatrix().world[tmp.getX()][tmp.getY()] = tmp; //attenzione al tmp.getX();
+	}
+	
 	public void addPowerUp(int t) {
 		PowerUp tmp = null;
+		foundPosition();
 		switch (t) {
 		case 0:
-			foundPosition();
 			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.GRENADE, 0, true);
-			tmp.setDropTime(currentTime);
-			tmp.setBefore(getMatrix().world[getX()][getY()]);
-			power.add(tmp); 
-			if(getMatrix().world[getX()][getY()] instanceof BrickWall)
-				((BrickWall)getMatrix().world[getX()][getY()]).setBefore(tmp);
-			else
-				getMatrix().world[getX()][getY()] = tmp;
+			extendAddPowerUp(tmp);
 			break;
 		case 1:
-			foundPosition();
 			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.HELMET, 12, true);
-			tmp.setDropTime(currentTime);
-			tmp.setBefore(getMatrix().world[getX()][getY()]);
-			power.add(tmp);
-			if(getMatrix().world[getX()][getY()] instanceof BrickWall)
-				((BrickWall)getMatrix().world[getX()][getY()]).setBefore(tmp);
-			else
-				getMatrix().world[getX()][getY()] = tmp;
+			extendAddPowerUp(tmp);
 			break;
 		case 2:
-			foundPosition();
 			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.SHOVEL, 15, true);
-			tmp.setDropTime(currentTime);
-			tmp.setBefore(getMatrix().world[getX()][getY()]);
-			power.add(tmp);
-			if(getMatrix().world[getX()][getY()] instanceof BrickWall)
-				((BrickWall)getMatrix().world[getX()][getY()]).setBefore(tmp);
-			else
-				getMatrix().world[getX()][getY()] = tmp;
+			extendAddPowerUp(tmp);
 			break;
 		case 3:
-			foundPosition();
 			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.STAR, 0, true);
-			tmp.setDropTime(currentTime);
-			tmp.setBefore(getMatrix().world[getX()][getY()]);
-			power.add(tmp);
-			if(getMatrix().world[getX()][getY()] instanceof BrickWall)
-				((BrickWall)getMatrix().world[getX()][getY()]).setBefore(tmp);
-			else
-				getMatrix().world[getX()][getY()] = tmp;
+			extendAddPowerUp(tmp);
 			break;
 		case 4:
-			foundPosition();
 			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.TANK, 0, true);
-			tmp.setDropTime(currentTime);
-			tmp.setBefore(getMatrix().world[getX()][getY()]);
-			power.add(tmp);
-			if(getMatrix().world[getX()][getY()] instanceof BrickWall)
-				((BrickWall)getMatrix().world[getX()][getY()]).setBefore(tmp);
-			else
-				getMatrix().world[getX()][getY()] = tmp;
+			extendAddPowerUp(tmp);
 			break;
 		case 5:
-			foundPosition();
 			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.TIMER, 10, true);
-			tmp.setDropTime(currentTime);
-			tmp.setBefore(getMatrix().world[getX()][getY()]);
-			power.add(tmp);
-			if(getMatrix().world[getX()][getY()] instanceof BrickWall)
-				((BrickWall)getMatrix().world[getX()][getY()]).setBefore(tmp);
-			else
-				getMatrix().world[getX()][getY()] = tmp;
+			extendAddPowerUp(tmp);
 			break;
 		default:
 			break;
 		}
 	}
 
+	private boolean movePowerUpInCorrectPosition(){
+		
+		//CONTROLLO POS DEL POWERUP SE E' BUONA
+	
+		if(x-1 >= 0 && !(getMatrix().world[x-1][y] instanceof Water) 
+			&& !(getMatrix().world[x-1][y] instanceof EnemyTank)
+			&& !(getMatrix().world[x-1][y] instanceof PlayerTank)){          //UP 
+			xTmp=x-1; //necessito sapere le coordinate della nuova pos e me li salvo
+			yTmp=y;
+			return true;
+		}
+		if(x+1 < getSize() && !(getMatrix().world[x+1][y] instanceof Water)
+			&& !(getMatrix().world[x+1][y] instanceof EnemyTank)
+			&& !(getMatrix().world[x+1][y] instanceof PlayerTank)){           //DOWN
+			xTmp=x+1;
+			yTmp=y;
+			return true;
+		}
+		if(y-1 >= 0 && !(getMatrix().world[x][y-1] instanceof Water)
+			&& !(getMatrix().world[x][y-1] instanceof EnemyTank)
+			&& !(getMatrix().world[x][y-1] instanceof PlayerTank) ){          //LEFT
+			xTmp=x;
+			yTmp=y-1;
+			return true;
+		}
+		if(y+1 < getSize() && !(getMatrix().world[x][y+1] instanceof Water)
+			&& !(getMatrix().world[x][y+1] instanceof EnemyTank)
+			&& !(getMatrix().world[x][y+1] instanceof PlayerTank) ){          //RIGHT
+			xTmp=x;
+			yTmp=y+1;
+			return true;
+		}
+		return false;
+	}
+	
 	public void foundPosition() {
 		boolean flag = false;
 
@@ -320,9 +340,12 @@ public class GameManager {
 
 			if (!(getMatrix().world[x][y] instanceof SteelWall) && !(getMatrix().world[x][y] instanceof PlayerTank)
 					&& !(getMatrix().world[x][y] instanceof EnemyTank) && !(getMatrix().world[x][y] instanceof PowerUp)
-					&& !(getMatrix().world[x][y] instanceof Rocket) && !(getMatrix().world[x][y] instanceof Flag))
-
+					&& !(getMatrix().world[x][y] instanceof Rocket) && !(getMatrix().world[x][y] instanceof Flag)){		
 				flag = true;
+			}
+			if(getMatrix().world[x][y] instanceof Water) //se cade nell'acqua controlla
+				if(!movePowerUpInCorrectPosition()) //se la condizione non è soddisfatta
+					flag=false; //continua a ciclare
 		}
 	}
 

@@ -10,6 +10,7 @@ public class PowerUp extends AbstractStaticObject {
 	private long duration;
 	private boolean drop;
 	private long dropTime; //salva il tempo quando cade
+	private boolean dropOnBorder;
 
 	public PowerUp(int x, int y, World world, Power powerUp, long duration, boolean drop) {
 		super(x, y, world);
@@ -20,6 +21,7 @@ public class PowerUp extends AbstractStaticObject {
 		this.drop=drop;
 		this.setDropTime(0);
 		before=null;
+		dropOnBorder = false;
 	}
 
 	@Override
@@ -104,6 +106,14 @@ public class PowerUp extends AbstractStaticObject {
 
 	public void setBefore(AbstractStaticObject before) {
 		this.before = before;
+	}
+
+	public boolean isDropOnBorder() {
+		return dropOnBorder;
+	}
+
+	public void setDropOnBorder(boolean dropOnBorder) {
+		this.dropOnBorder = dropOnBorder;
 	}
 	
 }
