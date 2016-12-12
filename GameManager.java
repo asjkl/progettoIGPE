@@ -33,8 +33,8 @@ public class GameManager {
 	private boolean first=false; //preso un powerUp deve diventare true
 	//serve per gestire quando viene preso un powerUp perke se si rimane
 	//sulla stessa cella si comporta in modo strano.
-	private int xTmp = -9; //usato in addPowerUp
-	private int yTmp = -9; //usato in addPowerUp
+	private int xTmp = -1; //usato in addPowerUp
+	private int yTmp = -1; //usato in addPowerUp
 
 	public GameManager() {
 		matrix = new World(size, size);
