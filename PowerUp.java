@@ -11,6 +11,7 @@ public class PowerUp extends AbstractStaticObject {
 	private boolean drop;
 	private long dropTime; //salva il tempo quando cade
 	private boolean dropOnBorder;
+	private String dropDirection;
 
 	public PowerUp(int x, int y, World world, Power powerUp, long duration, boolean drop) {
 		super(x, y, world);
@@ -22,6 +23,7 @@ public class PowerUp extends AbstractStaticObject {
 		this.setDropTime(0);
 		before=null;
 		dropOnBorder = false;
+		dropDirection=null;
 	}
 
 	@Override
@@ -114,6 +116,14 @@ public class PowerUp extends AbstractStaticObject {
 
 	public void setDropOnBorder(boolean dropOnBorder) {
 		this.dropOnBorder = dropOnBorder;
+	}
+
+	public String getDropDirection() {
+		return dropDirection;
+	}
+
+	public void setDropDirection(String dropDirection) {
+		this.dropDirection = dropDirection;
 	}
 	
 }

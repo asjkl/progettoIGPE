@@ -33,9 +33,11 @@ public class GameManager {
 	private boolean first=false; //preso un powerUp deve diventare true
 	//serve per gestire quando viene preso un powerUp perke se si rimane
 	//sulla stessa cella si comporta in modo strano.
+	
 	private int xTmp = -1; //usato in addPowerUp
 	private int yTmp = -1; //usato in addPowerUp
-
+	private String dir;    //usato in addPowerUp
+	
 	public GameManager() {
 		matrix = new World(size, size);
 		enemy = new ArrayList<>();
@@ -250,12 +252,13 @@ public class GameManager {
 	private void extendAddPowerUp(PowerUp tmp){
 		
 		tmp.setDropTime(currentTime);
-		tmp.setBefore(getMatrix().world[getX()][getY()]);
+		tmp.setBefore(getMatrix().world[getX()][getY()]); //prima di spostare powerUp mi salvo l oggetto su cui è
+														  //caduto precedentemente.
 		if(tmp.getBefore() instanceof Water){
-			tmp.setX(xTmp); //powerUp viene spostato....
+			tmp.setX(xTmp); //powerUp viene spostato dall acqua alla cella accanto (pos buona )
 			tmp.setY(yTmp);	
 		}
-	
+		tmp.setDropDirection(dir);
 		power.add(tmp);
 		if(getMatrix().world[getX()][getY()] instanceof BrickWall)
 			((BrickWall)getMatrix().world[getX()][getY()]).setBefore(tmp);
@@ -303,8 +306,9 @@ public class GameManager {
 		if(x-1 >= 0 && !(getMatrix().world[x-1][y] instanceof Water) 
 			&& !(getMatrix().world[x-1][y] instanceof EnemyTank)
 			&& !(getMatrix().world[x-1][y] instanceof PlayerTank)){          //UP 
-			xTmp=x-1; //necessito sapere le coordinate della nuova pos e me li salvo
-			yTmp=y;
+			xTmp=x-1; //necessito sapere le coordinate della nuova pos. buona su cui verrà spostato in seguito
+			yTmp=y;	  //il powerUp, qui non è possibile farlo perke prima mi devo creare il powerUp e il before e poi...
+			dir="UP";
 			return true;
 		}
 		if(x+1 < getSize() && !(getMatrix().world[x+1][y] instanceof Water)
@@ -312,6 +316,7 @@ public class GameManager {
 			&& !(getMatrix().world[x+1][y] instanceof PlayerTank)){           //DOWN
 			xTmp=x+1;
 			yTmp=y;
+			dir="DOWN";
 			return true;
 		}
 		if(y-1 >= 0 && !(getMatrix().world[x][y-1] instanceof Water)
@@ -319,6 +324,7 @@ public class GameManager {
 			&& !(getMatrix().world[x][y-1] instanceof PlayerTank) ){          //LEFT
 			xTmp=x;
 			yTmp=y-1;
+			dir="LEFT";
 			return true;
 		}
 		if(y+1 < getSize() && !(getMatrix().world[x][y+1] instanceof Water)
@@ -326,6 +332,7 @@ public class GameManager {
 			&& !(getMatrix().world[x][y+1] instanceof PlayerTank) ){          //RIGHT
 			xTmp=x;
 			yTmp=y+1;
+			dir="RIGHT";
 			return true;
 		}
 		return false;
