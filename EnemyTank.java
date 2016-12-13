@@ -55,7 +55,7 @@ public class EnemyTank extends AbstractDynamicObject {
 				protection=true;
 			} 
 			else
-				if( next instanceof PowerUp && ((PowerUp) next).getPowerUp() == Power.HELMET && ((PowerUp)next).getBefore() instanceof Trees)
+				if( next instanceof PowerUp && ((PowerUp) next).getPowerUp() == Power.HELMET &&( ((PowerUp)next).getBefore() instanceof Trees || ((PowerUp)next).getBefore() instanceof Ice) )
 					curr = ((PowerUp)next).getBefore();
 			else
 				curr = next;

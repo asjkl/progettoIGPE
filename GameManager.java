@@ -14,9 +14,9 @@ public class GameManager {
 	private static final int size = 20;
 	private int finalScore = 0;
 	private int count[];
-	private int currentNumEnemyOnMap = 6; 
+	private int currentNumEnemyOnMap = 10; 
 	private int maxNumEnemyOnMap = 0; 
-	private int totalNumberOfEnemies = 10;
+	private int totalNumberOfEnemies = 50;
 	private Random random;
 	private World matrix;
 	private PlayerTank player;
@@ -57,7 +57,7 @@ public class GameManager {
 		int i = 0;// indice di riga
 
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("maps/trees.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader("maps/map04.txt"));
 			String line = reader.readLine();
 			while (line != null) {
 
@@ -181,7 +181,6 @@ public class GameManager {
 				if(tmp == currentTime) { //countdown durata prima di sparire
 					power.get(a).setDrop(false);
 					
-					System.out.println(power.get(a).getBefore());
 					if(power.get(a).getBefore() instanceof Water){
 						getMatrix().world[power.get(a).getX()][power.get(a).getY()] = null;
 						getMatrix().world [((Water)power.get(a).getBefore()).getX()]
