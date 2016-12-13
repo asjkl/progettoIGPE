@@ -14,9 +14,9 @@ public class GameManager {
 	private static final int size = 20;
 	private int finalScore = 0;
 	private int count[];
-	private int currentNumEnemyOnMap = 20; 
+	private int currentNumEnemyOnMap = 6; 
 	private int maxNumEnemyOnMap = 0; 
-	private int totalNumberOfEnemies = 50;
+	private int totalNumberOfEnemies = 10;
 	private Random random;
 	private World matrix;
 	private PlayerTank player;
@@ -36,7 +36,7 @@ public class GameManager {
 	
 	private int xTmp = -1; //usato in addPowerUp
 	private int yTmp = -1; //usato in addPowerUp
-	private String dir;    //usato in addPowerUp
+	private Direction dir; //usato in addPowerUp
 	
 	public GameManager() {
 		matrix = new World(size, size);
@@ -308,7 +308,7 @@ public class GameManager {
 			&& !(getMatrix().world[x-1][y] instanceof PlayerTank)){          //UP 
 			xTmp=x-1; //necessito sapere le coordinate della nuova pos. buona su cui verrà spostato in seguito
 			yTmp=y;	  //il powerUp, qui non è possibile farlo perke prima mi devo creare il powerUp e il before e poi...
-			dir="UP";
+			dir=Direction.UP;
 			return true;
 		}
 		if(x+1 < getSize() && !(getMatrix().world[x+1][y] instanceof Water)
@@ -316,7 +316,7 @@ public class GameManager {
 			&& !(getMatrix().world[x+1][y] instanceof PlayerTank)){           //DOWN
 			xTmp=x+1;
 			yTmp=y;
-			dir="DOWN";
+			dir=Direction.DOWN;
 			return true;
 		}
 		if(y-1 >= 0 && !(getMatrix().world[x][y-1] instanceof Water)
@@ -324,7 +324,7 @@ public class GameManager {
 			&& !(getMatrix().world[x][y-1] instanceof PlayerTank) ){          //LEFT
 			xTmp=x;
 			yTmp=y-1;
-			dir="LEFT";
+			dir=Direction.LEFT;
 			return true;
 		}
 		if(y+1 < getSize() && !(getMatrix().world[x][y+1] instanceof Water)
@@ -332,7 +332,7 @@ public class GameManager {
 			&& !(getMatrix().world[x][y+1] instanceof PlayerTank) ){          //RIGHT
 			xTmp=x;
 			yTmp=y+1;
-			dir="RIGHT";
+			dir=Direction.RIGHT;
 			return true;
 		}
 		return false;
