@@ -57,7 +57,7 @@ public class GameManager {
 		int i = 0;// indice di riga
 
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("maps/water.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader("maps/trees.txt"));
 			String line = reader.readLine();
 			while (line != null) {
 
@@ -413,9 +413,9 @@ public class GameManager {
 					if (((EnemyTank) rocket.get(a).getNext()).getHealth() == 0) {
 						switchCurrTank(((EnemyTank) rocket.get(a).getNext()));
 						if (((EnemyTank) rocket.get(a).getNext()).isPowerUpOn())
-							addPowerUp(new Random().nextInt(6));// PRIMA DI
-																// MORIRE GENERA
-																// UN POWERUP
+							addPowerUp(new Random().nextInt(6)); // PRIMA DI
+																 // MORIRE GENERA
+																 // UN POWERUP
 						destroyEnemyTank((EnemyTank) rocket.get(a).getNext());
 					}
 
@@ -932,7 +932,6 @@ public class GameManager {
 		return totalNumberOfEnemies;
 	}
 
-	
 	public boolean isFirst() {
 		return first;
 	}

@@ -48,11 +48,16 @@ public class EnemyTank extends AbstractDynamicObject {
 	public boolean sameObject() {
 		if (!(next instanceof Wall) && !(next instanceof EnemyTank) && !(next instanceof PlayerTank)
 				&& !(next instanceof Water) && !(next instanceof Rocket) && !(next instanceof Flag)) {
-			// prendo solo Helmet
-			if (next instanceof PowerUp && ((PowerUp) next).getPowerUp() == Power.HELMET) {
+			
+			// prende solo Helmet
+			if (next instanceof PowerUp && ((PowerUp) next).getPowerUp() == Power.HELMET && !(((PowerUp)next).getBefore() instanceof Trees)) {
 				curr = null;
 				protection=true;
-			} else
+			} 
+			else
+				if( next instanceof PowerUp && ((PowerUp) next).getPowerUp() == Power.HELMET && ((PowerUp)next).getBefore() instanceof Trees)
+					curr = ((PowerUp)next).getBefore();
+			else
 				curr = next;
 
 			return true;
