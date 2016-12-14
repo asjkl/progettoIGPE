@@ -24,7 +24,6 @@ public class GameManager {
 	private ArrayList<PowerUp> power;
 	private ArrayList<Rocket> rocket;
 	private Flag flag;
-	private Direction direction;
 	private ArrayList<AbstractStaticObject> recoveryWall;
 	private long currentTime;
 	private boolean updateAll = true;
@@ -394,10 +393,10 @@ public class GameManager {
 
 	// ---------------------------------------ROCKET----------------------------------------
 
-	public void updateRocket() {
+	public void updateRocket(int a) {
 		Rocket r = null; // rocket temporaneo
 
-		for (int a = 0; a < rocket.size(); a++) {
+		
 			rocket.get(a).update();
 
 			if (destroyRocket(rocket.get(a))) {
@@ -431,10 +430,11 @@ public class GameManager {
 				if (rocket.get(a).getNext() instanceof Rocket)
 					r = ((Rocket) rocket.get(a).getNext());
 
-				rocket.remove(a);
-				a--;
+				rocket.get(a).setRemove(true);
+				//rocket.remove(a);
+				//a--;
 			}
-		}
+		
 		if (r != null) // distruggi Rocket2
 			destroyOtherRocket(r);
 	}
@@ -674,7 +674,7 @@ public class GameManager {
 			enemy.add(new PowerTank(0, y, matrix, Direction.STOP));
 			break;
 		case 3:
-			enemy.add(new ArmorTank(0, y, matrix, direction.STOP));
+			enemy.add(new ArmorTank(0, y, matrix, Direction.STOP));
 			break;
 		}
 		// matrix.world[0][y] = enemy.get(contEnemy);
@@ -794,14 +794,6 @@ public class GameManager {
 
 	public void setY(int y) {
 		this.y = y;
-	}
-
-	public Direction getDirection() {
-		return direction;
-	}
-
-	public void setDirection(Direction direction) {
-		this.direction = direction;
 	}
 
 	public Random getRandom() {
