@@ -14,9 +14,9 @@ public class GameManager {
 	private static final int size = 20;
 	private int finalScore = 0;
 	private int count[];
-	private int currentNumEnemyOnMap = 10; 
+	private int currentNumEnemyOnMap = 4; 
 	private int maxNumEnemyOnMap = 0; 
-	private int totalNumberOfEnemies = 50;
+	private int totalNumberOfEnemies = 10;
 	private Random random;
 	private World matrix;
 	private PlayerTank player;
@@ -57,7 +57,7 @@ public class GameManager {
 		int i = 0;// indice di riga
 
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("maps/map04.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader("maps/mappa.txt"));
 			String line = reader.readLine();
 			while (line != null) {
 
@@ -571,6 +571,7 @@ public class GameManager {
 				enemy.get(i).setAppearsInTheMap(false);
 				enemy.get(i).setDestroy(true);
 				maxNumEnemyOnMap--;
+				totalNumberOfEnemies--;
 				break;
 			}
 	}
@@ -664,16 +665,16 @@ public class GameManager {
 	private void selectEnemy(int y) {
 		switch (random.nextInt(4)) {
 		case 0:
-			enemy.add(new BasicTank(0, y, matrix, direction));
+			enemy.add(new BasicTank(0, y, matrix, Direction.STOP));
 			break;
 		case 1:
-			enemy.add(new FastTank(0, y, matrix, direction));
+			enemy.add(new FastTank(0, y, matrix, Direction.STOP));
 			break;
 		case 2:
-			enemy.add(new PowerTank(0, y, matrix, direction));
+			enemy.add(new PowerTank(0, y, matrix, Direction.STOP));
 			break;
 		case 3:
-			enemy.add(new ArmorTank(0, y, matrix, direction));
+			enemy.add(new ArmorTank(0, y, matrix, direction.STOP));
 			break;
 		}
 		// matrix.world[0][y] = enemy.get(contEnemy);
