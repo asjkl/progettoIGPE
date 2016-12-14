@@ -110,55 +110,6 @@ public class GameManager {
 		}
 	}
 
-	public void printWin() {
-
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println(" ---------------------------------  YOU WIN  ---------------------------------- ");
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-	}
-
-	public void printGameOver() {
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println(" ---------------------------------  Game Over  ---------------------------------- ");
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-	}
-
-	public void scoreDisplay() {
-
-		for (int i = 0, j = 1; i < count.length; i++) {
-
-			int tmp = 100 * count[i];
-			System.out.println(tmp + " PTS " + count[i] + " -> " + "TANK " + j++);
-		}
-
-		System.out.println("-----------------");
-		System.out.println("TOTAL " + finalScore);
-	}
-
 	public void verifyPlayerPosition(PlayerTank p){
 		//controllo se player si è mosso ( serve per PowerUp)
 		if(p.getX() != x || p.getY() != y)
@@ -395,8 +346,6 @@ public class GameManager {
 
 	public void updateRocket(int a) {
 		Rocket r = null; // rocket temporaneo
-
-		
 			rocket.get(a).update();
 
 			if (destroyRocket(rocket.get(a))) {
@@ -431,8 +380,6 @@ public class GameManager {
 					r = ((Rocket) rocket.get(a).getNext());
 
 				rocket.get(a).setRemove(true);
-				//rocket.remove(a);
-				//a--;
 			}
 		
 		if (r != null) // distruggi Rocket2
