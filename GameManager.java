@@ -14,7 +14,7 @@ public class GameManager {
 	private static final int size = 20;
 	private int finalScore = 0;
 	private int count[];
-	private int currentNumEnemyOnMap = 4; 
+	private int currentNumEnemyOnMap = 6; 
 	private int maxNumEnemyOnMap = 0; 
 	private int totalNumberOfEnemies = 10;
 	private Random random;
@@ -48,13 +48,14 @@ public class GameManager {
 
 		for (int i = 0; i < count.length; i++)
 			count[i] = 0;
-
+		System.out.println("1");
 		importMatrix();
 	}
 
 	public void importMatrix() {
 		int i = 0;// indice di riga
 
+		System.out.println("ciao");
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader("maps/mappa.txt"));
 			String line = reader.readLine();
@@ -347,9 +348,10 @@ public class GameManager {
 	public void updateRocket(int a) {
 		Rocket r = null; // rocket temporaneo
 			rocket.get(a).update();
+			rocket.get(a).setUpdateRocket(false);
 
 			if (destroyRocket(rocket.get(a))) {
-				//countRockets(rocket.get(a));
+				countRockets(rocket.get(a));
 
 				// aggiorna rocket se curr non è un tank
 				if (!(rocket.get(a).getCurr() instanceof PlayerTank) && !(rocket.get(a).getCurr() instanceof EnemyTank))
@@ -379,7 +381,7 @@ public class GameManager {
 				if (rocket.get(a).getNext() instanceof Rocket)
 					r = ((Rocket) rocket.get(a).getNext());
 
-				rocket.get(a).setRemove(true);
+					rocket.remove(a);
 			}
 		
 		if (r != null) // distruggi Rocket2
@@ -443,9 +445,8 @@ public class GameManager {
 			if (r == rocket.get(a)) {
 				countRockets(rocket.get(a));
 				matrix.world[rocket.get(a).getX()][rocket.get(a).getY()] = rocket.get(a).getCurr();
-				rocket.get(a).setRemove(true);
-				//rocket.remove(a);
-				//a--;
+				rocket.remove(a);
+				a--;
 			}
 	}
 
@@ -573,9 +574,9 @@ public class GameManager {
 
 	// -------------------------------------ENEMY-------------------------------------------
 
-	public void randomEnemy(int value) {
-		while (enemy.size() < value) {
-			selectPosition(value);
+	public void randomEnemy(int totalNumberOfEnemies) {
+		while (enemy.size()< totalNumberOfEnemies) {
+			selectPosition(totalNumberOfEnemies);
 		}
 	}
 
@@ -588,7 +589,6 @@ public class GameManager {
 		} else {
 			value = random.nextInt(2);
 		}
-
 		int position;
 		while (value != 0) {
 			position = 0;
@@ -601,9 +601,6 @@ public class GameManager {
 				break;
 			case 2:
 				position = size - 1;
-				break;
-			default:
-				position = 0;
 				break;
 			}
 			selectEnemy(position);

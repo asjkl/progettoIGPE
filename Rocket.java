@@ -9,7 +9,6 @@ public class Rocket extends AbstractDynamicObject {
 	private Point pixel;
 	private int cont;
 	private boolean updateRocket;
-	private boolean remove;
 	
 	public Rocket(int x, int y, World world, Direction direction, AbstractDynamicObject tank) {
 		super(x, y, world, direction);
@@ -20,7 +19,6 @@ public class Rocket extends AbstractDynamicObject {
 		setPixel(new Point(x*35, y*35));
 		this.cont=1;
 		this.updateRocket=true;
-		this.setRemove(false);
 	}
 
 	@Override
@@ -87,13 +85,5 @@ public class Rocket extends AbstractDynamicObject {
 
 	public void setPixel(Point pixel) {
 		this.pixel = pixel;
-	}
-
-	public boolean isRemove() {
-		return remove;
-	}
-
-	public void setRemove(boolean remove) {
-		this.remove = remove;
 	}
 }
