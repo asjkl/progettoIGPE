@@ -32,7 +32,7 @@ public class World {
 		this.column = column;
 	}
 
-	public void stampa() {
+	public void print() {
 		for (int a = 0; a < row; a++) {
 			for (int b = 0; b < column; b++) {
 				System.out.print(world[a][b]);

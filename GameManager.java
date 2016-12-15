@@ -14,7 +14,7 @@ public class GameManager {
 	private static final int size = 20;
 	private int finalScore = 0;
 	private int count[];
-	private int currentNumEnemyOnMap = 6; 
+	private int currentNumEnemyOnMap = 4; 
 	private int maxNumEnemyOnMap = 0; 
 	private int totalNumberOfEnemies = 10;
 	private Random random;
@@ -29,15 +29,15 @@ public class GameManager {
 	private boolean updateAll = true;
 	private int durationPowerUp = 20;
 	private int numEnemyDropsPowerUp = 1;
-	private boolean first=false; //preso un powerUp deve diventare true
-	//serve per gestire quando viene preso un powerUp perke se si rimane
-	//sulla stessa cella si comporta in modo strano.
-	
-	private int xTmp = -1; //usato in addPowerUp
-	private int yTmp = -1; //usato in addPowerUp
-	private Direction dir; //usato in addPowerUp
+	/*se powerUp è stato preso e non ti sei mai mai mosso dalla cella in cui l hai preso*/
+	private boolean first=false;  
+	//usato in addPowerUp
+	private int xTmp = -1; 
+	private int yTmp = -1; 
+	private Direction dir; 
 	
 	public GameManager() {
+		
 		matrix = new World(size, size);
 		enemy = new ArrayList<>();
 		rocket = new ArrayList<>();
@@ -48,14 +48,11 @@ public class GameManager {
 
 		for (int i = 0; i < count.length; i++)
 			count[i] = 0;
-		System.out.println("1");
 		importMatrix();
 	}
 
 	public void importMatrix() {
 		int i = 0;// indice di riga
-
-		System.out.println("ciao");
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader("maps/mappa.txt"));
 			String line = reader.readLine();
@@ -724,7 +721,7 @@ public class GameManager {
 		}
 	}
 
-	// -----------------------------SET&GET-----------------------------------------------
+	// -----------------------------SET & GET-----------------------------------------------
 
 	public int getX() {
 		return x;
