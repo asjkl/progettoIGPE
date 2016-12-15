@@ -349,7 +349,7 @@ public class GameManager {
 			rocket.get(a).update();
 
 			if (destroyRocket(rocket.get(a))) {
-				countRockets(rocket.get(a));
+				//countRockets(rocket.get(a));
 
 				// aggiorna rocket se curr non è un tank
 				if (!(rocket.get(a).getCurr() instanceof PlayerTank) && !(rocket.get(a).getCurr() instanceof EnemyTank))
@@ -386,7 +386,7 @@ public class GameManager {
 			destroyOtherRocket(r);
 	}
 
-	private void countRockets(Rocket r) {
+	public void countRockets(Rocket r) {
 		if (!(r.getTank() instanceof EnemyTank))
 			player.setContRocket(player.getContRocket() - 1);
 		else {
@@ -401,8 +401,9 @@ public class GameManager {
 
 	private boolean destroyRocket(Rocket rocket) {
 
-		if (rocket.isBordo() || rocket.getNext() instanceof Rocket || rocket.getNext() instanceof PlayerTank)
+		if (rocket.isBordo() || rocket.getNext() instanceof Rocket || rocket.getNext() instanceof PlayerTank){
 			return true;
+		}
 
 		if (rocket.getNext() instanceof Flag) {
 			flag.setHit(true);
@@ -442,8 +443,9 @@ public class GameManager {
 			if (r == rocket.get(a)) {
 				countRockets(rocket.get(a));
 				matrix.world[rocket.get(a).getX()][rocket.get(a).getY()] = rocket.get(a).getCurr();
-				rocket.remove(a);
-				a--;
+				rocket.get(a).setRemove(true);
+				//rocket.remove(a);
+				//a--;
 			}
 	}
 
@@ -666,7 +668,7 @@ public class GameManager {
 				//  pezzo di codice commentato non fa sparare ai bordi
 				if (!(enemy.get(a).getNext() instanceof EnemyTank)
 						&& updateAll == true /* && enemy.get(a).notRocket() */);
-					//createRocketTank(enemy.get(a).getDirection(), enemy.get(a));
+					createRocketTank(enemy.get(a).getDirection(), enemy.get(a));
 			}
 		}
 

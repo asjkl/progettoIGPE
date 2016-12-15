@@ -18,7 +18,7 @@ public class Rocket extends AbstractDynamicObject {
 		curr = tank; //quando viene creato il Rocket il suo curr sarà il TANK
 		
 		setPixel(new Point(x*35, y*35));
-		this.cont=0;
+		this.cont=1;
 		this.updateRocket=true;
 		this.setRemove(false);
 	}
