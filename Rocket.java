@@ -10,6 +10,8 @@ public class Rocket extends AbstractDynamicObject {
 	private int cont;
 	private boolean updateRocket;
 	
+	private AbstractStaticObject beforeBordo;
+	
 	public Rocket(int x, int y, World world, Direction direction, AbstractDynamicObject tank) {
 		super(x, y, world, direction);
 		this.bordo = false;
@@ -19,6 +21,7 @@ public class Rocket extends AbstractDynamicObject {
 		setPixel(new Point(x*35, y*35));
 		this.cont=1;
 		this.updateRocket=true;
+		this.beforeBordo=tank.getCurr();
 	}
 
 	@Override
@@ -85,5 +88,13 @@ public class Rocket extends AbstractDynamicObject {
 
 	public void setPixel(Point pixel) {
 		this.pixel = pixel;
+	}
+
+	public AbstractStaticObject getBeforeBordo() {
+		return beforeBordo;
+	}
+
+	public void setBeforeBordo(AbstractStaticObject beforeBordo) {
+		this.beforeBordo = beforeBordo;
 	}
 }

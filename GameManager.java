@@ -14,7 +14,7 @@ public class GameManager {
 	private static final int size = 20;
 	private int finalScore = 0;
 	private int count[];
-	private int currentNumEnemyOnMap = 4; 
+	private int currentNumEnemyOnMap = 0; 
 	private int maxNumEnemyOnMap = 0; 
 	private int totalNumberOfEnemies = 10;
 	private Random random;
@@ -346,13 +346,16 @@ public class GameManager {
 		Rocket r = null; // rocket temporaneo
 			rocket.get(a).update();
 			rocket.get(a).setUpdateRocket(false);
-
+			
 			if (destroyRocket(rocket.get(a))) {
 				countRockets(rocket.get(a));
 
 				// aggiorna rocket se curr non è un tank
 				if (!(rocket.get(a).getCurr() instanceof PlayerTank) && !(rocket.get(a).getCurr() instanceof EnemyTank))
 					matrix.world[rocket.get(a).getX()][rocket.get(a).getY()] = rocket.get(a).getCurr();
+				else			//FORSE RISOLVE IL FATTO DEL ROCKET AL BORDO...DA TESTARE
+					matrix.world[rocket.get(a).getX()][rocket.get(a).getY()] = rocket.get(a).getBeforeBordo();
+				
 
 				// distruggi enemy
 				if (rocket.get(a).getNext() instanceof EnemyTank && rocket.get(a).getTank() instanceof PlayerTank)
@@ -377,8 +380,8 @@ public class GameManager {
 
 				if (rocket.get(a).getNext() instanceof Rocket)
 					r = ((Rocket) rocket.get(a).getNext());
-
-					rocket.remove(a);
+				
+				rocket.remove(a);
 			}
 		
 		if (r != null) // distruggi Rocket2
