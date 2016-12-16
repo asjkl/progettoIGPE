@@ -3,6 +3,7 @@ package progettoIGPE.davide.giovanni.unical2016;
 import java.util.Random;
 
 public class EnemyTank extends AbstractDynamicObject {
+	
 	private int point;
 	private int step;
 	private int countStep;
@@ -16,9 +17,8 @@ public class EnemyTank extends AbstractDynamicObject {
 	private boolean appearsInTheMap;
 	private boolean protection;
 	private boolean powerUpOn;
-	
-	private boolean noUpdateG=false;
-	private boolean destroy=false;
+	private boolean noUpdateG;
+	private boolean destroy;
 
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health,
 			int point) {
@@ -36,6 +36,8 @@ public class EnemyTank extends AbstractDynamicObject {
 		appearsInTheMap = false;
 		protection = false;
 		powerUpOn = false;
+		noUpdateG=false;
+		destroy=false;
 	}
 
 	@Override
@@ -180,25 +182,10 @@ public class EnemyTank extends AbstractDynamicObject {
 		}
 		return false;
 	}
-/*
-	public boolean notRocket() {
-		if ((getDirection() == Direction.UP && ((getX() == 0 && getY() == 0) || getX() == 0)
-				|| (getDirection() == Direction.DOWN
-						&& ((getX() == world.getRow() - 1 && getY() == 0) || getX() == world.getRow() - 1))
-				|| (getDirection() == Direction.LEFT && (getX() == 0))
-				|| (getDirection() == Direction.RIGHT && (getY() == world.getColumn() - 1))))
-			return false;
-		return true;
-	}
-*/
+
 	@Override
 	public void setDirection(Direction direction) {
 		super.setDirection(direction);
-	}
-
-	@Override
-	public String toString() {
-		return "E";
 	}
 
 	public boolean isDirectionUp() {
