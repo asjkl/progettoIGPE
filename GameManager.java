@@ -29,12 +29,11 @@ public class GameManager {
 	private ArrayList<AbstractStaticObject> recoveryWall;
 	private long currentTime;
 	private boolean updateAll = true;
+	
+	//POWERUPS
 	private int durationPowerUp = 20;
-	private int numEnemyDropsPowerUp = 1;
-	/*se powerUp è stato preso e non ti sei mai mai mosso dalla cella in cui l hai preso*/
-	private boolean first=false;  
-	//usato in addPowerUp
-	private int xTmp = -1; 
+	private int numEnemyDropsPowerUp = 1; //indica ogni quanti enemie far cadere powerUp 
+	private int xTmp = -1; //tutti e 3 usati in addPowerUp
 	private int yTmp = -1; 
 	private Direction dir; 
 	
@@ -138,13 +137,7 @@ public class GameManager {
 			} // while
 	
 	}
-	
-	public void verifyPlayerPosition(PlayerTank p){
-		//controllo se player si è mosso ( serve per PowerUp)
-		if(p.getX() != x || p.getY() != y)
-			setFirst(false);
-	}
-	
+		
 	//SERVE PER CONVERTIRE LA SPEED AD UN INTERO
 	public int returnIntSpeed(Speed speed) {
 		if(speed==Speed.SLOW){
@@ -193,15 +186,15 @@ public class GameManager {
 
 		for (int a = 0; a < power.size(); a++){			
 			if (power.get(a).isActivate()) { 
-				System.out.println(power.get(a) + "---------- attivo!");
+//				System.out.println(power.get(a) + "---------- attivo!");
 				
 				long tmp = (power.get(a).getTimer() + power.get(a).getDuration()) % 60;
 
-				System.out.println("tmpTimeOut: " + tmp);
-				System.out.println("getTimer"+power.get(a).getTimer());
+//				System.out.println("tmpTimeOut: " + tmp);
+//				System.out.println("getTimer"+power.get(a).getTimer());
 
 				if (tmp == currentTime) {
-					System.out.println(power.get(a) + "---------- disattivo!");
+//					System.out.println(power.get(a) + "---------- disattivo!");
 					managePowerUp(power.get(a));
 					power.get(a).setActivate(false);
 					power.remove(a);
@@ -213,28 +206,23 @@ public class GameManager {
 
 	private void managePowerUp(PowerUp p) {
 
-		switch (p.getPowerUp()) {
-
-		case HELMET:
+		if(p.getPowerUp() == Power.HELMET) {
 			player.setProtection(false);
-			break;
-		case SHOVEL:
-			int x = 0;
-			for (int i = size - 2; i < size; i++)
-				for (int j = (size / 2) - 2; j <= size / 2; j++)
-					if (!(getMatrix().world[i][j] instanceof Flag))
-						if (x < recoveryWall.size())
-							getMatrix().world[i][j] = recoveryWall.get(x++);
-			recoveryWall.clear();
-			break;
-		case STAR:
-			player.setLevel(player.getLevel());
-			break;
-		case TIMER:
+		}
+		else if(p.getPowerUp() == Power.SHOVEL) {
+				int x = 0;
+				for (int i = size - 2; i < size; i++){
+					for (int j = (size / 2) - 2; j <= size / 2; j++){
+						if (!(getMatrix().world[i][j] instanceof Flag)){
+							if (x < recoveryWall.size())
+								getMatrix().world[i][j] = recoveryWall.get(x++);
+						}
+					}
+				}
+				recoveryWall.clear();
+		}
+		else if(p.getPowerUp() == Power.TIMER){
 			updateAll = true;
-			break;
-		default:
-			break;
 		}
 	}
 
@@ -352,7 +340,8 @@ public class GameManager {
 			for (int i = 0; i < enemy.size(); i++)
 				if (enemy.get(i).isAppearsInTheMap()) {
 					matrix.world[enemy.get(i).getX()][enemy.get(i).getY()] = enemy.get(i).getCurr();
-					// enemy.get(i).setAppearsInTheMap(false);
+					enemy.get(i).setAppearsInTheMap(false);
+					//TODO forse senza remove
 					enemy.remove(i);
 					i--;
 				}
@@ -362,18 +351,18 @@ public class GameManager {
 			player.setProtection(true);
 			break;
 		case SHOVEL:
-			for (int i = size - 2; i < size; i++)
-				for (int j = (size / 2) - 2; j <= size / 2; j++)
+			for (int i = size - 2; i < size; i++){
+				for (int j = (size / 2) - 2; j <= size / 2; j++){
 					if (!(getMatrix().world[i][j] instanceof Flag)) {
 						recoveryWall.add(getMatrix().world[i][j]);
 						getMatrix().world[i][j] = new SteelWall(i, j, getMatrix(), 4);
 					}
+				}
+			}
 			break;
 		case STAR:
-			if (player.getLevel() < 3){
+			if(player.getLevel()<3)
 				player.setLevel(player.getLevel() + 1);
-			System.out.println("-----------------------------------------");
-			}
 			break;
 		case TANK:
 			player.setResume(player.getResume() + 1);
@@ -851,14 +840,6 @@ public class GameManager {
 		this.durationPowerUp = durationPowerUp;
 	}
 	
-	public boolean isFirst() {
-		return first;
-	}
-
-	public void setFirst(boolean first) {
-		this.first = first;
-	}
-
 	public int getNumberOfEnemyToSpawn() {
 		return numberOfEnemyToSpawn;
 	}
