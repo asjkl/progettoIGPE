@@ -2,6 +2,7 @@ package progettoIGPE.davide.giovanni.unical2016;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 //import java.util.Scanner;
@@ -14,9 +15,10 @@ public class GameManager {
 	private static final int size = 20;
 	private int finalScore = 0;
 	private int count[];
-	private int currentNumEnemyOnMap = 6; 
-	private int maxNumEnemyOnMap = 0; 
-	private int totalNumberOfEnemies = 10;
+	
+	private int numberOfEnemyToSpawn = 4; 
+	private int numberOfEnemyOnMap = 0; 
+	
 	private Random random;
 	private World matrix;
 	private PlayerTank player;
@@ -46,17 +48,17 @@ public class GameManager {
 		recoveryWall = new ArrayList<>();
 		count = new int[4];
 
-		for (int i = 0; i < count.length; i++)
+		for (int i = 0; i < count.length; i++) //conta occorrenze enemies?
 			count[i] = 0;
-		importMatrix();
+		importMap();
 	}
 
-	public void importMatrix() {
+	public void importMap() {
 		int i = 0;// indice di riga
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("maps/mappa.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader("maps/map01.txt"));
 			String line = reader.readLine();
-			while (line != null) {
+			while (i < size) {
 
 				StringTokenizer st = new StringTokenizer(line, " ");
 				int j = 0;// indice di colonna
@@ -100,7 +102,10 @@ public class GameManager {
 				i++;
 				line = reader.readLine();
 			} // while
+			
+			importEnemies(reader, line);
 			reader.close();
+			
 		} // try
 		catch (Exception e) {
 
@@ -108,6 +113,32 @@ public class GameManager {
 		}
 	}
 
+	public void importEnemies(BufferedReader reader, String line){
+				
+			while (line != null) {
+				StringTokenizer st = new StringTokenizer(line, " ");
+				
+				String typology = null;
+				String number = null;
+				
+				if(st.hasMoreTokens())
+					typology = st.nextToken();
+				if(st.hasMoreTokens())
+					number = st.nextToken();
+				
+				if(typology!=null && number!=null)
+					addEnemies(typology,Integer.parseInt(number));
+					
+				try {
+					line = reader.readLine();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} // while
+	
+	}
+	
 	public void verifyPlayerPosition(PlayerTank p){
 		//controllo se player si è mosso ( serve per PowerUp)
 		if(p.getX() != x || p.getY() != y)
@@ -151,15 +182,15 @@ public class GameManager {
 
 		for (int a = 0; a < power.size(); a++){			
 			if (power.get(a).isActivate()) { 
-//				System.out.println(power.get(a) + "---------- attivo!");
+				System.out.println(power.get(a) + "---------- attivo!");
 				
 				long tmp = (power.get(a).getTimer() + power.get(a).getDuration()) % 60;
 
-//				System.out.println("tmpTimeOut: " + tmp);
-//				System.out.println("getTimer"+power.get(a).getTimer());
+				System.out.println("tmpTimeOut: " + tmp);
+				System.out.println("getTimer"+power.get(a).getTimer());
 
 				if (tmp == currentTime) {
-//					System.out.println(power.get(a) + "---------- disattivo!");
+					System.out.println(power.get(a) + "---------- disattivo!");
 					managePowerUp(power.get(a));
 					power.get(a).setActivate(false);
 					power.remove(a);
@@ -314,7 +345,7 @@ public class GameManager {
 					enemy.remove(i);
 					i--;
 				}
-			maxNumEnemyOnMap = 0;
+			numberOfEnemyOnMap = 0;
 			break;
 		case HELMET:
 			player.setProtection(true);
@@ -328,8 +359,10 @@ public class GameManager {
 					}
 			break;
 		case STAR:
-			if (player.getLevel() < 3)
+			if (player.getLevel() < 3){
 				player.setLevel(player.getLevel() + 1);
+			System.out.println("-----------------------------------------");
+			}
 			break;
 		case TANK:
 			player.setResume(player.getResume() + 1);
@@ -363,7 +396,9 @@ public class GameManager {
 					if (((EnemyTank) rocket.get(a).getNext()).getHealth() == 0) {
 						switchCurrTank(((EnemyTank) rocket.get(a).getNext()));
 						if (((EnemyTank) rocket.get(a).getNext()).isPowerUpOn())
-							addPowerUp(new Random().nextInt(6)); // PRIMA DI MORIRE GENERA UN POWERUP
+//							addPowerUp(new Random().nextInt(6)); // PRIMA DI MORIRE GENERA UN POWERUP
+							//TODO
+							addPowerUp(3); 
 						destroyEnemyTank((EnemyTank) rocket.get(a).getNext());
 					}
 
@@ -519,8 +554,8 @@ public class GameManager {
 				increaseCount(enemyT);
 				enemy.get(i).setAppearsInTheMap(false);
 				enemy.get(i).setDestroy(true);
-				maxNumEnemyOnMap--;
-				totalNumberOfEnemies--;
+				numberOfEnemyOnMap--;
+				enemy.remove(i);
 				break;
 			}
 	}
@@ -573,62 +608,53 @@ public class GameManager {
 
 	// -------------------------------------ENEMY-------------------------------------------
 
-	public void randomEnemy(int totalNumberOfEnemies) {
-		while (enemy.size()< totalNumberOfEnemies) {
-			selectPosition(totalNumberOfEnemies);
+	public void addEnemies(String T, int N){
+		
+		int []pos = {0, size/2-1, size-1}; //possibili pos per far spawnare enemies 
+		int c=0;
+		int saveLastPosition=0;
+		
+		while(c < N){
+			chooseEnemy(T,pos[saveLastPosition%3]);
+			saveLastPosition++;
+			c++;
 		}
 	}
 
-	private void selectPosition(int num) {
-		int value;
-		if ((num - enemy.size()) > 3) {
-			value = random.nextInt(4);
-		} else if ((num - enemy.size()) > 2) {
-			value = random.nextInt(3);
-		} else {
-			value = random.nextInt(2);
-		}
-		int position;
-		while (value != 0) {
-			position = 0;
-			switch (random.nextInt(3)) {
-			case 0:
-				position = 0;
-				break;
-			case 1:
-				position = size / 2;
-				break;
-			case 2:
-				position = size - 1;
-				break;
-			}
-			selectEnemy(position);
-			value--;
-		}
-	}
-
-	private void selectEnemy(int y) {
-		switch (random.nextInt(4)) {
-		case 0:
+	private void chooseEnemy(String typology, int y) {
+		switch (typology) {
+		case "basic":
 			enemy.add(new BasicTank(0, y, matrix, Direction.STOP));
 			break;
-		case 1:
+		case "fast":
 			enemy.add(new FastTank(0, y, matrix, Direction.STOP));
 			break;
-		case 2:
+		case "power":
 			enemy.add(new PowerTank(0, y, matrix, Direction.STOP));
 			break;
-		case 3:
+		case "armor":
 			enemy.add(new ArmorTank(0, y, matrix, Direction.STOP));
 			break;
 		}
-		// matrix.world[0][y] = enemy.get(contEnemy);
-		// contEnemy++;
 		if ((enemy.size() % numEnemyDropsPowerUp) == 0) {
 			enemy.get(enemy.size() - 1).setPowerUpOn(true);
 		}
 	}
 
+	public void spawnEnemy() {
+
+		int count=0;
+		while(numberOfEnemyOnMap < numberOfEnemyToSpawn){
+			if(!enemy.get(count).isAppearsInTheMap() && !enemy.get(count).isDestroy()){
+				enemy.get(count).setAppearsInTheMap(true);
+				numberOfEnemyOnMap++;
+			}
+			count++;
+		}
+	}
+
+	
+	//TODO da rivedere
 	public void enemyPositionRandom(int a) {
 			
 		if (updateAll) {
@@ -686,18 +712,6 @@ public class GameManager {
 			
 		} // POWERUP
 
-	}
-
-	public void bringUpTheEnemyInTheMap() {
-		for (int a = 0; a < enemy.size(); a++) {
-			if (maxNumEnemyOnMap < currentNumEnemyOnMap && !enemy.get(a).isAppearsInTheMap()
-					&& matrix.world[enemy.get(a).getX()][enemy.get(a).getY()] == null && !enemy.get(a).isDestroy()) {
-				enemy.get(a).setAppearsInTheMap(true);
-				maxNumEnemyOnMap++;
-			}
-			if (maxNumEnemyOnMap == currentNumEnemyOnMap) // ESCO DAL CICLO
-				break;
-		}
 	}
 
 	// -----------------------------SET & GET-----------------------------------------------
@@ -794,22 +808,6 @@ public class GameManager {
 		this.count = count;
 	}
 
-	public int getCurrentNumEnemyOnMap() {
-		return currentNumEnemyOnMap;
-	}
-
-	public void setCurrentNumEnemyOnMap(int currentNumEnemyOnMap) {
-		this.currentNumEnemyOnMap = currentNumEnemyOnMap;
-	}
-
-	public int getMaxNumEnemyOnMap() {
-		return maxNumEnemyOnMap;
-	}
-
-	public void setMaxNumEnemyOnMap(int maxNumEnemyOnMap) {
-		this.maxNumEnemyOnMap = maxNumEnemyOnMap;
-	}
-
 	public ArrayList<AbstractStaticObject> getRecoveryWall() {
 		return recoveryWall;
 	}
@@ -842,10 +840,6 @@ public class GameManager {
 		this.durationPowerUp = durationPowerUp;
 	}
 	
-	public int getTotalNumberOfEnemies() {
-		return totalNumberOfEnemies;
-	}
-
 	public boolean isFirst() {
 		return first;
 	}
@@ -853,4 +847,21 @@ public class GameManager {
 	public void setFirst(boolean first) {
 		this.first = first;
 	}
+
+	public int getNumberOfEnemyToSpawn() {
+		return numberOfEnemyToSpawn;
+	}
+	
+	public void setNumberOfEnemyToSpawn(int numberOfEnemyToSpawn) {
+		this.numberOfEnemyToSpawn = numberOfEnemyToSpawn;
+	}
+	
+	public int getNumberOfEnemyOnMap() {
+		return numberOfEnemyOnMap;
+	}
+	
+	public void setNumberOfEnemyOnMap(int numberOfEnemyOnMap) {
+		this.numberOfEnemyOnMap = numberOfEnemyOnMap;
+}
+
 }
