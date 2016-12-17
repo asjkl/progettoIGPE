@@ -145,6 +145,17 @@ public class GameManager {
 			setFirst(false);
 	}
 	
+	//SERVE PER CONVERTIRE LA SPEED AD UN INTERO
+	public int returnIntSpeed(Speed speed) {
+		if(speed==Speed.SLOW){
+			return 1;
+		}else if(speed==Speed.NORMAL){
+			return 2;
+		}else{
+			return 3;
+		}
+	}
+	
 	// ----------------------------------------POWERUP-------------------------------------
 
 	public void isDroppedOnTheMap(){
@@ -217,7 +228,7 @@ public class GameManager {
 			recoveryWall.clear();
 			break;
 		case STAR:
-			player.setLevel(player.getLevel() - 1);
+			player.setLevel(player.getLevel());
 			break;
 		case TIMER:
 			updateAll = true;
@@ -388,7 +399,7 @@ public class GameManager {
 					matrix.world[rocket.get(a).getX()][rocket.get(a).getY()] = rocket.get(a).getCurr();
 				// altrimenti metti curr del tank
 				else
-					matrix.world[rocket.get(a).getX()][rocket.get(a).getY()] = rocket.get(a).getTank().getCurr();
+					matrix.world[rocket.get(a).getX()][rocket.get(a).getY()] = rocket.get(a).getBeforeBordo();
 				
 
 				// distruggi enemy
