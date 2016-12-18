@@ -16,7 +16,7 @@ public class GameManager {
 	private int finalScore = 0;
 	private int count[];
 	
-	private int numberOfEnemyToSpawn = 4; 
+	private int numberOfEnemyToSpawn = 4;
 	private int numberOfEnemyOnMap = 0; 
 	
 	public Sounds sounds;
@@ -331,9 +331,9 @@ public class GameManager {
 		}
 		else if(p.getPowerUp() == Power.TIMER){
 			for(int i=0;i<enemy.size();i++){
-				if(enemy.get(i).isStopEnemie())
-					enemy.get(i).setStopEnemie(false);
-					enemy.get(i).setStopGraficaEnemy(false);
+				if(enemy.get(i).isStopEnemy())
+					enemy.get(i).setStopEnemy(false);
+					enemy.get(i).setStopEnemyGraphic(false);
 			}
 		}
 	}
@@ -375,7 +375,7 @@ public class GameManager {
 		case TIMER: //STOPPO SOLO NEMICI PRESENTI SULLA MAPPA IN QUEL MOMENTO
 			for(int i=0;i<enemy.size();i++){
 				if(enemy.get(i).isAppearsInTheMap()){
-					enemy.get(i).setStopEnemie(true);
+					enemy.get(i).setStopEnemy(true);
 				}
 			}
 			break;
@@ -407,7 +407,7 @@ public class GameManager {
 						if (((EnemyTank) rocket.get(a).getNext()).isPowerUpOn())
 //							addPowerUp(new Random().nextInt(6)); // PRIMA DI MORIRE GENERA UN POWERUP
 							//TODO
-							addPowerUp(5); 
+							addPowerUp(3); 
 						destroyEnemyTank((EnemyTank) rocket.get(a).getNext());
 					}
 
@@ -515,6 +515,7 @@ public class GameManager {
 		player.setDirection(Direction.STOP);
 		player.setCurr(null);
 		player.setDied(true);
+		player.setLevel(1);
 	}
 
 	private void destroyWall(Rocket rocket) {
@@ -668,7 +669,7 @@ public class GameManager {
 
 	public void enemyPositionRandom(int a) {
 			
-			if (enemy.get(a).isAppearsInTheMap()) {
+			if (enemy.get(a).isAppearsInTheMap() && !enemy.get(a).isStopEnemy()) { //stopEnemy TIMER
 				if (enemy.get(a).getCountStep() == 0 || enemy.get(a).isRecoverValue()) {
 					
 					enemy.get(a).setPositionDirection();
@@ -694,7 +695,7 @@ public class GameManager {
 
 	public void enemyUpdate(int a) {
 
-		if (enemy.get(a).isAppearsInTheMap() && !enemy.get(a).isStopEnemie()) {
+		if (enemy.get(a).isAppearsInTheMap() && !enemy.get(a).isStopEnemy()) {
 			if (enemy.get(a).getStep() >= enemy.get(a).getCountStep()) {
 				enemy.get(a).update();
 			

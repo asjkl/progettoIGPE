@@ -11,6 +11,9 @@ public class Rocket extends AbstractDynamicObject {
 	private boolean updateRocket;
 	private AbstractStaticObject beforeBordo;
 	
+	private boolean firstAnimationNo=true;
+	
+	
 	public Rocket(int x, int y, World world, Direction direction, AbstractDynamicObject tank) {
 		super(x, y, world, direction);
 		this.bordo = false;
@@ -103,5 +106,13 @@ public class Rocket extends AbstractDynamicObject {
 
 	public void setBeforeBordo(AbstractStaticObject beforeBordo) {
 		this.beforeBordo = beforeBordo;
+	}
+
+	public boolean isFirstAnimationNo() {
+		return firstAnimationNo;
+	}
+
+	public void setFirstAnimationNo(boolean firstAnimationNo) {
+		this.firstAnimationNo = firstAnimationNo;
 	}
 }
