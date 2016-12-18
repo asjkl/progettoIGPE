@@ -19,6 +19,7 @@ public class EnemyTank extends AbstractDynamicObject {
 	private boolean powerUpOn;
 	private boolean noUpdateG;
 	private boolean destroy;
+	private boolean stopEnemie; //powerUp TIMER
 
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health,
 			int point) {
@@ -38,6 +39,7 @@ public class EnemyTank extends AbstractDynamicObject {
 		powerUpOn = false;
 		noUpdateG=false;
 		destroy=false;
+		setStopEnemie(false);
 	}
 
 	@Override
@@ -306,5 +308,13 @@ public class EnemyTank extends AbstractDynamicObject {
 
 	public void setDestroy(boolean destroy) {
 		this.destroy = destroy;
+	}
+
+	public boolean isStopEnemie() {
+		return stopEnemie;
+	}
+
+	public void setStopEnemie(boolean stopEnemie) {
+		this.stopEnemie = stopEnemie;
 	}
 }

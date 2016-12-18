@@ -15,7 +15,6 @@ public class GameManager {
 	private static final int size = 20;
 	private int finalScore = 0;
 	private int count[];
-	private boolean updateAll = true;
 	
 	private int numberOfEnemyToSpawn = 4; 
 	private int numberOfEnemyOnMap = 0; 
@@ -132,7 +131,6 @@ public class GameManager {
 				try {
 					line = reader.readLine();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			} // while
@@ -205,28 +203,6 @@ public class GameManager {
 		}
 	}
 
-	private void managePowerUp(PowerUp p) {
-
-		if(p.getPowerUp() == Power.HELMET) {
-			player.setProtection(false);
-		}
-		else if(p.getPowerUp() == Power.SHOVEL) {
-				int x = 0;
-				for (int i = size - 2; i < size; i++){
-					for (int j = (size / 2) - 2; j <= size / 2; j++){
-						if (!(getMatrix().world[i][j] instanceof Flag)){
-							if (x < recoveryWall.size())
-								getMatrix().world[i][j] = recoveryWall.get(x++);
-						}
-					}
-				}
-				recoveryWall.clear();
-		}
-		else if(p.getPowerUp() == Power.TIMER){
-			updateAll = true;
-		}
-	}
-
 	private void extendAddPowerUp(PowerUp tmp){
 		
 		tmp.setDropTime(currentTime);
@@ -271,7 +247,7 @@ public class GameManager {
 			extendAddPowerUp(tmp);
 			break;
 		case 5:
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.TIMER, 10, true);
+			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.TIMER, 20, true);
 			extendAddPowerUp(tmp);
 			break;
 		default:
@@ -325,9 +301,9 @@ public class GameManager {
 			x = random.nextInt(size);
 			y = random.nextInt(size);
 
-			if (!(getMatrix().world[x][y] instanceof SteelWall) && !(getMatrix().world[x][y] instanceof PlayerTank)
-					&& !(getMatrix().world[x][y] instanceof EnemyTank) && !(getMatrix().world[x][y] instanceof PowerUp)
-					&& !(getMatrix().world[x][y] instanceof Rocket) && !(getMatrix().world[x][y] instanceof Flag)){		
+			if (!(getMatrix().world[x][y] instanceof PlayerTank) && !(getMatrix().world[x][y] instanceof EnemyTank) 
+					&& !(getMatrix().world[x][y] instanceof PowerUp) && !(getMatrix().world[x][y] instanceof Rocket) 
+					&& !(getMatrix().world[x][y] instanceof Flag)){		
 				flag = true;
 			}
 			if(getMatrix().world[x][y] instanceof Water) //se cade nell'acqua controlla
@@ -336,6 +312,31 @@ public class GameManager {
 		}
 	}
 
+	private void managePowerUp(PowerUp p) {
+
+		if(p.getPowerUp() == Power.HELMET) {
+			player.setProtection(false);
+		}
+		else if(p.getPowerUp() == Power.SHOVEL) {
+				int x = 0;
+				for (int i = size - 2; i < size; i++){
+					for (int j = (size / 2) - 2; j <= size / 2; j++){
+						if (!(getMatrix().world[i][j] instanceof Flag)){
+							if (x < recoveryWall.size())
+								getMatrix().world[i][j] = recoveryWall.get(x++);
+						}
+					}
+				}
+				recoveryWall.clear();
+		}
+		else if(p.getPowerUp() == Power.TIMER){
+			for(int i=0;i<enemy.size();i++){
+				if(enemy.get(i).isStopEnemie())
+					enemy.get(i).setStopEnemie(false);
+			}
+		}
+	}
+	
 	public void usePowerUp(PowerUp power) {
 
 		switch (power.getPowerUp()) {
@@ -370,8 +371,12 @@ public class GameManager {
 		case TANK:
 			player.setResume(player.getResume() + 1);
 			break;
-		case TIMER:
-			updateAll = false;
+		case TIMER: //STOPPO SOLO NEMICI PRESENTI SULLA MAPPA IN QUEL MOMENTO
+			for(int i=0;i<enemy.size();i++){
+				if(enemy.get(i).isAppearsInTheMap()){
+					enemy.get(i).setStopEnemie(true);
+				}
+			}
 			break;
 		}
 	}
@@ -401,7 +406,7 @@ public class GameManager {
 						if (((EnemyTank) rocket.get(a).getNext()).isPowerUpOn())
 //							addPowerUp(new Random().nextInt(6)); // PRIMA DI MORIRE GENERA UN POWERUP
 							//TODO
-							addPowerUp(3); 
+							addPowerUp(5); 
 						destroyEnemyTank((EnemyTank) rocket.get(a).getNext());
 					}
 
@@ -660,10 +665,8 @@ public class GameManager {
 		}
 	}
 
-	//TODO da rivedere
 	public void enemyPositionRandom(int a) {
 			
-		if (updateAll) {
 			if (enemy.get(a).isAppearsInTheMap()) {
 				if (enemy.get(a).getCountStep() == 0 || enemy.get(a).isRecoverValue()) {
 					
@@ -671,53 +674,46 @@ public class GameManager {
 					enemy.get(a).setCountStep(0);
 					enemy.get(a).setStep(0);
 					enemy.get(a).setNoUpdateG(false);
+					
 					do {
 						enemy.get(a).directionEnemyRandom();
-					} while (!enemy.get(a).positionCorrect() && !enemy.get(a).notSamePosition()
-							&& !enemy.get(a).allTrue());
+					} while (!enemy.get(a).positionCorrect() && !enemy.get(a).notSamePosition() && !enemy.get(a).allTrue());
 				
 					int tempCont;
 					do{
 					tempCont = random.nextInt(size);
 					}while(tempCont==matrix.getColumn());
+					
 					enemy.get(a).setStep(tempCont);
 				}
-				if (!(enemy.get(a).getNext() instanceof EnemyTank)&& updateAll == true);
+				if (!(enemy.get(a).getNext() instanceof EnemyTank));
 					createRocketTank(enemy.get(a).getDirection(), enemy.get(a));
 			}
-		}
-
 	}
 
 	public void enemyUpdate(int a) {
 
-		// AGGIORNA NEMICI SOLO SE NON E' STATO PRESO POWERUP TIMER
-		if (updateAll) {
-
-				if (enemy.get(a).isAppearsInTheMap()) {
-					if (enemy.get(a).getStep() >= enemy.get(a).getCountStep()) {
-						enemy.get(a).update();
-					
-						if (enemy.get(a).getX() == enemy.get(a).getTempX() && enemy.get(a).getY() == enemy.get(a).getTempY()) {
-							enemy.get(a).setRecoverValue(true);
-						} else {
-							enemy.get(a).setPositionXY();
-							matrix.world[enemy.get(a).getX()][enemy.get(a).getY()] = enemy.get(a);
-							enemy.get(a).setCountStep(enemy.get(a).getCountStep() + 1);
-							if (!enemy.get(a).positionCorrect()) 
-								enemy.get(a).setRecoverValue(true);
-							else 
-								enemy.get(a).setRecoverValue(false);
-						}
-					} else {
-						enemy.get(a).setCountStep(0);
-						enemy.get(a).setNoUpdateG(true);
-						matrix.world[enemy.get(a).getX()][enemy.get(a).getY()] = enemy.get(a);
-					}
-				}
+		if (enemy.get(a).isAppearsInTheMap() && !enemy.get(a).isStopEnemie()) {
+			if (enemy.get(a).getStep() >= enemy.get(a).getCountStep()) {
+				enemy.get(a).update();
 			
-		} // POWERUP
-
+				if (enemy.get(a).getX() == enemy.get(a).getTempX() && enemy.get(a).getY() == enemy.get(a).getTempY()) {
+					enemy.get(a).setRecoverValue(true);
+				} else {
+					enemy.get(a).setPositionXY();
+					matrix.world[enemy.get(a).getX()][enemy.get(a).getY()] = enemy.get(a);
+					enemy.get(a).setCountStep(enemy.get(a).getCountStep() + 1);
+					if (!enemy.get(a).positionCorrect()) 
+						enemy.get(a).setRecoverValue(true);
+					else 
+						enemy.get(a).setRecoverValue(false);
+				}
+			} else {
+				enemy.get(a).setCountStep(0);
+				enemy.get(a).setNoUpdateG(true);
+				matrix.world[enemy.get(a).getX()][enemy.get(a).getY()] = enemy.get(a);
+			}
+		}
 	}
 
 	// -----------------------------SET & GET-----------------------------------------------
@@ -828,14 +824,6 @@ public class GameManager {
 
 	public void setCurrentTime(long currentTime) {
 		this.currentTime = currentTime;
-	}
-
-	public boolean isUpdateAll() {
-		return updateAll;
-	}
-
-	public void setUpdateAll(boolean updateAll) {
-		this.updateAll = updateAll;
 	}
 
 	public int getDurationPowerUp() {
