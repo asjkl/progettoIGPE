@@ -19,12 +19,10 @@ public class EnemyTank extends AbstractDynamicObject {
 	private boolean powerUpOn;
 	private boolean noUpdateG;
 	private boolean destroy;
-	private boolean stopEnemie; //powerUp TIMER
-	
-	private boolean stopGraficaEnemy=false;
+	private boolean stopEnemy; //powerUp TIMER
+	private boolean stopEnemyGraphic; //powerUp TIMER
 
-	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health,
-			int point) {
+	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health, int point) {
 		super(x, y, world, speed, speedShot, direction, health);
 		this.point = point;
 		step = 0;
@@ -41,7 +39,8 @@ public class EnemyTank extends AbstractDynamicObject {
 		powerUpOn = false;
 		noUpdateG=false;
 		destroy=false;
-		setStopEnemie(false);
+		stopEnemy=false;
+		stopEnemyGraphic=false;
 	}
 
 	@Override
@@ -312,19 +311,19 @@ public class EnemyTank extends AbstractDynamicObject {
 		this.destroy = destroy;
 	}
 
-	public boolean isStopEnemie() {
-		return stopEnemie;
+	public boolean isStopEnemy() {
+		return stopEnemy;
 	}
 
-	public void setStopEnemie(boolean stopEnemie) {
-		this.stopEnemie = stopEnemie;
+	public void setStopEnemy(boolean stopEnemy) {
+		this.stopEnemy = stopEnemy;
 	}
 
-	public boolean isStopGraficaEnemy() {
-		return stopGraficaEnemy;
+	public boolean isStopEnemyGraphic() {
+		return stopEnemyGraphic;
 	}
 
-	public void setStopGraficaEnemy(boolean stopGraficaEnemy) {
-		this.stopGraficaEnemy = stopGraficaEnemy;
+	public void setStopEnemyGraphic(boolean stopEnemyGraphic) {
+		this.stopEnemyGraphic = stopEnemyGraphic;
 	}
 }
