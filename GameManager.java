@@ -333,6 +333,7 @@ public class GameManager {
 			for(int i=0;i<enemy.size();i++){
 				if(enemy.get(i).isStopEnemie())
 					enemy.get(i).setStopEnemie(false);
+					enemy.get(i).setStopGraficaEnemy(false);
 			}
 		}
 	}
