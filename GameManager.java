@@ -5,20 +5,22 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-//import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class GameManager {
 	
 	private int x;
 	private int y;
+	private long currentTime;
 	private static final int size = 20;
 	private int finalScore = 0;
 	private int count[];
+	private boolean updateAll = true;
 	
 	private int numberOfEnemyToSpawn = 4; 
 	private int numberOfEnemyOnMap = 0; 
 	
+	public Sounds sounds;
 	private Random random;
 	private World matrix;
 	private PlayerTank player;
@@ -27,13 +29,11 @@ public class GameManager {
 	private ArrayList<Rocket> rocket;
 	private Flag flag;
 	private ArrayList<AbstractStaticObject> recoveryWall;
-	private long currentTime;
-	private boolean updateAll = true;
 	
 	//POWERUPS
 	private int durationPowerUp = 20;
 	private int numEnemyDropsPowerUp = 1; //indica ogni quanti enemie far cadere powerUp 
-	private int xTmp = -1; //tutti e 3 usati in addPowerUp
+	private int xTmp = -1; 
 	private int yTmp = -1; 
 	private Direction dir; 
 	
@@ -45,6 +45,7 @@ public class GameManager {
 		power = new ArrayList<>();
 		random = new Random();
 		recoveryWall = new ArrayList<>();
+		sounds = new Sounds();
 		count = new int[4];
 
 		for (int i = 0; i < count.length; i++) //conta occorrenze enemies?
@@ -246,6 +247,8 @@ public class GameManager {
 	public void addPowerUp(int t) {
 		PowerUp tmp = null;
 		foundPosition();
+		//TODO sounds powerUpAppear
+		sounds.powerUpAppear();
 		switch (t) {
 		case 0:
 			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.GRENADE, 0, true);
@@ -576,7 +579,11 @@ public class GameManager {
 
 		if ((tank instanceof PlayerTank && player.getLevel() < 3 && player.getContRocket() == 0)
 				|| (tank instanceof PlayerTank && player.getLevel() > 1 && player.getContRocket() < 2)
-				|| (tank instanceof EnemyTank && tank.getContRocket() == 0)) {
+				|| (tank instanceof EnemyTank && tank.getContRocket() == 0)){
+			
+		//TODO SOUND ROCKETSHOT
+			sounds.rocketShot();
+				
 			switch (tmp) {
 			case UP:
 				rocket.add(new Rocket(tank.getX(), tank.getY(), matrix, Direction.UP, tank));
@@ -653,7 +660,6 @@ public class GameManager {
 		}
 	}
 
-	
 	//TODO da rivedere
 	public void enemyPositionRandom(int a) {
 			
