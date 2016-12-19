@@ -658,7 +658,7 @@ public class GameManager {
 	public void spawnEnemy() {
 
 		int count=0;
-		while(numberOfEnemyOnMap < numberOfEnemyToSpawn){
+		while(count < enemy.size() && numberOfEnemyOnMap < numberOfEnemyToSpawn){
 			if(!enemy.get(count).isAppearsInTheMap() && !enemy.get(count).isDestroy()){
 				enemy.get(count).setAppearsInTheMap(true);
 				numberOfEnemyOnMap++;
