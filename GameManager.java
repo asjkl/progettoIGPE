@@ -64,13 +64,13 @@ public class GameManager {
 				String tmp;
 				while (st.hasMoreTokens()) {
 
-					tmp = st.nextToken();
+					 tmp = st.nextToken();
 
 					switch (tmp) {
 					case ("null"):
 						getMatrix().world[i][j] = null;
 						break;
-					 case ("[//]"):
+					case ("[//]"):
 						getMatrix().world[i][j] = new SteelWall(i, j, getMatrix(), 4);
 						break;
 					case ("@@@@"):
@@ -590,7 +590,8 @@ public class GameManager {
 			
 		//TODO SOUND ROCKETSHOT
 			sounds.rocketShot();
-				
+			
+			
 			switch (tmp) {
 			case UP:
 				rocket.add(new Rocket(tank.getX(), tank.getY(), matrix, Direction.UP, tank));
@@ -658,7 +659,7 @@ public class GameManager {
 	public void spawnEnemy() {
 
 		int count=0;
-		while(count < enemy.size() && numberOfEnemyOnMap < numberOfEnemyToSpawn){
+		while(count<enemy.size() && numberOfEnemyOnMap < numberOfEnemyToSpawn){
 			if(!enemy.get(count).isAppearsInTheMap() && !enemy.get(count).isDestroy()){
 				enemy.get(count).setAppearsInTheMap(true);
 				numberOfEnemyOnMap++;
