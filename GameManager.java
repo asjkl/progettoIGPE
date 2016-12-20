@@ -570,6 +570,9 @@ public class GameManager {
 		//TODO SOUND ROCKETSHOT
 			sounds.rocketShot();
 			
+			if(tmp == Direction.STOP)
+				tmp=Direction.UP;
+			
 			rocket.add(new Rocket(tank.getX(), tank.getY(), matrix, tmp, tank));
 	
 			tank.setContRocket(tank.getContRocket() + 1); // conta rocket

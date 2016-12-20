@@ -1,7 +1,5 @@
 package progettoIGPE.davide.giovanni.unical2016;
 
-import java.awt.Point;
-
 public class Rocket extends AbstractDynamicObject {
 
 	private boolean bordo; // se trovo bordo
