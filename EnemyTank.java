@@ -21,6 +21,10 @@ public class EnemyTank extends AbstractDynamicObject {
 	private boolean destroy;
 	private boolean stopEnemy; //powerUp TIMER
 	private boolean stopEnemyGraphic; //powerUp TIMER
+	
+	//usato per la grafica
+//	private int cont;
+//	private boolean updateEnemy;
 
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health, int point) {
 		super(x, y, world, speed, speedShot, direction, health);
@@ -41,6 +45,15 @@ public class EnemyTank extends AbstractDynamicObject {
 		destroy=false;
 		stopEnemy=false;
 		stopEnemyGraphic=false;
+		
+		setUpdateObject(true);
+		if(speed==Speed.SLOW){
+			this.setCont(1);
+		}else if(speed==Speed.NORMAL){
+			this.setCont(getSizePixel()/2);
+		}else{			
+			this.setCont((getSizePixel()/2)+5);
+		}
 	}
 
 	@Override

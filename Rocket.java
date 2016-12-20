@@ -6,13 +6,10 @@ public class Rocket extends AbstractDynamicObject {
 
 	private boolean bordo; // se trovo bordo
 	private AbstractDynamicObject tank; // rocket appartenenza
-	private Point pixel;
-	private int cont;
-	private boolean updateRocket;
 	private AbstractStaticObject beforeBordo;
 	
+	//PER GRAFICA
 	private boolean firstAnimationNo;
-	
 	
 	public Rocket(int x, int y, World world, Direction direction, AbstractDynamicObject tank) {
 		super(x, y, world, direction);
@@ -21,16 +18,14 @@ public class Rocket extends AbstractDynamicObject {
 		curr = tank; //quando viene creato il Rocket il suo curr sarà il TANK
 		this.setBeforeBordo(tank.getCurr());
 		
-		setPixel(new Point(x*35, y*35));
-		this.updateRocket=true;
 		this.firstAnimationNo=true;
-		
+		setUpdateObject(true);
 		if(tank.getSpeedShot()==Speed.SLOW){
-			this.cont=1;
+			this.setCont(1);
 		}else if(tank.getSpeedShot()==Speed.NORMAL){
-			this.cont=17;
+			this.setCont(getSizePixel()/2);
 		}else{			
-			this.cont=22;
+			this.setCont((getSizePixel()/2)+5);
 		}
 	}
 
@@ -74,30 +69,6 @@ public class Rocket extends AbstractDynamicObject {
 
 	public void setTank(AbstractDynamicObject tank) {
 		this.tank = tank;
-	}
-	
-	public int getCont() {
-		return cont;
-	}
-
-	public void setCont(int cont) {
-		this.cont = cont;
-	}
-
-	public boolean isUpdateRocket() {
-		return updateRocket;
-	}
-
-	public void setUpdateRocket(boolean updateRocket) {
-		this.updateRocket = updateRocket;
-	}
-
-	public Point getPixel() {
-		return pixel;
-	}
-
-	public void setPixel(Point pixel) {
-		this.pixel = pixel;
 	}
 
 	public AbstractStaticObject getBeforeBordo() {

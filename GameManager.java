@@ -389,7 +389,7 @@ public class GameManager {
 	public void updateRocket(int a) {
 		Rocket r = null; // rocket temporaneo
 			rocket.get(a).update();
-			rocket.get(a).setUpdateRocket(false);
+			rocket.get(a).setUpdateObject(false);
 			
 			if (destroyRocket(rocket.get(a))) {
 				countRockets(rocket.get(a));
@@ -570,25 +570,8 @@ public class GameManager {
 		//TODO SOUND ROCKETSHOT
 			sounds.rocketShot();
 			
-			switch (tmp) {
-			case UP:
-				rocket.add(new Rocket(tank.getX(), tank.getY(), matrix, Direction.UP, tank));
-				break;
-			case DOWN:
-				rocket.add(new Rocket(tank.getX(), tank.getY(), matrix, Direction.DOWN, tank));
-				break;
-			case LEFT:
-				rocket.add(new Rocket(tank.getX(), tank.getY(), matrix, Direction.LEFT, tank));
-				break;
-			case RIGHT:
-				rocket.add(new Rocket(tank.getX(), tank.getY(), matrix, Direction.RIGHT, tank));
-				break;
-			case STOP:
-				rocket.add(new Rocket(tank.getX(), tank.getY(), matrix, Direction.UP, tank));
-				break;
-			default:
-				break;
-			}
+			rocket.add(new Rocket(tank.getX(), tank.getY(), matrix, tmp, tank));
+	
 			tank.setContRocket(tank.getContRocket() + 1); // conta rocket
 		}
 	}
