@@ -22,7 +22,6 @@ public class Rocket extends AbstractDynamicObject {
 		this.setBeforeBordo(tank.getCurr());
 		
 		setPixel(new Point(x*35, y*35));
-		this.cont=1;
 		this.updateRocket=true;
 		this.firstAnimationNo=true;
 		

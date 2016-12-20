@@ -216,6 +216,8 @@ public class GameManager {
 		power.add(tmp);
 		if(getMatrix().world[getX()][getY()] instanceof BrickWall)
 			((BrickWall)getMatrix().world[getX()][getY()]).setBefore(tmp);
+		else if(getMatrix().world[getX()][getY()] instanceof SteelWall)
+			((SteelWall)getMatrix().world[getX()][getY()]).setBefore(tmp);
 		else
 			getMatrix().world[tmp.getX()][tmp.getY()] = tmp; //attenzione al tmp.getX();
 	}
@@ -503,7 +505,6 @@ public class GameManager {
 			((Wall) rocket.getNext()).setHealth(((Wall) rocket.getNext()).getHealth() - 2);
 		else if (!(rocket.getNext() instanceof SteelWall)) // e non è SteelWall
 			((Wall) rocket.getNext()).setHealth(((Wall) rocket.getNext()).getHealth() - 1);
-
 	}
 
 	private void damageAndDestroyPlayerTank() {
@@ -520,37 +521,15 @@ public class GameManager {
 
 	private void destroyWall(Rocket rocket) {
 		
-		//se BRICKWALL allora metto il suo before che potrebbe essere un PowerUp
-		//altriemtni se STEELWALL metto null
-		
-		switch (rocket.getDirection()) {
-		case UP:
-			if(matrix.world[rocket.getX() - 1][rocket.getY()] instanceof BrickWall)
-				matrix.world[rocket.getX() - 1][rocket.getY()] = ((BrickWall)matrix.world[rocket.getX() - 1][rocket.getY()]).getBefore();
-			else 
-				matrix.world[rocket.getX() - 1][rocket.getY()] = null;
-			break;
-		case DOWN:
-			if(matrix.world[rocket.getX() + 1][rocket.getY()] instanceof BrickWall)
-				matrix.world[rocket.getX() + 1][rocket.getY()] = ((BrickWall)matrix.world[rocket.getX() + 1][rocket.getY()]).getBefore();
-			else 
-				matrix.world[rocket.getX() + 1][rocket.getY()] = null;
-			break;
-		case RIGHT:
-			if(matrix.world[rocket.getX()][rocket.getY() + 1] instanceof BrickWall)
-				matrix.world[rocket.getX()][rocket.getY() + 1] = ((BrickWall)matrix.world[rocket.getX()][rocket.getY() + 1]).getBefore();
-			else 
-				matrix.world[rocket.getX()][rocket.getY() + 1] = null;
-			break;
-		case LEFT:
-			if(matrix.world[rocket.getX()][rocket.getY() - 1] instanceof BrickWall)
-				matrix.world[rocket.getX()][rocket.getY() - 1] = ((BrickWall)matrix.world[rocket.getX()][rocket.getY() - 1]).getBefore();
-			else
-				matrix.world[rocket.getX()][rocket.getY() - 1] = null;
-			break;
-		default:
-			break;
-		}
+		int xR = rocket.getNext().getX();
+		int yR = rocket.getNext().getY();
+	
+			if(matrix.world[xR][yR] instanceof BrickWall)
+				matrix.world[xR][yR] = ((BrickWall)matrix.world[xR][yR]).getBefore();
+			else if(matrix.world[xR][yR] instanceof SteelWall)
+					matrix.world[xR][yR] = ((SteelWall)matrix.world[xR][yR]).getBefore();
+				else 
+					matrix.world[xR][yR] = null;
 	}
 
 	private void destroyEnemyTank(EnemyTank enemyT) {
@@ -590,7 +569,6 @@ public class GameManager {
 			
 		//TODO SOUND ROCKETSHOT
 			sounds.rocketShot();
-			
 			
 			switch (tmp) {
 			case UP:

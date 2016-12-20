@@ -13,7 +13,7 @@ public class PlayerTank extends AbstractDynamicObject {
 		protection = false;
 		resume = 3;
 		point = 0;
-		level = 1;
+		level = 2;
 		died=false;
 	}
 
