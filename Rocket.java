@@ -11,7 +11,7 @@ public class Rocket extends AbstractDynamicObject {
 	private boolean updateRocket;
 	private AbstractStaticObject beforeBordo;
 	
-	private boolean firstAnimationNo=true;
+	private boolean firstAnimationNo;
 	
 	
 	public Rocket(int x, int y, World world, Direction direction, AbstractDynamicObject tank) {
@@ -19,6 +19,12 @@ public class Rocket extends AbstractDynamicObject {
 		this.bordo = false;
 		this.tank = tank;
 		curr = tank; //quando viene creato il Rocket il suo curr sarà il TANK
+		this.setBeforeBordo(tank.getCurr());
+		
+		setPixel(new Point(x*35, y*35));
+		this.cont=1;
+		this.updateRocket=true;
+		this.firstAnimationNo=true;
 		
 		if(tank.getSpeedShot()==Speed.SLOW){
 			this.cont=1;
@@ -27,11 +33,6 @@ public class Rocket extends AbstractDynamicObject {
 		}else{			
 			this.cont=22;
 		}
-		this.setBeforeBordo(tank.getCurr());
-		
-		setPixel(new Point(x*35, y*35));
-		this.cont=1;
-		this.updateRocket=true;
 	}
 
 	@Override
