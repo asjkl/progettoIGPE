@@ -1,5 +1,7 @@
 package progettoIGPE.davide.giovanni.unical2016;
 
+import java.awt.Point;
+
 public abstract class AbstractDynamicObject extends AbstractStaticObject implements DynamicObject {
 	private Speed speed;
 	private Speed speedShot;
@@ -7,24 +9,34 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	private int health;
 	protected AbstractStaticObject curr;
 	protected AbstractStaticObject next;
-	private int contRocket = 0;
+	private int contRocket;
 	public boolean ok; //ok posso andare 
+	
+	//usato per la grafica
+	private int cont; //conta pixel
+	private boolean updateObject; //switcha dalla logica alla grafica
+	private Point pixelPosition;
+	private int sizePixel=35;
 
-	public AbstractDynamicObject(int x, int y, World mondo, Speed speed, Speed speedShot, Direction direction,
-			int health) {
+	public AbstractDynamicObject(int x, int y, World mondo, Speed speed, Speed speedShot, Direction direction,int health) {
 		super(x, y, mondo);
 		this.speed = speed;
 		this.direction = direction;
 		this.speedShot = speedShot;
 		this.health = health;
-		this.setContRocket(0);
+		contRocket=0;
 		curr = null;
 		next = null;
+		
+		pixelPosition=new Point(x*sizePixel, y*sizePixel);
 	}
 
-	public AbstractDynamicObject(int x, int y, World mondo, Direction direction) {
+	//COSTRUTTORE SOLO PER IL ROCKET
+	public AbstractDynamicObject(int x, int y, World mondo, Direction direction) {		
 		super(x, y, mondo);
 		this.direction = direction;
+		
+		pixelPosition=new Point(x*sizePixel, y*sizePixel);
 	}
 
 	public void update() {
@@ -150,4 +162,36 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		this.contRocket = contRocket;
 	}
 
+	public boolean isUpdateObject() {
+		return updateObject;
+	}
+
+	public void setUpdateObject(boolean updateObject) {
+		this.updateObject = updateObject;
+	}
+
+	public int getCont() {
+		return cont;
+	}
+
+	public void setCont(int cont) {
+		this.cont = cont;
+	}
+
+	public Point getPixelPosition() {
+		return pixelPosition;
+	}
+
+	public void setPixelPosition(Point pixelPosition) {
+		this.pixelPosition = pixelPosition;
+	}
+
+	public int getSizePixel() {
+		return sizePixel;
+	}
+
+	public void setSizePixel(int sizePixel) {
+		this.sizePixel = sizePixel;
+	}
+	
 }
