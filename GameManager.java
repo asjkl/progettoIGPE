@@ -305,7 +305,7 @@ public class GameManager {
 
 			if (!(getMatrix().world[x][y] instanceof PlayerTank) && !(getMatrix().world[x][y] instanceof EnemyTank) 
 					&& !(getMatrix().world[x][y] instanceof PowerUp) && !(getMatrix().world[x][y] instanceof Rocket) 
-					&& !(getMatrix().world[x][y] instanceof Flag)){		
+					&& !(getMatrix().world[x][y] instanceof Flag) && getMatrix().world[x][y] !=null ){		
 				flag = true;
 			}
 			if(getMatrix().world[x][y] instanceof Water) //se cade nell'acqua controlla
