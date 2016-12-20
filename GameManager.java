@@ -167,12 +167,15 @@ public class GameManager {
 						getMatrix().world[power.get(a).getX()][power.get(a).getY()] = null;
 						getMatrix().world [((Water)power.get(a).getBefore()).getX()]
 								          [((Water)power.get(a).getBefore()).getY()] = power.get(a).getBefore();
-						
 					}
 					else{
-						getMatrix().world[power.get(a).getX()][power.get(a).getY()] = power.get(a).getBefore();
+						
 						if(power.get(a).getBefore() instanceof BrickWall)
-						((BrickWall)power.get(a).getBefore()).setBefore(null); //se PowerUp scaduto deve essere cancellato
+							((BrickWall)power.get(a).getBefore()).setBefore(null); //se PowerUp scaduto deve essere cancellato
+						else if(power.get(a).getBefore() instanceof SteelWall)
+							((SteelWall)power.get(a).getBefore()).setBefore(null); //se PowerUp scaduto deve essere cancellato
+						else
+							getMatrix().world[power.get(a).getX()][power.get(a).getY()] = power.get(a).getBefore();
 					}
 					power.remove(a);
 					a--;
@@ -305,7 +308,7 @@ public class GameManager {
 
 			if (!(getMatrix().world[x][y] instanceof PlayerTank) && !(getMatrix().world[x][y] instanceof EnemyTank) 
 					&& !(getMatrix().world[x][y] instanceof PowerUp) && !(getMatrix().world[x][y] instanceof Rocket) 
-					&& !(getMatrix().world[x][y] instanceof Flag) && getMatrix().world[x][y] !=null ){		
+					&& !(getMatrix().world[x][y] instanceof Flag)){		
 				flag = true;
 			}
 			if(getMatrix().world[x][y] instanceof Water) //se cade nell'acqua controlla
@@ -406,10 +409,6 @@ public class GameManager {
 				if (rocket.get(a).getNext() instanceof EnemyTank && rocket.get(a).getTank() instanceof PlayerTank)
 					if (((EnemyTank) rocket.get(a).getNext()).getHealth() == 0) {
 						switchCurrTank(((EnemyTank) rocket.get(a).getNext()));
-						if (((EnemyTank) rocket.get(a).getNext()).isPowerUpOn())
-//							addPowerUp(new Random().nextInt(6)); // PRIMA DI MORIRE GENERA UN POWERUP
-							//TODO
-							addPowerUp(3); 
 						destroyEnemyTank((EnemyTank) rocket.get(a).getNext());
 					}
 
@@ -459,7 +458,7 @@ public class GameManager {
 
 		if (rocket.getNext() instanceof Wall) {
 			damageWall(rocket);
-			if (((Wall) rocket.getNext()).getHealth() == 0)
+			if (((Wall) rocket.getNext()).getHealth() <= 0)
 				destroyWall(rocket);
 			return true;
 		}
@@ -534,6 +533,9 @@ public class GameManager {
 
 	private void destroyEnemyTank(EnemyTank enemyT) {
 
+		if (enemyT.isPowerUpOn())
+			addPowerUp(new Random().nextInt(6)); // PRIMA DI MORIRE GENERA UN POWERUP 
+		
 		matrix.world[enemyT.getX()][enemyT.getY()] = enemyT.getCurr();
 
 		// distruggi enemy dalla lista
