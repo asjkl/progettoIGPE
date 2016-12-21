@@ -565,8 +565,8 @@ public class GameManager {
 
 	public void createRocketTank(int x, int y, Direction tmp, AbstractDynamicObject tank) {
 
-		if ((tank instanceof PlayerTank && player.getLevel() < 3 && player.getContRocket() == 0)
-				|| (tank instanceof PlayerTank && player.getLevel() > 1 && player.getContRocket() < 2)
+		if ((tank instanceof PlayerTank && player.getLevel() > 1 && player.getContRocket() < 2)
+				||(tank instanceof PlayerTank && player.getLevel() == 1 && player.getContRocket() == 0)
 				|| (tank instanceof EnemyTank && tank.getContRocket() == 0)){
 			
 		//TODO SOUND ROCKETSHOT
