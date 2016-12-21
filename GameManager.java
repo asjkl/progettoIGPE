@@ -563,7 +563,7 @@ public class GameManager {
 		}
 	}
 
-	public void createRocketTank(Direction tmp, AbstractDynamicObject tank) {
+	public void createRocketTank(int x, int y, Direction tmp, AbstractDynamicObject tank) {
 
 		if ((tank instanceof PlayerTank && player.getLevel() < 3 && player.getContRocket() == 0)
 				|| (tank instanceof PlayerTank && player.getLevel() > 1 && player.getContRocket() < 2)
@@ -575,8 +575,8 @@ public class GameManager {
 			if(tmp == Direction.STOP) //serve quando nasce playerTank, essendo STOP spara verso l alto
 				tmp=Direction.UP;
 			
-			rocket.add(new Rocket(tank.getX(), tank.getY(), matrix, tmp, tank));
-	
+			rocket.add(new Rocket(x, y, matrix, tmp, tank));
+		
 			tank.setContRocket(tank.getContRocket() + 1); // conta rocket	
 		}
 	}
@@ -656,7 +656,7 @@ public class GameManager {
 					enemy.get(a).setStep(tempCont);
 				}
 				if (!(enemy.get(a).getNext() instanceof EnemyTank));
-					createRocketTank(enemy.get(a).getDirection(), enemy.get(a));
+					createRocketTank(enemy.get(a).getX(),enemy.get(a).getY(),enemy.get(a).getDirection(), enemy.get(a));
 			}
 	}
 
