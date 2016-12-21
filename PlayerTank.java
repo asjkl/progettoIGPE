@@ -13,7 +13,7 @@ public class PlayerTank extends AbstractDynamicObject {
 		protection = false;
 		resume = 3;
 		point = 0;
-		level = 1;
+		level = 2;
 		died=false;
 		
 		if(this.getSpeed()==Speed.SLOW){
@@ -105,5 +105,4 @@ public class PlayerTank extends AbstractDynamicObject {
 	public void setDied(boolean died) {
 		this.died = died;
 	}
-
 }

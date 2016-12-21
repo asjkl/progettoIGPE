@@ -17,7 +17,7 @@ public class GameManager {
 	private int count[];
 	
 	private int numberOfEnemyToSpawn = 4;
-	private int numberOfEnemyOnMap = 0; 
+	private int numberOfEnemyOnMap = 0;  
 	
 	public Sounds sounds;
 	private Random random;
@@ -308,7 +308,7 @@ public class GameManager {
 
 			if (!(getMatrix().world[x][y] instanceof PlayerTank) && !(getMatrix().world[x][y] instanceof EnemyTank) 
 					&& !(getMatrix().world[x][y] instanceof PowerUp) && !(getMatrix().world[x][y] instanceof Rocket) 
-					&& !(getMatrix().world[x][y] instanceof Flag)){		
+					&& !(getMatrix().world[x][y] instanceof Flag && getMatrix().world[x][y] != null)){		
 				flag = true;
 			}
 			if(getMatrix().world[x][y] instanceof Water) //se cade nell'acqua controlla
@@ -572,12 +572,12 @@ public class GameManager {
 		//TODO SOUND ROCKETSHOT
 			sounds.rocketShot();
 			
-			if(tmp == Direction.STOP)
+			if(tmp == Direction.STOP) //serve quando nasce playerTank, essendo STOP spara verso l alto
 				tmp=Direction.UP;
 			
 			rocket.add(new Rocket(tank.getX(), tank.getY(), matrix, tmp, tank));
 	
-			tank.setContRocket(tank.getContRocket() + 1); // conta rocket
+			tank.setContRocket(tank.getContRocket() + 1); // conta rocket	
 		}
 	}
 
