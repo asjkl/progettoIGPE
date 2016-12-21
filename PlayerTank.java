@@ -8,11 +8,6 @@ public class PlayerTank extends AbstractDynamicObject {
 	private int point;
 	private boolean died;
 	
-	//DOPPIO ROCKET
-	private int xTmp;
-	private int yTmp;
-	private Direction directionTmp;
-
 	public PlayerTank(int x, int y, World world) {
 		super(x, y, world, Speed.NORMAL, Speed.NORMAL, Direction.STOP, 1);
 		protection = false;
@@ -20,9 +15,6 @@ public class PlayerTank extends AbstractDynamicObject {
 		point = 0;
 		level = 2;
 		died=false;
-		xTmp=-1;
-		yTmp=-1;
-		directionTmp=null;
 		
 		if(this.getSpeed()==Speed.SLOW){
 			this.setCont(1);
@@ -112,29 +104,5 @@ public class PlayerTank extends AbstractDynamicObject {
 
 	public void setDied(boolean died) {
 		this.died = died;
-	}
-
-	public Direction getDirectionTmp() {
-		return directionTmp;
-	}
-
-	public void setDirectionTmp(Direction directionTmp) {
-		this.directionTmp = directionTmp;
-	}
-
-	public int getyTmp() {
-		return yTmp;
-	}
-
-	public void setyTmp(int yTmp) {
-		this.yTmp = yTmp;
-	}
-
-	public int getxTmp() {
-		return xTmp;
-	}
-
-	public void setxTmp(int xTmp) {
-		this.xTmp = xTmp;
 	}
 }
