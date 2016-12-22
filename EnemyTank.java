@@ -21,10 +21,6 @@ public class EnemyTank extends AbstractDynamicObject {
 	private boolean destroy;
 	private boolean stopEnemy; //powerUp TIMER
 	private boolean stopEnemyGraphic; //powerUp TIMER
-	
-	//usato per la grafica
-//	private int cont;
-//	private boolean updateEnemy;
 
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health, int point) {
 		super(x, y, world, speed, speedShot, direction, health);

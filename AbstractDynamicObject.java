@@ -27,7 +27,6 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		contRocket=0;
 		curr = null;
 		next = null;
-		
 		pixelPosition=new Point(x*sizePixel, y*sizePixel);
 	}
 
@@ -35,7 +34,6 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	public AbstractDynamicObject(int x, int y, World mondo, Direction direction) {		
 		super(x, y, mondo);
 		this.direction = direction;
-		
 		pixelPosition=new Point(x*sizePixel, y*sizePixel);
 	}
 

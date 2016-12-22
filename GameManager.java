@@ -15,7 +15,7 @@ public class GameManager {
 	private static final int size = 20;
 	private int finalScore = 0;
 	private int count[];
-	private int numberOfEnemyToSpawn = 4;
+	private int numberOfEnemyToSpawn = 1;
 	private int numberOfEnemyOnMap = 0;
 
 	public Sounds sounds;
@@ -395,18 +395,18 @@ public class GameManager {
 			rocket.setUpdateObject(false);
 
 			if (destroyRocket(rocket)) {
-				rocket.setDestroy(true);
+				destroyRocketFinally(rocket);
 			}
 	}
 
 	private boolean destroyRocket(Rocket rocket) {
 
-		if (rocket.isBordo() || rocket.getNext() instanceof PlayerTank){
+		if (rocket.isBordo()){
 			return true;
 		}
 
 		if( rocket.getNext() instanceof Rocket ){
-			((Rocket)rocket.getNext()).setDestroy(true);
+			destroyRocketFinally(((Rocket)rocket.getNext()));
 			return true;
 		}
 
@@ -459,18 +459,14 @@ public class GameManager {
 
 	public void destroyRocketFinally(Rocket r){
 
-		if(r.isDestroy()){
 			countRockets(r);
 
-			// aggiorna rocket se curr non è un tank mettendo curr del rocket
 			if (!(r.getCurr() instanceof PlayerTank) && !(r.getCurr() instanceof EnemyTank))
 				matrix.world[r.getX()][r.getY()] = r.getCurr();
-			else  // altrimenti metti curr del tank
+			else  
 				matrix.world[r.getX()][r.getY()] = r.getBeforeBordo();
-
+			
 			rocket.remove(r);
-		}
-
 	}
 
 	public void countRockets(Rocket r) {

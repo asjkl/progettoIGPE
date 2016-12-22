@@ -5,7 +5,6 @@ public class Rocket extends AbstractDynamicObject {
 	private boolean bordo; // se trovo bordo
 	private AbstractDynamicObject tank; // rocket appartenenza
 	private AbstractStaticObject beforeBordo;
-	private boolean destroy;
 	
 	//PER GRAFICA
 	private boolean firstAnimationNo;
@@ -17,7 +16,6 @@ public class Rocket extends AbstractDynamicObject {
 		this.tank = tank;
 		curr = tank; //quando viene creato il Rocket il suo curr sarà il TANK
 		beforeBordo = tank.getCurr();
-		destroy = false;
 		this.firstAnimationNo=true;
 		
 		if(tank.getSpeedShot()==Speed.SLOW){
@@ -55,7 +53,7 @@ public class Rocket extends AbstractDynamicObject {
 	@Override
 	public void update() {
 		super.update();
-		changeNextForSecondRocketOnlyRocketPlayer();
+		//changeNextForSecondRocketOnlyRocketPlayer();
 		getWorld().world[getX()][getY()] = this;
 	}
 	
@@ -117,15 +115,5 @@ public class Rocket extends AbstractDynamicObject {
 
 	public void setRocketForPlayer(boolean rocketForPlayer) {
 		this.rocketForPlayer = rocketForPlayer;
-	}
-
-
-	public boolean isDestroy() {
-		return destroy;
-	}
-
-
-	public void setDestroy(boolean destroy) {
-		this.destroy = destroy;
 	}
 }
