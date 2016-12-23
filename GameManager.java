@@ -37,7 +37,7 @@ public class GameManager {
 
 	public GameManager() {
 
-		matrix = new World(size, size);
+		 matrix = new World(size, size);
 		enemy = new ArrayList<>();
 		rocket = new ArrayList<>();
 		power = new ArrayList<>();
