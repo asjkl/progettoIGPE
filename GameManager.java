@@ -368,19 +368,11 @@ public class GameManager {
 		switch (power.getPowerUp()) {
 		case GRENADE:
 			
-//			for (int i = 0; i < enemy.size(); i++)
-//				if (enemy.get(i).isAppearsInTheMap()){
-//					destroyEnemyTank(enemy.get(i));
-			
 			for (int i = 0; i < enemy.size(); i++)
-				if (enemy.get(i).isAppearsInTheMap()) {
-					matrix.world[enemy.get(i).getX()][enemy.get(i).getY()] = enemy.get(i).getCurr();
-					enemy.get(i).setAppearsInTheMap(false);
-					enemy.remove(i);
+				if (enemy.get(i).isAppearsInTheMap()){
+					destroyEnemyTank(enemy.get(i));
 					i--;
 				}
-			numberOfEnemyOnMap = 0;
-			numberOfEnemyReadyToSpwan= 0;
 			
 			break;
 		case HELMET:
@@ -566,8 +558,7 @@ public class GameManager {
 		
 		//GENERA POWERUP
 		if (enemyT.isPowerUpOn())
-//			addPowerUp(new Random().nextInt(6)); 
-			addPowerUp(0);  //GREANDE
+			addPowerUp(new Random().nextInt(6)); 
 
 		// METTI CURR
 		matrix.world[enemyT.getX()][enemyT.getY()] = enemyT.getCurr(); 
@@ -665,6 +656,7 @@ public class GameManager {
 					enemy.get(count).setReadyToSpawn(false);
 					numberOfEnemyOnMap++;
 				}
+				
 				count++;
 			}
 	}
