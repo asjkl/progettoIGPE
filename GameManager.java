@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.StringTokenizer;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameManager {
 
@@ -15,7 +17,7 @@ public class GameManager {
 	private static final int size = 20;
 	private int finalScore = 0;
 	private int count[];
-	private int numberOfEnemyToSpawn = 0;
+	private int numberOfEnemyToSpawn = 3;
 	private int numberOfEnemyOnMap = 0;
 
 	public Sounds sounds;
@@ -35,9 +37,17 @@ public class GameManager {
 	private int yTmp = -1;
 	private Direction dir;
 
-	public GameManager() {
+	public class MyTask extends TimerTask {
 
-		 matrix = new World(size, size);
+		public void run(){
+			getMatrix().print();
+			System.out.println();
+		}
+	}
+	
+	public GameManager() {
+	
+		matrix = new World(size, size);
 		enemy = new ArrayList<>();
 		rocket = new ArrayList<>();
 		power = new ArrayList<>();
@@ -48,7 +58,12 @@ public class GameManager {
 
 		for (int i = 0; i < count.length; i++) //conta occorrenze enemies?
 			count[i] = 0;
+	
 		importMap();
+		
+		Timer timer = new Timer();
+		TimerTask task = new MyTask();
+		timer.schedule( task, 1000, 1000 );	
 	}
 
 	public void importMap() {
@@ -400,28 +415,17 @@ public class GameManager {
 	}
 
 	private boolean destroyRocket(Rocket rocket) {
-	
 		
-		//----------------------PROVA-----------------------------------
-		
-		if( rocket.getNext() instanceof Rocket ){ // se il secondo rocket scontra il primo
+		if( rocket.getNext() instanceof Rocket ){ 
 			
-			if( ( ((Rocket)rocket.getNext()).isBordo() || ((Rocket)rocket.getNext()).isDestroyRocketAndWall() )  // se il primo si trova nel muro o al bordo
-					&& rocket.getTank() instanceof PlayerTank && ((Rocket)rocket.getNext()).getTank() instanceof PlayerTank) // se entrambi rocket sono del player ( importante)
-				return false; // non fare nulla cioe non distruggere ne il secondo ne il primo.  
-				// se metti return true qui, significa non distruggere il secondo subito ma il primo e SBALLA. PROVA!!!!!!!!!!!!!!!!!
-				
+			//SERVE PER ANIMAZIONE ROCKET
+			if( ( ((Rocket)rocket.getNext()).isBorder() || ((Rocket)rocket.getNext()).isDestroyRocketAndWall() ) 
+					&& rocket.getTank() instanceof PlayerTank && ((Rocket)rocket.getNext()).getTank() instanceof PlayerTank) 
+				return false;  
 			
-			
-			
-				// se arriva qui non è il doppioRocket del player  e gestisce il rocket normalmente
 				destroyRocketFinally(((Rocket)rocket.getNext()));
 				return true;
 		}
-		
-		//-------------------------------------------------------------
-		
-		
 		
 		if(rocket.isDestroyRocketAndWall()){
 			damageWall(rocket);
@@ -434,7 +438,7 @@ public class GameManager {
 			rocket.setDestroyRocketAndWall(true);
 		}
 		
-		if (rocket.isBordo()){
+		if (rocket.isBorder()){
 			return true;
 		}
 
@@ -471,7 +475,7 @@ public class GameManager {
 				|| (rocket.getX() == matrix.getRow() - 1 && rocket.getDirection() == Direction.DOWN)
 				|| (rocket.getY() == 0 && rocket.getDirection() == Direction.LEFT)
 				|| (rocket.getY() == matrix.getColumn() - 1 && rocket.getDirection() == Direction.RIGHT)) {
-			rocket.setBordo(true);
+			rocket.setBorder(true);
 		}
 		return false;
 	}
@@ -483,7 +487,7 @@ public class GameManager {
 			if (!(r.getCurr() instanceof PlayerTank) && !(r.getCurr() instanceof EnemyTank))
 				matrix.world[r.getX()][r.getY()] = r.getCurr();
 			else  
-				matrix.world[r.getX()][r.getY()] = r.getBeforeBordo();
+				matrix.world[r.getX()][r.getY()] = r.getBeforeBorder();
 			
 			rocket.remove(r);
 	}
@@ -539,7 +543,7 @@ public class GameManager {
 	}
 
 	private void destroyEnemyTank(EnemyTank enemyT) {
-
+		
 		if (enemyT.isPowerUpOn())
 			addPowerUp(new Random().nextInt(6)); // PRIMA DI MORIRE GENERA UN POWERUP
 
@@ -633,13 +637,17 @@ public class GameManager {
 	public void spawnEnemy() {
 
 		int count=0;
-		while(count<enemy.size() && numberOfEnemyOnMap < numberOfEnemyToSpawn){
-			if(!enemy.get(count).isAppearsInTheMap() && !enemy.get(count).isDestroy()){
-				enemy.get(count).setAppearsInTheMap(true);
-				numberOfEnemyOnMap++;
+		
+			while(count<enemy.size() && numberOfEnemyOnMap < numberOfEnemyToSpawn){
+				
+				//enemy.get(count).setReadyToSpawn(true);
+				
+				if(!enemy.get(count).isAppearsInTheMap() && !enemy.get(count).isDestroy()){
+					enemy.get(count).setAppearsInTheMap(true);
+					numberOfEnemyOnMap++;
+				}
+				count++;
 			}
-			count++;
-		}
 	}
 
 	public void enemyPositionRandom(int a) {

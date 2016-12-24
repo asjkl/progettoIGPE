@@ -2,9 +2,9 @@ package progettoIGPE.davide.giovanni.unical2016;
 
 public class Rocket extends AbstractDynamicObject {
 
-	private boolean bordo; // se trovo bordo
+	private boolean border; // se trovo bordo
 	private AbstractDynamicObject tank; // rocket appartenenza
-	private AbstractStaticObject beforeBordo;
+	private AbstractStaticObject beforeBorder;
 	
 	//PER GRAFICA
 	private boolean firstAnimationNo;
@@ -13,10 +13,10 @@ public class Rocket extends AbstractDynamicObject {
 	
 	public Rocket(int x, int y, World world, Direction direction, AbstractDynamicObject tank) {
 		super(x, y, world, direction);
-		this.bordo = false;
+		this.border = false;
 		this.tank = tank;
 		curr = tank; //quando viene creato il Rocket il suo curr sarà il TANK
-		beforeBordo = tank.getCurr();
+		beforeBorder = tank.getCurr();
 		this.firstAnimationNo=true;
 		setDestroyRocketAndWall(false);
 		
@@ -71,12 +71,12 @@ public class Rocket extends AbstractDynamicObject {
 		return " -- ";
 	}
 
-	public boolean isBordo() {
-		return bordo;
+	public boolean isBorder() {
+		return border;
 	}
 
-	public void setBordo(boolean bordo) {
-		this.bordo = bordo;
+	public void setBorder(boolean border) {
+		this.border = border;
 	}
 
 	public AbstractDynamicObject getTank() {
@@ -87,12 +87,12 @@ public class Rocket extends AbstractDynamicObject {
 		this.tank = tank;
 	}
 
-	public AbstractStaticObject getBeforeBordo() {
-		return beforeBordo;
+	public AbstractStaticObject getBeforeBorder() {
+		return beforeBorder;
 	}
 
-	public void setBeforeBordo(AbstractStaticObject beforeBordo) {
-		this.beforeBordo = beforeBordo;
+	public void setBeforeBordo(AbstractStaticObject beforeBorder) {
+		this.beforeBorder = beforeBorder;
 	}
 
 	public boolean isFirstAnimationNo() {
