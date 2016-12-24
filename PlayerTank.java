@@ -22,7 +22,7 @@ public class PlayerTank extends AbstractDynamicObject {
 			this.setCont(getSizePixel()/2);
 		}else{			
 			this.setCont((getSizePixel()/2)+5);
-		}	
+		}	 
 	} 
 
 	@Override

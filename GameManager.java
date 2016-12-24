@@ -15,7 +15,7 @@ public class GameManager {
 	private static final int size = 20;
 	private int finalScore = 0;
 	private int count[];
-	private int numberOfEnemyToSpawn = 1;
+	private int numberOfEnemyToSpawn = 0;
 	private int numberOfEnemyOnMap = 0;
 
 	public Sounds sounds;
@@ -393,20 +393,48 @@ public class GameManager {
 
 			rocket.update();
 			rocket.setUpdateObject(false);
-
+			
 			if (destroyRocket(rocket)) {
 				destroyRocketFinally(rocket);
 			}
 	}
 
 	private boolean destroyRocket(Rocket rocket) {
-
-		if (rocket.isBordo()){
+	
+		
+		//----------------------PROVA-----------------------------------
+		
+		if( rocket.getNext() instanceof Rocket ){ // se il secondo rocket scontra il primo
+			
+			if( ( ((Rocket)rocket.getNext()).isBordo() || ((Rocket)rocket.getNext()).isDestroyRocketAndWall() )  // se il primo si trova nel muro o al bordo
+					&& rocket.getTank() instanceof PlayerTank && ((Rocket)rocket.getNext()).getTank() instanceof PlayerTank) // se entrambi rocket sono del player ( importante)
+				return false; // non fare nulla cioe non distruggere ne il secondo ne il primo.  
+				// se metti return true qui, significa non distruggere il secondo subito ma il primo e SBALLA. PROVA!!!!!!!!!!!!!!!!!
+				
+			
+			
+			
+				// se arriva qui non è il doppioRocket del player  e gestisce il rocket normalmente
+				destroyRocketFinally(((Rocket)rocket.getNext()));
+				return true;
+		}
+		
+		//-------------------------------------------------------------
+		
+		
+		
+		if(rocket.isDestroyRocketAndWall()){
+			damageWall(rocket);
+			if (((Wall) rocket.getNext()).getHealth() <= 0)
+				destroyWall(rocket);
 			return true;
 		}
-
-		if( rocket.getNext() instanceof Rocket ){
-			destroyRocketFinally(((Rocket)rocket.getNext()));
+		
+		if (rocket.getNext() instanceof Wall) {
+			rocket.setDestroyRocketAndWall(true);
+		}
+		
+		if (rocket.isBordo()){
 			return true;
 		}
 
@@ -415,15 +443,7 @@ public class GameManager {
 			return true;
 		}
 
-		if (rocket.getNext() instanceof Wall) {
-			damageWall(rocket);
-			if (((Wall) rocket.getNext()).getHealth() <= 0)
-				destroyWall(rocket);
-			return true;
-		}
-
 		if (rocket.getNext() instanceof EnemyTank) {
-
 			if (rocket.getTank() instanceof PlayerTank){
 				if (((EnemyTank) rocket.getNext()).isProtection() == false)
 					damageEnemyTank(rocket);
@@ -438,7 +458,6 @@ public class GameManager {
 			return true;
 		}
 
-		// distruggi player
 		if (rocket.getNext() instanceof PlayerTank && rocket.getTank() instanceof EnemyTank) {
 			if (player.isProtection() == false) {
 				switchCurrTank(player);
