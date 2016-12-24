@@ -17,9 +17,7 @@ public class GameManager {
 	private static final int size = 20;
 	private int finalScore = 0;
 	private int count[];
-	private int numberOfEnemyToSpawn = 3;
-	private int numberOfEnemyOnMap = 0;
-
+	
 	public Sounds sounds;
 	private Random random;
 	private World matrix;
@@ -29,13 +27,19 @@ public class GameManager {
 	private ArrayList<Rocket> rocket;
 	private Flag flag;
 	private ArrayList<AbstractStaticObject> recoveryWall;
+	
+	//ENEMY
+		private int numberOfEnemyToSpawn = 3;
+		private int numberOfEnemyOnMap = 0;
+		private int numberOfEnemyReadyToSpwan = 0;
+		private int secondsToSpwan = 4;
 
 	//POWERUPS
-	private int durationPowerUp = 20;
-	private int numEnemyDropsPowerUp = 1; //indica ogni quanti enemie far cadere powerUp
-	private int xTmp = -1;
-	private int yTmp = -1;
-	private Direction dir;
+		private int durationPowerUp = 20;
+		private int numEnemyDropsPowerUp = 1; //indica ogni quanti enemie far cadere powerUp
+		private int xTmp = -1;
+		private int yTmp = -1;
+		private Direction dir;
 
 	public class MyTask extends TimerTask {
 
@@ -61,9 +65,9 @@ public class GameManager {
 	
 		importMap();
 		
-		Timer timer = new Timer();
-		TimerTask task = new MyTask();
-		timer.schedule( task, 1000, 1000 );	
+//		Timer timer = new Timer();
+//		TimerTask task = new MyTask();
+//		timer.schedule( task, 1000, 1000 );	
 	}
 
 	public void importMap() {
@@ -268,7 +272,7 @@ public class GameManager {
 			extendAddPowerUp(tmp);
 			break;
 		case 5:
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.TIMER, 20, true);
+			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.TIMER, 12, true);
 			extendAddPowerUp(tmp);
 			break;
 		default:
@@ -363,6 +367,11 @@ public class GameManager {
 
 		switch (power.getPowerUp()) {
 		case GRENADE:
+			
+//			for (int i = 0; i < enemy.size(); i++)
+//				if (enemy.get(i).isAppearsInTheMap()){
+//					destroyEnemyTank(enemy.get(i));
+			
 			for (int i = 0; i < enemy.size(); i++)
 				if (enemy.get(i).isAppearsInTheMap()) {
 					matrix.world[enemy.get(i).getX()][enemy.get(i).getY()] = enemy.get(i).getCurr();
@@ -371,6 +380,8 @@ public class GameManager {
 					i--;
 				}
 			numberOfEnemyOnMap = 0;
+			numberOfEnemyReadyToSpwan= 0;
+			
 			break;
 		case HELMET:
 			player.setProtection(true);
@@ -544,22 +555,25 @@ public class GameManager {
 
 	private void destroyEnemyTank(EnemyTank enemyT) {
 		
+		//PRIMA DI MORIRE
+		finalScore += enemyT.getPoint();
+		increaseCount(enemyT);
+		
+		if(numberOfEnemyOnMap > 0)
+			numberOfEnemyOnMap--;
+		if(numberOfEnemyReadyToSpwan > 0)
+			numberOfEnemyReadyToSpwan--;
+		
+		//GENERA POWERUP
 		if (enemyT.isPowerUpOn())
-			addPowerUp(new Random().nextInt(6)); // PRIMA DI MORIRE GENERA UN POWERUP
+//			addPowerUp(new Random().nextInt(6)); 
+			addPowerUp(0);  //GREANDE
 
-		matrix.world[enemyT.getX()][enemyT.getY()] = enemyT.getCurr();
+		// METTI CURR
+		matrix.world[enemyT.getX()][enemyT.getY()] = enemyT.getCurr(); 
 
-		// distruggi enemy dalla lista
-		for (int i = 0; i < enemy.size(); i++)
-			if (enemy.get(i) == enemyT) {
-				finalScore += enemyT.getPoint();
-				increaseCount(enemyT);
-				enemy.get(i).setAppearsInTheMap(false);
-				enemy.get(i).setDestroy(true);
-				numberOfEnemyOnMap--;
-				enemy.remove(i);
-				break;
-			}
+		// DISTRUGGI
+		enemy.remove(enemyT);
 	}
 
 	public void increaseCount(EnemyTank e) {
@@ -636,14 +650,19 @@ public class GameManager {
 
 	public void spawnEnemy() {
 
-		int count=0;
+		int count = 0;
 		
 			while(count<enemy.size() && numberOfEnemyOnMap < numberOfEnemyToSpawn){
 				
-				//enemy.get(count).setReadyToSpawn(true);
+				if(numberOfEnemyReadyToSpwan < numberOfEnemyToSpawn && !enemy.get(count).isReadyToSpawn() && !enemy.get(count).isAppearsInTheMap()){
+					enemy.get(count).setReadyToSpawn(true);
+					enemy.get(count).setSpawnTime((currentTime+secondsToSpwan)%60);
+					numberOfEnemyReadyToSpwan++;
+				}
 				
-				if(!enemy.get(count).isAppearsInTheMap() && !enemy.get(count).isDestroy()){
+				if(enemy.get(count).isReadyToSpawn() && currentTime == enemy.get(count).getSpawnTime()){
 					enemy.get(count).setAppearsInTheMap(true);
+					enemy.get(count).setReadyToSpawn(false);
 					numberOfEnemyOnMap++;
 				}
 				count++;

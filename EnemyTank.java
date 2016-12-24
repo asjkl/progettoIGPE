@@ -18,12 +18,11 @@ public class EnemyTank extends AbstractDynamicObject {
 	private boolean protection;
 	private boolean powerUpOn;
 	private boolean noUpdateG;
-	private boolean destroy;
 	private boolean stopEnemy; //powerUp TIMER
 	private boolean stopEnemyGraphic; //powerUp TIMER
 	
 	private boolean readyToSpawn;
-	private int contT;
+	private long spawnTime; //salva il tempo che ci mette per spawnare
 
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health, int point) {
 		super(x, y, world, speed, speedShot, direction, health);
@@ -41,11 +40,9 @@ public class EnemyTank extends AbstractDynamicObject {
 		protection = false;
 		powerUpOn = false;
 		noUpdateG=false;
-		destroy=false;
 		stopEnemy=false;
 		stopEnemyGraphic=false;
 		readyToSpawn = false;
-		contT=1;
 		
 		setUpdateObject(true);
 		if(speed==Speed.SLOW){
@@ -317,14 +314,6 @@ public class EnemyTank extends AbstractDynamicObject {
 		this.noUpdateG = noUpdateG;
 	}
 
-	public boolean isDestroy() {
-		return destroy;
-	}
-
-	public void setDestroy(boolean destroy) {
-		this.destroy = destroy;
-	}
-
 	public boolean isStopEnemy() {
 		return stopEnemy;
 	}
@@ -349,11 +338,11 @@ public class EnemyTank extends AbstractDynamicObject {
 		this.readyToSpawn = readyToSpawn;
 	}
 
-	public int getContT() {
-		return contT;
+	public long getSpawnTime() {
+		return spawnTime;
 	}
 
-	public void setContT(int contT) {
-		this.contT = contT;
+	public void setSpawnTime(long spawnTime) {
+		this.spawnTime = spawnTime;
 	}
 }
