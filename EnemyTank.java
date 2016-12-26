@@ -23,6 +23,7 @@ public class EnemyTank extends AbstractDynamicObject {
 	
 	private boolean readyToSpawn;
 	private long spawnTime; //salva il tempo che ci mette per spawnare
+	private int countdown;
 
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health, int point) {
 		super(x, y, world, speed, speedShot, direction, health);
@@ -43,6 +44,7 @@ public class EnemyTank extends AbstractDynamicObject {
 		stopEnemy=false;
 		stopEnemyGraphic=false;
 		readyToSpawn = false;
+		countdown = 0;
 		
 		setUpdateObject(true);
 		if(speed==Speed.SLOW){
@@ -50,7 +52,7 @@ public class EnemyTank extends AbstractDynamicObject {
 		}else if(speed==Speed.NORMAL){
 			this.setCont(getSizePixel()/2);
 		}else{			
-			this.setCont((getSizePixel()/2)+6);
+			this.setCont((getSizePixel()/2)+5);
 		}
 	}
 
@@ -344,5 +346,13 @@ public class EnemyTank extends AbstractDynamicObject {
 
 	public void setSpawnTime(long spawnTime) {
 		this.spawnTime = spawnTime;
+	}
+
+	public int getCountdown() {
+		return countdown;
+	}
+
+	public void setCountdown(int countdown) {
+		this.countdown = countdown;
 	}
 }

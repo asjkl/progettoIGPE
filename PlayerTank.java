@@ -9,7 +9,7 @@ public class PlayerTank extends AbstractDynamicObject {
 	private boolean died;
 	
 	public PlayerTank(int x, int y, World world) {
-		 super(x, y, world, Speed.NORMAL, Speed.FAST, Direction.STOP, 1);
+		super(x, y, world, Speed.NORMAL, Speed.NORMAL, Direction.STOP, 1);
 		protection = false;
 		resume = 3;
 		point = 0;
@@ -21,7 +21,7 @@ public class PlayerTank extends AbstractDynamicObject {
 		}else if(this.getSpeed()==Speed.NORMAL){
 			this.setCont(getSizePixel()/2);
 		}else{			
-			this.setCont((getSizePixel()/2)+6);
+			this.setCont((getSizePixel()/2)+5);
 		}	 
 	} 
 

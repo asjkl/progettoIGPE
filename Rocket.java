@@ -25,7 +25,7 @@ public class Rocket extends AbstractDynamicObject {
 		}else if(tank.getSpeedShot()==Speed.NORMAL){
 			this.setCont(getSizePixel()/2);
 		}else{			
-			this.setCont((getSizePixel()/2)+6);
+			this.setCont((getSizePixel()/2)+5);
 		}
 		
 		if(tank instanceof PlayerTank){

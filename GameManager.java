@@ -32,7 +32,6 @@ public class GameManager {
 		private int numberOfEnemyToSpawn = 3;
 		private int numberOfEnemyOnMap = 0;
 		private int numberOfEnemyReadyToSpwan = 0;
-		private int secondsToSpwan = 4;
 
 	//POWERUPS
 		private int durationPowerUp = 20;
@@ -44,8 +43,15 @@ public class GameManager {
 	public class MyTask extends TimerTask {
 
 		public void run(){
-			getMatrix().print();
-			System.out.println();
+			
+			//STAMPA 
+//			getMatrix().print();
+//			System.out.println();
+			
+			//EFFETTO SPAWN
+			for(int i=0;i<getEnemy().size();i++)
+				if(getEnemy().get(i).isReadyToSpawn())
+					getEnemy().get(i).setCountdown((getEnemy().get(i).getCountdown()+1)%4);
 		}
 	}
 	
@@ -65,9 +71,9 @@ public class GameManager {
 	
 		importMap();
 		
-//		Timer timer = new Timer();
-//		TimerTask task = new MyTask();
-//		timer.schedule( task, 1000, 1000 );	
+		Timer timer = new Timer();
+		TimerTask task = new MyTask();
+		timer.schedule( task, 200, 200);	
 	}
 
 	public void importMap() {
@@ -423,7 +429,7 @@ public class GameManager {
 			
 			//SERVE PER ANIMAZIONE ROCKET
 			if( ( ((Rocket)rocket.getNext()).isBorder() || ((Rocket)rocket.getNext()).isDestroyRocketAndWall() ) 
-					&& rocket.getTank() instanceof PlayerTank && ((Rocket)rocket.getNext()).getTank() instanceof PlayerTank) 
+					&& rocket.getTank() instanceof PlayerTank && ((Rocket)rocket.getNext()).getTank() ==  rocket.getTank()) 
 				return false;  
 			
 				destroyRocketFinally(((Rocket)rocket.getNext()));
@@ -643,20 +649,17 @@ public class GameManager {
 
 		int count = 0;
 		
-			while(count<enemy.size() && numberOfEnemyOnMap < numberOfEnemyToSpawn){
-				
+			while(count<enemy.size() && numberOfEnemyOnMap < numberOfEnemyToSpawn){		
 				if(numberOfEnemyReadyToSpwan < numberOfEnemyToSpawn && !enemy.get(count).isReadyToSpawn() && !enemy.get(count).isAppearsInTheMap()){
 					enemy.get(count).setReadyToSpawn(true);
-					enemy.get(count).setSpawnTime((currentTime+secondsToSpwan)%60);
+					enemy.get(count).setSpawnTime((currentTime+4)%60); //il +4 indica i secondi che ci metterà..
 					numberOfEnemyReadyToSpwan++;
 				}
-				
 				if(enemy.get(count).isReadyToSpawn() && currentTime == enemy.get(count).getSpawnTime()){
 					enemy.get(count).setAppearsInTheMap(true);
 					enemy.get(count).setReadyToSpawn(false);
 					numberOfEnemyOnMap++;
 				}
-				
 				count++;
 			}
 	}
