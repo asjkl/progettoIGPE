@@ -686,7 +686,7 @@ public class GameManager {
 					enemy.get(a).setStep(tempCont);
 				}
 				if (!(enemy.get(a).getNext() instanceof EnemyTank));
-					createRocketTank(enemy.get(a).getDirection(), enemy.get(a));
+					 createRocketTank(enemy.get(a).getDirection(), enemy.get(a));
 			}
 	}
 

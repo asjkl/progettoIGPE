@@ -21,7 +21,7 @@ public class PlayerTank extends AbstractDynamicObject {
 		}else if(this.getSpeed()==Speed.NORMAL){
 			this.setCont(getSizePixel()/2);
 		}else{			
-			this.setCont((getSizePixel()/2)+5);
+			 this.setCont((getSizePixel()/2)+5);
 		}	 
 	} 
 
