@@ -592,7 +592,7 @@ public class GameManager {
 				|| (tank instanceof EnemyTank && tank.getContRocket() == 0)) {
 
 			// TODO SOUND ROCKETSHOT
-			sounds.rocketShot();
+			//sounds.rocketShot();
 
 			if (tmp == Direction.STOP) // serve quando nasce playerTank, essendo
 										// STOP spara verso l alto
@@ -652,7 +652,7 @@ public class GameManager {
 			while(count<enemy.size() && numberOfEnemyOnMap < numberOfEnemyToSpawn){		
 				if(numberOfEnemyReadyToSpwan < numberOfEnemyToSpawn && !enemy.get(count).isReadyToSpawn() && !enemy.get(count).isAppearsInTheMap()){
 					enemy.get(count).setReadyToSpawn(true);
-					enemy.get(count).setSpawnTime((currentTime+4)%60); //il +4 indica i secondi che ci metterà..
+					enemy.get(count).setSpawnTime((currentTime+3)%60); //il +4 indica i secondi che ci metterà..
 					numberOfEnemyReadyToSpwan++;
 				}
 				if(enemy.get(count).isReadyToSpawn() && currentTime == enemy.get(count).getSpawnTime()){
