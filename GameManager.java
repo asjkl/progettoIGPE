@@ -65,9 +65,9 @@ public class GameManager {
 	
 		importMap();
 		
-		Timer timer = new Timer();
-		TimerTask task = new MyTask();
-		timer.schedule( task, 1000, 1000 );	
+//		Timer timer = new Timer();
+//		TimerTask task = new MyTask();
+//		timer.schedule( task, 1000, 1000 );	
 	}
 
 	public void importMap() {
@@ -683,7 +683,7 @@ public class GameManager {
 					enemy.get(a).setStep(tempCont);
 				}
 				if (!(enemy.get(a).getNext() instanceof EnemyTank));
-					//createRocketTank(enemy.get(a).getDirection(), enemy.get(a));
+					createRocketTank(enemy.get(a).getDirection(), enemy.get(a));
 			}
 	}
 

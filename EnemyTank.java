@@ -50,7 +50,7 @@ public class EnemyTank extends AbstractDynamicObject {
 		}else if(speed==Speed.NORMAL){
 			this.setCont(getSizePixel()/2);
 		}else{			
-			this.setCont((getSizePixel()/2)+5);
+			this.setCont((getSizePixel()/2)+6);
 		}
 	}
 
