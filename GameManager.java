@@ -23,7 +23,7 @@ public class GameManager {
 	private World matrix;
 	private PlayerTank player;
 	private ArrayList<EnemyTank> enemy;
-	private ArrayList<PowerUp> power;
+	private ArrayList<PowerUp> power; 
 	private ArrayList<Rocket> rocket;
 	private Flag flag;
 	private ArrayList<AbstractStaticObject> recoveryWall;
@@ -415,81 +415,73 @@ public class GameManager {
 
 	public void updateRocket(Rocket rocket) {
 
-			rocket.update();
-			rocket.setUpdateObject(false);
+		rocket.update();
+		rocket.setUpdateObject(false);
 			
-			if (destroyRocket(rocket)) {
-				destroyRocketFinally(rocket);
+		if(!rocket.ok && !rocket.isFinishAnimation()){ 
+			rocket.setFinishAnimation(true);
+			
+			if(rocket.getNext() instanceof Rocket){
+				((Rocket)rocket.getNext()).setFinishAnimation(true);
 			}
+			return;
+		}
+				
+		if (crashRocket(rocket)){
+			destroyRocket(rocket);
+		}	
 	}
 
-	private boolean destroyRocket(Rocket rocket) {
+	private boolean crashRocket(Rocket rocket) {
 		
-		if( rocket.getNext() instanceof Rocket ){ 
+		if(!rocket.ok){  
 			
-			//SERVE PER ANIMAZIONE ROCKET
-			if( ( ((Rocket)rocket.getNext()).isBorder() || ((Rocket)rocket.getNext()).isDestroyRocketAndWall() ) 
-					&& rocket.getTank() instanceof PlayerTank && ((Rocket)rocket.getNext()).getTank() ==  rocket.getTank()) 
-				return false;  
-			
-				destroyRocketFinally(((Rocket)rocket.getNext()));
-				return true;
-		}
+				//ROCKET
+				if((rocket.getNext() instanceof Rocket)){
+					destroyRocket(((Rocket)rocket.getNext()));
+				}
+				
+				//WALL
+				if(rocket.getNext() instanceof Wall){
+					damageWall(rocket);
+					if (((Wall) rocket.getNext()).getHealth() <= 0)
+						destroyWall(rocket);
+				}
+				
+				//FLAG
+				if (rocket.getNext() instanceof Flag) {
+					flag.setHit(true);
+				}
+				
+				//ENEMYTANK
+				if (rocket.getNext() instanceof EnemyTank) {
+					if (rocket.getTank() instanceof PlayerTank){
+						if (((EnemyTank) rocket.getNext()).isProtection() == false)
+							damageEnemyTank(rocket);
+						else
+						((EnemyTank) rocket.getNext()).setProtection(false);
+					}
+	
+					if (((EnemyTank) rocket.getNext()).getHealth() == 0) {
+						switchCurrTank(((EnemyTank) rocket.getNext()));
+						destroyEnemyTank((EnemyTank) rocket.getNext());
+					}
+				}
+				
+				//PLAYERTANK
+				if (rocket.getNext() instanceof PlayerTank && rocket.getTank() instanceof EnemyTank) {
+					if (player.isProtection() == false) {
+						switchCurrTank(player);
+						damageAndDestroyPlayerTank();
+					}
+				}
 		
-		if(rocket.isDestroyRocketAndWall()){
-			damageWall(rocket);
-			if (((Wall) rocket.getNext()).getHealth() <= 0)
-				destroyWall(rocket);
 			return true;
-		}
-		
-		if (rocket.getNext() instanceof Wall) {
-			rocket.setDestroyRocketAndWall(true);
-		}
-		
-		if (rocket.isBorder()){
-			return true;
-		}
-
-		if (rocket.getNext() instanceof Flag) {
-			flag.setHit(true);
-			return true;
-		}
-
-		if (rocket.getNext() instanceof EnemyTank) {
-			if (rocket.getTank() instanceof PlayerTank){
-				if (((EnemyTank) rocket.getNext()).isProtection() == false)
-					damageEnemyTank(rocket);
-				else
-				((EnemyTank) rocket.getNext()).setProtection(false);
-			}
-
-			if (((EnemyTank) rocket.getNext()).getHealth() == 0) {
-				switchCurrTank(((EnemyTank) rocket.getNext()));
-				destroyEnemyTank((EnemyTank) rocket.getNext());
-			}
-			return true;
-		}
-
-		if (rocket.getNext() instanceof PlayerTank && rocket.getTank() instanceof EnemyTank) {
-			if (player.isProtection() == false) {
-				switchCurrTank(player);
-				damageAndDestroyPlayerTank();
-			}
-			return true;
-		}
-
-		// se Rocket tocca bordo ( è legato al primo if )
-		if ((rocket.getX() == 0 && rocket.getDirection() == Direction.UP)
-				|| (rocket.getX() == matrix.getRow() - 1 && rocket.getDirection() == Direction.DOWN)
-				|| (rocket.getY() == 0 && rocket.getDirection() == Direction.LEFT)
-				|| (rocket.getY() == matrix.getColumn() - 1 && rocket.getDirection() == Direction.RIGHT)) {
-			rocket.setBorder(true);
-		}
+		}		
 		return false;
 	}
 
-	public void destroyRocketFinally(Rocket r){
+	public void destroyRocket(Rocket r){
 
 			countRockets(r);
 
