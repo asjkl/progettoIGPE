@@ -425,7 +425,7 @@ public class GameManager {
 
 	private boolean destroyRocket(Rocket rocket) {
 		
-		if(rocket.isCrashRocket() && rocket.getNext() instanceof Rocket ){ 
+		if( rocket.getNext() instanceof Rocket ){ 
 			
 			//SERVE PER ANIMAZIONE ROCKET
 			if( ( ((Rocket)rocket.getNext()).isBorder() || ((Rocket)rocket.getNext()).isDestroyRocketAndWall() ) 
@@ -451,10 +451,6 @@ public class GameManager {
 			return true;
 		}
 
-		if( rocket.getNext() instanceof Rocket ){ 
-			rocket.setCrashRocket(true);
-		}
-		
 		if (rocket.getNext() instanceof Flag) {
 			flag.setHit(true);
 			return true;

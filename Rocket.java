@@ -10,7 +10,6 @@ public class Rocket extends AbstractDynamicObject {
 	private boolean firstAnimationNo;
 	private boolean rocketForPlayer;	
 	private boolean destroyRocketAndWall;
-	private boolean crashRocket;
 	
 	public Rocket(int x, int y, World world, Direction direction, AbstractDynamicObject tank) {
 		super(x, y, world, direction);
@@ -20,7 +19,6 @@ public class Rocket extends AbstractDynamicObject {
 		beforeBorder = tank.getCurr();
 		this.firstAnimationNo=true;
 		setDestroyRocketAndWall(false);
-		crashRocket=false;
 		
 		if(tank.getSpeedShot()==Speed.SLOW){
 			this.setCont(1);
@@ -121,13 +119,5 @@ public class Rocket extends AbstractDynamicObject {
 
 	public void setDestroyRocketAndWall(boolean destroyRocketAndWall) {
 		this.destroyRocketAndWall = destroyRocketAndWall;
-	}
-
-	public boolean isCrashRocket() {
-		return crashRocket;
-	}
-
-	public void setCrashRocket(boolean crashRocket) {
-		this.crashRocket = crashRocket;
 	}
 }
