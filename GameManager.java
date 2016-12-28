@@ -45,9 +45,9 @@ public class GameManager {
 		public void run(){
 			
 			//STAMPA 
-//			getMatrix().print();
-//			System.out.println();
-			
+			//getMatrix().print();
+			//System.out.println();
+					
 			//EFFETTO SPAWN
 			for(int i=0;i<getEnemy().size();i++)
 				if(getEnemy().get(i).isReadyToSpawn())
@@ -79,7 +79,7 @@ public class GameManager {
 	public void importMap() {
 		int i = 0;// indice di riga
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("maps/map01.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader("maps/ice.txt"));
 			String line = reader.readLine();
 			while (i < size) {
 
@@ -414,9 +414,7 @@ public class GameManager {
 	// ---------------------------------------ROCKET----------------------------------------
 
 	public void updateRocket(Rocket rocket) {
-		if(!rocket.isFinishAnimation())			//UNA VOLTA CHE FINISCO CHE OK DIVENTA =FALSE, AL PROSSIMO CICLO DI QUANDO ENTERò.
-			rocket.update();					//NON DEVO FARE UN UPDATE LOGICO PERCHè DEVO SOLO ASPETTARE CHE FINISCE LA GRAFICA
-		
+		rocket.update();				
 		rocket.setUpdateObject(false);
 			
 		if(!rocket.ok && !rocket.isFinishAnimation()){ 
