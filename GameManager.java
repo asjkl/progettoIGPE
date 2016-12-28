@@ -414,8 +414,9 @@ public class GameManager {
 	// ---------------------------------------ROCKET----------------------------------------
 
 	public void updateRocket(Rocket rocket) {
-
-		rocket.update();
+		if(!rocket.isFinishAnimation())			//UNA VOLTA CHE FINISCO CHE OK DIVENTA =FALSE, AL PROSSIMO CICLO DI QUANDO ENTERò.
+			rocket.update();					//NON DEVO FARE UN UPDATE LOGICO PERCHè DEVO SOLO ASPETTARE CHE FINISCE LA GRAFICA
+		
 		rocket.setUpdateObject(false);
 			
 		if(!rocket.ok && !rocket.isFinishAnimation()){ 
