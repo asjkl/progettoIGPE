@@ -45,8 +45,8 @@ public class GameManager {
 		public void run(){
 			
 			//STAMPA 
-			//getMatrix().print();
-			//System.out.println();
+//			getMatrix().print();
+//			System.out.println();
 					
 			//EFFETTO SPAWN
 			for(int i=0;i<getEnemy().size();i++)
@@ -73,13 +73,13 @@ public class GameManager {
 		
 		Timer timer = new Timer();
 		TimerTask task = new MyTask();
-		timer.schedule( task, 200, 200);	
+		timer.schedule( task, 100, 100);	
 	}
 
 	public void importMap() {
 		int i = 0;// indice di riga
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("maps/ice.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader("maps/mappa.txt"));
 			String line = reader.readLine();
 			while (i < size) {
 
