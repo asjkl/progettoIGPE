@@ -9,7 +9,7 @@ public class AllWall extends AbstractStaticObject {
 		super(x, y, mondo);
 		this.shot = shot;
 		this.tank = tank;
-	}
+	} 
 
 	public boolean isShot() {
 		return shot;
