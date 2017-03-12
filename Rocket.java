@@ -9,6 +9,10 @@ public class Rocket extends AbstractDynamicObject {
 	private boolean firstAnimationNo;
 	private boolean rocketForPlayer;	
 	private boolean finishAnimation;
+	//serve per il gamemanager nella funzione updateRocket, cioè
+	//l'update del rocket viene solo fatto se questo non è prossimo 
+	//alla distruzione ( N.B. " rocket.setNotUpdate(true) " prima del return.
+	private boolean notUpdate;          
 
 	public Rocket(int x, int y, World world, Direction direction, AbstractDynamicObject tank) {
 		super(x, y, world, direction);
@@ -17,6 +21,7 @@ public class Rocket extends AbstractDynamicObject {
 		beforeBorder = tank.getCurr();
 		firstAnimationNo=true;
 		finishAnimation = false;
+		notUpdate=false;
 		
 		if(tank.getSpeedShot()==Speed.SLOW){
 			this.setCont(1);
@@ -51,6 +56,9 @@ public class Rocket extends AbstractDynamicObject {
 	
 	@Override
 	public boolean sameObject() {
+		
+		if(next instanceof Rocket && ((Rocket) next).getTank() == this.getTank())
+			return true;
 		if (!(next instanceof Wall) && !(next instanceof PlayerTank) && !(next instanceof Rocket)
 				&& !(next instanceof EnemyTank) && !(next instanceof Flag)) {
 			curr=next;
@@ -107,5 +115,13 @@ public class Rocket extends AbstractDynamicObject {
 
 	public void setFinishAnimation(boolean finishAnimation) {
 		this.finishAnimation = finishAnimation;
+	}
+
+	public boolean isNotUpdate() {
+		return notUpdate;
+	}
+
+	public void setNotUpdate(boolean notUpdate) {
+		this.notUpdate = notUpdate;
 	}
 }

@@ -34,7 +34,9 @@ public class PlayerTank extends AbstractDynamicObject {
 
 	@Override
 	public boolean sameObject() {
-
+		//RISOLVE SCATTO QUANDO SI SPARA RENDE INVISIBILE IL PROPRIO ROCKET
+		if(next instanceof Rocket && ((Rocket) next).getTank() == this)
+			return true;
 		if (!(next instanceof Wall) && !(next instanceof EnemyTank) && !(next instanceof PlayerTank)
 				&& !(next instanceof Water) && !(next instanceof Rocket)  && !(next instanceof Flag)) {
 			// prendo tutti i powerUp

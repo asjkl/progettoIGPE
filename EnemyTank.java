@@ -64,6 +64,7 @@ public class EnemyTank extends AbstractDynamicObject {
 
 	@Override
 	public boolean sameObject() {
+		
 		if (!(next instanceof Wall) && !(next instanceof EnemyTank) && !(next instanceof PlayerTank)
 				&& !(next instanceof Water) && !(next instanceof Rocket) && !(next instanceof Flag)) {
 			

@@ -73,7 +73,7 @@ public class GameManager {
 		
 		Timer timer = new Timer();
 		TimerTask task = new MyTask();
-		timer.schedule( task, 100, 100);	
+		timer.schedule( task, 50, 50);	
 	}
 
 	public void importMap() {
@@ -414,21 +414,24 @@ public class GameManager {
 	// ---------------------------------------ROCKET----------------------------------------
 
 	public void updateRocket(Rocket rocket) {
+		
+//		if(rocket.isNotUpdate())
 		rocket.update();				
 		rocket.setUpdateObject(false);
 			
-		if(!rocket.ok && !rocket.isFinishAnimation()){ 
-			rocket.setFinishAnimation(true);
-			
-			if(rocket.getNext() instanceof Rocket){
-				((Rocket)rocket.getNext()).setFinishAnimation(true);
-			}
-			return;
-		}
-				
+//		if(!rocket.ok && !rocket.isFinishAnimation()){ 
+//			rocket.setFinishAnimation(true);
+//			
+//			if(rocket.getNext() instanceof Rocket){
+//				((Rocket)rocket.getNext()).setFinishAnimation(true);
+//			}
+//			rocket.setNotUpdate(true);
+//			return;
+//		}	
+		
 		if (crashRocket(rocket)){
 			destroyRocket(rocket);
-		}	
+		}
 	}
 
 	private boolean crashRocket(Rocket rocket) {
@@ -590,7 +593,7 @@ public class GameManager {
 				tmp = Direction.UP;
 
 			rocket.add(new Rocket(tank.getX(), tank.getY(), matrix, tmp, tank));
-
+			
 			tank.setContRocket(tank.getContRocket() + 1); // conta rocket
 		}
 	}
