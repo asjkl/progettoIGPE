@@ -16,13 +16,13 @@ public class PowerUp extends AbstractStaticObject {
 	public PowerUp(int x, int y, World world, Power powerUp, long duration, boolean drop) {
 		super(x, y, world);
 		this.powerUp = powerUp;
-		timer=0;
-		activate=false;
+		this.timer=0;
+		this.activate=false;
 		this.duration=duration;
 		this.drop=drop;
 		this.setDropTime(0);
-		before=null;
-		dropOnBorder = false;
+		this.before=null;
+		this.dropOnBorder = false;
 		setDropDirection(null);
 	}
 

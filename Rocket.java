@@ -12,27 +12,25 @@ public class Rocket extends AbstractDynamicObject {
 		super(x, y, world, direction);
 
 		this.tank = tank;
-		curr = tank; //quando viene creato il Rocket il suo curr sarà il TANK
-		beforeBorder = tank.getCurr();
-		firstAnimationNo=true;
-		finishAnimation = false;
+		this.curr = tank; //quando viene creato il Rocket il suo curr sarà il TANK
+		this.beforeBorder = tank.getCurr();
+		this.firstAnimationNo=true;
+		this.finishAnimation = false;
 		
-//		if(tank instanceof PlayerTank){
-//			if(tank.getContRocket()<1){	
-//				setUpdateObject(true);
-//				setRocketForPlayer(true);
-//				}
-//			else{
-//				setUpdateObject(false);
-//				setRocketForPlayer(false);
-//			}
-//		}
-//		else{
-//			setUpdateObject(true);
-//			setRocketForPlayer(true);
-//		}
-		setUpdateObject(true);
-		setRocketForPlayer(true);
+		if(tank instanceof PlayerTank){
+			if(tank.getContRocket()<1){	
+				setUpdateObject(true);
+				setRocketForPlayer(true);
+				}
+			else{
+				setUpdateObject(false);
+				setRocketForPlayer(false);
+			}
+		}
+		else{
+			setUpdateObject(true);
+			setRocketForPlayer(true);
+		}
 	}
 	
 	@Override
@@ -46,8 +44,8 @@ public class Rocket extends AbstractDynamicObject {
 		
 		if(next instanceof Rocket && ((Rocket) next).getTank() == this.getTank())
 			return true;
-		if (!(next instanceof Wall) && !(next instanceof PlayerTank) && !(next instanceof Rocket)
-				&& !(next instanceof EnemyTank) && !(next instanceof Flag)) {
+		if (!(next instanceof Wall) && !(next instanceof Tank) && !(next instanceof Rocket)
+				 && !(next instanceof Flag)) {
 			curr=next;
 			return true;
 		}

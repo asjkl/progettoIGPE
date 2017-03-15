@@ -28,24 +28,23 @@ public class EnemyTank extends Tank {
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health, int point) {
 		super(x, y, world, speed, speedShot, direction, health);
 		this.point = point;
-		step = 0;
-		countStep = 0;
-		recoverValue = false;
-		tempX = x;
-		tempY = y;
-		directionUp = false;
-		directionDown = false;
-		directionLeft = false;
-		directionRight = false;
-		appearsInTheMap = false;
-		protection = false;
-		powerUpOn = false;
-		noUpdateG=false;
-		stopEnemy=false;
-		stopEnemyGraphic=false;
-		readyToSpawn = false;
-		countdown = 0;
-		
+		this.step = 0;
+		this.countStep = 0;
+		this.recoverValue = false;
+		this.tempX = x;
+		this.tempY = y;
+		this.directionUp = false;
+		this.directionDown = false;
+		this.directionLeft = false;
+		this.directionRight = false;
+		this.appearsInTheMap = false;
+		this.protection = false;
+		this.powerUpOn = false;
+		this.noUpdateG=false;
+		this.stopEnemy=false;
+		this.stopEnemyGraphic=false;
+		this.readyToSpawn = false;
+		this.countdown = 0;
 		setUpdateObject(true);
 	}
 
@@ -58,7 +57,7 @@ public class EnemyTank extends Tank {
 	@Override
 	public boolean sameObject() {
 		
-		if (!(next instanceof Wall) && !(next instanceof EnemyTank) && !(next instanceof PlayerTank)
+		if (!(next instanceof Wall) && !(next instanceof Tank)
 				&& !(next instanceof Water) && !(next instanceof Rocket) && !(next instanceof Flag)) {
 			
 			// prende solo Helmet

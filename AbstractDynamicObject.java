@@ -19,22 +19,22 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 
 	public AbstractDynamicObject(int x, int y, World mondo, Speed speed, Speed speedShot, Direction direction,int health) {
 		super(x, y, mondo);
-		sizePixel=35;
+		this.sizePixel=35;
 		this.speed = speed;
 		this.direction = direction;
 		this.speedShot = speedShot;
 		this.health = health;
-		contRocket=0;
-		curr = null;
-		next = null;
-		pixelPosition=new Point(x*sizePixel, y*sizePixel);
+		this.contRocket=0;
+		this.curr = null;
+		this.next = null;
+		this.pixelPosition=new Point(x*sizePixel, y*sizePixel);
 		FPS(speed);
 	}
 
 	//COSTRUTTORE SOLO PER IL ROCKET
 	public AbstractDynamicObject(int x, int y, World mondo, Direction direction) {		
 		super(x, y, mondo);
-		sizePixel=35;
+		this.sizePixel=35;
 		this.direction = direction;
 		pixelPosition=new Point(x*sizePixel, y*sizePixel);
 		FPS(this.speedShot);	
@@ -56,7 +56,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		free=true;
 		
 		// rimette l oggetto di prima
-		if (!(curr instanceof PlayerTank) && !(curr instanceof EnemyTank)) {
+		if (!(curr instanceof Tank)) {
 			getWorld().world[getX()][getY()] = curr;
 		}
 		switch (getDirection()) {

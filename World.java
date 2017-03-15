@@ -8,7 +8,7 @@ public class World {
 	public World(int row, int column) {
 		this.row = row;
 		this.column = column;
-		world = new AbstractStaticObject[row][column];
+		this.world = new AbstractStaticObject[row][column];
 	}
 
 	public World() {
