@@ -2,7 +2,7 @@ package progettoIGPE.davide.giovanni.unical2016;
 
 import java.util.Random;
 
-public class EnemyTank extends AbstractDynamicObject {
+public class EnemyTank extends Tank {
 	
 	private int point;
 	private int step;
@@ -47,13 +47,6 @@ public class EnemyTank extends AbstractDynamicObject {
 		countdown = 0;
 		
 		setUpdateObject(true);
-		if(speed==Speed.SLOW){
-			this.setCont(1);
-		}else if(speed==Speed.NORMAL){
-			this.setCont(getSizePixel()/2);
-		}else{			
-			this.setCont((getSizePixel()/2)+5);
-		}
 	}
 
 	@Override

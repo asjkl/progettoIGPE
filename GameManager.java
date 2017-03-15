@@ -10,34 +10,34 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class GameManager {
-
-	private int x;
-	private int y;
-	private long currentTime;
-	private static final int size = 20;
-	private int finalScore = 0;
-	private int count[];
 	
-	public Sounds sounds;
-	private Random random;
-	private World matrix;
-	private PlayerTank player;
-	private ArrayList<EnemyTank> enemy;
-	private ArrayList<PowerUp> power; 
-	private ArrayList<Rocket> rocket;
-	private Flag flag;
-	private ArrayList<AbstractStaticObject> recoveryWall;
+	//OTHERS
+		private int x;
+		private int y;
+		private long currentTime;
+		private static final int size = 20;
+		private int finalScore;
+		private int count[];
+		public Sounds sounds;
+		private Random random;
+		private World matrix;
+		private PlayerTank player;
+		private ArrayList<EnemyTank> enemy;
+		private ArrayList<PowerUp> power; 
+		private ArrayList<Rocket> rocket;
+		private Flag flag;
+		private ArrayList<AbstractStaticObject> recoveryWall;
 	
 	//ENEMY
-		private int numberOfEnemyToSpawn = 3;
-		private int numberOfEnemyOnMap = 0;
-		private int numberOfEnemyReadyToSpwan = 0;
+		private int numberOfEnemyToSpawn;
+		private int numberOfEnemyOnMap;
+		private int numberOfEnemyReadyToSpwan;
 
 	//POWERUPS
-		private int durationPowerUp = 20;
-		private int numEnemyDropsPowerUp = 1; //indica ogni quanti enemie far cadere powerUp
-		private int xTmp = -1;
-		private int yTmp = -1;
+		private int durationPowerUp;
+		private int numEnemyDropsPowerUp;
+		private int xTmp;
+		private int yTmp;
 		private Direction dir;
 
 	public class MyTask extends TimerTask {
@@ -57,6 +57,13 @@ public class GameManager {
 	
 	public GameManager() {
 	
+		numberOfEnemyToSpawn = 3;
+		numberOfEnemyOnMap = 0;
+		numberOfEnemyReadyToSpwan = 0;
+		durationPowerUp = 20;
+		numEnemyDropsPowerUp = 1; //indica ogni quanti enemie far cadere powerUp
+		xTmp = -1;
+		yTmp = -1;
 		matrix = new World(size, size);
 		enemy = new ArrayList<>();
 		rocket = new ArrayList<>();
@@ -415,7 +422,6 @@ public class GameManager {
 
 	public void updateRocket(Rocket rocket) {
 		
-//		if(rocket.isNotUpdate())
 		rocket.update();				
 		rocket.setUpdateObject(false);
 			
@@ -436,7 +442,7 @@ public class GameManager {
 
 	private boolean crashRocket(Rocket rocket) {
 		
-		if(!rocket.ok){  
+		if(!rocket.free){  
 			
 				//ROCKET
 				if((rocket.getNext() instanceof Rocket)){

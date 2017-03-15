@@ -3,6 +3,7 @@ package progettoIGPE.davide.giovanni.unical2016;
 import java.awt.Point;
 
 public abstract class AbstractDynamicObject extends AbstractStaticObject implements DynamicObject {
+	
 	private Speed speed;
 	private Speed speedShot;
 	private Direction direction;
@@ -10,16 +11,15 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	protected AbstractStaticObject curr;
 	protected AbstractStaticObject next;
 	private int contRocket;
-	public boolean ok; //ok posso andare 
-	
-	//usato per la grafica
-	private int cont; //conta pixel
+	public boolean free;
+	private int contP; //conta pixel
 	private boolean updateObject; //switcha dalla logica alla grafica
 	private Point pixelPosition;
-	private int sizePixel=35;
+	private int sizePixel;
 
 	public AbstractDynamicObject(int x, int y, World mondo, Speed speed, Speed speedShot, Direction direction,int health) {
 		super(x, y, mondo);
+		sizePixel=35;
 		this.speed = speed;
 		this.direction = direction;
 		this.speedShot = speedShot;
@@ -28,18 +28,32 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		curr = null;
 		next = null;
 		pixelPosition=new Point(x*sizePixel, y*sizePixel);
+		FPS(speed);
 	}
 
 	//COSTRUTTORE SOLO PER IL ROCKET
 	public AbstractDynamicObject(int x, int y, World mondo, Direction direction) {		
 		super(x, y, mondo);
+		sizePixel=35;
 		this.direction = direction;
 		pixelPosition=new Point(x*sizePixel, y*sizePixel);
+		FPS(this.speedShot);	
 	}
 
+	public void FPS(Speed s){
+		
+		if(s==Speed.SLOW){
+			this.setCont(1);
+		}else if(s==Speed.NORMAL){
+			this.setCont(getSizePixel()/2);
+		}else{			
+			this.setCont((getSizePixel()/2)+5);
+		}
+	}
+	
 	public void update() {
 		
-		ok=true;
+		free=true;
 		
 		// rimette l oggetto di prima
 		if (!(curr instanceof PlayerTank) && !(curr instanceof EnemyTank)) {
@@ -53,10 +67,10 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 					setX(getX() - 1);
 				}
 				else
-					ok=false;
+					free=false;
 			}
 			else 
-				ok=false;
+				free=false;
 			break;
 		case DOWN:
 			if (getX() + 1 < getWorld().getRow()) {
@@ -65,10 +79,10 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 					setX(getX() + 1);
 				}
 				else
-					ok=false;
+					free=false;
 			}	
 			else 
-				ok=false;
+				free=false;
 			break;
 		case LEFT:
 			if (getY() - 1 >= 0) {
@@ -77,10 +91,10 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 					setY(getY() - 1);
 				}
 				else
-					ok=false;
+					free=false;
 			}
 			else 
-				ok=false;
+				free=false;
 			break;
 		case RIGHT:
 			if (getY() + 1 < getWorld().getColumn()) {
@@ -89,10 +103,10 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 					setY(getY() + 1);
 				}
 				else
-					ok=false;
+					free=false;
 			}
 			else 
-				ok=false;
+				free=false;
 			break;
 		default:
 			break;
@@ -169,11 +183,11 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	}
 
 	public int getCont() {
-		return cont;
+		return contP;
 	}
 
-	public void setCont(int cont) {
-		this.cont = cont;
+	public void setCont(int contP) {
+		this.contP = contP;
 	}
 
 	public Point getPixelPosition() {

@@ -1,28 +1,20 @@
 package progettoIGPE.davide.giovanni.unical2016;
 
-public class PlayerTank extends AbstractDynamicObject {
+public class PlayerTank extends Tank {
 
-	private static int level; // 1 stella...2 stella... 3 stella
+	private static int level;
 	private int resume;
 	private boolean protection;
 	private int point;
 	private boolean died;
 	
 	public PlayerTank(int x, int y, World world) {
-		super(x, y, world, Speed.NORMAL,Speed.NORMAL, Direction.STOP, 1);
+		super(x, y, world, Speed.SLOW,Speed.SLOW, Direction.STOP, 1);
 		protection = false;
 		resume = 3;
 		point = 0;
-		level = 1;
+		level = 2;
 		died=false;
-		
-		if(this.getSpeed()==Speed.SLOW){
-			this.setCont(1);
-		}else if(this.getSpeed()==Speed.NORMAL){
-			this.setCont(getSizePixel()/2);
-		}else{			
-			 this.setCont((getSizePixel()/2)+5);
-		}	 
 	} 
 
 	@Override

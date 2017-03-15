@@ -2,50 +2,37 @@ package progettoIGPE.davide.giovanni.unical2016;
 
 public class Rocket extends AbstractDynamicObject {
 
-	private AbstractDynamicObject tank; // rocket appartenenza
+	private AbstractDynamicObject tank;
 	private AbstractStaticObject beforeBorder;
-	
-	//PER GRAFICA
 	private boolean firstAnimationNo;
 	private boolean rocketForPlayer;	
-	private boolean finishAnimation;
-	//serve per il gamemanager nella funzione updateRocket, cioè
-	//l'update del rocket viene solo fatto se questo non è prossimo 
-	//alla distruzione ( N.B. " rocket.setNotUpdate(true) " prima del return.
-	private boolean notUpdate;          
+	private boolean finishAnimation;        
 
-	public Rocket(int x, int y, World world, Direction direction, AbstractDynamicObject tank) {
+	public Rocket(int x, int y, World world, Direction direction, AbstractDynamicObject tank) {		
 		super(x, y, world, direction);
+
 		this.tank = tank;
 		curr = tank; //quando viene creato il Rocket il suo curr sarà il TANK
 		beforeBorder = tank.getCurr();
 		firstAnimationNo=true;
 		finishAnimation = false;
-		notUpdate=false;
 		
-		if(tank.getSpeedShot()==Speed.SLOW){
-			this.setCont(1);
-		}else if(tank.getSpeedShot()==Speed.NORMAL){
-			this.setCont(getSizePixel()/2);
-		}else{			
-			this.setCont((getSizePixel()/2)+5);
-		}
-		
-		if(tank instanceof PlayerTank){
-			if(tank.getContRocket()<1){	
-				setUpdateObject(true);
-				setRocketForPlayer(true);
-				}
-			else{
-				setUpdateObject(false);
-				setRocketForPlayer(false);
-			}
-		}
-		else{
-			setUpdateObject(true);
-			setRocketForPlayer(true);
-		}
-		
+//		if(tank instanceof PlayerTank){
+//			if(tank.getContRocket()<1){	
+//				setUpdateObject(true);
+//				setRocketForPlayer(true);
+//				}
+//			else{
+//				setUpdateObject(false);
+//				setRocketForPlayer(false);
+//			}
+//		}
+//		else{
+//			setUpdateObject(true);
+//			setRocketForPlayer(true);
+//		}
+		setUpdateObject(true);
+		setRocketForPlayer(true);
 	}
 	
 	@Override
@@ -115,13 +102,5 @@ public class Rocket extends AbstractDynamicObject {
 
 	public void setFinishAnimation(boolean finishAnimation) {
 		this.finishAnimation = finishAnimation;
-	}
-
-	public boolean isNotUpdate() {
-		return notUpdate;
-	}
-
-	public void setNotUpdate(boolean notUpdate) {
-		this.notUpdate = notUpdate;
 	}
 }
