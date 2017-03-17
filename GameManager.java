@@ -15,7 +15,7 @@ public class GameManager {
 		private int x;
 		private int y;
 		private long currentTime;
-		private static final int size = 20;
+		private static final int size = 21;
 		private int finalScore;
 		private int count[];
 		public Sounds sounds;
@@ -37,7 +37,7 @@ public class GameManager {
 		private int durationPowerUp;
 		private int numEnemyDropsPowerUp;
 		private int xTmp;
-		private int yTmp;
+		private int yTmp; 
 		private Direction dir;
 
 	public class MyTask extends TimerTask {
@@ -45,8 +45,8 @@ public class GameManager {
 		public void run(){
 			
 			//STAMPA 
-			getMatrix().print();
-			System.out.println();
+//			getMatrix().print();
+//			System.out.println();
 					
 			//EFFETTO SPAWN
 			for(int i=0;i<getEnemy().size();i++)
@@ -86,7 +86,7 @@ public class GameManager {
 	public void importMap() {
 		int i = 0;// indice di riga
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("maps/map01.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader("maps/map04.txt"));
 			String line = reader.readLine();
 			while (i < size) {
 
@@ -442,7 +442,7 @@ public class GameManager {
 
 	private boolean crashRocket(Rocket rocket) {
 		
-		if(!rocket.free){  
+		if(!rocket.canGo){  
 			
 				//ROCKET
 				if((rocket.getNext() instanceof Rocket)){

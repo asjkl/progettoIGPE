@@ -11,7 +11,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	protected AbstractStaticObject curr;
 	protected AbstractStaticObject next;
 	private int contRocket;
-	public boolean free;
+	public boolean canGo;
 	private int contP; //conta pixel
 	private boolean updateObject; //switcha dalla logica alla grafica
 	private Point pixelPosition;
@@ -53,7 +53,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	
 	public void update() {
 		
-		free=true;
+		canGo=true;
 		
 		// rimette l oggetto di prima
 		if (!(curr instanceof Tank)) {
@@ -67,10 +67,10 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 					setX(getX() - 1);
 				}
 				else
-					free=false;
+					canGo=false;
 			}
 			else 
-				free=false;
+				canGo=false;
 			break;
 		case DOWN:
 			if (getX() + 1 < getWorld().getRow()) {
@@ -79,10 +79,10 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 					setX(getX() + 1);
 				}
 				else
-					free=false;
+					canGo=false;
 			}	
 			else 
-				free=false;
+				canGo=false;
 			break;
 		case LEFT:
 			if (getY() - 1 >= 0) {
@@ -91,10 +91,10 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 					setY(getY() - 1);
 				}
 				else
-					free=false;
+					canGo=false;
 			}
 			else 
-				free=false;
+				canGo=false;
 			break;
 		case RIGHT:
 			if (getY() + 1 < getWorld().getColumn()) {
@@ -103,10 +103,10 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 					setY(getY() + 1);
 				}
 				else
-					free=false;
+					canGo=false;
 			}
 			else 
-				free=false;
+				canGo=false;
 			break;
 		default:
 			break;

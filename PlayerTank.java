@@ -13,7 +13,7 @@ public class PlayerTank extends Tank {
 		this.protection = false;
 		this.resume = 3;
 		this.point = 0;
-		this.level = 2;
+		this.level = 1;
 		this.died=false;
 	} 
 
