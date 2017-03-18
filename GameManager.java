@@ -87,7 +87,7 @@ public class GameManager {
 	public void importMap() {
 		int i = 0;// indice di riga
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("maps/map04.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader("maps/trees.txt"));
 			String line = reader.readLine();
 			while (i < vertical) {
 
@@ -402,7 +402,7 @@ public class GameManager {
 			break;
 		case SHOVEL:
 			for (int i = vertical - 2; i < vertical; i++){
-				for (int j = (horizontal / 2) - 2; j <= horizontal / 2; j++){
+				for (int j = (horizontal / 2) - 1; j <= (horizontal / 2)+1; j++){
 					if (!(getMatrix().world[i][j] instanceof Flag)) {
 						recoveryWall.add(getMatrix().world[i][j]);
 						getMatrix().world[i][j] = new SteelWall(i, j, getMatrix(), 4);
