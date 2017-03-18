@@ -537,10 +537,10 @@ public class GameManager {
 
 	private void damageAndDestroyPlayerTank() {
 		getMatrix().world[player.getX()][player.getY()] = player.getCurr();
-		getMatrix().world[vertical - 1][(horizontal / 2) - 3] = player;
+		getMatrix().world[vertical-1][(horizontal / 2)-2] = player;
 		player.setResume(player.getResume() - 1);
 		player.setX(vertical - 1);
-		player.setY((horizontal / 2) - 3);
+		player.setY((horizontal / 2) -2);
 		player.setDirection(Direction.STOP);
 		player.setCurr(null);
 		player.setDied(true);
