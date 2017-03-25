@@ -434,17 +434,6 @@ public class GameManager {
 		
 		rocket.update();				
 		rocket.setUpdateObject(false);
-			
-//		if(!rocket.ok && !rocket.isFinishAnimation()){ 
-//			rocket.setFinishAnimation(true);
-//			
-//			if(rocket.getNext() instanceof Rocket){
-//				((Rocket)rocket.getNext()).setFinishAnimation(true);
-//			}
-//			rocket.setNotUpdate(true);
-//			return;
-//		}	
-		
 		if (crashRocket(rocket)){
 			destroyRocket(rocket);
 		}
@@ -503,10 +492,13 @@ public class GameManager {
 
 			countRockets(r);
 
-			if (!(r.getCurr() instanceof PlayerTank) && !(r.getCurr() instanceof EnemyTank))
+			if (!(r.getCurr() instanceof PlayerTank) && !(r.getCurr() instanceof EnemyTank)){
 				matrix.world[r.getX()][r.getY()] = r.getCurr();
-			else  
+			}
+			else{
+					
 				matrix.world[r.getX()][r.getY()] = r.getBeforeBorder();
+			}
 			
 			rocket.remove(r);
 	}

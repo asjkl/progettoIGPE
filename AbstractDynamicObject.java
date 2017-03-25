@@ -52,6 +52,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		if (!(curr instanceof Tank)) {
 			getWorld().world[getX()][getY()] = curr;
 		}
+		
 		switch (getDirection()) {
 		case UP:
 			if (getX() - 1 >= 0) {
