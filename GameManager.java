@@ -368,7 +368,7 @@ public class GameManager {
 		else if(p.getPowerUp() == Power.SHOVEL) {
 				int x = 0;
 				for (int i = vertical - 2; i < vertical; i++){
-					for (int j = (horizontal / 2) - 2; j <= horizontal / 2; j++){
+					for (int j = (horizontal / 2) - 1; j <= (horizontal / 2)+1; j++){
 						if (!(getMatrix().world[i][j] instanceof Flag)){
 							if (x < recoveryWall.size())
 								getMatrix().world[i][j] = recoveryWall.get(x++);
