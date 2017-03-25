@@ -46,8 +46,8 @@ public class GameManager {
 		public void run(){
 			
 			//STAMPA 
-//			getMatrix().print();
-//			System.out.println();
+			getMatrix().print();
+			System.out.println();
 					
 			//EFFETTO SPAWN
 			for(int i=0;i<getEnemy().size();i++)
@@ -87,7 +87,7 @@ public class GameManager {
 	public void importMap() {
 		int i = 0;// indice di riga
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("maps/trees.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader("maps/mappa.txt"));
 			String line = reader.readLine();
 			while (i < vertical) {
 
@@ -177,17 +177,18 @@ public class GameManager {
 
 	}
 
-	public int returnIntSpeed(Speed speed) {
+	public int returnSpeed(Speed speed) {
 		//SERVE PER CONVERTIRE LA SPEED AD UN INTERO
-		if(speed==Speed.SLOW){
+		if(speed==Speed.SLOW)
 			return 1;
-		}else if(speed==Speed.NORMAL){
+		else if(speed==Speed.NORMAL)
 			return 2;
-		}else{
+		else if(speed==Speed.FAST)
 			return 3;
-		}
+		
+		return 0;
 	}
-
+	
 	// ----------------------------------------POWERUP-------------------------------------
 
 	public void isDroppedOnTheMap(){

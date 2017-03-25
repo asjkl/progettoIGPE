@@ -41,14 +41,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	}
 
 	public void FPS(Speed s){
-		
-		if(s==Speed.SLOW){
-			this.setCont(1);
-		}else if(s==Speed.NORMAL){
-			this.setCont(getSizePixel()/2);
-		}else{			
-			this.setCont((getSizePixel()/2)+5);
-		}
+		setCont(1);
 	}
 	
 	public void update() {

@@ -2,14 +2,14 @@ package progettoIGPE.davide.giovanni.unical2016;
 
 public class PlayerTank extends Tank {
 
-	private static int level;
+	private int level;
 	private int resume;
 	private boolean protection;
 	private int point;
 	private boolean died;
 	
 	public PlayerTank(int x, int y, World world) {
-		super(x, y, world, Speed.SLOW,Speed.FAST, Direction.STOP, 1);
+		super(x, y, world, Speed.NORMAL,Speed.FAST, Direction.STOP, 1);
 		this.protection = false;
 		this.resume = 3;
 		this.point = 0;
@@ -57,7 +57,7 @@ public class PlayerTank extends Tank {
 	}
 
 	public void setLevel(int level) {
-		PlayerTank.level = level;
+		this.level = level;
 	}
 
 	public int getResume() {
