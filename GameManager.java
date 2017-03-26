@@ -46,8 +46,8 @@ public class GameManager {
 		public void run(){
 			
 			//STAMPA 
-			getMatrix().print();
-			System.out.println();
+//			getMatrix().print();
+//			System.out.println();
 					
 			//EFFETTO SPAWN
 			for(int i=0;i<getEnemy().size();i++)
@@ -62,7 +62,7 @@ public class GameManager {
 		numberOfEnemyOnMap = 0;
 		numberOfEnemyReadyToSpwan = 0;
 		durationPowerUp = 20;
-		numEnemyDropsPowerUp = 1; //indica ogni quanti enemie far cadere powerUp
+		numEnemyDropsPowerUp = 3; //indica ogni quanti enemie far cadere powerUp
 		xTmp = -1;
 		yTmp = -1;
 		matrix = new World(vertical, horizontal);
@@ -142,14 +142,6 @@ public class GameManager {
 
 			e.printStackTrace();
 		}
-	}
-
-	public static int getHorizontal() {
-		return horizontal;
-	}
-
-	public static int getVertical() {
-		return vertical;
 	}
 
 	public void importEnemies(BufferedReader reader, String line){
@@ -434,6 +426,7 @@ public class GameManager {
 		
 		rocket.update();				
 		rocket.setUpdateObject(false);
+		
 		if (crashRocket(rocket)){
 			destroyRocket(rocket);
 		}
@@ -491,12 +484,11 @@ public class GameManager {
 	public void destroyRocket(Rocket r){
 
 			countRockets(r);
-
-			if (!(r.getCurr() instanceof PlayerTank) && !(r.getCurr() instanceof EnemyTank)){
+			
+			if (!(r.getCurr() instanceof Tank)){
 				matrix.world[r.getX()][r.getY()] = r.getCurr();
 			}
-			else{
-					
+			else{				
 				matrix.world[r.getX()][r.getY()] = r.getBeforeBorder();
 			}
 			
@@ -555,16 +547,17 @@ public class GameManager {
 
 	private void destroyEnemyTank(EnemyTank enemyT) {
 		
-		//PRIMA DI MORIRE
+		// PRIMA DI MORIRE
 		finalScore += enemyT.getPoint();
 		increaseCount(enemyT);
 		
 		if(numberOfEnemyOnMap > 0)
 			numberOfEnemyOnMap--;
+		
 		if(numberOfEnemyReadyToSpwan > 0)
 			numberOfEnemyReadyToSpwan--;
 		
-		//GENERA POWERUP
+		// GENERA POWERUP
 		if (enemyT.isPowerUpOn())
 			addPowerUp(new Random().nextInt(6)); 
 
@@ -628,6 +621,7 @@ public class GameManager {
 	}
 
 	private void chooseEnemy(String typology, int y) {
+		
 		switch (typology) {
 		case "basic":
 			enemy.add(new BasicTank(0, y, matrix, Direction.STOP));
@@ -847,4 +841,11 @@ public class GameManager {
 		this.numberOfEnemyOnMap = numberOfEnemyOnMap;
 }
 
+	public static int getHorizontal() {
+		return horizontal;
+	}
+
+	public static int getVertical() {
+		return vertical;
+	}
 }

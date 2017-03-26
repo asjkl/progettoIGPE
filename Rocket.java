@@ -6,7 +6,7 @@ public class Rocket extends AbstractDynamicObject {
 	private AbstractStaticObject beforeBorder;
 	private boolean firstAnimationNo;
 	private boolean rocketForPlayer;	
-	private boolean finishAnimation;        
+	private boolean finishAnimation;         
 
 	public Rocket(int x, int y, World world, Direction direction, AbstractDynamicObject tank) {		
 		super(x, y, world, direction);
@@ -14,7 +14,7 @@ public class Rocket extends AbstractDynamicObject {
 		this.tank = tank;
 		this.curr = tank; //quando viene creato il Rocket il suo curr sarà il TANK
 		this.beforeBorder = tank.getCurr();
-		this.firstAnimationNo=true;
+		this.firstAnimationNo = true;
 		this.finishAnimation = false;
 		
 		if(tank instanceof PlayerTank){
