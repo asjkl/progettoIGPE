@@ -31,10 +31,9 @@ public class PlayerTank extends Tank {
 			// prendo tutti i powerUp
 			if (next instanceof PowerUp && !(((PowerUp)next).getBefore() instanceof Trees) && !(((PowerUp)next).getBefore() instanceof Ice)) 
 				curr = null;
-			else
-			if( next instanceof PowerUp && (((PowerUp)next).getBefore() instanceof Trees || ((PowerUp)next).getBefore() instanceof Ice) )
+			else if( next instanceof PowerUp && (((PowerUp)next).getBefore() instanceof Trees || ((PowerUp)next).getBefore() instanceof Ice) )
 				curr = ((PowerUp)next).getBefore();
-			 else
+			else
 				curr = next;
 				
 			return true;
