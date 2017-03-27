@@ -3,7 +3,6 @@ package progettoIGPE.davide.giovanni.unical2016;
 public class Rocket extends AbstractDynamicObject {
 
 	private AbstractDynamicObject tank;
-	private AbstractStaticObject beforeBorder;
 	private boolean firstAnimationNo;
 	private boolean rocketForPlayer;	
 	private boolean finishAnimation;         
@@ -13,7 +12,7 @@ public class Rocket extends AbstractDynamicObject {
 
 		this.tank = tank;
 		this.curr = tank; //quando viene creato il Rocket il suo curr sarà il TANK
-		this.beforeBorder = tank.getCurr();
+
 		this.firstAnimationNo = true;
 		this.finishAnimation = false;
 		
@@ -36,7 +35,8 @@ public class Rocket extends AbstractDynamicObject {
 	@Override
 	public void update() {
 		super.update();
-		getWorld().world[getX()][getY()] = this;
+		if (curr != tank)
+			getWorld().world[getX()][getY()] = this;
 	}
 	
 	@Override
@@ -68,14 +68,6 @@ public class Rocket extends AbstractDynamicObject {
 
 	public void setTank(AbstractDynamicObject tank) {
 		this.tank = tank;
-	}
-
-	public AbstractStaticObject getBeforeBorder() {
-		return beforeBorder;
-	}
-
-	public void setBeforeBordo(AbstractStaticObject beforeBorder) {
-		this.beforeBorder = beforeBorder;
 	}
 
 	public boolean isFirstAnimationNo() {

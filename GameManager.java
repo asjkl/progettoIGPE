@@ -12,11 +12,11 @@ import java.util.TimerTask;
 public class GameManager {
 	
 	//OTHERS
-		 private int x;
+		private int x;
 		private int y;
 		private long currentTime;
-		private static final int horizontal = 21;
-		private static final int vertical = 20;
+		private static final int hight = 21;
+		private static final int width = 20;
 		private int finalScore;
 		private int count[];
 		public Sounds sounds;
@@ -46,8 +46,8 @@ public class GameManager {
 		public void run(){
 			
 			//STAMPA 
-//			getMatrix().print();
-//			System.out.println();
+			getMatrix().print();
+			System.out.println();
 					
 			//EFFETTO SPAWN
 			for(int i=0;i<getEnemy().size();i++)
@@ -65,7 +65,7 @@ public class GameManager {
 		numEnemyDropsPowerUp = 3; //indica ogni quanti enemie far cadere powerUp
 		xTmp = -1;
 		yTmp = -1;
-		matrix = new World(vertical, horizontal);
+		matrix = new World(width, hight);
 		enemy = new ArrayList<>();
 		rocket = new ArrayList<>();
 		power = new ArrayList<>();
@@ -89,7 +89,7 @@ public class GameManager {
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader("maps/mappa.txt"));
 			String line = reader.readLine();
-			while (i < vertical) {
+			while (i < width) {
 
 				StringTokenizer st = new StringTokenizer(line, " ");
 				int j = 0;// indice di colonna
@@ -307,7 +307,7 @@ public class GameManager {
 			dir=Direction.UP;
 			return true;
 		}
-		if(x+1 < vertical && !(getMatrix().world[x+1][y] instanceof Water)
+		if(x+1 < width && !(getMatrix().world[x+1][y] instanceof Water)
 			&& !(getMatrix().world[x+1][y] instanceof EnemyTank)
 			&& !(getMatrix().world[x+1][y] instanceof PlayerTank)){           //DOWN
 			xTmp=x+1;
@@ -323,7 +323,7 @@ public class GameManager {
 			dir=Direction.LEFT;
 			return true;
 		}
-		if(y+1 < horizontal && !(getMatrix().world[x][y+1] instanceof Water)
+		if(y+1 < hight && !(getMatrix().world[x][y+1] instanceof Water)
 			&& !(getMatrix().world[x][y+1] instanceof EnemyTank)
 			&& !(getMatrix().world[x][y+1] instanceof PlayerTank) ){          //RIGHT
 			xTmp=x;
@@ -338,8 +338,8 @@ public class GameManager {
 		boolean flag = false;
 
 		while (!flag) {
-			x = random.nextInt(vertical);
-			y = random.nextInt(horizontal);
+			x = random.nextInt(width);
+			y = random.nextInt(hight);
 
 			if (!(getMatrix().world[x][y] instanceof PlayerTank) && !(getMatrix().world[x][y] instanceof EnemyTank)
 					&& !(getMatrix().world[x][y] instanceof PowerUp) && !(getMatrix().world[x][y] instanceof Rocket)
@@ -359,8 +359,8 @@ public class GameManager {
 		}
 		else if(p.getPowerUp() == Power.SHOVEL) {
 				int x = 0;
-				for (int i = vertical - 2; i < vertical; i++){
-					for (int j = (horizontal / 2) - 1; j <= (horizontal / 2)+1; j++){
+				for (int i = width - 2; i < width; i++){
+					for (int j = (hight / 2) - 1; j <= (hight / 2)+1; j++){
 						if (!(getMatrix().world[i][j] instanceof Flag)){
 							if (x < recoveryWall.size())
 								getMatrix().world[i][j] = recoveryWall.get(x++);
@@ -394,8 +394,8 @@ public class GameManager {
 			player.setProtection(true);
 			break;
 		case SHOVEL:
-			for (int i = vertical - 2; i < vertical; i++){
-				for (int j = (horizontal / 2) - 1; j <= (horizontal / 2)+1; j++){
+			for (int i = width - 2; i < width; i++){
+				for (int j = (hight / 2) - 1; j <= (hight / 2)+1; j++){
 					if (!(getMatrix().world[i][j] instanceof Flag)) {
 						recoveryWall.add(getMatrix().world[i][j]);
 						getMatrix().world[i][j] = new SteelWall(i, j, getMatrix(), 4);
@@ -484,13 +484,9 @@ public class GameManager {
 	public void destroyRocket(Rocket r){
 
 			countRockets(r);
-			
-			if (!(r.getCurr() instanceof Tank)){
+		
+			if (r.getCurr() != r.getTank())
 				matrix.world[r.getX()][r.getY()] = r.getCurr();
-			}
-			else{				
-				matrix.world[r.getX()][r.getY()] = r.getBeforeBorder();
-			}
 			
 			rocket.remove(r);
 	}
@@ -522,10 +518,10 @@ public class GameManager {
 
 	private void damageAndDestroyPlayerTank() {
 		getMatrix().world[player.getX()][player.getY()] = player.getCurr();
-		getMatrix().world[vertical-1][(horizontal / 2)-2] = player;
+		getMatrix().world[width-1][(hight / 2)-2] = player;
 		player.setResume(player.getResume() - 1);
-		player.setX(vertical - 1);
-		player.setY((horizontal / 2) -2);
+		player.setX(width - 1);
+		player.setY((hight / 2) -2);
 		player.setDirection(Direction.STOP);
 		player.setCurr(null);
 		player.setDied(true);
@@ -609,7 +605,7 @@ public class GameManager {
 
 	public void addEnemies(String T, int N){
 
-		int []pos = {0, horizontal/2, horizontal-1}; //possibili pos per far spawnare enemies
+		int []pos = {0, hight/2, hight-1}; //possibili pos per far spawnare enemies
 		int c=0;
 		int saveLastPosition=0;
 
@@ -676,7 +672,7 @@ public class GameManager {
 
 					int tempCont;
 					do{
-					tempCont = random.nextInt(vertical);
+					tempCont = random.nextInt(width);
 					}while(tempCont==matrix.getColumn());
 
 					enemy.get(a).setStep(tempCont);
@@ -842,10 +838,10 @@ public class GameManager {
 }
 
 	public static int getHorizontal() {
-		return horizontal;
+		return hight;
 	}
 
 	public static int getVertical() {
-		return vertical;
+		return width;
 	}
 }
