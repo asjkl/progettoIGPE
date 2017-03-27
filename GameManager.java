@@ -12,7 +12,7 @@ import java.util.TimerTask;
 public class GameManager {
 	
 	//OTHERS
-		private int x;
+		 private int x;
 		private int y;
 		private long currentTime;
 		private static final int horizontal = 21;
