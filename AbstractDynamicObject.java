@@ -28,7 +28,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		this.curr = null;
 		this.next = null;
 		this.pixelPosition=new Point(x*sizePixel, y*sizePixel);
-		FPS(speed);
+		FPS();
 	}
 
 	//COSTRUTTORE SOLO PER IL ROCKET
@@ -37,10 +37,10 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		this.sizePixel=35;
 		this.direction = direction;
 		pixelPosition=new Point(x*sizePixel, y*sizePixel);
-		FPS(this.speedShot);	
+		FPS();	
 	}
 
-	public void FPS(Speed s){
+	public void FPS(){
 		setCont(1);
 	}
 	

@@ -28,6 +28,7 @@ public class GameManager {
 		private ArrayList<Rocket> rocket;
 		private Flag flag;
 		private ArrayList<AbstractStaticObject> recoveryWall;
+		public static boolean M[][] = new boolean[height][width]; 
 	
 	//ENEMY
 		private int numberOfEnemyToSpawn;
@@ -46,8 +47,8 @@ public class GameManager {
 		public void run(){
 			
 			//STAMPA 
-			getMatrix().print();
-			System.out.println();
+//			getMatrix().print();
+//			System.out.println();
 					
 			//EFFETTO SPAWN
 			for(int i=0;i<getEnemy().size();i++)
@@ -74,6 +75,10 @@ public class GameManager {
 		sounds = new Sounds();
 		count = new int[4];
 
+		for(int i=0;i<height;i++)
+			for(int j=0;j<width;j++)
+				M[i][j] = false;
+		
 		for (int i = 0; i < count.length; i++) //conta occorrenze enemies?
 			count[i] = 0;
 	
@@ -428,7 +433,8 @@ public class GameManager {
 		rocket.setUpdateObject(false);
 		
 		if (crashRocket(rocket)){
-			destroyRocket(rocket);
+			rocket.setZombie(true);
+			//destroyRocket(rocket);
 		}
 	}
 

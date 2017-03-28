@@ -5,7 +5,8 @@ public class Rocket extends AbstractDynamicObject {
 	private AbstractDynamicObject tank;
 	private boolean firstAnimationNo;
 	private boolean rocketForPlayer;	
-	private boolean finishAnimation;         
+	private boolean finishAnimation;  
+	private boolean zombie = false;
 
 	public Rocket(int x, int y, World world, Direction direction, AbstractDynamicObject tank) {		
 		super(x, y, world, direction);
@@ -92,5 +93,13 @@ public class Rocket extends AbstractDynamicObject {
 
 	public void setFinishAnimation(boolean finishAnimation) {
 		this.finishAnimation = finishAnimation;
+	}
+
+	public boolean isZombie() {
+		return zombie;
+	}
+
+	public void setZombie(boolean zombie) {
+		this.zombie = zombie;
 	}
 }
