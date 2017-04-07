@@ -46,8 +46,8 @@ public class GameManager {
 		public void run(){
 			
 			//STAMPA 
-			getMatrix().print();
-			System.out.println();
+//			getMatrix().print();
+//			System.out.println();
 					
 			//EFFETTO SPAWN
 			for(int i=0;i<getEnemy().size();i++)
@@ -429,19 +429,19 @@ public class GameManager {
 		rocket.setUpdateObject(false);
 		
 		if (crashRocket(rocket)){
-			destroyRocket(rocket);
+			rocket.setZombie(true);	
 		}
 	}
 
 	private boolean crashRocket(Rocket rocket) {
 		
-		if(!rocket.canGo){  
+		 if(!rocket.canGo){  
 			
 				//ROCKET
-				if((rocket.getNext() instanceof Rocket)){
-					destroyRocket(((Rocket)rocket.getNext()));
+				if((rocket.getNext() instanceof Rocket) && ((Rocket)rocket.getNext()).getTank() != rocket.getTank()){
+				destroyRocket(((Rocket)rocket.getNext()));
 				}
-				
+					
 				//WALL
 				if(rocket.getNext() instanceof Wall){
 					damageWall(rocket);
@@ -482,10 +482,9 @@ public class GameManager {
 		return false;
 	}
 
-	public void destroyRocket(Rocket r){
-
+	public void destroyRocket(Rocket r){	
 			countRockets(r);
-		
+			
 			if (r.getCurr() != r.getTank())
 				matrix.world[r.getX()][r.getY()] = r.getCurr();
 			
