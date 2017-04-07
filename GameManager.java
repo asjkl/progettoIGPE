@@ -19,7 +19,6 @@ public class GameManager {
 		public static final int height = 20;
 		private int finalScore;
 		private int count[];
-		public Sounds sounds;
 		private Random random;
 		private World matrix;
 		private PlayerTank player;
@@ -28,7 +27,7 @@ public class GameManager {
 		private ArrayList<Rocket> rocket;
 		private Flag flag;
 		private ArrayList<AbstractStaticObject> recoveryWall;
-		public static boolean M[][] = new boolean[height][width]; 
+		private boolean soundPowerUp;
 	
 	//ENEMY
 		private int numberOfEnemyToSpawn;
@@ -47,8 +46,8 @@ public class GameManager {
 		public void run(){
 			
 			//STAMPA 
-//			getMatrix().print();
-//			System.out.println();
+			getMatrix().print();
+			System.out.println();
 					
 			//EFFETTO SPAWN
 			for(int i=0;i<getEnemy().size();i++)
@@ -72,12 +71,8 @@ public class GameManager {
 		power = new ArrayList<>();
 		random = new Random();
 		recoveryWall = new ArrayList<>();
-		sounds = new Sounds();
 		count = new int[4];
-
-		for(int i=0;i<height;i++)
-			for(int j=0;j<width;j++)
-				M[i][j] = false;
+		soundPowerUp=false;
 		
 		for (int i = 0; i < count.length; i++) //conta occorrenze enemies?
 			count[i] = 0;
@@ -268,8 +263,9 @@ public class GameManager {
 		foundPosition();
 
 		//TODO sounds powerUpAppear
-		sounds.powerUpAppear();
-
+		//sounds.powerUpAppear();
+		soundPowerUp=true;
+		
 		switch (t) {
 		case 0:
 			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.GRENADE, 0, true);
@@ -433,8 +429,7 @@ public class GameManager {
 		rocket.setUpdateObject(false);
 		
 		if (crashRocket(rocket)){
-			rocket.setZombie(true);
-			//destroyRocket(rocket);
+			destroyRocket(rocket);
 		}
 	}
 
@@ -841,5 +836,15 @@ public class GameManager {
 
 	public void setNumberOfEnemyOnMap(int numberOfEnemyOnMap) {
 		this.numberOfEnemyOnMap = numberOfEnemyOnMap;
+	}
+
+	
+	public boolean isSoundPowerUp() {
+		return soundPowerUp;
+	}
+
+
+	public void setSoundPowerUp(boolean soundPowerUp) {
+		this.soundPowerUp = soundPowerUp;
 	}
 }
