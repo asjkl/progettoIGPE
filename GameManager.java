@@ -435,7 +435,7 @@ public class GameManager {
 
 	private boolean crashRocket(Rocket rocket) {
 		
-		 if(!rocket.canGo){  
+		  if(!rocket.canGo){  
 			
 				//ROCKET
 				if((rocket.getNext() instanceof Rocket) && ((Rocket)rocket.getNext()).getTank() != rocket.getTank()){
