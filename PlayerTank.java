@@ -7,14 +7,17 @@ public class PlayerTank extends Tank {
 	private boolean protection;
 	private int point;
 	private boolean died;
+	private boolean first;
 	
 	public PlayerTank(int x, int y, World world) {
 		super(x, y, world, Speed.NORMAL,Speed.FAST, Direction.STOP, 1);
 		this.protection = false;
 		this.resume = 3;
 		this.point = 0;
-		this.level = 1;
+		this.level = 2;
 		this.died=false;
+		setReadyToSpawn(true);
+		first=true;
 	} 
 
 	@Override
@@ -27,7 +30,7 @@ public class PlayerTank extends Tank {
 	@Override
 	public boolean sameObject() {
 		if (!(next instanceof Wall) && !(next instanceof Tank)
-				&& !(next instanceof Water) && !(next instanceof Rocket)  && !(next instanceof Flag)) {
+				&& !(next instanceof Water) && !(next instanceof Rocket) && !(next instanceof Flag)) {
 			// prendo tutti i powerUp
 			if (next instanceof PowerUp && !(((PowerUp)next).getBefore() instanceof Trees) && !(((PowerUp)next).getBefore() instanceof Ice)) 
 				curr = null;
@@ -94,5 +97,13 @@ public class PlayerTank extends Tank {
 
 	public void setDied(boolean died) {
 		this.died = died;
+	}
+
+	public boolean isFirst() {
+		return first;
+	}
+
+	public void setFirst(boolean first) {
+		this.first = first;
 	}
 }

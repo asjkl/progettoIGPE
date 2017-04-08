@@ -20,10 +20,6 @@ public class EnemyTank extends Tank {
 	private boolean noUpdateG;
 	private boolean stopEnemy; //powerUp TIMER
 	private boolean stopEnemyGraphic; //powerUp TIMER
-	
-	private boolean readyToSpawn;
-	private long spawnTime; //salva il tempo che ci mette per spawnare
-	private int countdown;
 
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health, int point) {
 		super(x, y, world, speed, speedShot, direction, health);
@@ -43,8 +39,7 @@ public class EnemyTank extends Tank {
 		this.noUpdateG=false;
 		this.stopEnemy=false;
 		this.stopEnemyGraphic=false;
-		this.readyToSpawn = false;
-		this.countdown = 0;
+		setReadyToSpawn(false);
 		setUpdateObject(true);
 	}
 
@@ -177,7 +172,6 @@ public class EnemyTank extends Tank {
 			break;
 		default:
 			break;
-
 		}
 	}
 
@@ -325,27 +319,4 @@ public class EnemyTank extends Tank {
 		this.stopEnemyGraphic = stopEnemyGraphic;
 	}
 
-	public boolean isReadyToSpawn() {
-		return readyToSpawn;
-	}
-
-	public void setReadyToSpawn(boolean readyToSpawn) {
-		this.readyToSpawn = readyToSpawn;
-	}
-
-	public long getSpawnTime() {
-		return spawnTime;
-	}
-
-	public void setSpawnTime(long spawnTime) {
-		this.spawnTime = spawnTime;
-	}
-
-	public int getCountdown() {
-		return countdown;
-	}
-
-	public void setCountdown(int countdown) {
-		this.countdown = countdown;
-	}
 }
