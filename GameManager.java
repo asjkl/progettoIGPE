@@ -530,7 +530,7 @@ public class GameManager {
 		player.setDirection(Direction.STOP);
 		player.setCurr(null);
 		player.setDied(true);
-		player.setLevel(1);
+		player.setLevel(0);
 		
 		player.setReadyToSpawn(true);
 		player.setCountdown(0);
@@ -587,8 +587,8 @@ public class GameManager {
 
 	public void createRocketTank(Direction tmp, AbstractDynamicObject tank) {
 
-		if ((tank instanceof PlayerTank && player.getLevel() > 1 && player.getContRocket() < 2)
-				|| (tank instanceof PlayerTank && player.getLevel() == 1 && player.getContRocket() == 0)
+		if ((tank instanceof PlayerTank && player.getLevel() > 0 && player.getContRocket() < 2)
+				|| (tank instanceof PlayerTank && player.getLevel() == 0 && player.getContRocket() == 0)
 				|| (tank instanceof EnemyTank && tank.getContRocket() == 0)) {
 
 			if (tmp == Direction.STOP && tank instanceof PlayerTank) // serve quando nasce playerTank, essendo STOP spara verso l alto

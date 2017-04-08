@@ -10,7 +10,7 @@ public class PlayerTank extends Tank {
 	private boolean first;
 	
 	public PlayerTank(int x, int y, World world) {
-		super(x, y, world, Speed.NORMAL,Speed.FAST, Direction.STOP, 1);
+		super(x, y, world, Speed.NORMAL, Speed.FAST, Direction.STOP, 1);
 		this.protection = false;
 		this.resume = 3;
 		this.point = 0;
