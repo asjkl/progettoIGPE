@@ -54,12 +54,21 @@ public class GameManager {
 				if(getEnemy().get(i).isReadyToSpawn())
 					getEnemy().get(i).setCountdown((getEnemy().get(i).getCountdown()+1)%4);
 			
-			//EFFETTO SPAWN PLAYER
+			//EFFETTO SPAWN E PROTEZIONE PLAYER
 			if(currentTime == getPlayer().getSpawnTime())
 					getPlayer().setReadyToSpawn(false);
-			if(getPlayer().isReadyToSpawn()){
+			if(getPlayer().isReadyToSpawn() || getPlayer().isProtection()){
 				getPlayer().setCountdown((getPlayer().getCountdown()+1)%2);
 			}
+			
+			//EFFETTO PROTEZIONE ENEMY (SE è POSSIBILE EVITARE QUESTO FOR, E FARE IL SETCONTDOWN DA QUALCHE ALTRA PARTE)
+			for(int a=0; a<enemy.size(); a++){
+				if(enemy.get(a).isAppearsInTheMap() && enemy.get(a).isProtection()){
+					enemy.get(a).setCountdown((enemy.get(a).getCountdown()+1)%2);
+				}
+			}
+			
+			
 		}
 	}
 	
@@ -273,34 +282,37 @@ public class GameManager {
 
 		soundPowerUp=true;
 		
-		switch (t) {
-		case 0:
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.GRENADE, 0, true);
-			extendAddPowerUp(tmp);
-			break;
-		case 1:
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.HELMET, 12, true);
-			extendAddPowerUp(tmp);
-			break;
-		case 2:
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.SHOVEL, 15, true);
-			extendAddPowerUp(tmp);
-			break;
-		case 3:
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.STAR, 0, true);
-			extendAddPowerUp(tmp);
-			break;
-		case 4:
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.TANK, 0, true);
-			extendAddPowerUp(tmp);
-			break;
-		case 5:
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.TIMER, 12, true);
-			extendAddPowerUp(tmp);
-			break;
-		default:
-			break;
-		}
+//		switch (t) {
+//		case 0:
+//			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.GRENADE, 0, true);
+//			extendAddPowerUp(tmp);
+//			break;
+//		case 1:
+//			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.HELMET, 12, true);
+//			extendAddPowerUp(tmp);
+//			break;
+//		case 2:
+//			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.SHOVEL, 15, true);
+//			extendAddPowerUp(tmp);
+//			break;
+//		case 3:
+//			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.STAR, 0, true);
+//			extendAddPowerUp(tmp);
+//			break;
+//		case 4:
+//			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.TANK, 0, true);
+//			extendAddPowerUp(tmp);
+//			break;
+//		case 5:
+//			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.TIMER, 12, true);
+//			extendAddPowerUp(tmp);
+//			break;
+//		default:
+//			break;
+//		}
+		tmp = new PowerUp(getX(), getY(), getMatrix(), Power.HELMET, 12, true);
+		extendAddPowerUp(tmp);
+	
 	}
 
 	private boolean movePowerUpInCorrectPosition(){
