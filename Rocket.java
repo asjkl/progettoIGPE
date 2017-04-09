@@ -13,7 +13,7 @@ public class Rocket extends AbstractDynamicObject {
 
 		this.tank = tank;
 		this.curr = tank; //quando viene creato il Rocket il suo curr sarà il TANK
-
+			
 		this.firstAnimationNo = true;
 		this.finishAnimation = false;
 		
@@ -42,6 +42,9 @@ public class Rocket extends AbstractDynamicObject {
 	
 	@Override
 	public boolean sameObject() {
+		if(firstAnimationNo && next==tank){			//IL PROBLEMA DEL PERCHè NON SPARANO SPESSO I NEMICI E PERCHè IL NEXT SUBITO è IL TANK STESSO E FANNO DISTRUGGERE IL ROCKET
+			return true;							//DENTRO QUESTO IF ENTRO UNA SOLA VOLTA..CIOè SOLO ALL'INIZIO DELLO SPARO E POI NON ENTRERò MAI PIù
+		}
 		
 		if(next instanceof Rocket && ((Rocket) next).getTank() == this.getTank())
 			return true;

@@ -46,8 +46,8 @@ public class GameManager {
 		public void run(){
 			
 			//STAMPA 
-			getMatrix().print();
-			System.out.println();
+//			getMatrix().print();
+//			System.out.println();
 			
 			//EFFETTO SPAWN
 			for(int i=0;i<getEnemy().size();i++)
@@ -65,7 +65,7 @@ public class GameManager {
 	
 	public GameManager() {
 	
-		numberOfEnemyToSpawn = 3;
+		numberOfEnemyToSpawn = 1;
 		numberOfEnemyOnMap = 0;
 		numberOfEnemyReadyToSpwan = 0;
 		durationPowerUp = 20;
