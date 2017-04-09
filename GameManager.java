@@ -65,7 +65,7 @@ public class GameManager {
 	
 	public GameManager() {
 	
-		numberOfEnemyToSpawn = 1;
+		numberOfEnemyToSpawn = 3;
 		numberOfEnemyOnMap = 0;
 		numberOfEnemyReadyToSpwan = 0;
 		durationPowerUp = 20;
