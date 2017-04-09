@@ -7,7 +7,7 @@ public abstract class Tank extends AbstractDynamicObject{
 	private boolean readyToSpawn;
 	private int countdown;
 	private long spawnTime; //salva il tempo che ci mette per spawnare
-	
+	private boolean protection;
 	private Direction  oldD; 
 	private boolean oldDirection;
 	private Direction tmpDirection; 
@@ -18,6 +18,7 @@ public abstract class Tank extends AbstractDynamicObject{
 		super(x, y, mondo, speed, speedShot, direction, health);
 		setTmpCont(0);
 		this.setCountdown(0);
+		protection = false;
 		oldD = Direction.STOP;
 		tmpDirection = Direction.STOP;
 		timerEffect = -1;
@@ -91,6 +92,14 @@ public abstract class Tank extends AbstractDynamicObject{
 
 	public void setTimerEffect(long timerEffect) {
 		this.timerEffect = timerEffect;
+	}
+
+	public boolean isProtection() {
+		return protection;
+	}
+
+	public void setProtection(boolean protection) {
+		this.protection = protection;
 	}
 
 }

@@ -4,18 +4,16 @@ public class PlayerTank extends Tank {
 
 	private int level;
 	private int resume;
-	private boolean protection;
 	private int point;
 	private boolean died;
 	private boolean first;
 	
 	public PlayerTank(int x, int y, World world) {
 		super(x, y, world, Speed.NORMAL, Speed.FAST, Direction.STOP, 1);
-		this.protection = false;
 		this.resume = 3;
 		this.point = 0;
-		this.level = 0;
-		this.died=false;
+		this.level = 2;
+		this.died = false;
 		setReadyToSpawn(true);
 		first=true;
 	} 
@@ -68,14 +66,6 @@ public class PlayerTank extends Tank {
 
 	public void setResume(int resume) {
 		this.resume = resume;
-	}
-
-	public boolean isProtection() {
-		return protection;
-	}
-
-	public void setProtection(boolean protection) {
-		this.protection = protection;
 	}
 
 	public int getPoint() {

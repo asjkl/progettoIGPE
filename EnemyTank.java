@@ -15,7 +15,7 @@ public class EnemyTank extends Tank {
 	private boolean directionLeft;
 	private boolean directionRight;
 	private boolean appearsInTheMap;
-	private boolean protection;
+	
 	private boolean powerUpOn;
 	private boolean noUpdateG;
 	private boolean stopEnemy; //powerUp TIMER
@@ -34,7 +34,6 @@ public class EnemyTank extends Tank {
 		this.directionLeft = false;
 		this.directionRight = false;
 		this.appearsInTheMap = false;
-		this.protection = false;
 		this.powerUpOn = false;
 		this.noUpdateG=false;
 		this.stopEnemy=false;
@@ -58,7 +57,7 @@ public class EnemyTank extends Tank {
 			// prende solo Helmet
 			if (next instanceof PowerUp && ((PowerUp) next).getPowerUp() == Power.HELMET && !(((PowerUp)next).getBefore() instanceof Trees)) {
 				curr = null;
-				protection=true;
+				setProtection(true);
 			} 
 			else
 				if( next instanceof PowerUp && ((PowerUp) next).getPowerUp() == Power.HELMET &&( ((PowerUp)next).getBefore() instanceof Trees || ((PowerUp)next).getBefore() instanceof Ice) )
@@ -277,14 +276,6 @@ public class EnemyTank extends Tank {
 
 	public void setAppearsInTheMap(boolean appearsInTheMap) {
 		this.appearsInTheMap = appearsInTheMap;
-	}
-
-	public boolean isProtection() {
-		return protection;
-	}
-
-	public void setProtection(boolean protection) {
-		this.protection = protection;
 	}
 
 	public boolean isPowerUpOn() {
