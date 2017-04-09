@@ -46,7 +46,7 @@ public class Rocket extends AbstractDynamicObject {
 		if(next instanceof Rocket && ((Rocket) next).getTank() == this.getTank())
 			return true;
 		
-		if (!(next instanceof Wall) && !(next instanceof Tank && next != tank) && !(next instanceof Rocket)
+		if (!(next instanceof Wall) && !(next instanceof Tank) && !(next instanceof Rocket)
 				 && !(next instanceof Flag)) {
 			curr=next;
 			return true;
