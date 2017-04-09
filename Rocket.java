@@ -6,7 +6,6 @@ public class Rocket extends AbstractDynamicObject {
 	private boolean firstAnimationNo;
 	private boolean rocketForPlayer;	
 	private boolean finishAnimation;  
-	private boolean zombie = false;
 
 	public Rocket(int x, int y, World world, Direction direction, AbstractDynamicObject tank) {		
 		super(x, y, world, direction);
@@ -42,8 +41,9 @@ public class Rocket extends AbstractDynamicObject {
 	
 	@Override
 	public boolean sameObject() {
-		if(firstAnimationNo && next==tank){			//IL PROBLEMA DEL PERCHè NON SPARANO SPESSO I NEMICI E PERCHè IL NEXT SUBITO è IL TANK STESSO E FANNO DISTRUGGERE IL ROCKET
-			return true;							//DENTRO QUESTO IF ENTRO UNA SOLA VOLTA..CIOè SOLO ALL'INIZIO DELLO SPARO E POI NON ENTRERò MAI PIù
+		
+		if(firstAnimationNo && next==tank){
+			return true;							
 		}
 		
 		if(next instanceof Rocket && ((Rocket) next).getTank() == this.getTank())
@@ -97,13 +97,5 @@ public class Rocket extends AbstractDynamicObject {
 
 	public void setFinishAnimation(boolean finishAnimation) {
 		this.finishAnimation = finishAnimation;
-	}
-
-	public boolean isZombie() {
-		return zombie;
-	}
-
-	public void setZombie(boolean zombie) {
-		this.zombie = zombie;
 	}
 }

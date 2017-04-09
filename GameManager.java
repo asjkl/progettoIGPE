@@ -11,7 +11,7 @@ import java.util.TimerTask;
 
 public class GameManager {
 	
-	//OTHERS
+	//OTHER
 		private int x;
 		private int y;
 		private long currentTime;
@@ -41,6 +41,8 @@ public class GameManager {
 		private int yTmp; 
 		private Direction dir;
 
+	// --------------------------------------OTHER-----------------------------------------
+		
 	public class MyTask extends TimerTask {
 
 		public void run(){
@@ -105,7 +107,7 @@ public class GameManager {
 	public void importMap() {
 		int i = 0;// indice di riga
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("maps/mappa.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader("maps/ice.txt"));
 			String line = reader.readLine();
 			while (i < height) {
 
@@ -446,8 +448,7 @@ public class GameManager {
 		rocket.setUpdateObject(false);
 		
 		if(!rocket.canGo){
-			crashRocket(rocket);
-//			rocket.setZombie(true);	
+			crashRocket(rocket);	
 			destroyRocket(rocket);
 		}
 	}
@@ -691,6 +692,7 @@ public class GameManager {
 					tempCont = random.nextInt(height);
 					}while(tempCont==matrix.getColumn());
 
+					enemy.get(a).setTmpDirection(enemy.get(a).getDirection()); // usato per ICE
 					enemy.get(a).setStep(tempCont);
 					
 				}
