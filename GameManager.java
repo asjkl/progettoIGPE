@@ -76,7 +76,7 @@ public class GameManager {
 	
 	public GameManager() {
 	
-		numberOfEnemyToSpawn = 3;
+		numberOfEnemyToSpawn = 10;
 		numberOfEnemyOnMap = 0;
 		numberOfEnemyReadyToSpwan = 0;
 		durationPowerUp = 20;
@@ -106,7 +106,7 @@ public class GameManager {
 	public void importMap() {
 		int i = 0;// indice di riga
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("maps/ice.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader("maps/map01.txt"));
 			String line = reader.readLine();
 			while (i < height) {
 
@@ -456,7 +456,6 @@ public class GameManager {
 					
 			//ROCKET
 			if((rocket.getNext() instanceof Rocket)){
-//				((Rocket)rocket.getNext()).setZombie(true);
 				destroyRocket(((Rocket)rocket.getNext()));
 			}
 				
@@ -507,7 +506,7 @@ public class GameManager {
 	}
 
 	public void countRockets(Rocket r) {
-		if (!(r.getTank() instanceof EnemyTank))
+		if (!(r.getTank() instanceof EnemyTank) && player.getContRocket() > 0)
 			player.setContRocket(player.getContRocket() - 1);
 		else {
 			for (int b = 0; b < enemy.size(); b++) {

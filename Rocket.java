@@ -42,12 +42,18 @@ public class Rocket extends AbstractDynamicObject {
 	@Override
 	public boolean sameObject() {
 		
-		if(firstAnimationNo && next==tank){
+		//rende trasparente il secondo rocket dal primo (player TANK) 
+				if(next instanceof Rocket && ((Rocket) next).getTank() == this.getTank()){
+					this.setNext(((Rocket) next).getCurr());
+					//TODO problema rocket
+					return true;
+				}
+		
+		if(firstAnimationNo && next == tank){
 			return true;							
 		}
 		
-		if(next instanceof Rocket && ((Rocket) next).getTank() == this.getTank())
-			return true;
+		
 		
 		if (!(next instanceof Wall) && !(next instanceof Tank) && !(next instanceof Rocket)
 				 && !(next instanceof Flag)) {
