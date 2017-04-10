@@ -16,6 +16,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	private boolean updateObject; //switcha dalla logica alla grafica
 	private Point pixelPosition;
 	private int sizePixel;
+	private int rotateDegrees; // rotazione oggetto
 
 	public AbstractDynamicObject(int x, int y, World mondo, Speed speed, Speed speedShot, Direction direction,int health) {
 		super(x, y, mondo);
@@ -28,6 +29,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		this.curr = null;
 		this.next = null;
 		this.pixelPosition=new Point(x*sizePixel, y*sizePixel);
+		this.rotateDegrees=0;
 		FPS();
 	}
 
@@ -198,6 +200,14 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 
 	public void setSizePixel(int sizePixel) {
 		this.sizePixel = sizePixel;
+	}
+
+	public int getRotateDegrees() {
+		return rotateDegrees;
+	}
+
+	public void setRotateDegrees(int rotateDegrees) {
+		this.rotateDegrees = rotateDegrees;
 	}
 	
 }

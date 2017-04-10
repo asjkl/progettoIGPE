@@ -51,7 +51,6 @@ public class GameManager {
 //			getMatrix().print();
 //			System.out.println();
 			
-			
 			for(int i=0;i<getEnemy().size();i++){
 				
 				//EFFETTO SPAWN
@@ -691,8 +690,7 @@ public class GameManager {
 					do{
 					tempCont = random.nextInt(height);
 					}while(tempCont==matrix.getColumn());
-
-					enemy.get(a).setTmpDirection(enemy.get(a).getDirection()); // usato per ICE
+					
 					enemy.get(a).setStep(tempCont);
 					
 				}

@@ -10,8 +10,7 @@ public abstract class Tank extends AbstractDynamicObject{
 	private boolean protection;
 	private Direction  oldD; 
 	private boolean oldDirection;
-	private Direction tmpDirection; 
-	
+	private Direction tmpDirection;
 	private long timerEffect;
 	
 	public Tank(int x, int y, World mondo, Speed speed, Speed speedShot, Direction direction,int health) {
@@ -101,5 +100,4 @@ public abstract class Tank extends AbstractDynamicObject{
 	public void setProtection(boolean protection) {
 		this.protection = protection;
 	}
-
 }
