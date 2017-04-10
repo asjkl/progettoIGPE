@@ -9,13 +9,43 @@ public class Rocket extends AbstractDynamicObject {
 
 	public Rocket(int x, int y, World world, Direction direction, AbstractDynamicObject tank) {		
 		super(x, y, world, direction);
-
 		this.tank = tank;
-		this.curr = tank; //quando viene creato il Rocket il suo curr sarà il TANK
-			
+		this.curr = tank; //quando viene creato il Rocket il suo curr sarà il TANK	
 		this.firstAnimationNo = true;
 		this.finishAnimation = false;
+		rocketForPlayer(); //spostato in una funzione
+	}
+	
+	@Override
+	public void update() {
+		super.update();
+		if (curr != tank)
+			getWorld().world[getX()][getY()] = this;
+	}
+	
+	@Override
+	public boolean sameObject() {
 		
+		//rende trasparente il primo dal secondo rocket (player TANK) 
+				if(next instanceof Rocket && ((Rocket) next).getTank() == this.getTank()){
+					this.setNext(((Rocket) next).getCurr());
+					//TODO problema rocket
+					return true;
+				}
+		
+		if(firstAnimationNo && next == tank){
+			return true;							
+		}
+		
+		if (!(next instanceof Wall) && !(next instanceof Tank) && !(next instanceof Rocket)
+				 && !(next instanceof Flag)) {
+			curr=next;
+			return true;
+		}
+		return false;
+	}
+	
+	void rocketForPlayer(){
 		if(tank instanceof PlayerTank){
 			if(tank.getContRocket()<1){	
 				setUpdateObject(true);
@@ -30,37 +60,6 @@ public class Rocket extends AbstractDynamicObject {
 			setUpdateObject(true);
 			setRocketForPlayer(true);
 		}
-	}
-	
-	@Override
-	public void update() {
-		super.update();
-		if (curr != tank)
-			getWorld().world[getX()][getY()] = this;
-	}
-	
-	@Override
-	public boolean sameObject() {
-		
-		//rende trasparente il secondo rocket dal primo (player TANK) 
-				if(next instanceof Rocket && ((Rocket) next).getTank() == this.getTank()){
-					this.setNext(((Rocket) next).getCurr());
-					//TODO problema rocket
-					return true;
-				}
-		
-		if(firstAnimationNo && next == tank){
-			return true;							
-		}
-		
-		
-		
-		if (!(next instanceof Wall) && !(next instanceof Tank) && !(next instanceof Rocket)
-				 && !(next instanceof Flag)) {
-			curr=next;
-			return true;
-		}
-		return false;
 	}
 	
 	@Override

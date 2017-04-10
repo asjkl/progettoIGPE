@@ -17,7 +17,13 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	private Point pixelPosition;
 	private int sizePixel;
 	private int rotateDegrees; // rotazione oggetto
-
+	
+	//distruzione object + time (effect explosion)
+	private boolean toDestroy;
+	private long time;
+	private int inc;
+	
+	
 	public AbstractDynamicObject(int x, int y, World mondo, Speed speed, Speed speedShot, Direction direction,int health) {
 		super(x, y, mondo);
 		this.sizePixel=35;
@@ -30,6 +36,9 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		this.next = null;
 		this.pixelPosition=new Point(x*sizePixel, y*sizePixel);
 		this.rotateDegrees=0;
+		this.toDestroy=false;
+		this.time=-1;
+		this.inc=0;
 		FPS();
 	}
 
@@ -208,6 +217,30 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 
 	public void setRotateDegrees(int rotateDegrees) {
 		this.rotateDegrees = rotateDegrees;
+	}
+
+	public boolean isToDestroy() {
+		return toDestroy;
+	}
+
+	public void setToDestroy(boolean toDestroy) {
+		this.toDestroy = toDestroy;
+	}
+
+	public long getTime() {
+		return time;
+	}
+
+	public void setTime(long time) {
+		this.time = time;
+	}
+
+	public int getInc() {
+		return inc;
+	}
+
+	public void setInc(int inc) {
+		this.inc = inc;
 	}
 	
 }

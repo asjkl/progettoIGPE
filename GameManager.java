@@ -62,21 +62,29 @@ public class GameManager {
 					enemy.get(i).setCountdown((enemy.get(i).getCountdown()+1)%2);
 				}
 				
+				//ENEMY EXPLOSION
+				 if(enemy.get(i).isToDestroy())
+						enemy.get(i).setInc(enemy.get(i).getInc()+1);
 			}
 			
 			//EFFETTO SPAWN E PROTEZIONE PLAYER
-			if(currentTime == getPlayer().getSpawnTime())
-					getPlayer().setReadyToSpawn(false);
-			if(getPlayer().isReadyToSpawn() || getPlayer().isProtection()){
-				getPlayer().setCountdown((getPlayer().getCountdown()+1)%2);
+			if(currentTime == player.getSpawnTime())
+					player.setReadyToSpawn(false);
+			if(player.isReadyToSpawn() || player.isProtection()){
+				player.setCountdown((player.getCountdown()+1)%2);
 			}
 			
-		}
+			//ROCKET EXPLOSION
+			for(int i=0;i<rocket.size();i++){
+				 if(rocket.get(i).isToDestroy())
+						rocket.get(i).setInc(rocket.get(i).getInc()+1);
+			}
+		}	 
 	}
 	
 	public GameManager() {
 	
-		numberOfEnemyToSpawn = 10;
+		numberOfEnemyToSpawn = 3;
 		numberOfEnemyOnMap = 0;
 		numberOfEnemyReadyToSpwan = 0;
 		durationPowerUp = 20;
@@ -89,8 +97,10 @@ public class GameManager {
 		power = new ArrayList<>();
 		random = new Random();
 		recoveryWall = new ArrayList<>();
+
 		count = new int[4];
 		soundPowerUp=false;
+		
 		
 		for (int i = 0; i < count.length; i++) //conta occorrenze enemies?
 			count[i] = 0;
@@ -497,12 +507,18 @@ public class GameManager {
 	}
 
 	public void destroyRocket(Rocket r){	
-			countRockets(r);
 			
-			if (r.getCurr() != r.getTank())
-				matrix.world[r.getX()][r.getY()] = r.getCurr();
+		countRockets(r);
 			
-			rocket.remove(r);
+		if (r.getCurr() != r.getTank())
+			matrix.world[r.getX()][r.getY()] = r.getCurr();
+			
+		//rocket.remove(r);	
+		
+		//new
+		r.setToDestroy(true);
+		r.setTime(currentTime);
+		
 	}
 
 	public void countRockets(Rocket r) {
@@ -539,11 +555,14 @@ public class GameManager {
 		player.setDirection(Direction.STOP);
 		player.setCurr(null);
 		player.setDied(true);
-		player.setLevel(0);
+//		player.setLevel(0);
 		
 		player.setReadyToSpawn(true);
 		player.setCountdown(0);
 		player.setSpawnTime((currentTime+4)%60);
+		
+//		player.setToDestroy(true);
+//		player.setTime(currentTime);
 	}
 
 	private void destroyWall(Rocket rocket) {
@@ -580,6 +599,10 @@ public class GameManager {
 
 		// DISTRUGGI
 		enemy.remove(enemyT);
+		
+		//effetto explosion
+//		enemyT.setToDestroy(true);
+//		enemyT.setTime(currentTime);
 	}
 
 	public void increaseCount(EnemyTank e) {
@@ -860,4 +883,5 @@ public class GameManager {
 	public void setSoundPowerUp(boolean soundPowerUp) {
 		this.soundPowerUp = soundPowerUp;
 	}
+
 }
