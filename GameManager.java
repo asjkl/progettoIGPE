@@ -119,7 +119,7 @@ public class GameManager {
 	public void importMap() {
 		int i = 0;// indice di riga
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("maps/map01.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader("maps/ice.txt"));
 			String line = reader.readLine();
 			while (i < height) {
 
