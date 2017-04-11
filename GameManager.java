@@ -63,16 +63,19 @@ public class GameManager {
 				}
 				
 				//ENEMY EXPLOSION
-				 if(enemy.get(i).isToDestroy())
+				 if(enemy.get(i).isToDestroy()){
 						enemy.get(i).setInc(enemy.get(i).getInc()+1);
+				 }
 			}
 			
-			//EFFETTO SPAWN E PROTEZIONE PLAYER
+			//EFFETTO SPAWN / PROTEZIONE PLAYER / ESPLOSIONE
 			if(currentTime == player.getSpawnTime())
 					player.setReadyToSpawn(false);
 			if(player.isReadyToSpawn() || player.isProtection()){
 				player.setCountdown((player.getCountdown()+1)%2);
 			}
+			if(player.isToDestroy())
+				player.setInc(player.getInc()+1);
 			
 			//ROCKET EXPLOSION
 			for(int i=0;i<rocket.size();i++){
@@ -511,14 +514,11 @@ public class GameManager {
 		countRockets(r);
 			
 		if (r.getCurr() != r.getTank())
-			matrix.world[r.getX()][r.getY()] = r.getCurr();
-			
-		//rocket.remove(r);	
+			matrix.world[r.getX()][r.getY()] = r.getCurr();	
 		
-		//new
+		// USATO PER EFFETTO EXPLOSION
 		r.setToDestroy(true);
 		r.setTime(currentTime);
-		
 	}
 
 	public void countRockets(Rocket r) {
@@ -547,22 +547,12 @@ public class GameManager {
 	}
 
 	private void damageAndDestroyPlayerTank() {
+		
 		getMatrix().world[player.getX()][player.getY()] = player.getCurr();
-		getMatrix().world[height-1][(width / 2)-2] = player;
-		player.setResume(player.getResume() - 1);
-		player.setX(height - 1);
-		player.setY((width / 2) -2);
-		player.setDirection(Direction.STOP);
-		player.setCurr(null);
-		player.setDied(true);
-//		player.setLevel(0);
 		
-		player.setReadyToSpawn(true);
-		player.setCountdown(0);
-		player.setSpawnTime((currentTime+4)%60);
-		
-//		player.setToDestroy(true);
-//		player.setTime(currentTime);
+		// USATO PER EFFETTO EXPLOSION
+		player.setToDestroy(true);
+		player.setTime(currentTime);
 	}
 
 	private void destroyWall(Rocket rocket) {
@@ -594,15 +584,12 @@ public class GameManager {
 		if (enemyT.isPowerUpOn())
 			addPowerUp(new Random().nextInt(6)); 
 
-		// METTI CURR
+		// RIMETTI CURR
 		matrix.world[enemyT.getX()][enemyT.getY()] = enemyT.getCurr(); 
-
-		// DISTRUGGI
-		enemy.remove(enemyT);
 		
-		//effetto explosion
-//		enemyT.setToDestroy(true);
-//		enemyT.setTime(currentTime);
+		// USATO EFFETTO EXPLOSION
+		enemyT.setToDestroy(true);
+		enemyT.setTime(currentTime);
 	}
 
 	public void increaseCount(EnemyTank e) {

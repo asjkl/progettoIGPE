@@ -12,7 +12,7 @@ public class PlayerTank extends Tank {
 		super(x, y, world, Speed.NORMAL, Speed.FAST, Direction.STOP, 1);
 		this.resume = 3;
 		this.point = 0;
-		this.level = 1;
+		this.level = 0;
 		this.died = false;
 		setReadyToSpawn(true);
 		first=true;
@@ -21,7 +21,8 @@ public class PlayerTank extends Tank {
 	@Override
 	public void update() {
 		super.update();
-		getWorld().world[getX()][getY()] = this;
+		if(!isToDestroy())
+			getWorld().world[getX()][getY()] = this;
 		setDirection(Direction.STOP); 
 	}
 

@@ -26,7 +26,6 @@ public abstract class Tank extends AbstractDynamicObject{
 	@Override
 	public void update(){
 		super.update();
-		getWorld().world[getX()][getY()] = this;
 	}
 
 	public int getTmpCont() {
