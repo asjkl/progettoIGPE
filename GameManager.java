@@ -91,7 +91,7 @@ public class GameManager {
 		numberOfEnemyOnMap = 0;
 		numberOfEnemyReadyToSpwan = 0;
 		durationPowerUp = 20;
-		numEnemyDropsPowerUp = 4; //indica ogni quanti enemie far cadere powerUp
+		numEnemyDropsPowerUp = 1; //indica ogni quanti enemie far cadere powerUp
 		xTmp = -1;
 		yTmp = -1;
 		matrix = new World(height, width);
@@ -119,7 +119,7 @@ public class GameManager {
 	public void importMap() {
 		int i = 0;// indice di riga
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("maps/ice.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader("maps/mappa.txt"));
 			String line = reader.readLine();
 			while (i < height) {
 
@@ -418,7 +418,6 @@ public class GameManager {
 			for (int i = 0; i < enemy.size(); i++)
 				if (enemy.get(i).isAppearsInTheMap()){
 					destroyEnemyTank(enemy.get(i));
-					i--;
 				}
 			
 			break;
