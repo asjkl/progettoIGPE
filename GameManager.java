@@ -41,6 +41,37 @@ public class GameManager {
 		private int yTmp; 
 		private Direction dir;
 
+		public GameManager() {
+			
+			numberOfEnemyToSpawn = 3;
+			numberOfEnemyOnMap = 0;
+			numberOfEnemyReadyToSpwan = 0;
+			durationPowerUp = 20;
+			numEnemyDropsPowerUp = 1; //indica ogni quanti enemie far cadere powerUp
+			xTmp = -1;
+			yTmp = -1;
+			matrix = new World(height, width);
+			enemy = new ArrayList<>();
+			rocket = new ArrayList<>();
+			power = new ArrayList<>();
+			random = new Random();
+			recoveryWall = new ArrayList<>();
+
+			count = new int[4];
+			soundPowerUp=false;
+			
+			
+			for (int i = 0; i < count.length; i++) //conta occorrenze enemies?
+				count[i] = 0;
+		
+			importMap();
+			
+			Timer timer = new Timer();
+			TimerTask task = new MyTask();
+			timer.schedule( task, 85, 85);
+			
+		}
+		
 	// --------------------------------------OTHER-----------------------------------------
 		
 	public class MyTask extends TimerTask {
@@ -85,37 +116,6 @@ public class GameManager {
 		}	 
 	}
 	
-	public GameManager() {
-	
-		numberOfEnemyToSpawn = 3;
-		numberOfEnemyOnMap = 0;
-		numberOfEnemyReadyToSpwan = 0;
-		durationPowerUp = 20;
-		numEnemyDropsPowerUp = 1; //indica ogni quanti enemie far cadere powerUp
-		xTmp = -1;
-		yTmp = -1;
-		matrix = new World(height, width);
-		enemy = new ArrayList<>();
-		rocket = new ArrayList<>();
-		power = new ArrayList<>();
-		random = new Random();
-		recoveryWall = new ArrayList<>();
-
-		count = new int[4];
-		soundPowerUp=false;
-		
-		
-		for (int i = 0; i < count.length; i++) //conta occorrenze enemies?
-			count[i] = 0;
-	
-		importMap();
-		
-		Timer timer = new Timer();
-		TimerTask task = new MyTask();
-		timer.schedule( task, 85, 85);
-		
-	}
-
 	public void importMap() {
 		int i = 0;// indice di riga
 		try {
