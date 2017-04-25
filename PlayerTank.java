@@ -28,6 +28,11 @@ public class PlayerTank extends Tank {
 
 	@Override
 	public boolean sameObject() {
+		
+		if(next instanceof Rocket && ((Rocket)next).getTank() instanceof PlayerTank ){
+			next = ((Rocket)next).getCurr();
+		}
+		
 		if (!(next instanceof Wall) && !(next instanceof Tank)
 				&& !(next instanceof Water) && !(next instanceof Rocket) && !(next instanceof Flag)) {
 			// prendo tutti i powerUp

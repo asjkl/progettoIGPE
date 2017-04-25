@@ -41,7 +41,7 @@ public class GameManager {
 		private int yTmp; 
 		private Direction dir;
 
-		public GameManager() {
+	public GameManager() {
 			
 			numberOfEnemyToSpawn = 3;
 			numberOfEnemyOnMap = 0;
@@ -702,9 +702,9 @@ public class GameManager {
 					enemy.get(a).setStep(tempCont);
 					
 				}
-				if (!(enemy.get(a).getNext() instanceof EnemyTank));
-					 createRocketTank(enemy.get(a).getDirection(), enemy.get(a));
+			
 			}
+			
 	}
 
 	public void enemyUpdate(int a) {
