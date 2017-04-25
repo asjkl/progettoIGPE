@@ -23,7 +23,7 @@ public class PowerUp extends AbstractStaticObject {
 		this.setDropTime(0);
 		this.before=null;
 		this.dropOnBorder = false;
-		setDropDirection(null);
+		this.setDropDirection(null);
 	}
 
 	@Override
@@ -125,5 +125,5 @@ public class PowerUp extends AbstractStaticObject {
 	public void setDropDirection(Direction dropDirection) {
 		this.dropDirection = dropDirection;
 	}
-	
+
 }

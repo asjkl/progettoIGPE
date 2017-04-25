@@ -10,5 +10,4 @@ public class ArmorTank extends EnemyTank {
 	public String toString () {
 		return " AT ";
 	}
-
 }

@@ -24,7 +24,6 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	private long time;
 	private int inc;
 	
-	
 	public AbstractDynamicObject(int x, int y, World mondo, Speed speed, Speed speedShot, Direction direction,int health) {
 		super(x, y, mondo);
 		this.sizePixel=35;

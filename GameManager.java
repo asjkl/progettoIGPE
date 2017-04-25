@@ -17,8 +17,6 @@ public class GameManager {
 		private long currentTime;
 		public static final int width = 21;
 		public static final int height = 20;
-		private int finalScore;
-		private int count[];
 		private Random random;
 		private World matrix;
 		private PlayerTank player;
@@ -26,6 +24,7 @@ public class GameManager {
 		private ArrayList<PowerUp> power; 
 		private ArrayList<Rocket> rocket;
 		private Flag flag;
+		private Statistics statistics;
 		private ArrayList<AbstractStaticObject> recoveryWall;
 		private boolean soundPowerUp;
 	
@@ -42,7 +41,6 @@ public class GameManager {
 		private Direction dir;
 
 	public GameManager() {
-			
 			numberOfEnemyToSpawn = 3;
 			numberOfEnemyOnMap = 0;
 			numberOfEnemyReadyToSpwan = 0;
@@ -56,14 +54,8 @@ public class GameManager {
 			power = new ArrayList<>();
 			random = new Random();
 			recoveryWall = new ArrayList<>();
-
-			count = new int[4];
+			setStatistics(new Statistics());
 			soundPowerUp=false;
-			
-			
-			for (int i = 0; i < count.length; i++) //conta occorrenze enemies?
-				count[i] = 0;
-		
 			importMap();
 			
 			Timer timer = new Timer();
@@ -119,7 +111,7 @@ public class GameManager {
 	public void importMap() {
 		int i = 0;// indice di riga
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("maps/map01.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader("maps/mappa.txt"));
 			String line = reader.readLine();
 			while (i < height) {
 
@@ -386,6 +378,8 @@ public class GameManager {
 
 	private void managePowerUp(PowerUp p) {
 
+		statistics.calcolate(p);
+		
 		if(p.getPowerUp() == Power.HELMET) {
 			player.setProtection(false);
 		}
@@ -411,7 +405,7 @@ public class GameManager {
 	}
 
 	public void usePowerUp(PowerUp power) {
-
+	
 		switch (power.getPowerUp()) {
 		case GRENADE:
 			
@@ -569,9 +563,7 @@ public class GameManager {
 
 	private void destroyEnemyTank(EnemyTank enemyT) {
 		
-		// PRIMA DI MORIRE
-		finalScore += enemyT.getPoint();
-		increaseCount(enemyT);
+		statistics.calcolate(enemyT); // gli passo l'enemy ucciso e verrà gestito tutto nella classe statistics
 		
 		if(numberOfEnemyOnMap > 0)
 			numberOfEnemyOnMap--;
@@ -589,18 +581,6 @@ public class GameManager {
 		// USATO EFFETTO EXPLOSION
 		enemyT.setToDestroy(true);
 		enemyT.setTime(currentTime);
-	}
-
-	public void increaseCount(EnemyTank e) {
-		if (e instanceof BasicTank) {
-			count[0]++;
-		} else if (e instanceof FastTank) {
-			count[1]++;
-		} else if (e instanceof PowerTank) {
-			count[2]++;
-		} else if (e instanceof ArmorTank) {
-			count[3]++;
-		}
 	}
 
 	public void createRocketTank(Direction tmp, AbstractDynamicObject tank) {
@@ -806,22 +786,6 @@ public class GameManager {
 		this.rocket = rocket;
 	}
 
-	public int getFinalScore() {
-		return finalScore;
-	}
-
-	public void setFinalScore(int finalScore) {
-		this.finalScore = finalScore;
-	}
-
-	public int[] getCount() {
-		return count;
-	}
-
-	public void setCount(int[] count) {
-		this.count = count;
-	}
-
 	public ArrayList<AbstractStaticObject> getRecoveryWall() {
 		return recoveryWall;
 	}
@@ -868,6 +832,14 @@ public class GameManager {
 
 	public void setSoundPowerUp(boolean soundPowerUp) {
 		this.soundPowerUp = soundPowerUp;
+	}
+
+	public Statistics getStatistics() {
+		return statistics;
+	}
+
+	public void setStatistics(Statistics statistics) {
+		this.statistics = statistics;
 	}
 
 }
