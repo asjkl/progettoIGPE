@@ -137,7 +137,7 @@ public class GameManager {
 						getMatrix().world[i][j] = new Ice(i, j, getMatrix());
 						break;
 					case ("TTTT"):
-						getMatrix().world[i][j] = new Trees(i, j, getMatrix());
+						getMatrix().world[i][j] = new Tree(i, j, getMatrix());
 						break;
 					case ("[||]"):
 						getMatrix().world[i][j] = new BrickWall(i, j, getMatrix(), 2);

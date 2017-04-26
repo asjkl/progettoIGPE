@@ -6,4 +6,5 @@ public interface DynamicObject extends StaticObject {
 	Speed getSpeedShot();
 
 	Direction getDirection();
+	
 }
