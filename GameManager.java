@@ -39,6 +39,7 @@ public class GameManager {
 		private int xTmp;
 		private int yTmp; 
 		private Direction dir;
+		private long blinkTime;
 
 	public GameManager() {
 			numberOfEnemyToSpawn = 3;
@@ -48,6 +49,7 @@ public class GameManager {
 			numEnemyDropsPowerUp = 1; //indica ogni quanti enemie far cadere powerUp
 			xTmp = -1;
 			yTmp = -1;
+			blinkTime=5;
 			matrix = new World(height, width);
 			enemy = new ArrayList<>();
 			rocket = new ArrayList<>();
@@ -111,7 +113,7 @@ public class GameManager {
 	public void importMap() {
 		int i = 0;// indice di riga
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("maps/mappa.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader("maps/brick.txt"));
 			String line = reader.readLine();
 			while (i < height) {
 
@@ -213,11 +215,12 @@ public class GameManager {
 			if (power.get(a).isDrop() && !power.get(a).isActivate()) {
 
 				long tmp = (power.get(a).getDropTime() + getDurationPowerUp()) % 60;
-
-//				System.out.println("tmpDrop: " + tmp);
-//				System.out.println("getTimer"+power.get(a).getDropTime());
-
-				if(tmp == currentTime) { //countdown durata prima di sparire
+				
+				//EFFETTO LAMPEGGIO
+				if(currentTime == (power.get(a).getDropTime() + (getDurationPowerUp()-blinkTime)) % 60)
+					power.get(a).setBlink(true);
+				
+				if(tmp == currentTime) { 
 					power.get(a).setDrop(false);
 
 					if(power.get(a).getBefore() instanceof Water){
@@ -245,15 +248,10 @@ public class GameManager {
 
 		for (int a = 0; a < power.size(); a++){
 			if (power.get(a).isActivate()) {
-//				System.out.println(power.get(a) + "---------- attivo!");
-
+				
 				long tmp = (power.get(a).getTimer() + power.get(a).getDuration()) % 60;
 
-//				System.out.println("tmpTimeOut: " + tmp);
-//				System.out.println("getTimer"+power.get(a).getTimer());
-
 				if (tmp == currentTime) {
-//					System.out.println(power.get(a) + "---------- disattivo!");
 					managePowerUp(power.get(a));
 					power.get(a).setActivate(false);
 					power.remove(a);

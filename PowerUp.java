@@ -5,13 +5,14 @@ public class PowerUp extends AbstractStaticObject {
 	private AbstractStaticObject before; //salva oggetto su cui cade
 	private Power powerUp;
 	private AbstractDynamicObject tank; //powerup appartenenza
-	private long timer;
 	private boolean activate;
-	private long duration;
 	private boolean drop;
-	private long dropTime; //salva il tempo quando cade
 	private boolean dropOnBorder;
 	private Direction dropDirection;
+	private long duration;
+	private long timer;
+	private long dropTime; //salva il tempo quando cade
+	private boolean blink;
 
 	public PowerUp(int x, int y, World world, Power powerUp, long duration, boolean drop) {
 		super(x, y, world);
@@ -24,8 +25,9 @@ public class PowerUp extends AbstractStaticObject {
 		this.before=null;
 		this.dropOnBorder = false;
 		this.setDropDirection(null);
+		this.blink=false;
 	}
-
+	
 	@Override
 	public String toString() {
 		switch (powerUp) {
@@ -124,6 +126,14 @@ public class PowerUp extends AbstractStaticObject {
 
 	public void setDropDirection(Direction dropDirection) {
 		this.dropDirection = dropDirection;
+	}
+
+	public boolean isBlink() {
+		return blink;
+	}
+
+	public void setBlink(boolean blink) {
+		this.blink = blink;
 	}
 
 }
