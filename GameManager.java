@@ -11,12 +11,14 @@ import java.util.TimerTask;
 
 public class GameManager {
 	
+	public static final int width = 21;
+	public static final int height = 20;
+	public static String map = "maps/mappa.txt"; 
+	
 	//OTHER
 		private int x;
 		private int y;
 		private long currentTime;
-		public static final int width = 21;
-		public static final int height = 20;
 		private Random random;
 		private World matrix;
 		private PlayerTank player;
@@ -113,7 +115,7 @@ public class GameManager {
 	public void importMap() {
 		int i = 0;// indice di riga
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("maps/brick.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader(map));
 			String line = reader.readLine();
 			while (i < height) {
 
