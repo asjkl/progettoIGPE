@@ -21,8 +21,7 @@ public class PlayerTank extends Tank {
 	@Override
 	public void update() {
 		super.update();
-		if(!isToDestroy())
-			getWorld().world[getX()][getY()] = this;
+		getWorld().world[getX()][getY()] = this;
 		setDirection(Direction.STOP); 
 	}
 

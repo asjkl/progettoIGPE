@@ -19,10 +19,8 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	private int rotateDegrees; // rotazione oggetto
 	private boolean firstTime; // booleana per entrare una sola volta
 	
-	//distruzione object + time (effect explosion)
-	private boolean toDestroy;
-	private long time;
-	private int inc;
+
+	
 	
 	public AbstractDynamicObject(int x, int y, World mondo, Speed speed, Speed speedShot, Direction direction,int health) {
 		super(x, y, mondo);
@@ -36,9 +34,6 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		this.next = null;
 		this.pixelPosition=new Point(x*sizePixel, y*sizePixel);
 		this.rotateDegrees=0;
-		this.toDestroy=false;
-		this.time=-1;
-		this.inc=0;
 		this.firstTime=true;
 		FPS();
 	}
@@ -219,31 +214,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	public void setRotateDegrees(int rotateDegrees) {
 		this.rotateDegrees = rotateDegrees;
 	}
-
-	public boolean isToDestroy() {
-		return toDestroy;
-	}
-
-	public void setToDestroy(boolean toDestroy) {
-		this.toDestroy = toDestroy;
-	}
-
-	public long getTime() {
-		return time;
-	}
-
-	public void setTime(long time) {
-		this.time = time;
-	}
-
-	public int getInc() {
-		return inc;
-	}
-
-	public void setInc(int inc) {
-		this.inc = inc;
-	}
-
+	
 	public boolean isFirstTime() {
 		return firstTime;
 	}
