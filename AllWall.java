@@ -3,7 +3,7 @@ package progettoIGPE.davide.giovanni.unical2016;
 public class AllWall extends AbstractStaticObject {
 
 	private boolean shot;
-	private boolean tank;
+	private boolean tank ;
 
 	public AllWall(int x, int y, World mondo, boolean shot, boolean tank) {
 		super(x, y, mondo);
