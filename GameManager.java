@@ -9,11 +9,13 @@ import java.util.StringTokenizer;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.JTextField;
+
 public class GameManager {
 	
 	public static final int width = 21;
 	public static final int height = 20;
-	public static String map = "maps/mappa.txt"; 
+	//public static String map = "maps/mappa.txt"; 
 	
 	//OTHER
 		private int x;
@@ -45,7 +47,7 @@ public class GameManager {
 		private Direction dir;
 		private long blinkTime;
 
-	public GameManager() {
+		public GameManager(JTextField filename, JTextField dir2){
 			numberOfEnemyToSpawn = 3;
 			numberOfEnemyOnMap = 0;
 			numberOfEnemyReadyToSpwan = 0;
@@ -64,7 +66,7 @@ public class GameManager {
 			soundPowerUp=false;
 			points = new ArrayList<>();
 			boom = new ArrayList<>();
-			importMap();
+			importMap(filename, dir2);
 			
 			Timer timer = new Timer();
 			TimerTask task = new MyTask();
@@ -113,10 +115,10 @@ public class GameManager {
 		}	 
 	}
 	
-	public void importMap() {
+	public void importMap(JTextField filename, JTextField dir) {
 		int i = 0;// indice di riga
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(map));
+			BufferedReader reader = new BufferedReader(new FileReader(dir.getText()+"/"+filename.getText()));
 			String line = reader.readLine();
 			while (i < height) {
 
