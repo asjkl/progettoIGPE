@@ -15,7 +15,6 @@ public class GameManager {
 	
 	public static final int width = 21;
 	public static final int height = 20;
-	//public static String map = "maps/mappa.txt"; 
 	
 	//OTHER
 		private int x;
@@ -84,18 +83,19 @@ public class GameManager {
 //			getMatrix().print();
 //			System.out.println();
 			
+
 			for(int i=0;i<boom.size();i++){
-			
-				 if(boom.get(i) instanceof Tank)
+				 if(boom.get(i) instanceof Tank) 
 						((Tank)(boom.get(i))).setInc(((Tank)(boom.get(i))).getInc()+1);
 				 if(boom.get(i) instanceof Rocket)
 						((Rocket)(boom.get(i))).setInc(((Rocket)(boom.get(i))).getInc()+1);
-				 if(boom.get(i) instanceof PowerUp)
-					 ((PowerUp)(boom.get(i))).setInc(((PowerUp)(boom.get(i))).getInc()+1);
+			}				
+			for(int i=0;i<points.size();i++){
+				 if(points.get(i) instanceof PowerUp)
+					 ((PowerUp)(points.get(i))).setInc(((PowerUp)(points.get(i))).getInc()+1);
 			}
 				
-			for(int i=0;i<getEnemy().size();i++){
-			
+			for(int i=0;i<getEnemy().size();i++){	
 				//EFFETTO SPAWN ENEMY
 				if(getEnemy().get(i).isReadyToSpawn())
 					getEnemy().get(i).setCountdown((getEnemy().get(i).getCountdown()+1)%4);
@@ -114,7 +114,7 @@ public class GameManager {
 			}
 		}	 
 	}
-	
+
 	public void importMap(JTextField filename, JTextField dir) {
 		int i = 0;// indice di riga
 		try {
@@ -320,7 +320,6 @@ public class GameManager {
 		default:
 			break;
 		}	
-		points.add(tmp);
 	}
 
 	private boolean movePowerUpInCorrectPosition(){
@@ -543,7 +542,6 @@ public class GameManager {
 	private void damageAndDestroyPlayerTank() {
 		
 		boom.add(player);
-		
 		getMatrix().world[player.getX()][player.getY()] = player.getCurr();
 		
 		player.setInc(0);

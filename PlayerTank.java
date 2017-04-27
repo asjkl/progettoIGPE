@@ -14,8 +14,8 @@ public class PlayerTank extends Tank {
 		this.point = 0;
 		this.level = 0 ;
 		this.died = false;
-		setReadyToSpawn(true);
-		first=true;
+		this.setReadyToSpawn(true);
+		this.first=true;
 	} 
 
 	@Override
