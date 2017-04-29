@@ -13,6 +13,7 @@ public class PowerUp extends AbstractStaticObject {
 	private long timer;
 	private long dropTime; //salva il tempo quando cade
 	private boolean blink;
+	private int inc; // serve per gli effetti di powerUp
 
 	public PowerUp(int x, int y, World world, Power powerUp, long duration, boolean drop) {
 		super(x, y, world);
@@ -26,6 +27,7 @@ public class PowerUp extends AbstractStaticObject {
 		this.dropOnBorder = false;
 		this.setDropDirection(null);
 		this.blink=false;
+		this.inc=0;
 	}
 	
 	@Override
@@ -134,6 +136,14 @@ public class PowerUp extends AbstractStaticObject {
 
 	public void setBlink(boolean blink) {
 		this.blink = blink;
+	}
+
+	public int getInc() {
+		return inc;
+	}
+
+	public void setInc(int inc) {
+		this.inc = inc;
 	}
 
 }

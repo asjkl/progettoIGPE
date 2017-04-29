@@ -4,13 +4,11 @@ public abstract class AbstractStaticObject implements StaticObject {
 	private int x;
 	private int y;
 	protected World world;
-	private int inc; // serve per gli effetti di powerUp/Tank
 
 	public AbstractStaticObject(int x, int y, World world) {
 		this.x = x;
 		this.y = y;
 		this.world = world;
-		this.inc=0;
 	}
 
 	@Override
@@ -46,11 +44,4 @@ public abstract class AbstractStaticObject implements StaticObject {
 		return "AbstractStaticObject [x=" + x + ", y=" + y + ", mondo=" + world + "]";
 	}
 
-	public int getInc() {
-		return inc;
-	}
-
-	public void setInc(int inc) {
-		this.inc = inc;
-	}
 }

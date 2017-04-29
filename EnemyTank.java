@@ -15,12 +15,11 @@ public class EnemyTank extends Tank {
 	private boolean directionLeft;
 	private boolean directionRight;
 	private boolean appearsInTheMap;
-	
 	private boolean powerUpOn;
 	private boolean noUpdateG;
 	private boolean stopEnemy; //powerUp TIMER
 	private boolean stopEnemyGraphic; //powerUp TIMER
-
+	
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health, int point) {
 		super(x, y, world, speed, speedShot, direction, health);
 		this.point = point;
@@ -38,8 +37,8 @@ public class EnemyTank extends Tank {
 		this.noUpdateG=false;
 		this.stopEnemy=false;
 		this.stopEnemyGraphic=false;
-		setReadyToSpawn(false);
-		setUpdateObject(true);
+		this.setReadyToSpawn(false);
+		this.setUpdateObject(true);
 	}
 
 	@Override

@@ -15,6 +15,10 @@ public class PlayerTank extends Tank {
 		this.level = 0 ;
 		this.died = false;
 		this.setReadyToSpawn(true);
+		this.setCountdown(0);
+		this.setInc(0);
+		this.setRotateDegrees(0);
+		this.setTmpDirection(Direction.UP);
 		this.first=true;
 	} 
 

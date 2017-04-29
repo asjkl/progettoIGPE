@@ -18,10 +18,8 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	private int sizePixel;
 	private int rotateDegrees; // rotazione oggetto
 	private boolean firstTime; // booleana per entrare una sola volta
-	
+	private int inc; // serve per gli effetti di Tank (PowerUp ha il suo)
 
-	
-	
 	public AbstractDynamicObject(int x, int y, World mondo, Speed speed, Speed speedShot, Direction direction,int health) {
 		super(x, y, mondo);
 		this.sizePixel=35;
@@ -35,6 +33,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		this.pixelPosition=new Point(x*sizePixel, y*sizePixel);
 		this.rotateDegrees=0;
 		this.firstTime=true;
+		this.inc=0;
 		FPS();
 	}
 
@@ -221,6 +220,14 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 
 	public void setFirstTime(boolean firstTime) {
 		this.firstTime = firstTime;
+	}
+
+	public int getInc() {
+		return inc;
+	}
+
+	public void setInc(int inc) {
+		this.inc = inc;
 	}
 	
 }

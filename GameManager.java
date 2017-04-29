@@ -541,23 +541,16 @@ public class GameManager {
 
 	private void damageAndDestroyPlayerTank() {
 		
-		boom.add(player);
-		getMatrix().world[player.getX()][player.getY()] = player.getCurr();
+		PlayerTank old = player;
+		boom.add(old);
+		getMatrix().world[old.getX()][old.getY()] = old.getCurr();
 		
-		player.setInc(0);
-		getMatrix().world[GameManager.height-1][(GameManager.width / 2)-2] = player;
-		player.setResume(player.getResume() - 1);
-		player.setX(GameManager.height - 1);
-		player.setY((GameManager.width / 2) -2);
-		player.setDirection(Direction.STOP);
-		player.setCurr(null);
+		player = new PlayerTank(GameManager.height-1, (GameManager.width / 2)-2, matrix);
+		player.setResume(old.getResume()-1);
 		player.setDied(true);
-		player.setLevel(0);
-		
-	//USATO PER LO SPAWN
-		player.setReadyToSpawn(true);
-		player.setCountdown(0);
 		player.setSpawnTime((currentTime+4)%60);
+		
+		matrix.world[GameManager.height-1][(GameManager.width / 2)-2] = player;
 	}
 
 	private void destroyWall(Rocket rocket) {
@@ -693,9 +686,7 @@ public class GameManager {
 					enemy.get(a).setStep(tempCont);
 					
 				}
-			
 			}
-			
 	}
 
 	public void enemyUpdate(int a) {
