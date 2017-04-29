@@ -40,6 +40,7 @@ public class EnemyTank extends Tank {
 		this.stopEnemyGraphic=false;
 		this.setReadyToSpawn(false);
 		this.setUpdateObject(true);
+		tempT=-1;
 	}
 
 	@Override
