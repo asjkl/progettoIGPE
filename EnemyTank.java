@@ -40,7 +40,6 @@ public class EnemyTank extends Tank {
 		this.stopEnemyGraphic=false;
 		this.setReadyToSpawn(false);
 		this.setUpdateObject(true);
-		this.tempT=-1;
 	}
 
 	@Override
@@ -51,7 +50,7 @@ public class EnemyTank extends Tank {
 
 	@Override
 	public boolean sameObject() {
-		
+
 		if (!(next instanceof Wall) && !(next instanceof Tank)
 				&& !(next instanceof Water) && !(next instanceof Rocket) && !(next instanceof Flag)) {
 			

@@ -37,7 +37,6 @@ public class GameManager {
 		private int numberOfEnemyToSpawn;
 		private int numberOfEnemyOnMap;
 		private int numberOfEnemyReadyToSpwan;
-		private int timeToShot;
 
 	//POWERUPS
 		private int durationPowerUp;
@@ -48,6 +47,7 @@ public class GameManager {
 		private long blinkTime;
 
 		public GameManager(JTextField filename, JTextField dir2){
+		
 			numberOfEnemyToSpawn = 3;
 			numberOfEnemyOnMap = 0;
 			numberOfEnemyReadyToSpwan = 0;
@@ -56,7 +56,6 @@ public class GameManager {
 			xTmp = -1;
 			yTmp = -1;
 			blinkTime = 5; //quanti secondi alla fine deve lampeggiare
-			timeToShot = 2; //ogni quant bisogna sparare (enemy)
 			soundPowerUp = false;
 			
 			matrix = new World(height, width);
@@ -68,9 +67,7 @@ public class GameManager {
 			boom = new ArrayList<>();
 			random = new Random();
 			setStatistics(new Statistics());
-			
-			
-			
+		
 			importMap(filename, dir2);
 			
 			Timer timer = new Timer();
@@ -665,7 +662,6 @@ public class GameManager {
 				if(enemy.get(count).isReadyToSpawn() && currentTime >= enemy.get(count).getSpawnTime()){
 					enemy.get(count).setAppearsInTheMap(true);
 					enemy.get(count).setReadyToSpawn(false);
-					enemy.get(count).setTempT(currentTime); //usato per sparare ogni tot tempo
 					numberOfEnemyOnMap++;
 				}
 				count++;
@@ -850,14 +846,6 @@ public class GameManager {
 
 	public void setStatistics(Statistics statistics) {
 		this.statistics = statistics;
-	}
-
-	public int getTimeToShot() {
-		return timeToShot;
-	}
-
-	public void setTimeToShot(int timeToShot) {
-		this.timeToShot = timeToShot;
 	}
 
 }
