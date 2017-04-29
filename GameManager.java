@@ -37,6 +37,7 @@ public class GameManager {
 		private int numberOfEnemyToSpawn;
 		private int numberOfEnemyOnMap;
 		private int numberOfEnemyReadyToSpwan;
+		private int timeToShot;
 
 	//POWERUPS
 		private int durationPowerUp;
@@ -54,23 +55,27 @@ public class GameManager {
 			numEnemyDropsPowerUp = 1; //indica ogni quanti enemie far cadere powerUp
 			xTmp = -1;
 			yTmp = -1;
-			blinkTime=5;
+			blinkTime = 5; //quanti secondi alla fine deve lampeggiare
+			timeToShot = 2; //ogni quant bisogna sparare (enemy)
+			soundPowerUp = false;
+			
 			matrix = new World(height, width);
 			enemy = new ArrayList<>();
 			rocket = new ArrayList<>();
 			power = new ArrayList<>();
-			random = new Random();
 			recoveryWall = new ArrayList<>();
-			setStatistics(new Statistics());
-			soundPowerUp=false;
 			points = new ArrayList<>();
 			boom = new ArrayList<>();
+			random = new Random();
+			setStatistics(new Statistics());
+			
+			
+			
 			importMap(filename, dir2);
 			
 			Timer timer = new Timer();
 			TimerTask task = new MyTask();
 			timer.schedule( task, 85, 85);
-			
 		}
 		
 	// --------------------------------------OTHER-----------------------------------------
@@ -457,7 +462,7 @@ public class GameManager {
 		
 		if(!rocket.canGo){
 			crashRocket(rocket);	
-			destroyRocket(rocket);
+			destroyRocket(rocket);	
 		}
 	}
 
@@ -505,9 +510,11 @@ public class GameManager {
 	}
 
 	public void destroyRocket(Rocket r){	
-			
+		
+		if(r.getTank() instanceof EnemyTank){ //per gestire il ritardo shot
+			((EnemyTank)r.getTank()).setTempT(currentTime);
+		}
 		countRockets(r);
-			
 		if (r.getCurr() != r.getTank())
 			matrix.world[r.getX()][r.getY()] = r.getCurr();	
 		boom.add(r);
@@ -658,6 +665,7 @@ public class GameManager {
 				if(enemy.get(count).isReadyToSpawn() && currentTime >= enemy.get(count).getSpawnTime()){
 					enemy.get(count).setAppearsInTheMap(true);
 					enemy.get(count).setReadyToSpawn(false);
+					enemy.get(count).setTempT(currentTime); //usato per sparare ogni tot tempo
 					numberOfEnemyOnMap++;
 				}
 				count++;
@@ -842,6 +850,14 @@ public class GameManager {
 
 	public void setStatistics(Statistics statistics) {
 		this.statistics = statistics;
+	}
+
+	public int getTimeToShot() {
+		return timeToShot;
+	}
+
+	public void setTimeToShot(int timeToShot) {
+		this.timeToShot = timeToShot;
 	}
 
 }

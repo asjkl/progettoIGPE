@@ -19,6 +19,7 @@ public class EnemyTank extends Tank {
 	private boolean noUpdateG;
 	private boolean stopEnemy; //powerUp TIMER
 	private boolean stopEnemyGraphic; //powerUp TIMER
+	private long tempT;
 	
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health, int point) {
 		super(x, y, world, speed, speedShot, direction, health);
@@ -39,6 +40,7 @@ public class EnemyTank extends Tank {
 		this.stopEnemyGraphic=false;
 		this.setReadyToSpawn(false);
 		this.setUpdateObject(true);
+		this.tempT=-1;
 	}
 
 	@Override
@@ -307,6 +309,14 @@ public class EnemyTank extends Tank {
 
 	public void setStopEnemyGraphic(boolean stopEnemyGraphic) {
 		this.stopEnemyGraphic = stopEnemyGraphic;
+	}
+
+	public long getTempT() {
+		return tempT;
+	}
+
+	public void setTempT(long tempT) {
+		this.tempT = tempT;
 	}
 
 }
