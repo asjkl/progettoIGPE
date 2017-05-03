@@ -30,9 +30,9 @@ public class GameManager {
 		private ArrayList<PowerUp> power; 
 		private ArrayList<Rocket> rocket;
 		private ArrayList<AbstractStaticObject> recoveryWall;
-		public ArrayList<AbstractStaticObject> points;
-		public ArrayList<AbstractStaticObject> boom;
-		public ArrayList<Rocket> r;
+		private ArrayList<AbstractStaticObject> points;
+		private ArrayList<AbstractStaticObject> boom;
+		private ArrayList<Rocket>rocketFin;
 	
 	//ENEMY
 		private int numberOfEnemyToSpawn;
@@ -67,7 +67,7 @@ public class GameManager {
 			points = new ArrayList<>();
 			boom = new ArrayList<>();
 			random = new Random();
-			r=new ArrayList<>();
+			rocketFin=new ArrayList<>();
 			setStatistics(new Statistics());
 			
 			importMap(filename, dir2);
@@ -468,8 +468,7 @@ public class GameManager {
 		
 		if(!rocket.canGo){
 			crashRocket(rocket);	
-			destroyRocket(rocket);
-			
+			destroyRocket(rocket);	
 		}
 	}
 
@@ -521,7 +520,7 @@ public class GameManager {
 		countRockets(r);
 		if (r.getCurr() != r.getTank())
 			matrix.world[r.getX()][r.getY()] = r.getCurr();	
-		this.r.add(r);
+		this.rocketFin.add(r);
 		rocket.remove(r);	
 	}
 
@@ -855,6 +854,30 @@ public class GameManager {
 
 	public void setStatistics(Statistics statistics) {
 		this.statistics = statistics;
+	}
+
+	public ArrayList<AbstractStaticObject> getPoints() {
+			return points;
+		}
+
+	public void setPoints(ArrayList<AbstractStaticObject> points) {
+		this.points = points;
+	}
+
+	public ArrayList<AbstractStaticObject> getBoom() {
+		return boom;
+	}
+
+	public void setBoom(ArrayList<AbstractStaticObject> boom) {
+		this.boom = boom;
+	}
+
+	public ArrayList<Rocket> getRocketFin() {
+		return rocketFin;
+	}
+
+	public void setRocketFin(ArrayList<Rocket> rocketFin) {
+		this.rocketFin = rocketFin;
 	}
 
 }
