@@ -15,13 +15,13 @@ public class PowerUp extends AbstractStaticObject {
 	private boolean blink;
 	private int inc; // serve per gli effetti di powerUp
 
-	public PowerUp(int x, int y, World world, Power powerUp, long duration, boolean drop) {
+	public PowerUp(int x, int y, World world, Power powerUp) {
 		super(x, y, world);
 		this.powerUp = powerUp;
 		this.timer=0;
 		this.activate=false;
-		this.duration=duration;
-		this.drop=drop;
+		this.duration=duration();
+		this.drop=true;
 		this.setDropTime(0);
 		this.before=null;
 		this.dropOnBorder = false;
@@ -50,6 +50,11 @@ public class PowerUp extends AbstractStaticObject {
 		}
 	}
 	
+	public int duration(){
+		if(powerUp == Power.SHOVEL || powerUp == Power.HELMET || powerUp == Power.TIMER)
+			return 5;
+		return 0;
+	}
 	public Power getPowerUp() {
 		return powerUp;
 	}

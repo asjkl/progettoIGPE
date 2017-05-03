@@ -227,7 +227,7 @@ public class GameManager {
 				if(currentTime == (power.get(a).getDropTime() + (getDurationPowerUp()-blinkTime)) % 60)
 					power.get(a).setBlink(true);
 				
-				if(tmp == currentTime) { 
+				if(currentTime == tmp) { 
 					power.get(a).setDrop(false);
 
 					if(power.get(a).getBefore() instanceof Water){
@@ -255,12 +255,18 @@ public class GameManager {
 
 		for (int a = 0; a < power.size(); a++){
 			if (power.get(a).isActivate()) {
+				System.out.println(power.get(a) + "---------- attivo!");
 				
 				long tmp = (power.get(a).getTimer() + power.get(a).getDuration()) % 60;
 
+				System.out.println("CURRENT:   "+ currentTime);
+				System.out.println("getTimer:  "+power.get(a).getTimer());
+				System.out.println("tmpTimeOut: " + tmp);
+			
+				
 				if (tmp == currentTime) {
+					System.out.println(power.get(a) + "---------- disattivo!");
 					managePowerUp(power.get(a));
-					power.get(a).setActivate(false);
 					power.remove(a);
 					a--;
 				}
@@ -296,27 +302,28 @@ public class GameManager {
 		
 		switch (t) {
 		case 0:
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.GRENADE, 0, true);
+			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.GRENADE);
 			extendAddPowerUp(tmp);
 			break;
 		case 1:
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.HELMET, 12, true);
+			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.HELMET);
 			extendAddPowerUp(tmp);
 			break;
 		case 2:
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.SHOVEL, 15, true);
+			                                                             
+			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.SHOVEL);
 			extendAddPowerUp(tmp);
 			break;
 		case 3:
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.STAR, 0, true);
+			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.STAR);
 			extendAddPowerUp(tmp);
 			break;
 		case 4:
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.TANK, 0, true);
+			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.TANK);
 			extendAddPowerUp(tmp);
 			break;
 		case 5:
-			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.TIMER, 12, true);
+			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.TIMER);
 			extendAddPowerUp(tmp);
 			break;
 		default:
@@ -508,9 +515,6 @@ public class GameManager {
 
 	public void destroyRocket(Rocket r){	
 		
-		if(r.getTank() instanceof EnemyTank){ //per gestire il ritardo shot
-			((EnemyTank)r.getTank()).setTempT(currentTime);
-		}
 		countRockets(r);
 		if (r.getCurr() != r.getTank())
 			matrix.world[r.getX()][r.getY()] = r.getCurr();	
@@ -582,7 +586,8 @@ public class GameManager {
 		
 		// GENERA POWERUP
 		if (enemyT.isPowerUpOn())
-			addPowerUp(new Random().nextInt(6)); 
+			addPowerUp(0);
+//			addPowerUp(new Random().nextInt(6)); 
 
 		// RIMETTI CURR
 		matrix.world[enemyT.getX()][enemyT.getY()] = enemyT.getCurr(); 
@@ -659,10 +664,11 @@ public class GameManager {
 					enemy.get(count).setSpawnTime((currentTime+4)%60); //il +4 indica i secondi che ci metterà..
 					numberOfEnemyReadyToSpwan++;
 				}
-				if(enemy.get(count).isReadyToSpawn() && currentTime >= enemy.get(count).getSpawnTime()){
+				if(enemy.get(count).isReadyToSpawn() && currentTime == enemy.get(count).getSpawnTime()){
 					enemy.get(count).setAppearsInTheMap(true);
 					enemy.get(count).setReadyToSpawn(false);
 					numberOfEnemyOnMap++;
+					enemy.get(count).setNextShotTime((currentTime+1) % 60); //per sparare dopo tot tempo
 				}
 				count++;
 			}
