@@ -32,6 +32,7 @@ public class GameManager {
 		private ArrayList<AbstractStaticObject> recoveryWall;
 		public ArrayList<AbstractStaticObject> points;
 		public ArrayList<AbstractStaticObject> boom;
+		public ArrayList<Rocket> r;
 	
 	//ENEMY
 		private int numberOfEnemyToSpawn;
@@ -66,8 +67,9 @@ public class GameManager {
 			points = new ArrayList<>();
 			boom = new ArrayList<>();
 			random = new Random();
+			r=new ArrayList<>();
 			setStatistics(new Statistics());
-		
+			
 			importMap(filename, dir2);
 			
 			Timer timer = new Timer();
@@ -466,7 +468,8 @@ public class GameManager {
 		
 		if(!rocket.canGo){
 			crashRocket(rocket);	
-			destroyRocket(rocket);	
+			destroyRocket(rocket);
+			
 		}
 	}
 
@@ -518,7 +521,7 @@ public class GameManager {
 		countRockets(r);
 		if (r.getCurr() != r.getTank())
 			matrix.world[r.getX()][r.getY()] = r.getCurr();	
-		boom.add(r);
+		this.r.add(r);
 		rocket.remove(r);	
 	}
 

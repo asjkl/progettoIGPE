@@ -14,15 +14,12 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	public boolean canGo;
 	private int contP; //conta pixel
 	private boolean updateObject; //switcha dalla logica alla grafica
-	private Point pixelPosition;
-	private int sizePixel;
 	private int rotateDegrees; // rotazione oggetto
 	private boolean firstTime; // booleana per entrare una sola volta
 	private int inc; // serve per gli effetti di Tank (PowerUp ha il suo)
 
 	public AbstractDynamicObject(int x, int y, World mondo, Speed speed, Speed speedShot, Direction direction,int health) {
 		super(x, y, mondo);
-		this.sizePixel=35;
 		this.speed = speed;
 		this.direction = direction;
 		this.speedShot = speedShot;
@@ -30,7 +27,6 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		this.contRocket=0;
 		this.curr = null;
 		this.next = null;
-		this.pixelPosition=new Point(x*sizePixel, y*sizePixel);
 		this.rotateDegrees=0;
 		this.firstTime=true;
 		this.inc=0;
@@ -40,9 +36,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	//COSTRUTTORE SOLO PER IL ROCKET
 	public AbstractDynamicObject(int x, int y, World mondo, Direction direction) {		
 		super(x, y, mondo);
-		this.sizePixel=35;
 		this.direction = direction;
-		pixelPosition=new Point(x*sizePixel, y*sizePixel);
 		FPS();	
 	}
 
@@ -188,22 +182,6 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 
 	public void setCont(int contP) {
 		this.contP = contP;
-	}
-
-	public Point getPixelPosition() {
-		return pixelPosition;
-	}
-
-	public void setPixelPosition(Point pixelPosition) {
-		this.pixelPosition = pixelPosition;
-	}
-
-	public int getSizePixel() {
-		return sizePixel;
-	}
-
-	public void setSizePixel(int sizePixel) {
-		this.sizePixel = sizePixel;
 	}
 
 	public int getRotateDegrees() {
