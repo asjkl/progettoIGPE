@@ -1,7 +1,5 @@
 package progettoIGPE.davide.giovanni.unical2016;
 
-import java.awt.Point;
-
 public abstract class AbstractDynamicObject extends AbstractStaticObject implements DynamicObject {
 	
 	private Speed speed;

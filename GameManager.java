@@ -122,7 +122,8 @@ public class GameManager {
 	public void importMap(JTextField filename, JTextField dir) {
 		int i = 0;// indice di riga
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(dir.getText()+"/"+filename.getText()));
+			BufferedReader reader = new BufferedReader(new FileReader
+					(dir.getText()+"/"+filename.getText()));
 			String line = reader.readLine();
 			while (i < height) {
 
@@ -473,24 +474,12 @@ public class GameManager {
 	}
 
 	public void crashRocket(Rocket rocket) {
-					
-			//ROCKET
-			if((rocket.getNext() instanceof Rocket)){
-				destroyRocket(((Rocket)rocket.getNext()));
-			}
-				
+						
 			//WALL
 			if(rocket.getNext() instanceof Wall){
 				damageWall(rocket);
-				if (((Wall) rocket.getNext()).getHealth() <= 0)
-					destroyWall(rocket);
 			}
-			
-			//FLAG
-			if (rocket.getNext() instanceof Flag) {
-				flag.setHit(true);
-			}
-			
+		
 			//ENEMYTANK
 			if (rocket.getNext() instanceof EnemyTank) {
 				if (rocket.getTank() instanceof PlayerTank){
@@ -499,8 +488,30 @@ public class GameManager {
 					else
 					((EnemyTank) rocket.getNext()).setProtection(false);
 				}
-
-				if (((EnemyTank) rocket.getNext()).getHealth() == 0) {
+			}
+	}
+	
+	public void destroy(Rocket rocket){
+			
+			//ROCKET
+			if((rocket.getNext() instanceof Rocket)){
+				destroyRocket(((Rocket)rocket.getNext()));
+			}
+			
+			//FLAG
+			if (rocket.getNext() instanceof Flag) {
+				flag.setHit(true);
+			}
+				
+			//WALL
+			if(rocket.getNext() instanceof Wall){
+				if (((Wall) rocket.getNext()).getHealth() <= 0)
+					destroyWall(rocket);
+			}
+				
+			//ENEMYTANK
+			if (rocket.getNext() instanceof EnemyTank) {
+				if (((EnemyTank) rocket.getNext()).getHealth() <= 0) {
 					switchCurrTank(((EnemyTank) rocket.getNext()));
 					destroyEnemyTank((EnemyTank) rocket.getNext());
 				}
@@ -510,7 +521,7 @@ public class GameManager {
 			if (rocket.getNext() instanceof PlayerTank && rocket.getTank() instanceof EnemyTank) {
 				if (player.isProtection() == false && !player.isReadyToSpawn()) {
 					switchCurrTank(player);
-					damageAndDestroyPlayerTank();
+					destroyPlayerTank();
 				}
 			}
 	}
@@ -549,7 +560,7 @@ public class GameManager {
 			((Wall) rocket.getNext()).setHealth(((Wall) rocket.getNext()).getHealth() - 1);
 	}
 
-	private void damageAndDestroyPlayerTank() {
+	public void destroyPlayerTank() {
 		
 		PlayerTank old = player;
 		boom.add(old);
@@ -563,7 +574,7 @@ public class GameManager {
 		matrix.world[GameManager.height-1][(GameManager.width / 2)-2] = player;
 	}
 
-	private void destroyWall(Rocket rocket) {
+	public void destroyWall(Rocket rocket) {
 
 		int xR = rocket.getNext().getX();
 		int yR = rocket.getNext().getY();
@@ -576,7 +587,7 @@ public class GameManager {
 					matrix.world[xR][yR] = null;
 	}
 
-	private void destroyEnemyTank(EnemyTank enemyT) {
+	public void destroyEnemyTank(EnemyTank enemyT) {
 		
 		statistics.calcolate(enemyT); // gli passo l'enemy ucciso e verrà gestito tutto nella classe statistics
 		
