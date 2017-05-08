@@ -49,7 +49,7 @@ public class GameManager {
 
 		public GameManager(JTextField filename, JTextField dir2){
 		
-			numberOfEnemyToSpawn = 1;
+			numberOfEnemyToSpawn = 3;
 			numberOfEnemyOnMap = 0;
 			numberOfEnemyReadyToSpwan = 0;
 			durationPowerUp = 20;
@@ -379,11 +379,15 @@ public class GameManager {
 			x = random.nextInt(height);
 			y = random.nextInt(width);
 
-			if (!(getMatrix().world[x][y] instanceof PlayerTank) && !(getMatrix().world[x][y] instanceof EnemyTank)
-					&& !(getMatrix().world[x][y] instanceof PowerUp) && !(getMatrix().world[x][y] instanceof Rocket)
-					&& !(getMatrix().world[x][y] instanceof Flag && getMatrix().world[x][y] != null)){
+//			if (!(getMatrix().world[x][y] instanceof PlayerTank) && !(getMatrix().world[x][y] instanceof EnemyTank)
+//					&& !(getMatrix().world[x][y] instanceof PowerUp) && !(getMatrix().world[x][y] instanceof Rocket)
+//					&& !(getMatrix().world[x][y] instanceof Flag && getMatrix().world[x][y] != null)){
+//				flag = true;
+//			}
+			if (getMatrix().world[x][y] instanceof Tree){
 				flag = true;
 			}
+			
 			if(getMatrix().world[x][y] instanceof Water) //se cade nell'acqua controlla
 				if(!movePowerUpInCorrectPosition()) //se la condizione non è soddisfatta
 					flag=false; //continua a ciclare
