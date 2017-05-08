@@ -49,7 +49,7 @@ public class GameManager {
 
 		public GameManager(JTextField filename, JTextField dir2){
 		
-			numberOfEnemyToSpawn = 3;
+			numberOfEnemyToSpawn = 1;
 			numberOfEnemyOnMap = 0;
 			numberOfEnemyReadyToSpwan = 0;
 			durationPowerUp = 20;
@@ -425,7 +425,7 @@ public class GameManager {
 			
 			for (int i = 0; i < enemy.size(); i++)
 				if (enemy.get(i).isAppearsInTheMap()){
-					destroyEnemyTank(enemy.get(i));
+					destroyEnemyTank(enemy.get(i--));
 				}
 			
 			break;
@@ -462,18 +462,8 @@ public class GameManager {
 	// ---------------------------------------ROCKET----------------------------------------
 
 	public void updateRocket(Rocket rocket) {
-		
 		rocket.update();				
 		rocket.setUpdateObject(false);
-		
-		if(!rocket.canGo){	
-			destroyRocket(rocket);
-			
-			//ROCKET
-			if((rocket.getNext() instanceof Rocket)){
-				destroyRocket(((Rocket)rocket.getNext()));
-			}
-		}
 	}
 
 	public void crashRocket(Rocket rocket) {
@@ -512,6 +502,13 @@ public class GameManager {
 					damageAndDestroyPlayerTank();
 				}
 			}
+			
+			//ROCKET
+			if(rocket.getNext() instanceof Rocket){
+				destroyRocket((Rocket)rocket.getNext());
+			}
+			
+			destroyRocket(rocket);
 	}
 
 	public void destroyRocket(Rocket r){	
@@ -519,7 +516,7 @@ public class GameManager {
 		countRockets(r);
 		if (r.getCurr() != r.getTank())
 			matrix.world[r.getX()][r.getY()] = r.getCurr();	
-		this.rocketFin.add(r);
+		boom.add(r);
 		rocket.remove(r);	
 	}
 
