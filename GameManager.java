@@ -499,7 +499,7 @@ public class GameManager {
 			if (rocket.getNext() instanceof PlayerTank && rocket.getTank() instanceof EnemyTank) {
 				if (player.isProtection() == false && !player.isReadyToSpawn()) {
 					switchCurrTank(player);
-					damageAndDestroyPlayerTank();
+					destroyPlayerTank();
 				}
 			}
 			
@@ -545,18 +545,18 @@ public class GameManager {
 			((Wall) rocket.getNext()).setHealth(((Wall) rocket.getNext()).getHealth() - 1);
 	}
 
-	private void damageAndDestroyPlayerTank() {
+	private void destroyPlayerTank() {
 		
 		PlayerTank old = player;
 		boom.add(old);
 		getMatrix().world[old.getX()][old.getY()] = old.getCurr();
 		
 		player = new PlayerTank(GameManager.height-1, (GameManager.width / 2)-2, matrix);
+		matrix.world[GameManager.height-1][(GameManager.width / 2)-2] = player;
+		
 		player.setResume(old.getResume()-1);
 		player.setDied(true);
 		player.setSpawnTime((currentTime+4)%60);
-		
-		matrix.world[GameManager.height-1][(GameManager.width / 2)-2] = player;
 	}
 
 	private void destroyWall(Rocket rocket) {
