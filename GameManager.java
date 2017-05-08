@@ -379,15 +379,11 @@ public class GameManager {
 			x = random.nextInt(height);
 			y = random.nextInt(width);
 
-//			if (!(getMatrix().world[x][y] instanceof PlayerTank) && !(getMatrix().world[x][y] instanceof EnemyTank)
-//					&& !(getMatrix().world[x][y] instanceof PowerUp) && !(getMatrix().world[x][y] instanceof Rocket)
-//					&& !(getMatrix().world[x][y] instanceof Flag && getMatrix().world[x][y] != null)){
-//				flag = true;
-//			}
-			if (getMatrix().world[x][y] instanceof Tree){
+			if (!(getMatrix().world[x][y] instanceof PlayerTank) && !(getMatrix().world[x][y] instanceof EnemyTank)
+					&& !(getMatrix().world[x][y] instanceof PowerUp) && !(getMatrix().world[x][y] instanceof Rocket)
+					&& !(getMatrix().world[x][y] instanceof Flag && getMatrix().world[x][y] != null)){
 				flag = true;
 			}
-			
 			if(getMatrix().world[x][y] instanceof Water) //se cade nell'acqua controlla
 				if(!movePowerUpInCorrectPosition()) //se la condizione non è soddisfatta
 					flag=false; //continua a ciclare
@@ -588,8 +584,7 @@ public class GameManager {
 		
 		// GENERA POWERUP
 		if (enemyT.isPowerUpOn())
-			addPowerUp(0);
-//			addPowerUp(new Random().nextInt(6)); 
+			addPowerUp(new Random().nextInt(6)); 
 
 		// RIMETTI CURR
 		matrix.world[enemyT.getX()][enemyT.getY()] = enemyT.getCurr(); 
