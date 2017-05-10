@@ -8,6 +8,8 @@ import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.JTextField;
 
@@ -46,6 +48,7 @@ public class GameManager {
 		private int yTmp; 
 		private Direction dir;
 		private long blinkTime;
+		private Lock lock;
 
 		public GameManager(JTextField filename, JTextField dir2){
 		
@@ -68,6 +71,7 @@ public class GameManager {
 			boom = new ArrayList<>();
 			random = new Random();
 			rocketFin=new ArrayList<>();
+			lock=new ReentrantLock();
 			setStatistics(new Statistics());
 			
 			importMap(filename, dir2);
@@ -467,7 +471,7 @@ public class GameManager {
 	}
 
 	public void crashRocket(Rocket rocket) {
-					
+			lock.lock();
 			//WALL
 			if(rocket.getNext() instanceof Wall){
 				damageWall(rocket);
@@ -509,6 +513,7 @@ public class GameManager {
 			}
 			
 			destroyRocket(rocket);
+			lock.unlock();
 	}
 
 	public void destroyRocket(Rocket r){	
@@ -875,4 +880,7 @@ public class GameManager {
 		this.rocketFin = rocketFin;
 	}
 
+	public Lock getLock() {
+		return lock;
+	}
 }

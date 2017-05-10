@@ -4,7 +4,8 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	
 	private Speed speed;
 	private Speed speedShot;
-	private Direction direction;
+	private Direction direction; 
+	
 	private int health;
 	protected AbstractStaticObject curr;
 	protected AbstractStaticObject next;
