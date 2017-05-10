@@ -7,6 +7,8 @@ public class PlayerTank extends Tank {
 	private int point;
 	private boolean died;
 	private boolean first;
+	private int bornX;
+	private int bornY;
 	
 	public PlayerTank(int x, int y, World world) {
 		super(x, y, world, Speed.NORMAL, Speed.FAST, Direction.STOP, 1);
@@ -20,6 +22,8 @@ public class PlayerTank extends Tank {
 		this.setRotateDegrees(0);
 		this.setTmpDirection(Direction.UP);
 		this.first=true;
+		this.setBornX(x);
+		this.setBornY(y);
 	} 
 
 	@Override
@@ -104,5 +108,21 @@ public class PlayerTank extends Tank {
 
 	public void setFirst(boolean first) {
 		this.first = first;
+	}
+
+	public int getBornX() {
+		return bornX;
+	}
+
+	public void setBornX(int bornX) {
+		this.bornX = bornX;
+	}
+
+	public int getBornY() {
+		return bornY;
+	}
+
+	public void setBornY(int bornY) {
+		this.bornY = bornY;
 	}
 }

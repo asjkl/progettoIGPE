@@ -551,8 +551,8 @@ public class GameManager {
 		boom.add(old);
 		getMatrix().world[old.getX()][old.getY()] = old.getCurr();
 		
-		player = new PlayerTank(GameManager.height-1, (GameManager.width / 2)-2, matrix);
-		matrix.world[GameManager.height-1][(GameManager.width / 2)-2] = player;
+		player = new PlayerTank(player.getBornX(),player.getBornY(),matrix);
+		matrix.world[player.getX()][player.getY()] = player;
 		
 		player.setResume(old.getResume()-1);
 		player.setDied(true);
