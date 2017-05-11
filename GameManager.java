@@ -48,6 +48,7 @@ public class GameManager {
 		private int yTmp; 
 		private Direction dir;
 		private long blinkTime;
+		
 		private Lock lock;
 
 		public GameManager(JTextField filename, JTextField dir2){
