@@ -2,7 +2,7 @@ package progettoIGPE.davide.giovanni.unical2016;
 
 public class Statistics {
 
-	private int hiscore; //record
+	private int highScore; //record
 	private int totalEnemies; //indica il numero di nemici uccisi
 	
 	//punteggio totale per ogni tipo di tank
@@ -19,7 +19,7 @@ public class Statistics {
 	private int fastTankOcc;
 	
 	public Statistics() {
-		this.hiscore = 0;
+		this.highScore = 0;
 		this.totalEnemies = 0;
 		this.basicTank = 0;
 		this.powerTank = 0;
@@ -35,19 +35,30 @@ public class Statistics {
 	public void calcolate(AbstractStaticObject A){
 		if(A instanceof BasicTank){
 			basicTank+=100;
+			totalEnemies+=basicTank;
 			basicTankOcc++;
 		}else if(A instanceof PowerTank){
 			powerTank+=300;
+			totalEnemies+=powerTank;
 			powerTankOcc++;
 		}else if(A instanceof ArmorTank){
 			armorTank+=400;
+			totalEnemies+=armorTank;
 			armorTankOcc++;
 		}else if(A instanceof FastTank){
 			fastTank+=200;
+			totalEnemies+=fastTank;
 			fastTankOcc++;
 		}else if(A instanceof PowerUp){
 			other+=500;
 		}
+	}
+	
+	public void setNewRecord() {
+		
+		if(totalEnemies > highScore)
+			highScore = totalEnemies;
+		
 	}
 	
 	public int getBasicTankOcc() {
@@ -82,12 +93,12 @@ public class Statistics {
 		this.fastTankOcc = fastTankOcc;
 	}
 	
-	public int getHiscore() {
-		return hiscore;
+	public int getHighScore() {
+		return highScore;
 	}
 
-	public void setHiscore(int hiscore) {
-		this.hiscore = hiscore;
+	public void setHighScore(int highScore) {
+		this.highScore = highScore;
 	}
 
 	public int getTotalEnemies() {

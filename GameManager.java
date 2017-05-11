@@ -15,72 +15,72 @@ import javax.swing.JTextField;
 
 public class GameManager {
 	
-	public static final int width = 21;
-	public static final int height = 20;
+	private final int width = 21;
+	private final int height = 20;
 	
 	//OTHER
-		private int x;
-		private int y;
-		private long currentTime;
-		private boolean soundPowerUp;
-		private Random random;
-		private World matrix;
-		private Flag flag;
-		private PlayerTank player;
-		private Statistics statistics;
-		private ArrayList<EnemyTank> enemy;
-		private ArrayList<PowerUp> power; 
-		private ArrayList<Rocket> rocket;
-		private ArrayList<AbstractStaticObject> recoveryWall;
-		private ArrayList<AbstractStaticObject> points;
-		private ArrayList<AbstractStaticObject> boom;
-		private ArrayList<Rocket>rocketFin;
+	private int x;
+	private int y;
+	private long currentTime;
+	private boolean soundPowerUp;
+	private Random random;
+	private World matrix;
+	private Flag flag;
+	private PlayerTank player;
+	private Statistics statistics;
+	private ArrayList<EnemyTank> enemy;
+	private ArrayList<PowerUp> power; 
+	private ArrayList<Rocket> rocket;
+	private ArrayList<AbstractStaticObject> recoveryWall;
+	private ArrayList<AbstractStaticObject> points;
+	private ArrayList<AbstractStaticObject> boom;
+	private ArrayList<Rocket>rocketFin;
 	
 	//ENEMY
-		private int numberOfEnemyToSpawn;
-		private int numberOfEnemyOnMap;
-		private int numberOfEnemyReadyToSpwan;
+	private int numberOfEnemyToSpawn;
+	private int numberOfEnemyOnMap;
+	private int numberOfEnemyReadyToSpwan;
 
 	//POWERUPS
-		private int durationPowerUp;
-		private int numEnemyDropsPowerUp;
-		private int xTmp;
-		private int yTmp; 
-		private Direction dir;
-		private long blinkTime;
-		
-		private Lock lock;
+	private int durationPowerUp;
+	private int numEnemyDropsPowerUp;
+	private int xTmp;
+	private int yTmp; 
+	private Direction dir;
+	private long blinkTime;
+	
+	private Lock lock;
 
-		public GameManager(JTextField filename, JTextField dir2){
+	public GameManager(JTextField filename, JTextField dir2){
+	
+		numberOfEnemyToSpawn = 3;
+		numberOfEnemyOnMap = 0;
+		numberOfEnemyReadyToSpwan = 0;
+		durationPowerUp = 20;
+		numEnemyDropsPowerUp = 1; //indica ogni quanti enemie far cadere powerUp
+		xTmp = -1;
+		yTmp = -1;
+		blinkTime = 5; //quanti secondi alla fine deve lampeggiare
+		soundPowerUp = false;
 		
-			numberOfEnemyToSpawn = 3;
-			numberOfEnemyOnMap = 0;
-			numberOfEnemyReadyToSpwan = 0;
-			durationPowerUp = 20;
-			numEnemyDropsPowerUp = 1; //indica ogni quanti enemie far cadere powerUp
-			xTmp = -1;
-			yTmp = -1;
-			blinkTime = 5; //quanti secondi alla fine deve lampeggiare
-			soundPowerUp = false;
-			
-			matrix = new World(height, width);
-			enemy = new ArrayList<>();
-			rocket = new ArrayList<>();
-			power = new ArrayList<>();
-			recoveryWall = new ArrayList<>();
-			points = new ArrayList<>();
-			boom = new ArrayList<>();
-			random = new Random();
-			rocketFin=new ArrayList<>();
-			lock=new ReentrantLock();
-			setStatistics(new Statistics());
-			
-			importMap(filename, dir2);
-			
-			Timer timer = new Timer();
-			TimerTask task = new MyTask();
-			timer.schedule( task, 85, 85);
-		}
+		matrix = new World(height, width);
+		enemy = new ArrayList<>();
+		rocket = new ArrayList<>();
+		power = new ArrayList<>();
+		recoveryWall = new ArrayList<>();
+		points = new ArrayList<>();
+		boom = new ArrayList<>();
+		random = new Random();
+		rocketFin=new ArrayList<>();
+		lock=new ReentrantLock();
+		setStatistics(new Statistics());
+		
+		importMap(filename, dir2);
+		
+		Timer timer = new Timer();
+		TimerTask task = new MyTask();
+		timer.schedule( task, 85, 85);
+	}
 		
 	// --------------------------------------OTHER-----------------------------------------
 		
@@ -729,6 +729,14 @@ public class GameManager {
 
 	// -----------------------------SET & GET-----------------------------------------------
 
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		return height;
+	}
+	
 	public int getX() {
 		return x;
 	}
@@ -859,7 +867,7 @@ public class GameManager {
 
 	public ArrayList<AbstractStaticObject> getPoints() {
 			return points;
-		}
+	}		
 
 	public void setPoints(ArrayList<AbstractStaticObject> points) {
 		this.points = points;
