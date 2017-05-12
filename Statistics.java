@@ -58,7 +58,6 @@ public class Statistics {
 		
 		if(totalEnemies > highScore)
 			highScore = totalEnemies;
-		
 	}
 	
 	public int getBasicTankOcc() {
