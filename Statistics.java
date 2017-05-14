@@ -32,22 +32,22 @@ public class Statistics {
 		this.other = 0;
 	}
 
-	public void calcolate(AbstractStaticObject A){
+	public void calculate(AbstractStaticObject A){
 		if(A instanceof BasicTank){
 			basicTank+=100;
-			totalEnemies+=basicTank;
+			totalEnemies+=100;
 			basicTankOcc++;
 		}else if(A instanceof PowerTank){
 			powerTank+=300;
-			totalEnemies+=powerTank;
+			totalEnemies+=300;
 			powerTankOcc++;
 		}else if(A instanceof ArmorTank){
 			armorTank+=400;
-			totalEnemies+=armorTank;
+			totalEnemies+=400;
 			armorTankOcc++;
 		}else if(A instanceof FastTank){
 			fastTank+=200;
-			totalEnemies+=fastTank;
+			totalEnemies+=200;
 			fastTankOcc++;
 		}else if(A instanceof PowerUp){
 			other+=500;

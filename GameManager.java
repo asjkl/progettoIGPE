@@ -397,7 +397,7 @@ public class GameManager {
 
 	private void managePowerUp(PowerUp p) {
 
-		statistics.calcolate(p);
+		statistics.calculate(p);
 		
 		if(p.getPowerUp() == Power.HELMET) {
 			player.setProtection(false);
@@ -580,7 +580,7 @@ public class GameManager {
 
 	private void destroyEnemyTank(EnemyTank enemyT) {
 		
-		statistics.calcolate(enemyT); // gli passo l'enemy ucciso e verrà gestito tutto nella classe statistics
+		statistics.calculate(enemyT); // gli passo l'enemy ucciso e verrà gestito tutto nella classe statistics
 		
 		if(numberOfEnemyOnMap > 0)
 			numberOfEnemyOnMap--;
