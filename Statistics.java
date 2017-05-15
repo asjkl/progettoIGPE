@@ -54,10 +54,14 @@ public class Statistics {
 		}
 	}
 	
+	public int totalOccurr() {
+		return (basicTankOcc + fastTankOcc + armorTankOcc + powerTankOcc);
+	}
+	
 	public void setNewRecord() {
 		
 		if(totalEnemies > highScore)
-			highScore = totalEnemies;
+			setHighScore(totalEnemies);
 	}
 	
 	public int getBasicTankOcc() {
