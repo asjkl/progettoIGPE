@@ -23,6 +23,7 @@ public class GameManager {
 	private int y;
 	private long currentTime;
 	private boolean soundPowerUp;
+	public boolean pause;
 	private Random random;
 	private World matrix;
 	private Flag flag;
@@ -49,10 +50,19 @@ public class GameManager {
 	private Direction dir;
 	private long blinkTime;
 	
+	//Timer
+	public Timer timer;
+	public TimerTask task;
+	
+	public Timer timer2;
+	public TimerTask task2;
+	
 	private Lock lock;
 
 	public GameManager(JTextField filename, JTextField dir2){
 	
+		currentTime = 0;
+		pause=false;
 		numberOfEnemyToSpawn = 3;
 		numberOfEnemyOnMap = 0;
 		numberOfEnemyReadyToSpwan = 0;
@@ -77,9 +87,13 @@ public class GameManager {
 		
 		importMap(filename, dir2);
 		
-		Timer timer = new Timer();
-		TimerTask task = new MyTask();
+		timer = new Timer();
+		task = new MyTask();
 		timer.schedule( task, 85, 85);
+		
+		timer2 = new Timer();
+		task2 = new CurrentTime();
+		timer2.schedule( task2, 0, 1000);
 	}
 		
 	// --------------------------------------OTHER-----------------------------------------
@@ -92,38 +106,49 @@ public class GameManager {
 //			getMatrix().print();
 //			System.out.println();
 			
+			if(!pause){
 
-			for(int i=0;i<boom.size();i++){
-				 if(boom.get(i) instanceof Tank) 
-						((Tank)(boom.get(i))).setInc(((Tank)(boom.get(i))).getInc()+1);
-				 if(boom.get(i) instanceof Rocket)
-						((Rocket)(boom.get(i))).setInc(((Rocket)(boom.get(i))).getInc()+1);
-			}				
-			for(int i=0;i<points.size();i++){
-				 if(points.get(i) instanceof PowerUp)
-					 ((PowerUp)(points.get(i))).setInc(((PowerUp)(points.get(i))).getInc()+1);
-			}
-				
-			for(int i=0;i<getEnemy().size();i++){	
-				//EFFETTO SPAWN ENEMY
-				if(getEnemy().get(i).isReadyToSpawn())
-					getEnemy().get(i).setCountdown((getEnemy().get(i).getCountdown()+1)%4);
-				
-				//EFFETTO PROTEZIONE ENEMY 
-				if(enemy.get(i).isAppearsInTheMap() && enemy.get(i).isProtection()){
-					enemy.get(i).setCountdown((enemy.get(i).getCountdown()+1)%2);
+				for(int i=0;i<boom.size();i++){
+					 if(boom.get(i) instanceof Tank) 
+							((Tank)(boom.get(i))).setInc(((Tank)(boom.get(i))).getInc()+1);
+					 if(boom.get(i) instanceof Rocket)
+							((Rocket)(boom.get(i))).setInc(((Rocket)(boom.get(i))).getInc()+1);
+				}				
+				for(int i=0;i<points.size();i++){
+					 if(points.get(i) instanceof PowerUp)
+						 ((PowerUp)(points.get(i))).setInc(((PowerUp)(points.get(i))).getInc()+1);
 				}
-			}
-			
-			//EFFETTO SPAWN / PROTEZIONE PLAYER 
-			if(currentTime == player.getSpawnTime())
-					player.setReadyToSpawn(false);
-			if(player.isReadyToSpawn() || player.isProtection()){
-				player.setCountdown((player.getCountdown()+1)%2);
-			}
-		}	 
+					
+				for(int i=0;i<getEnemy().size();i++){	
+					//EFFETTO SPAWN ENEMY
+					if(getEnemy().get(i).isReadyToSpawn())
+						getEnemy().get(i).setCountdown((getEnemy().get(i).getCountdown()+1)%4);
+					
+					//EFFETTO PROTEZIONE ENEMY 
+					if(enemy.get(i).isAppearsInTheMap() && enemy.get(i).isProtection()){
+						enemy.get(i).setCountdown((enemy.get(i).getCountdown()+1)%2);
+					}
+				}
+				
+				//EFFETTO SPAWN / PROTEZIONE PLAYER 
+				if(currentTime == player.getSpawnTime())
+						player.setReadyToSpawn(false);
+				if(player.isReadyToSpawn() || player.isProtection()){
+					player.setCountdown((player.getCountdown()+1)%2);
+				}
+			}	 
+		}
 	}
 
+	public class CurrentTime extends TimerTask {
+
+		public void run(){
+			System.out.println("CurrentTime");
+			if(!pause)
+			currentTime = (currentTime + 1 ) % 60;
+		}
+	}
+	
 	public void importMap(JTextField filename, JTextField dir) {
 		int i = 0;// indice di riga
 		try {
