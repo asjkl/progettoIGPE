@@ -143,7 +143,6 @@ public class GameManager {
 	public class CurrentTime extends TimerTask {
 
 		public void run(){
-			System.out.println("CurrentTime");
 			if(!pause)
 			currentTime = (currentTime + 1 ) % 60;
 		}
@@ -701,57 +700,121 @@ public class GameManager {
 				count++;
 			}
 	}
-
-	public void enemyPositionRandom(int a) {
-
-			if (enemy.get(a).isAppearsInTheMap() && !enemy.get(a).isStopEnemy()) { //stopEnemy TIMER
-				if (enemy.get(a).getCountStep() == 0 || enemy.get(a).isRecoverValue()) {
-
-					enemy.get(a).setPositionDirection();
-					enemy.get(a).setCountStep(0);
-					enemy.get(a).setStep(0);
-					enemy.get(a).setNoUpdateG(false);
-
-					do {
-						enemy.get(a).directionEnemyRandom();
-					} while (!enemy.get(a).positionCorrect() && !enemy.get(a).notSamePosition() && !enemy.get(a).allTrue());
-
-					int tempCont;
-					do{
-					tempCont = random.nextInt(height);
-					}while(tempCont==matrix.getColumn());
-					
-					enemy.get(a).setStep(tempCont);
-					
-				}
-			}
-	}
-
-	public void enemyUpdate(int a) {
-
-		if (enemy.get(a).isAppearsInTheMap() && !enemy.get(a).isStopEnemy()) {
-			if (enemy.get(a).getStep() >= enemy.get(a).getCountStep()) {
-				enemy.get(a).update();
-
-				if (enemy.get(a).getX() == enemy.get(a).getTempX() && enemy.get(a).getY() == enemy.get(a).getTempY()) {
-					enemy.get(a).setRecoverValue(true);
-				} else {
-					enemy.get(a).setPositionXY();
-					matrix.world[enemy.get(a).getX()][enemy.get(a).getY()] = enemy.get(a);
-					enemy.get(a).setCountStep(enemy.get(a).getCountStep() + 1);
-					if (!enemy.get(a).positionCorrect())
-						enemy.get(a).setRecoverValue(true);
-					else
-						enemy.get(a).setRecoverValue(false);
-				}
-			} else {
-				enemy.get(a).setCountStep(0);
-				enemy.get(a).setNoUpdateG(true);
-				matrix.world[enemy.get(a).getX()][enemy.get(a).getY()] = enemy.get(a);
+  
+	///////////// BY COSENTINO & DAVIDE //////////////////////
+	public void enemyPositionRandom(EnemyTank e) {
+		
+		if(!e.canGo) {
+			chooseDirection(e);
+			if(!e.stop){
+    			 int dir = -1;
+			     do {
+			    	 dir = new Random().nextInt(4); 
+			     } while(!e.directions[dir]);
+	    		 setDirEnemy(e, dir);
 			}
 		}
+	 }
+	
+	public void chooseDirection(EnemyTank e) {
+	    
+		boolean flag=false;
+		int x = e.getX();
+		int y = e.getY();
+		int left, right, up, down;
+		
+		//up
+		if(e.getX() > 0) {
+			up = e.getX() - 1;
+			if(!(matrix.world[up][y] instanceof Wall) && !(matrix.world[up][y] instanceof Tank) &&
+					 !(matrix.world[up][y] instanceof Water)) {
+			e.directions[0] = true;
+			flag=true;
+			}
+			else
+				e.directions[0] = false;
+		}
+		else
+			e.directions[0] = false;
+			
+		//down
+		if(e.getX() < height - 1) {
+			down = e.getX() + 1;
+			if(!(matrix.world[down][y] instanceof Wall) && !(matrix.world[down][y] instanceof Tank)
+				 && !(matrix.world[down][y] instanceof Water)){
+			e.directions[1] = true;
+			flag=true;
+			}
+			else
+				e.directions[1] = false;
+		}
+		else
+			e.directions[1] = false;
+		
+		//right
+		if(e.getY() < width - 1) {
+			right = e.getY() + 1;
+			if(!(matrix.world[x][right] instanceof Wall) && !(matrix.world[x][right] instanceof Tank) &&
+				  !(matrix.world[x][right] instanceof Water)){
+			e.directions[2] = true;
+			flag=true;
+			}
+			else
+				e.directions[2] = false;
+		}
+		else
+			e.directions[2] = false;
+		
+		//left
+		if(e.getY() > 0) {
+			left = e.getY() - 1;
+			if(!(matrix.world[x][left] instanceof Wall) &&!(matrix.world[x][left] instanceof Tank) &&
+				 !(matrix.world[x][left] instanceof Water)){
+			e.directions[3] = true;
+			flag=true;
+			}
+			else
+				e.directions[3] = false;
+		}
+		e.directions[3] = false;
+		
+		//se tutte le direzioni sono false
+		if(!flag)
+			e.stop=true;
+		else
+			e.stop=false;
 	}
+	
+	public void setDirEnemy(EnemyTank e, int dir) {
+	    
+	    switch(dir) {
+	    case 0:
+	      e.setDirection(Direction.UP);
+	      break;
+	    case 1:
+	      e.setDirection(Direction.DOWN);
+	      break;
+	    case 2:
+	      e.setDirection(Direction.RIGHT);
+	      break;
+	    case 3:
+	      e.setDirection(Direction.LEFT);
+	      break;
+	    default:
+	      break;
+	    }
+	}
+	
+	////////////////////////////////////////////////////////
+	
+	public void enemyUpdate(int a) {
 
+	    if (enemy.get(a).isAppearsInTheMap() && !enemy.get(a).isStopEnemy()) {
+	        enemy.get(a).update();
+	        matrix.world[enemy.get(a).getX()][enemy.get(a).getY()] = enemy.get(a);
+	    }
+	  }
+	
 	// -----------------------------SET & GET-----------------------------------------------
 
 	public int getWidth() {
@@ -918,3 +981,4 @@ public class GameManager {
 		return lock;
 	}
 }
+
