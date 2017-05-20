@@ -12,6 +12,7 @@ public class EnemyTank extends Tank {
 	private long nextShotTime;
 	public boolean[] directions;
 	public boolean stop;
+	public boolean first;
 	
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health, int point) {
 		super(x, y, world, speed, speedShot, direction, health);
@@ -25,7 +26,8 @@ public class EnemyTank extends Tank {
 		this.setReadyToSpawn(false);
 		this.setUpdateObject(true);
 		this.nextShot=false;
-		stop=false;
+		this.stop=false;
+		this.first=false;
 		
 		directions = new boolean[4];
 		for(int i = 0; i < directions.length; i++) {

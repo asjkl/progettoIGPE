@@ -10,9 +10,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
 import javax.swing.JTextField;
-import javax.swing.plaf.synth.SynthSpinnerUI;
 
 public class GameManager {
 	
@@ -146,6 +144,10 @@ public class GameManager {
 		public void run(){
 			if(!pause)
 			currentTime = (currentTime + 1 ) % 60;
+			
+			for(int i=0;i<enemy.size();i++)
+				if(enemy.get(i).stop)
+					enemy.get(i).first=false;
 		}
 	}
 	
@@ -702,7 +704,7 @@ public class GameManager {
 			}
 	}
   
-	///////////////////////////////////////////////////////
+	/////////////////// WORK IN PROGRESS ////////////////////////////////////
 	
 	public void enemyPositionRandom(EnemyTank e) {
 		
@@ -716,7 +718,72 @@ public class GameManager {
 			    e.setDir(dir);
 		 	}
 		}
+		 
+		if( e.stop && currentTime % 2 == 0 && !e.first){
+			
+			chooseDirWhenStopped(e);		
+			 int dir = new Random().nextInt(4); 
+			 if(e.directions[dir])
+				 e.setDir(dir);
+			 e.first=true;
+		}
 	 }
+	
+	public void chooseDirWhenStopped(EnemyTank e){
+		
+		int x = e.getX();
+		int y = e.getY();
+		int left, right, up, down;
+		
+		//up
+		if(e.getX() > 0) {
+			up = e.getX() - 1;
+			if(!(matrix.world[up][y] instanceof SteelWall) && !(matrix.world[up][y] instanceof Water)) {
+			e.directions[0] = true;
+			}
+			else
+				e.directions[0] = false;
+		}
+		else
+			e.directions[0] = false;
+			
+		//down
+		if(e.getX() < height - 1) {
+			down = e.getX() + 1;
+			if(!(matrix.world[down][y] instanceof SteelWall) && !(matrix.world[down][y] instanceof Water)){
+			e.directions[1] = true;
+			}
+			else
+				e.directions[1] = false;
+		}
+		else
+			e.directions[1] = false;
+		
+		//right
+		if(e.getY() < width - 1) {
+			right = e.getY() + 1;
+			if(!(matrix.world[x][right] instanceof SteelWall) && !(matrix.world[x][right] instanceof Water)){
+			e.directions[2] = true;
+			}
+			else
+				e.directions[2] = false;
+		}
+		else
+			e.directions[2] = false;
+		
+		//left
+		if(e.getY() > 0) {
+			left = e.getY() - 1;
+			if(!(matrix.world[x][left] instanceof SteelWall) &&  !(matrix.world[x][left] instanceof Water)){
+			e.directions[3] = true;
+			}
+			else
+				e.directions[3] = false;
+		}
+		else
+			e.directions[3] = false;
+		
+	}
 	
 	public void chooseDirection(EnemyTank e) {
 	    
@@ -788,7 +855,7 @@ public class GameManager {
 			e.stop=false;
 	}
 	
-	////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////
 	
 	public void enemyUpdate(int a) {
 
