@@ -706,16 +706,15 @@ public class GameManager {
 	
 	public void enemyPositionRandom(EnemyTank e) {
 		
-		if(!e.canGo) {
-			chooseDirection(e);
-			 if(!e.stop){
+		 if(!e.canGo){
+		 	chooseDirection(e);
+		 	if(!e.stop){
 				 int dir = -1;
-			     do {
+			     do { 
 			    	 dir = new Random().nextInt(4); 
-			    	 System.out.println("loop");
 			     } while(!e.directions[dir]);
-	    		 e.setDir(dir);
-			 }
+			    e.setDir(dir);
+		 	}
 		}
 	 }
 	
@@ -779,7 +778,8 @@ public class GameManager {
 			else
 				e.directions[3] = false;
 		}
-		e.directions[3] = false;
+		else
+			e.directions[3] = false;
 		
 		//se tutte le direzioni sono false
 		if(!flag)
