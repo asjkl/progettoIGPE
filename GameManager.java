@@ -12,6 +12,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.JTextField;
+import javax.swing.plaf.synth.SynthSpinnerUI;
 
 public class GameManager {
 	
@@ -701,18 +702,20 @@ public class GameManager {
 			}
 	}
   
-	///////////// BY COSENTINO & DAVIDE //////////////////////
+	///////////////////////////////////////////////////////
+	
 	public void enemyPositionRandom(EnemyTank e) {
 		
 		if(!e.canGo) {
 			chooseDirection(e);
-			if(!e.stop){
-    			 int dir = -1;
+			 if(!e.stop){
+				 int dir = -1;
 			     do {
 			    	 dir = new Random().nextInt(4); 
+			    	 System.out.println("loop");
 			     } while(!e.directions[dir]);
-	    		 setDirEnemy(e, dir);
-			}
+	    		 e.setDir(dir);
+			 }
 		}
 	 }
 	
@@ -783,26 +786,6 @@ public class GameManager {
 			e.stop=true;
 		else
 			e.stop=false;
-	}
-	
-	public void setDirEnemy(EnemyTank e, int dir) {
-	    
-	    switch(dir) {
-	    case 0:
-	      e.setDirection(Direction.UP);
-	      break;
-	    case 1:
-	      e.setDirection(Direction.DOWN);
-	      break;
-	    case 2:
-	      e.setDirection(Direction.RIGHT);
-	      break;
-	    case 3:
-	      e.setDirection(Direction.LEFT);
-	      break;
-	    default:
-	      break;
-	    }
 	}
 	
 	////////////////////////////////////////////////////////

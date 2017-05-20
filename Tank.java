@@ -2,8 +2,6 @@ package progettoIGPE.davide.giovanni.unical2016;
 
 public abstract class Tank extends AbstractDynamicObject{
 
-	//utilizzato per l effetto nel gamecomponent
-	private int tmpCont;
 	private boolean readyToSpawn;
 	private int countdown;
 	private long spawnTime; //salva il tempo che ci mette per spawnare
@@ -15,7 +13,6 @@ public abstract class Tank extends AbstractDynamicObject{
 	
 	public Tank(int x, int y, World mondo, Speed speed, Speed speedShot, Direction direction,int health) {
 		super(x, y, mondo, speed, speedShot, direction, health);
-		setTmpCont(0);
 		this.setCountdown(0);
 		protection = false;
 		oldD = Direction.STOP;
@@ -26,14 +23,6 @@ public abstract class Tank extends AbstractDynamicObject{
 	@Override
 	public void update(){
 		super.update();
-	}
-
-	public int getTmpCont() {
-		return tmpCont;
-	}
-
-	public void setTmpCont(int tmpCont) {
-		this.tmpCont = tmpCont;
 	}
 
 	public boolean isReadyToSpawn() {

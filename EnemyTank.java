@@ -65,6 +65,25 @@ public class EnemyTank extends Tank {
 		return false;
 	}
 
+	public void setDir(int dir){
+		 switch(dir) {
+		    case 0:
+		      this.setDirection(Direction.UP);
+		      break;
+		    case 1:
+		      this.setDirection(Direction.DOWN);
+		      break;
+		    case 2:
+		      this.setDirection(Direction.RIGHT);
+		      break;
+		    case 3:
+		      this.setDirection(Direction.LEFT);
+		      break;
+		    default:
+		      break;
+		    }
+	}
+	
 	public boolean isAppearsInTheMap() {
 		return appearsInTheMap;
 	}
