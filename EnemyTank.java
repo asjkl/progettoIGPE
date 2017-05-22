@@ -9,10 +9,11 @@ public class EnemyTank extends Tank {
 	private boolean stopEnemy; //powerUp TIMER
 	private boolean stopEnemyGraphic; //powerUp TIMER
 	private boolean nextShot;
-	private long nextShotTime;
 	public boolean[] directions;
 	public boolean stop;
-	public boolean first;
+	public boolean ok = false;
+	public long nextDirTime = 0;
+
 	
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health, int point) {
 		super(x, y, world, speed, speedShot, direction, health);
@@ -27,7 +28,6 @@ public class EnemyTank extends Tank {
 		this.setUpdateObject(true);
 		this.nextShot=false;
 		this.stop=false;
-		this.first=false;
 		
 		directions = new boolean[4];
 		for(int i = 0; i < directions.length; i++) {
@@ -132,14 +132,6 @@ public class EnemyTank extends Tank {
 
 	public void setNextShot(boolean nextShot) {
 		this.nextShot = nextShot;
-	}
-
-	public long getNextShotTime() {
-		return nextShotTime;
-	}
-
-	public void setNextShotTime(long nextShotTime) {
-		this.nextShotTime = nextShotTime;
 	}
 
 	public int getPoint() {

@@ -142,12 +142,10 @@ public class GameManager {
 	public class CurrentTime extends TimerTask {
 
 		public void run(){
-			if(!pause)
-			currentTime = (currentTime + 1 ) % 60;
 			
-			for(int i=0;i<enemy.size();i++)
-				if(enemy.get(i).stop)
-					enemy.get(i).first=false;
+			if(!pause){
+				currentTime = (currentTime + 1 ) % 60;
+			}
 		}
 	}
 	
@@ -698,7 +696,6 @@ public class GameManager {
 					enemy.get(count).setAppearsInTheMap(true);
 					enemy.get(count).setReadyToSpawn(false);
 					numberOfEnemyOnMap++;
-					enemy.get(count).setNextShotTime((currentTime+1) % 60); //per sparare dopo tot tempo
 				}
 				count++;
 			}
@@ -708,86 +705,23 @@ public class GameManager {
 	
 	public void enemyPositionRandom(EnemyTank e) {
 		
-		 if(!e.canGo){
-		 	chooseDirection(e);
-		 	if(!e.stop){
+		 if(!e.canGo && !e.ok){		 	
+		 		chooseDirection(e);
 				 int dir = -1;
 			     do { 
 			    	 dir = new Random().nextInt(4); 
 			     } while(!e.directions[dir]);
 			    e.setDir(dir);
-		 	}
-		}
+			    e.ok=true;
+			    e.nextDirTime = ((currentTime + 1)%60);
+		 }
 		 
-		if( e.stop && currentTime % 2 == 0 && !e.first){
-			
-			chooseDirWhenStopped(e);		
-			 int dir = new Random().nextInt(4); 
-			 if(e.directions[dir])
-				 e.setDir(dir);
-			 e.first=true;
-		}
+		 if( e.nextDirTime == currentTime)
+			e.ok=false;
 	 }
-	
-	public void chooseDirWhenStopped(EnemyTank e){
-		
-		int x = e.getX();
-		int y = e.getY();
-		int left, right, up, down;
-		
-		//up
-		if(e.getX() > 0) {
-			up = e.getX() - 1;
-			if(!(matrix.world[up][y] instanceof SteelWall) && !(matrix.world[up][y] instanceof Water)) {
-			e.directions[0] = true;
-			}
-			else
-				e.directions[0] = false;
-		}
-		else
-			e.directions[0] = false;
-			
-		//down
-		if(e.getX() < height - 1) {
-			down = e.getX() + 1;
-			if(!(matrix.world[down][y] instanceof SteelWall) && !(matrix.world[down][y] instanceof Water)){
-			e.directions[1] = true;
-			}
-			else
-				e.directions[1] = false;
-		}
-		else
-			e.directions[1] = false;
-		
-		//right
-		if(e.getY() < width - 1) {
-			right = e.getY() + 1;
-			if(!(matrix.world[x][right] instanceof SteelWall) && !(matrix.world[x][right] instanceof Water)){
-			e.directions[2] = true;
-			}
-			else
-				e.directions[2] = false;
-		}
-		else
-			e.directions[2] = false;
-		
-		//left
-		if(e.getY() > 0) {
-			left = e.getY() - 1;
-			if(!(matrix.world[x][left] instanceof SteelWall) &&  !(matrix.world[x][left] instanceof Water)){
-			e.directions[3] = true;
-			}
-			else
-				e.directions[3] = false;
-		}
-		else
-			e.directions[3] = false;
-		
-	}
 	
 	public void chooseDirection(EnemyTank e) {
 	    
-		boolean flag=false;
 		int x = e.getX();
 		int y = e.getY();
 		int left, right, up, down;
@@ -795,10 +729,9 @@ public class GameManager {
 		//up
 		if(e.getX() > 0) {
 			up = e.getX() - 1;
-			if(!(matrix.world[up][y] instanceof Wall) && !(matrix.world[up][y] instanceof Tank) &&
+			if(!(matrix.world[up][y] instanceof SteelWall)  &&
 					 !(matrix.world[up][y] instanceof Water)) {
 			e.directions[0] = true;
-			flag=true;
 			}
 			else
 				e.directions[0] = false;
@@ -809,10 +742,10 @@ public class GameManager {
 		//down
 		if(e.getX() < height - 1) {
 			down = e.getX() + 1;
-			if(!(matrix.world[down][y] instanceof Wall) && !(matrix.world[down][y] instanceof Tank)
+			if(!(matrix.world[down][y] instanceof SteelWall)
 				 && !(matrix.world[down][y] instanceof Water)){
 			e.directions[1] = true;
-			flag=true;
+	
 			}
 			else
 				e.directions[1] = false;
@@ -823,10 +756,9 @@ public class GameManager {
 		//right
 		if(e.getY() < width - 1) {
 			right = e.getY() + 1;
-			if(!(matrix.world[x][right] instanceof Wall) && !(matrix.world[x][right] instanceof Tank) &&
+			if(!(matrix.world[x][right] instanceof SteelWall) &&
 				  !(matrix.world[x][right] instanceof Water)){
 			e.directions[2] = true;
-			flag=true;
 			}
 			else
 				e.directions[2] = false;
@@ -837,22 +769,15 @@ public class GameManager {
 		//left
 		if(e.getY() > 0) {
 			left = e.getY() - 1;
-			if(!(matrix.world[x][left] instanceof Wall) &&!(matrix.world[x][left] instanceof Tank) &&
+			if(!(matrix.world[x][left] instanceof SteelWall) &&
 				 !(matrix.world[x][left] instanceof Water)){
 			e.directions[3] = true;
-			flag=true;
 			}
 			else
 				e.directions[3] = false;
 		}
 		else
 			e.directions[3] = false;
-		
-		//se tutte le direzioni sono false
-		if(!flag)
-			e.stop=true;
-		else
-			e.stop=false;
 	}
 	
 	//////////////////////////////////////////////////////////////////////
