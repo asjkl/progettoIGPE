@@ -20,7 +20,7 @@ public class GameManager {
 	//OTHER
 	private int x;
 	private int y;
-	private long currentTime;
+	public static long currentTime;
 	private boolean soundPowerUp;
 	public boolean pause;
 	private Random random;
@@ -700,88 +700,7 @@ public class GameManager {
 				count++;
 			}
 	}
-  
-	/////////////////// WORK IN PROGRESS ////////////////////////////////////
-	
-	public void enemyPositionRandom(EnemyTank e) {
-		
-		 if(!e.canGo && !e.ok){		 	
-		 		chooseDirection(e);
-				 int dir = -1;
-			     do { 
-			    	 dir = new Random().nextInt(4); 
-			     } while(!e.directions[dir]);
-			    e.setDir(dir);
-			    e.ok=true;
-			    e.nextDirTime = ((currentTime + 1)%60);
-		 }
-		 
-		 if( e.nextDirTime == currentTime)
-			e.ok=false;
-	 }
-	
-	public void chooseDirection(EnemyTank e) {
-	    
-		int x = e.getX();
-		int y = e.getY();
-		int left, right, up, down;
-		
-		//up
-		if(e.getX() > 0) {
-			up = e.getX() - 1;
-			if(!(matrix.world[up][y] instanceof SteelWall)  &&
-					 !(matrix.world[up][y] instanceof Water)) {
-			e.directions[0] = true;
-			}
-			else
-				e.directions[0] = false;
-		}
-		else
-			e.directions[0] = false;
-			
-		//down
-		if(e.getX() < height - 1) {
-			down = e.getX() + 1;
-			if(!(matrix.world[down][y] instanceof SteelWall)
-				 && !(matrix.world[down][y] instanceof Water)){
-			e.directions[1] = true;
-	
-			}
-			else
-				e.directions[1] = false;
-		}
-		else
-			e.directions[1] = false;
-		
-		//right
-		if(e.getY() < width - 1) {
-			right = e.getY() + 1;
-			if(!(matrix.world[x][right] instanceof SteelWall) &&
-				  !(matrix.world[x][right] instanceof Water)){
-			e.directions[2] = true;
-			}
-			else
-				e.directions[2] = false;
-		}
-		else
-			e.directions[2] = false;
-		
-		//left
-		if(e.getY() > 0) {
-			left = e.getY() - 1;
-			if(!(matrix.world[x][left] instanceof SteelWall) &&
-				 !(matrix.world[x][left] instanceof Water)){
-			e.directions[3] = true;
-			}
-			else
-				e.directions[3] = false;
-		}
-		else
-			e.directions[3] = false;
-	}
-	
-	//////////////////////////////////////////////////////////////////////
-	
+  	
 	public void enemyUpdate(int a) {
 
 	    if (enemy.get(a).isAppearsInTheMap() && !enemy.get(a).isStopEnemy()) {
@@ -878,14 +797,6 @@ public class GameManager {
 
 	public void setRecoveryWall(ArrayList<AbstractStaticObject> recoveryWall) {
 		this.recoveryWall = recoveryWall;
-	}
-
-	public long getCurrentTime() {
-		return currentTime;
-	}
-
-	public void setCurrentTime(long currentTime) {
-		this.currentTime = currentTime;
 	}
 
 	public int getDurationPowerUp() {
