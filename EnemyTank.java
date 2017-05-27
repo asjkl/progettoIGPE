@@ -169,7 +169,7 @@ public class EnemyTank extends Tank {
 	
 	void checkAndUpdateCost(Cell current, Cell t, int cost) {
 		
-		//se t è nullo o close[i][j] è stato gia visitato
+		//se t Ã¨ nullo o close[i][j] Ã¨ stato gia visitato
 		if (t == null || closed[t.i][t.j])
 			return;
 		
@@ -271,7 +271,7 @@ public class EnemyTank extends Tank {
 		for(int a=0; a<world.getRow(); a++){
 			for(int b=0; b<world.getColumn(); b++){
 				if(world.world[a][b]!=null && !(world.world[a][b] instanceof Flag) && world.world[a][b]!=this){
-					if(!(world.world[a][b] instanceof Water) || !(world.world[a][b] instanceof SteelWall))
+					if(world.world[a][b] instanceof Water || world.world[a][b] instanceof SteelWall)
 						blocchi.add(new Point(a,b));
 				}
 				if(world.world[a][b] instanceof Flag){
