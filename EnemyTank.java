@@ -18,19 +18,18 @@ public class EnemyTank extends Tank {
 	private boolean[] directions;
 	private boolean ok = false;
 	private long nextDirTime = 0;
-	
+
 	/////////////////// DIFFICULT ////////////////////////////////
-	private ArrayList<Point> blocchi=new ArrayList<>();
+	private ArrayList<Point> blocchi = new ArrayList<>();
 	private Cell[][] grid;
-	private boolean [][]minimalRoute;
+	private boolean[][] minimalRoute;
 	private PriorityQueue<Cell> open;
 	private Point flag;
 	private boolean closed[][];
 	private int startI, startJ;
 	private int endI, endJ;
 	public final int V_H_COST = 5;
-	
-	
+
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health,
 			int point) {
 		super(x, y, world, speed, speedShot, direction, health);
@@ -53,12 +52,12 @@ public class EnemyTank extends Tank {
 		}
 	}
 
-	@Override	
+	@Override
 	public void update() {
 		super.update();
 		getWorld().world[getX()][getY()] = this;
 	}
-	
+
 	@Override
 	public boolean sameObject() {
 
@@ -84,101 +83,92 @@ public class EnemyTank extends Tank {
 		}
 		return false;
 	}
-	////////////////////////////// EASY ////////////////////////////////////////////////////////////////////////
-	
+	////////////////////////////// EASY
+	////////////////////////////// ////////////////////////////////////////////////////////////////////////
+
 	public void easy() {
-		
-		 if(!canGo && !ok){		 	
-		 		chooseDirection();
-				 int dir = -1;
-			     do { 
-			    	 dir = new Random().nextInt(4); 
-			     } while(!directions[dir]);
-			    setDir(dir);
-			    ok=true;
-			    nextDirTime = ((GameManager.currentTime + 1)%60);
-		 }
-		 
-		 if( nextDirTime == GameManager.currentTime)
-			ok=false;
-	 }
-	
+
+		if (!canGo && !ok) {
+			chooseDirection();
+			int dir = -1;
+			do {
+				dir = new Random().nextInt(4);
+			} while (!directions[dir]);
+			setDir(dir);
+			ok = true;
+			nextDirTime = ((GameManager.currentTime + 1) % 60);
+		}
+
+		if (nextDirTime == GameManager.currentTime)
+			ok = false;
+	}
+
 	public void chooseDirection() {
-	    
+
 		int x = getX();
 		int y = getY();
 		int left, right, up, down;
-		
-		//up
-		if(x > 0) {
+
+		// up
+		if (x > 0) {
 			up = x - 1;
-			if(!(getWorld().world[up][y] instanceof SteelWall)  &&
-					 !(getWorld().world[up][y] instanceof Water)) {
-			directions[0] = true;
-			}
-			else
+			if (!(getWorld().world[up][y] instanceof SteelWall) && !(getWorld().world[up][y] instanceof Water)) {
+				directions[0] = true;
+			} else
 				directions[0] = false;
-		}
-		else
+		} else
 			directions[0] = false;
-			
-		//down
-		if(x < getWorld().getRow() - 1) {
+
+		// down
+		if (x < getWorld().getRow() - 1) {
 			down = x + 1;
-			if(!(getWorld().world[down][y] instanceof SteelWall)
-				 && !(getWorld().world[down][y] instanceof Water)){
-			directions[1] = true;
-	
-			}
-			else
+			if (!(getWorld().world[down][y] instanceof SteelWall) && !(getWorld().world[down][y] instanceof Water)) {
+				directions[1] = true;
+
+			} else
 				directions[1] = false;
-		}
-		else
+		} else
 			directions[1] = false;
-		
-		//right
-		if(y < getWorld().getColumn() - 1) {
+
+		// right
+		if (y < getWorld().getColumn() - 1) {
 			right = y + 1;
-			if(!(getWorld().world[x][right] instanceof SteelWall) &&
-				  !(getWorld().world[x][right] instanceof Water)){
-			directions[2] = true;
-			}
-			else
+			if (!(getWorld().world[x][right] instanceof SteelWall) && !(getWorld().world[x][right] instanceof Water)) {
+				directions[2] = true;
+			} else
 				directions[2] = false;
-		}
-		else
+		} else
 			directions[2] = false;
-		
-		//left
-		if(y > 0) {
+
+		// left
+		if (y > 0) {
 			left = y - 1;
-			if(!(getWorld().world[x][left] instanceof SteelWall) &&
-				 !(getWorld().world[x][left] instanceof Water)){
-			directions[3] = true;
-			}
-			else
+			if (!(getWorld().world[x][left] instanceof SteelWall) && !(getWorld().world[x][left] instanceof Water)) {
+				directions[3] = true;
+			} else
 				directions[3] = false;
-		}
-		else
+		} else
 			directions[3] = false;
 	}
-	////////////////////////////// MEDIUM //////////////////////////////////////////////////////////////////////
-	
-	////////////////////////////// DIFFICULT ///////////////////////////////////////////////////////////////////
-	
+	////////////////////////////// MEDIUM
+	////////////////////////////// //////////////////////////////////////////////////////////////////////
+
+	////////////////////////////// DIFFICULT
+	////////////////////////////// ///////////////////////////////////////////////////////////////////
+
 	void checkAndUpdateCost(Cell current, Cell t, int cost) {
-		
-		//se t Ã¨ nullo o close[i][j] Ã¨ stato gia visitato
+
+		// se t Ã¨ nullo o close[i][j] Ã¨ stato gia visitato
 		if (t == null || closed[t.i][t.j])
 			return;
-		
+
 		int t_final_cost = t.heuristicCost + cost;
 
 		boolean inOpen = open.contains(t);
 		if (!inOpen || t_final_cost < t.finalCost) {
 			t.finalCost = t_final_cost;
 			t.parent = current;
-			//new route
+			// new route
 			if (!inOpen)
 				open.add(t);
 		}
@@ -195,10 +185,10 @@ public class EnemyTank extends Tank {
 			current = open.poll();
 			if (current == null)
 				break;
-			//set true corrent pos
+			// set true corrent pos
 			closed[current.i][current.j] = true;
 
-			//if near flag return
+			// if near flag return
 			if (current.equals(grid[endI][endJ])) {
 				return;
 			}
@@ -259,63 +249,78 @@ public class EnemyTank extends Tank {
 				current = current.parent;
 				minimalRoute[current.i][current.j] = true;
 			}
-		} else
-			System.out.println("No possible path");
-		//System.out.println();
+		} else{
+			//NON HO TROVATO UN PERCORSO LIBERO, QUINDI DEVO COMINCIARE A FARMI UN PERCORSO DISTRUGGENDO LE MURA
+			//TODO NON è FINITO ANCORA; LA RICORSIONE SERVE PERCHè DEVO RIFARE TUTTO DALL'INIZIO RESETTANDO TUTTO PERò IN QUESTO CASO CAMBIA SOLO L'ARRAY DI BLOCCHI
+			blocchi.clear();
+			for(int a=0; a<world.getRow(); a++){
+				for(int b=0; b<world.getColumn(); b++){
+					if(world.world[a][b] != null && !(world.world[a][b] instanceof Flag)
+							&& !(world.world[a][b] instanceof Tree) && !(world.world[a][b] instanceof Ice)
+							&& !(world.world[a][b] instanceof BrickWall) && world.world[a][b] != this){
+							blocchi.add(new Point(a,b));
+					}
+				}
+			}
+			searchRoute(world.getRow(), world.getColumn(), getX(), getY(), (int) flag.getX(), (int) flag.getY(), blocchi);
+		}
+			
 	}
-	
+
 	public void difficult() {
 		blocchi.clear();
-		
-		for(int a=0; a<world.getRow(); a++){
-			for(int b=0; b<world.getColumn(); b++){
-				if(world.world[a][b]!=null && !(world.world[a][b] instanceof Flag) && world.world[a][b] != this){
-					blocchi.add(new Point(a,b));
+
+		for (int a = 0; a < world.getRow(); a++) {
+			for (int b = 0; b < world.getColumn(); b++) {
+				if (world.world[a][b] != null && !(world.world[a][b] instanceof Flag)
+						&& !(world.world[a][b] instanceof Tree) && !(world.world[a][b] instanceof Ice)
+						&& world.world[a][b] != this) {
+					blocchi.add(new Point(a, b));
 				}
-				if(world.world[a][b] instanceof Flag){
-					flag=new Point(a, b);
+				if (world.world[a][b] instanceof Flag) {
+					flag = new Point(a, b);
 				}
 			}
 		}
 		minimalRoute = new boolean[world.getRow()][world.getColumn()];
-		for(int i = 0;i < world.getRow(); i++) {
-			for(int j = 0;j < world.getColumn(); j++) {
+		for (int i = 0; i < world.getRow(); i++) {
+			for (int j = 0; j < world.getColumn(); j++) {
 				minimalRoute[i][j] = false;
 			}
 		}
-		
-		searchRoute(world.getRow(), world.getColumn(), getX(), getY(), (int)flag.getX(),(int)flag.getY(), blocchi);
-		
+
+		searchRoute(world.getRow(), world.getColumn(), getX(), getY(), (int) flag.getX(), (int) flag.getY(), blocchi);
+
 		int currX = getX();
 		int currY = getY();
-		
+
 		minimalRoute[currX][currY] = false;
-		
-		if(currX - 1 >= 0) {
-			if(minimalRoute[currX - 1][currY]) {
+
+		if (currX - 1 >= 0) {
+			if (minimalRoute[currX - 1][currY]) {
 				setDirection(Direction.UP);
 			}
 		}
-		
+
 		if (currY - 1 >= 0) {
-			if(minimalRoute[currX][currY - 1]) {
-			setDirection(Direction.LEFT);
+			if (minimalRoute[currX][currY - 1]) {
+				setDirection(Direction.LEFT);
 			}
 		}
-		
+
 		if (currY + 1 < world.getColumn() - 1) {
-			if(minimalRoute[currX][currY + 1]) {
+			if (minimalRoute[currX][currY + 1]) {
 				setDirection(Direction.RIGHT);
 			}
 		}
-	
+
 		if (currX + 1 < world.getRow() - 1) {
-				if(minimalRoute[currX + 1][currY]) {
-					setDirection(Direction.DOWN);
-				}
+			if (minimalRoute[currX + 1][currY]) {
+				setDirection(Direction.DOWN);
 			}
+		}
 	}
-	
+
 	class Cell {
 		int heuristicCost = 0; // Heuristic cost
 		int finalCost = 0; // G+H
@@ -332,9 +337,9 @@ public class EnemyTank extends Tank {
 			return "[" + this.i + ", " + this.j + "]";
 		}
 	}
-	
+
 	public void setBlocked(int i, int j) {
-			grid[i][j] = null;
+		grid[i][j] = null;
 	}
 
 	public void setStartCell(int i, int j) {
@@ -348,7 +353,7 @@ public class EnemyTank extends Tank {
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	public void setDir(int dir) {
 		switch (dir) {
 		case 0:
@@ -368,7 +373,7 @@ public class EnemyTank extends Tank {
 			break;
 		}
 	}
-	
+
 	public boolean isAppearsInTheMap() {
 		return appearsInTheMap;
 	}
@@ -417,12 +422,10 @@ public class EnemyTank extends Tank {
 		this.point = point;
 	}
 
-
 	public long getNextShotTime() {
 		return nextShotTime;
 	}
 
-	
 	public void setNextShotTime(long nextShotTime) {
 		this.nextShotTime = nextShotTime;
 	}
