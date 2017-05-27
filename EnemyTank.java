@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Random;
 
-
 public class EnemyTank extends Tank {
 
 	private int point;
@@ -15,11 +14,11 @@ public class EnemyTank extends Tank {
 	private boolean stopEnemy; // powerUp TIMER
 	private boolean stopEnemyGraphic; // powerUp TIMER
 	private boolean nextShot;
-	public boolean[] directions;
-	public boolean stop;
-	public boolean ok = false;
-	public long nextDirTime = 0;
-
+	private long nextShotTime;
+	private boolean[] directions;
+	private boolean ok = false;
+	private long nextDirTime = 0;
+	
 	/////////////////// DIFFICULT ////////////////////////////////
 	private ArrayList<Point> blocchi=new ArrayList<>();
 	private Cell[][] grid;
@@ -45,7 +44,7 @@ public class EnemyTank extends Tank {
 		this.setReadyToSpawn(false);
 		this.setUpdateObject(true);
 		this.nextShot = false;
-		this.stop = false;
+		this.nextShotTime = 0;
 		this.grid = new Cell[5][5];
 
 		directions = new boolean[4];
@@ -270,7 +269,8 @@ public class EnemyTank extends Tank {
 		
 		for(int a=0; a<world.getRow(); a++){
 			for(int b=0; b<world.getColumn(); b++){
-				if(world.world[a][b]!=null && !(world.world[a][b] instanceof Flag) && world.world[a][b]!=this){
+				if(world.world[a][b]!=null && !(world.world[a][b] instanceof Flag) && world.world[a][b] != this){
+					if(world.world[a][b] instanceof Water || world.world[a][b] instanceof SteelWall)
 					blocchi.add(new Point(a,b));
 				}
 				if(world.world[a][b] instanceof Flag){
@@ -424,5 +424,13 @@ public class EnemyTank extends Tank {
 
 	public void setPoint(int point) {
 		this.point = point;
+	}
+
+	public long getNextShotTime() {
+		return nextShotTime;
+	}
+
+	public void setNextShotTime(long nextShotTime) {
+		this.nextShotTime = nextShotTime;
 	}
 }

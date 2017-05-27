@@ -146,6 +146,14 @@ public class GameManager {
 			if(!pause){
 				currentTime = (currentTime + 1 ) % 60;
 			}
+			
+			for(int i=0;i<enemy.size();i++){
+				if (enemy.get(i).isUpdateObject() && 
+						enemy.get(i).isAppearsInTheMap() && 
+							!enemy.get(i).isStopEnemy()) {
+					enemy.get(i).setNextShot(true);
+				}
+			}
 		}
 	}
 	
