@@ -62,7 +62,7 @@ public class GameManager {
 	
 		currentTime = 0;
 		pause=false;
-		numberOfEnemyToSpawn = 3;
+		numberOfEnemyToSpawn = 1;
 		numberOfEnemyOnMap = 0;
 		numberOfEnemyReadyToSpwan = 0;
 		durationPowerUp = 20;
@@ -145,14 +145,6 @@ public class GameManager {
 			
 			if(!pause){
 				currentTime = (currentTime + 1 ) % 60;
-			}
-			
-			for(int i=0;i<enemy.size();i++){
-				if (enemy.get(i).isUpdateObject() && 
-						enemy.get(i).isAppearsInTheMap() && 
-							!enemy.get(i).isStopEnemy()) {
-					enemy.get(i).setNextShot(true);
-				}
 			}
 		}
 	}
