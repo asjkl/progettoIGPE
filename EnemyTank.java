@@ -21,18 +21,15 @@ public class EnemyTank extends Tank {
 	public long nextDirTime = 0;
 
 	/////////////////// DIFFICULT ////////////////////////////////
-	private boolean [][]minimalRoute;
 	private ArrayList<Point> blocchi=new ArrayList<>();
-	private Point flag;
-
-	// Blocked cells are just null Cell values in grid
 	private Cell[][] grid;
-
+	private boolean [][]minimalRoute;
 	private PriorityQueue<Cell> open;
-
+	private Point flag;
 	private boolean closed[][];
 	private int startI, startJ;
 	private int endI, endJ;
+	public final int V_H_COST = 5;
 	
 	
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health,
@@ -55,27 +52,6 @@ public class EnemyTank extends Tank {
 		for (int i = 0; i < directions.length; i++) {
 			directions[i] = false;
 		}
-
-		for(int a=0; a<world.getRow(); a++){
-			for(int b=0; b<world.getColumn(); b++){
-				if(world.world[a][b]!=null && !(world.world[a][b] instanceof Flag)){
-					blocchi.add(new Point(a,b));
-				}
-				if(world.world[a][b] instanceof Flag){
-					flag=new Point(a, b);
-				}
-			}
-		}
-			
-		//tiene traccia del percorso
-		minimalRoute = new boolean[world.getRow()][world.getColumn()];
-		for(int i = 0;i < world.getRow(); i++) {
-			for(int j = 0;j < world.getColumn(); j++) {
-				minimalRoute[i][j] = false;
-			}
-		}
-		
-		test(1, world.getRow(), world.getColumn(), getX(), getY(), (int)flag.getX(),(int)flag.getY(), blocchi);
 	}
 
 	@Override	
@@ -191,40 +167,6 @@ public class EnemyTank extends Tank {
 	
 	////////////////////////////// DIFFICULT ///////////////////////////////////////////////////////////////////
 	
-	//public final int DIAGONAL_COST = 14;
-	public final int V_H_COST = 5;
-
-	class Cell {
-		int heuristicCost = 0; // Heuristic cost
-		int finalCost = 0; // G+H
-		int i, j;
-		Cell parent;
-
-		Cell(int i, int j) {
-			this.i = i;
-			this.j = j;
-		}
-
-		@Override
-		public String toString() {
-			return "[" + this.i + ", " + this.j + "]";
-		}
-	}
-
-	public void setBlocked(int i, int j) {
-		grid[i][j] = null;
-	}
-
-	public void setStartCell(int i, int j) {
-		startI = i;
-		startJ = j;
-	}
-
-	public void setEndCell(int i, int j) {
-		endI = i;
-		endJ = j;
-	}
-
 	void checkAndUpdateCost(Cell current, Cell t, int cost) {
 		
 		//se t è nullo o close[i][j] è stato gia visitato
@@ -285,15 +227,7 @@ public class EnemyTank extends Tank {
 		}
 	}
 
-	/*
-	 * Params : tCase = test case No. x, y = Board's dimensions si, sj =
-	 * start location's x and y coordinates ei, ej = end location's x and y
-	 * coordinates int[][] blocked = array containing inaccessible cell
-	 * coordinates
-	 */
-	public void test(int tCase, int x, int y, int si, int sj, int ei, int ej, ArrayList<Point> blocchi2) {
-		System.out.println("\n\nTest Case #" + tCase);
-		// Reset
+	public void searchRoute(int x, int y, int si, int sj, int ei, int ej, ArrayList<Point> blocchi2) {
 		grid = new Cell[x][y];
 		closed = new boolean[x][y];
 		open = new PriorityQueue<>((Object o1, Object o2) -> {
@@ -302,81 +236,57 @@ public class EnemyTank extends Tank {
 
 			return c1.finalCost < c2.finalCost ? -1 : c1.finalCost > c2.finalCost ? 1 : 0;
 		});
-		// Set start position
-		setStartCell(si, sj); // Setting to 0,0 by default. Will be useful
-								// for the UI part
-
-		// Set End Location
+		setStartCell(si, sj); 
 		setEndCell(ei, ej);
 
 		for (int i = 0; i < x; ++i) {
 			for (int j = 0; j < y; ++j) {
 				grid[i][j] = new Cell(i, j);
 				grid[i][j].heuristicCost = Math.abs(i - endI) + Math.abs(j - endJ);
-				// System.out.print(grid[i][j].heuristicCost+" ");
 			}
-			// System.out.println();
 		}
 		grid[si][sj].finalCost = 0;
-		
-		/*
-		 * Set blocked cells. Simply set the cell values to null for blocked
-		 * cells.
-		 */
+
 		for (int i = 0; i < blocchi2.size(); ++i) {
 			setBlocked((int)blocchi2.get(i).getX(), (int)blocchi2.get(i).getY());
 		}
-
-		// Display initial map
-		System.out.println("Grid: ");
-		for (int i = 0; i < x; ++i) {
-			for (int j = 0; j < y; ++j) {
-				if (i == si && j == sj)
-					System.out.print("SO  "); // Source
-				else if (i == ei && j == ej)
-					System.out.print("DE  "); // Destination
-				else if (grid[i][j] != null)
-					System.out.printf("%-3d ", 0);
-				else
-					System.out.print("BL  ");
-			}
-			System.out.println();
-		}
-		System.out.println();
-
 		AStar();
-		System.out.println("\nScores for cells: ");
-		for (int i = 0; i < x; ++i) {
-			for (int j = 0; j < x; ++j) {
-				if (grid[i][j] != null)
-					System.out.printf("%-3d ", grid[i][j].finalCost);
-				else
-					System.out.print("BL  ");
-			}
-			System.out.println();
-		}
-		System.out.println();
 
 		if (closed[endI][endJ]) {
-			// Trace back the path
-			System.out.println("Path: ");
-	
 			Cell current = grid[endI][endJ];
-			
-			minimalRoute[current.i][current.j] = true; //traccia il percorso minimo
-			
-			System.out.print(current);
+			minimalRoute[current.i][current.j] = true; 
 			while (current.parent != null) {
-				System.out.print(" -> " + current.parent);
+				//System.out.print(current+" ");
 				current = current.parent;
 				minimalRoute[current.i][current.j] = true;
 			}
-			System.out.println();
 		} else
 			System.out.println("No possible path");
+		//System.out.println();
 	}
 	
 	public void difficult() {
+		blocchi.clear();
+		
+		for(int a=0; a<world.getRow(); a++){
+			for(int b=0; b<world.getColumn(); b++){
+				if(world.world[a][b]!=null && !(world.world[a][b] instanceof Flag) && world.world[a][b]!=this){
+					if(!(world.world[a][b] instanceof Water) || !(world.world[a][b] instanceof SteelWall))
+						blocchi.add(new Point(a,b));
+				}
+				if(world.world[a][b] instanceof Flag){
+					flag=new Point(a, b);
+				}
+			}
+		}
+		minimalRoute = new boolean[world.getRow()][world.getColumn()];
+		for(int i = 0;i < world.getRow(); i++) {
+			for(int j = 0;j < world.getColumn(); j++) {
+				minimalRoute[i][j] = false;
+			}
+		}
+		
+		searchRoute(world.getRow(), world.getColumn(), getX(), getY(), (int)flag.getX(),(int)flag.getY(), blocchi);
 		
 		int currX = getX();
 		int currY = getY();
@@ -428,6 +338,37 @@ public class EnemyTank extends Tank {
 			this.setDirection(Direction.STOP);
 			break;
 		}
+	}
+	
+	class Cell {
+		int heuristicCost = 0; // Heuristic cost
+		int finalCost = 0; // G+H
+		int i, j;
+		Cell parent;
+
+		Cell(int i, int j) {
+			this.i = i;
+			this.j = j;
+		}
+
+		@Override
+		public String toString() {
+			return "[" + this.i + ", " + this.j + "]";
+		}
+	}
+	
+	public void setBlocked(int i, int j) {
+			grid[i][j] = null;
+	}
+
+	public void setStartCell(int i, int j) {
+		startI = i;
+		startJ = j;
+	}
+
+	public void setEndCell(int i, int j) {
+		endI = i;
+		endJ = j;
 	}
 
 	public boolean isAppearsInTheMap() {
