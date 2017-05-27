@@ -270,7 +270,6 @@ public class EnemyTank extends Tank {
 		for(int a=0; a<world.getRow(); a++){
 			for(int b=0; b<world.getColumn(); b++){
 				if(world.world[a][b]!=null && !(world.world[a][b] instanceof Flag) && world.world[a][b] != this){
-					if(world.world[a][b] instanceof Water || world.world[a][b] instanceof SteelWall)
 					blocchi.add(new Point(a,b));
 				}
 				if(world.world[a][b] instanceof Flag){
