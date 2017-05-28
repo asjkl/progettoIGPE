@@ -25,7 +25,7 @@ public class GameManager {
 	public boolean pause;
 	private Random random;
 	private World matrix;
-	private Flag flag;
+	public static Flag flag;
 	private PlayerTank player;
 	private Statistics statistics;
 	private ArrayList<EnemyTank> enemy;
@@ -62,7 +62,7 @@ public class GameManager {
 	
 		currentTime = 0;
 		pause=false;
-		numberOfEnemyToSpawn = 1;
+		numberOfEnemyToSpawn = 3;
 		numberOfEnemyOnMap = 0;
 		numberOfEnemyReadyToSpwan = 0;
 		durationPowerUp = 20;

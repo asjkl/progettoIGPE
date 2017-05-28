@@ -20,15 +20,15 @@ public class EnemyTank extends Tank {
 	private long nextDirTime = 0;
 
 	/////////////////// DIFFICULT ////////////////////////////////
-	private ArrayList<Point> blocchi = new ArrayList<>();
+	private ArrayList<Point> blocchi;
 	private Cell[][] grid;
-	private boolean[][] minimalRoute;
 	private PriorityQueue<Cell> open;
-	private Point flag;
+	private boolean[][] minimalRoute;
 	private boolean closed[][];
 	private int startI, startJ;
 	private int endI, endJ;
 	public final int V_H_COST = 5;
+	public final int V_H_COST_BRICK = 20;
 
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health,
 			int point) {
@@ -44,7 +44,10 @@ public class EnemyTank extends Tank {
 		this.setUpdateObject(true);
 		this.setFirstShot(true);
 		this.nextShotTime = 0;
-		this.grid = new Cell[5][5];
+		this.minimalRoute = new boolean[world.getRow()][world.getColumn()];
+		this.closed = new boolean[world.getRow()][world.getColumn()];
+		this.grid = new Cell[world.getRow()][world.getColumn()];
+		this.blocchi = new ArrayList<>();
 
 		directions = new boolean[4];
 		for (int i = 0; i < directions.length; i++) {
@@ -217,79 +220,63 @@ public class EnemyTank extends Tank {
 	}
 
 	public void searchRoute(int x, int y, int si, int sj, int ei, int ej, ArrayList<Point> blocchi2) {
-		grid = new Cell[x][y];
-		closed = new boolean[x][y];
 		open = new PriorityQueue<>((Object o1, Object o2) -> {
 			Cell c1 = (Cell) o1;
 			Cell c2 = (Cell) o2;
-
 			return c1.finalCost < c2.finalCost ? -1 : c1.finalCost > c2.finalCost ? 1 : 0;
 		});
-		setStartCell(si, sj); 
+
+		setStartCell(si, sj);
 		setEndCell(ei, ej);
 
 		for (int i = 0; i < x; ++i) {
 			for (int j = 0; j < y; ++j) {
 				grid[i][j] = new Cell(i, j);
-				grid[i][j].heuristicCost = Math.abs(i - endI) + Math.abs(j - endJ);
+				if(world.world[i][j]instanceof BrickWall)
+					grid[i][j].heuristicCost = (Math.abs(i - endI) + Math.abs(j - endJ))+V_H_COST_BRICK;
+				else{
+					grid[i][j].heuristicCost = Math.abs(i - endI) + Math.abs(j - endJ);
+				}
 			}
 		}
 		grid[si][sj].finalCost = 0;
 
 		for (int i = 0; i < blocchi2.size(); ++i) {
-			setBlocked((int)blocchi2.get(i).getX(), (int)blocchi2.get(i).getY());
+			setBlocked((int) blocchi2.get(i).getX(), (int) blocchi2.get(i).getY());
 		}
 		AStar();
 
 		if (closed[endI][endJ]) {
 			Cell current = grid[endI][endJ];
-			minimalRoute[current.i][current.j] = true; 
+			minimalRoute[current.i][current.j] = true;
 			while (current.parent != null) {
-				//System.out.print(current+" ");
 				current = current.parent;
 				minimalRoute[current.i][current.j] = true;
 			}
-		} else{
-			//NON HO TROVATO UN PERCORSO LIBERO, QUINDI DEVO COMINCIARE A FARMI UN PERCORSO DISTRUGGENDO LE MURA
-			//TODO NON è FINITO ANCORA; LA RICORSIONE SERVE PERCHè DEVO RIFARE TUTTO DALL'INIZIO RESETTANDO TUTTO PERò IN QUESTO CASO CAMBIA SOLO L'ARRAY DI BLOCCHI
-			blocchi.clear();
-			for(int a=0; a<world.getRow(); a++){
-				for(int b=0; b<world.getColumn(); b++){
-					if(world.world[a][b] != null && !(world.world[a][b] instanceof Flag)
-							&& !(world.world[a][b] instanceof Tree) && !(world.world[a][b] instanceof Ice)
-							&& !(world.world[a][b] instanceof BrickWall) && world.world[a][b] != this){
-							blocchi.add(new Point(a,b));
-					}
-				}
-			}
-			searchRoute(world.getRow(), world.getColumn(), getX(), getY(), (int) flag.getX(), (int) flag.getY(), blocchi);
 		}
-			
 	}
 
 	public void difficult() {
 		blocchi.clear();
-
 		for (int a = 0; a < world.getRow(); a++) {
 			for (int b = 0; b < world.getColumn(); b++) {
-				if (world.world[a][b] != null && !(world.world[a][b] instanceof Flag)
-						&& !(world.world[a][b] instanceof Tree) && !(world.world[a][b] instanceof Ice)
-						&& world.world[a][b] != this) {
+				if (world.world[a][b] != null && world.world[a][b] != this && (world.world[a][b] instanceof SteelWall
+						|| world.world[a][b] instanceof Water || world.world[a][b] instanceof EnemyTank)) {
 					blocchi.add(new Point(a, b));
-				}
-				if (world.world[a][b] instanceof Flag) {
-					flag = new Point(a, b);
 				}
 			}
 		}
-		minimalRoute = new boolean[world.getRow()][world.getColumn()];
+
 		for (int i = 0; i < world.getRow(); i++) {
 			for (int j = 0; j < world.getColumn(); j++) {
 				minimalRoute[i][j] = false;
+				closed[i][j] = false;
+				grid[i][j] = null;
 			}
 		}
 
-		searchRoute(world.getRow(), world.getColumn(), getX(), getY(), (int) flag.getX(), (int) flag.getY(), blocchi);
+		searchRoute(world.getRow(), world.getColumn(), getX(), getY(), GameManager.flag.getX(), GameManager.flag.getY(),
+				blocchi);
 
 		int currX = getX();
 		int currY = getY();

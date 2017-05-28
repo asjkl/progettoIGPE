@@ -4,7 +4,7 @@ public class Flag extends AbstractStaticObject {
 	private boolean hit;
 
 	public Flag(int x, int y, World world) {
-		super(world.getRow(), (world.getColumn() / 2), world);
+		super(x, y, world);
 		this.hit = false;
 	}
 
