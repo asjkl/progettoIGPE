@@ -56,7 +56,7 @@ public class GameManager {
 	public Timer timer2;
 	public TimerTask task2;
 	
-	private Lock lock;
+//	private Lock lock;
 
 	public GameManager(JTextField filename, JTextField dir2){
 	
@@ -81,7 +81,7 @@ public class GameManager {
 		boom = new ArrayList<>();
 		random = new Random();
 		rocketFin=new ArrayList<>();
-		lock=new ReentrantLock();
+//		lock=new ReentrantLock();
 		setStatistics(new Statistics());
 		
 		importMap(filename, dir2);
@@ -497,7 +497,7 @@ public class GameManager {
 	}
 
 	public void crashRocket(Rocket rocket) {
-			lock.lock();
+//			lock.lock();
 			//WALL
 			if(rocket.getNext() instanceof Wall){
 				damageWall(rocket);
@@ -539,7 +539,7 @@ public class GameManager {
 			}
 			
 			destroyRocket(rocket);
-			lock.unlock();
+//			lock.unlock();
 	}
 
 	public void destroyRocket(Rocket r){	
@@ -861,10 +861,6 @@ public class GameManager {
 
 	public void setRocketFin(ArrayList<Rocket> rocketFin) {
 		this.rocketFin = rocketFin;
-	}
-
-	public Lock getLock() {
-		return lock;
 	}
 }
 
