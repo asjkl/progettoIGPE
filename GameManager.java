@@ -264,7 +264,7 @@ public class GameManager {
 					power.get(a).setDrop(false);
 
 					if(power.get(a).getBefore() instanceof Water){
-						getMatrix().world[power.get(a).getX()][power.get(a).getY()] = null;
+						getMatrix().world[power.get(a).getX()][power.get(a).getY()] = power.get(a).getBeforeWater();
 						getMatrix().world [((Water)power.get(a).getBefore()).getX()]
 								          [((Water)power.get(a).getBefore()).getY()] = power.get(a).getBefore();
 					}
@@ -313,6 +313,7 @@ public class GameManager {
 		tmp.setBefore(getMatrix().world[getX()][getY()]); //prima di spostare powerUp mi salvo l oggetto su cui è
 														  //caduto precedentemente.
 		if(tmp.getBefore() instanceof Water){
+			tmp.setBeforeWater(getMatrix().world[xTmp][yTmp]); //mi salvo l oggetto che verrà sovvraascritto
 			tmp.setX(xTmp); //powerUp viene spostato dall acqua alla cella accanto (pos buona )
 			tmp.setY(yTmp);
 		}
@@ -371,9 +372,11 @@ public class GameManager {
 		if(x-1 >= 0 && !(getMatrix().world[x-1][y] instanceof Water)
 			&& !(getMatrix().world[x-1][y] instanceof EnemyTank)
 			&& !(getMatrix().world[x-1][y] instanceof PlayerTank)){          //UP
+			
 			xTmp=x-1; //necessito sapere le coordinate della nuova pos. buona su cui verrà spostato in seguito
 			yTmp=y;	  //il powerUp, qui non è possibile farlo perke prima mi devo creare il powerUp e il before e poi...
 			dir=Direction.UP;
+			
 			return true;
 		}
 		if(x+1 < height && !(getMatrix().world[x+1][y] instanceof Water)
@@ -410,11 +413,15 @@ public class GameManager {
 			x = random.nextInt(height);
 			y = random.nextInt(width);
 
-			if (!(getMatrix().world[x][y] instanceof PlayerTank) && !(getMatrix().world[x][y] instanceof EnemyTank)
-					&& !(getMatrix().world[x][y] instanceof PowerUp) && !(getMatrix().world[x][y] instanceof Rocket)
-					&& !(getMatrix().world[x][y] instanceof Flag && getMatrix().world[x][y] != null)){
+			if (getMatrix().world[x][y] instanceof Water){
 				flag = true;
 			}
+			
+//			if (!(getMatrix().world[x][y] instanceof PlayerTank) && !(getMatrix().world[x][y] instanceof EnemyTank)
+//					&& !(getMatrix().world[x][y] instanceof PowerUp) && !(getMatrix().world[x][y] instanceof Rocket)
+//					&& !(getMatrix().world[x][y] instanceof Flag && getMatrix().world[x][y] != null)){
+//				flag = true;
+//			}
 			if(getMatrix().world[x][y] instanceof Water) //se cade nell'acqua controlla
 				if(!movePowerUpInCorrectPosition()) //se la condizione non è soddisfatta
 					flag=false; //continua a ciclare

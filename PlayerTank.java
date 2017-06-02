@@ -40,13 +40,16 @@ public class PlayerTank extends Tank {
 			next = ((Rocket)next).getCurr();
 		}
 		
-		if (!(next instanceof Wall) && !(next instanceof Tank)
-				&& !(next instanceof Water) && !(next instanceof Rocket) && !(next instanceof Flag)) {
-			// prendo tutti i powerUp
-			if (next instanceof PowerUp && !(((PowerUp)next).getBefore() instanceof Tree) && !(((PowerUp)next).getBefore() instanceof Ice)) 
-				curr = null;
-			else if( next instanceof PowerUp && (((PowerUp)next).getBefore() instanceof Tree || ((PowerUp)next).getBefore() instanceof Ice) )
-				curr = ((PowerUp)next).getBefore();
+		if (!(next instanceof Wall) && !(next instanceof Tank) && !(next instanceof Water) && !(next instanceof Rocket) && !(next instanceof Flag)) {
+
+			if (next instanceof PowerUp ){
+				if (!(((PowerUp)next).getBefore() instanceof Tree) && !(((PowerUp)next).getBefore() instanceof Ice) && !(((PowerUp)next).getBefore() instanceof Water)) 
+					curr = null;
+				else if(((PowerUp)next).getBefore() instanceof Water)
+					curr =((PowerUp)next).getBeforeWater();
+				else if((((PowerUp)next).getBefore() instanceof Tree || ((PowerUp)next).getBefore() instanceof Ice) )
+					curr = ((PowerUp)next).getBefore();
+			}
 			else
 				curr = next;
 				

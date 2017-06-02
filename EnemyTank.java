@@ -69,17 +69,22 @@ public class EnemyTank extends Tank {
 		if (!(next instanceof Wall) && !(next instanceof Tank) && !(next instanceof Water) && !(next instanceof Rocket)
 				&& !(next instanceof Flag)) {
 
-			// prende solo Helmet
-			if (next instanceof PowerUp && ((PowerUp) next).getPowerUp() == Power.HELMET
-					&& !(((PowerUp) next).getBefore() instanceof Tree)) {
-				curr = null;
+			if (next instanceof PowerUp && ((PowerUp) next).getPowerUp() == Power.HELMET ){
+					
 				setProtection(true);
-			} else if (next instanceof PowerUp && ((PowerUp) next).getPowerUp() == Power.HELMET
-					&& (((PowerUp) next).getBefore() instanceof Tree || ((PowerUp) next).getBefore() instanceof Ice))
-				curr = ((PowerUp) next).getBefore();
-			else
-				curr = next;
-
+				if(!(((PowerUp) next).getBefore() instanceof Tree) && !(((PowerUp) next).getBefore() instanceof Ice) 
+					&& !(((PowerUp) next).getBefore() instanceof Water)) {
+					curr = null;
+				} 
+				else if(((PowerUp)next).getBefore() instanceof Water){
+					curr = ((PowerUp)next).getBeforeWater();
+				}
+				else if (((PowerUp) next).getBefore() instanceof Tree || ((PowerUp) next).getBefore() instanceof Ice)
+					curr = ((PowerUp) next).getBefore();
+				}
+				else
+					curr = next;
+			
 			return true;
 		}
 		return false;

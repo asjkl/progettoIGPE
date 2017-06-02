@@ -3,6 +3,7 @@ package progettoIGPE.davide.giovanni.unical2016;
 public class PowerUp extends AbstractStaticObject {
 
 	private AbstractStaticObject before; //salva oggetto su cui cade
+	private AbstractStaticObject beforeWater; // importante non delete
 	private Power powerUp;
 	private AbstractDynamicObject tank; //powerup appartenenza
 	private boolean activate;
@@ -18,6 +19,7 @@ public class PowerUp extends AbstractStaticObject {
 	public PowerUp(int x, int y, World world, Power powerUp) {
 		super(x, y, world);
 		this.powerUp = powerUp;
+		this.beforeWater=null;
 		this.timer=0;
 		this.activate=false;
 		this.duration=duration();
@@ -149,6 +151,14 @@ public class PowerUp extends AbstractStaticObject {
 
 	public void setInc(int inc) {
 		this.inc = inc;
+	}
+
+	public AbstractStaticObject getBeforeWater() {
+		return beforeWater;
+	}
+
+	public void setBeforeWater(AbstractStaticObject beforeWater) {
+		this.beforeWater = beforeWater;
 	}
 
 }
