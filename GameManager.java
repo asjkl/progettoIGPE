@@ -412,16 +412,11 @@ public class GameManager {
 		while (!flag) {
 			x = random.nextInt(height);
 			y = random.nextInt(width);
-
-			if (getMatrix().world[x][y] instanceof Water){
+			if (!(getMatrix().world[x][y] instanceof PlayerTank) && !(getMatrix().world[x][y] instanceof EnemyTank)
+					&& !(getMatrix().world[x][y] instanceof PowerUp) && !(getMatrix().world[x][y] instanceof Rocket)
+					&& !(getMatrix().world[x][y] instanceof Flag && getMatrix().world[x][y] != null)){
 				flag = true;
 			}
-			
-//			if (!(getMatrix().world[x][y] instanceof PlayerTank) && !(getMatrix().world[x][y] instanceof EnemyTank)
-//					&& !(getMatrix().world[x][y] instanceof PowerUp) && !(getMatrix().world[x][y] instanceof Rocket)
-//					&& !(getMatrix().world[x][y] instanceof Flag && getMatrix().world[x][y] != null)){
-//				flag = true;
-//			}
 			if(getMatrix().world[x][y] instanceof Water) //se cade nell'acqua controlla
 				if(!movePowerUpInCorrectPosition()) //se la condizione non è soddisfatta
 					flag=false; //continua a ciclare
