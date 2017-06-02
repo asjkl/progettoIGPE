@@ -13,8 +13,7 @@ public class EnemyTank extends Tank {
 	private boolean noUpdateG;
 	private boolean stopEnemy; // powerUp TIMER
 	private boolean stopEnemyGraphic; // powerUp TIMER
-	private boolean firstShot;
-	private long nextShotTime;
+
 	private boolean[] directions;
 	private boolean ok = false;
 	private long nextDirTime = 0;
@@ -42,8 +41,7 @@ public class EnemyTank extends Tank {
 		this.stopEnemyGraphic = false;
 		this.setReadyToSpawn(false);
 		this.setUpdateObject(true);
-		this.setFirstShot(true);
-		this.nextShotTime = 0;
+
 		this.minimalRoute = new boolean[world.getRow()][world.getColumn()];
 		this.closed = new boolean[world.getRow()][world.getColumn()];
 		this.grid = new Cell[world.getRow()][world.getColumn()];
@@ -409,19 +407,4 @@ public class EnemyTank extends Tank {
 		this.point = point;
 	}
 
-	public long getNextShotTime() {
-		return nextShotTime;
-	}
-
-	public void setNextShotTime(long nextShotTime) {
-		this.nextShotTime = nextShotTime;
-	}
-
-	public boolean isFirstShot() {
-		return firstShot;
-	}
-
-	public void setFirstShot(boolean firstShot) {
-		this.firstShot = firstShot;
-	}
 }

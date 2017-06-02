@@ -10,6 +10,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
 import javax.swing.JTextField;
 
 public class GameManager {
@@ -56,7 +57,7 @@ public class GameManager {
 	public Timer timer2;
 	public TimerTask task2;
 	
-//	private Lock lock;
+	public Lock lock;
 
 	public GameManager(JTextField filename, JTextField dir2){
 	
@@ -81,7 +82,7 @@ public class GameManager {
 		boom = new ArrayList<>();
 		random = new Random();
 		rocketFin=new ArrayList<>();
-//		lock=new ReentrantLock();
+		lock=new ReentrantLock();
 		setStatistics(new Statistics());
 		
 		importMap(filename, dir2);
@@ -497,7 +498,7 @@ public class GameManager {
 	}
 
 	public void crashRocket(Rocket rocket) {
-//			lock.lock();
+			lock.lock();
 			//WALL
 			if(rocket.getNext() instanceof Wall){
 				damageWall(rocket);
@@ -539,7 +540,7 @@ public class GameManager {
 			}
 			
 			destroyRocket(rocket);
-//			lock.unlock();
+			lock.unlock();
 	}
 
 	public void destroyRocket(Rocket r){	
@@ -778,11 +779,7 @@ public class GameManager {
 	public Flag getFlag() {
 		return flag;
 	}
-
-	public void setFlag(Flag flag) {
-		this.flag = flag;
-	}
-
+	
 	public ArrayList<Rocket> getRocket() {
 		return rocket;
 	}
