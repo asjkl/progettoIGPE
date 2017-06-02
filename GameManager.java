@@ -173,15 +173,18 @@ public class GameManager {
 						break;
 					case ("@@@@"):
 						getMatrix().world[i][j] = new Ice(i, j, getMatrix());
+						getMatrix().objectStatic[i][j]=new Ice(i, j, getMatrix());
 						break;
 					case ("TTTT"):
 						getMatrix().world[i][j] = new Tree(i, j, getMatrix());
+						getMatrix().objectStatic[i][j]=new Tree(i, j, getMatrix());
 						break;
 					case ("[||]"):
 						getMatrix().world[i][j] = new BrickWall(i, j, getMatrix(), 2);
 						break;
 					case ("~~~~"):
 						getMatrix().world[i][j] = new Water(i, j, getMatrix());
+						getMatrix().objectStatic[i][j] =new Water(i, j, getMatrix());
 						break;
 					case ("****"):
 						player = new PlayerTank(i, j, getMatrix());
@@ -412,16 +415,11 @@ public class GameManager {
 		while (!flag) {
 			x = random.nextInt(height);
 			y = random.nextInt(width);
-
-			if (getMatrix().world[x][y] instanceof Water){
+			if (!(getMatrix().world[x][y] instanceof PlayerTank) && !(getMatrix().world[x][y] instanceof EnemyTank)
+					&& !(getMatrix().world[x][y] instanceof PowerUp) && !(getMatrix().world[x][y] instanceof Rocket)
+					&& !(getMatrix().world[x][y] instanceof Flag && getMatrix().world[x][y] != null)){
 				flag = true;
 			}
-			
-//			if (!(getMatrix().world[x][y] instanceof PlayerTank) && !(getMatrix().world[x][y] instanceof EnemyTank)
-//					&& !(getMatrix().world[x][y] instanceof PowerUp) && !(getMatrix().world[x][y] instanceof Rocket)
-//					&& !(getMatrix().world[x][y] instanceof Flag && getMatrix().world[x][y] != null)){
-//				flag = true;
-//			}
 			if(getMatrix().world[x][y] instanceof Water) //se cade nell'acqua controlla
 				if(!movePowerUpInCorrectPosition()) //se la condizione non è soddisfatta
 					flag=false; //continua a ciclare

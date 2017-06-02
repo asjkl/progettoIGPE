@@ -4,11 +4,13 @@ public class World {
 	private int row;
 	private int column;
 	public AbstractStaticObject[][] world;
+	public AbstractStaticObject[][] objectStatic;
 
 	public World(int row, int column) {
 		this.row = row;
 		this.column = column;
 		this.world = new AbstractStaticObject[row][column];
+		this.objectStatic=new AbstractStaticObject[row][column];
 	}
 
 	public World() {
