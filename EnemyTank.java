@@ -7,6 +7,7 @@ import java.util.Random;
 
 public class EnemyTank extends Tank {
 
+	
 	private int point;
 	private boolean appearsInTheMap;
 	private boolean powerUpOn;
