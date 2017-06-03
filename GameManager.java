@@ -57,9 +57,12 @@ public class GameManager {
 	public Timer timer2;
 	public TimerTask task2;
 	
+	private JTextField filename;
+	private JTextField directory;
+	
 	public Lock lock;
 
-	public GameManager(JTextField filename, JTextField dir2){
+	public GameManager(JTextField filename, JTextField directory){
 	
 		currentTime = 0;
 		pause=false;
@@ -85,7 +88,10 @@ public class GameManager {
 		lock=new ReentrantLock();
 		setStatistics(new Statistics());
 		
-		importMap(filename, dir2);
+		this.setDirectory(directory);
+		this.setFilename(filename);
+		
+		importMap(filename, directory);
 		
 		timer = new Timer();
 		task = new MyTask();
@@ -313,10 +319,10 @@ public class GameManager {
 	private void extendAddPowerUp(PowerUp tmp){
 
 		tmp.setDropTime(currentTime);
-		tmp.setBefore(getMatrix().world[getX()][getY()]); //prima di spostare powerUp mi salvo l oggetto su cui è
+		tmp.setBefore(getMatrix().world[getX()][getY()]); //prima di spostare powerUp mi salvo l oggetto su cui ï¿½
 														  //caduto precedentemente.
 		if(tmp.getBefore() instanceof Water){
-			tmp.setBeforeWater(getMatrix().world[xTmp][yTmp]); //mi salvo l oggetto che verrà sovvraascritto
+			tmp.setBeforeWater(getMatrix().world[xTmp][yTmp]); //mi salvo l oggetto che verrï¿½ sovvraascritto
 			tmp.setX(xTmp); //powerUp viene spostato dall acqua alla cella accanto (pos buona )
 			tmp.setY(yTmp);
 		}
@@ -376,8 +382,8 @@ public class GameManager {
 			&& !(getMatrix().world[x-1][y] instanceof EnemyTank)
 			&& !(getMatrix().world[x-1][y] instanceof PlayerTank)){          //UP
 			
-			xTmp=x-1; //necessito sapere le coordinate della nuova pos. buona su cui verrà spostato in seguito
-			yTmp=y;	  //il powerUp, qui non è possibile farlo perke prima mi devo creare il powerUp e il before e poi...
+			xTmp=x-1; //necessito sapere le coordinate della nuova pos. buona su cui verrï¿½ spostato in seguito
+			yTmp=y;	  //il powerUp, qui non ï¿½ possibile farlo perke prima mi devo creare il powerUp e il before e poi...
 			dir=Direction.UP;
 			
 			return true;
@@ -421,7 +427,7 @@ public class GameManager {
 				flag = true;
 			}
 			if(getMatrix().world[x][y] instanceof Water) //se cade nell'acqua controlla
-				if(!movePowerUpInCorrectPosition()) //se la condizione non è soddisfatta
+				if(!movePowerUpInCorrectPosition()) //se la condizione non ï¿½ soddisfatta
 					flag=false; //continua a ciclare
 		}
 	}
@@ -578,7 +584,7 @@ public class GameManager {
 
 		if (rocket.getTank() instanceof PlayerTank && player.getLevel() == 3)
 			((Wall) rocket.getNext()).setHealth(((Wall) rocket.getNext()).getHealth() - 2);
-		else if (!(rocket.getNext() instanceof SteelWall)) // e non è SteelWall
+		else if (!(rocket.getNext() instanceof SteelWall)) // e non ï¿½ SteelWall
 			((Wall) rocket.getNext()).setHealth(((Wall) rocket.getNext()).getHealth() - 1);
 	}
 
@@ -611,7 +617,7 @@ public class GameManager {
 
 	private void destroyEnemyTank(EnemyTank enemyT) {
 		
-		statistics.calculate(enemyT); // gli passo l'enemy ucciso e verrà gestito tutto nella classe statistics
+		statistics.calculate(enemyT); // gli passo l'enemy ucciso e verrï¿½ gestito tutto nella classe statistics
 		
 		if(numberOfEnemyOnMap > 0)
 			numberOfEnemyOnMap--;
@@ -695,7 +701,7 @@ public class GameManager {
 				
 				if(numberOfEnemyReadyToSpwan < numberOfEnemyToSpawn && !enemy.get(count).isReadyToSpawn() && !enemy.get(count).isAppearsInTheMap()){
 					enemy.get(count).setReadyToSpawn(true);
-					enemy.get(count).setSpawnTime((currentTime+4)%60); //il +4 indica i secondi che ci metterà..
+					enemy.get(count).setSpawnTime((currentTime+4)%60); //il +4 indica i secondi che ci metterï¿½..
 					numberOfEnemyReadyToSpwan++;
 				}
 				if(enemy.get(count).isReadyToSpawn() && currentTime == enemy.get(count).getSpawnTime()){
@@ -863,6 +869,22 @@ public class GameManager {
 
 	public void setRocketFin(ArrayList<Rocket> rocketFin) {
 		this.rocketFin = rocketFin;
+	}
+
+	public JTextField getFilename() {
+		return filename;
+	}
+
+	public void setFilename(JTextField filename) {
+		this.filename = filename;
+	}
+
+	public JTextField getDirectory() {
+		return directory;
+	}
+
+	public void setDirectory(JTextField directory) {
+		this.directory = directory;
 	}
 }
 
