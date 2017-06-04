@@ -24,7 +24,6 @@ public class GameManager {
 	private boolean soundPowerUp;
 	public boolean pauseOptionDialog;
 	public boolean paused;
-	public boolean shot;
 	private Random random;
 	private World matrix;
 	public static Flag flag;
@@ -66,7 +65,6 @@ public class GameManager {
 	public GameManager(JTextField filename, JTextField directory){
 	
 		currentTime = 0;
-		shot=false;
 		pauseOptionDialog=false;
 		paused = false;
 		numberOfEnemyToSpawn = 3;
