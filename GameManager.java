@@ -10,7 +10,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
 import javax.swing.JTextField;
 
 public class GameManager {
@@ -23,7 +22,9 @@ public class GameManager {
 	private int y;
 	public static long currentTime;
 	private boolean soundPowerUp;
-	public boolean pause;
+	public boolean pauseOptionDialog;
+	public boolean paused;
+	public boolean shot;
 	private Random random;
 	private World matrix;
 	public static Flag flag;
@@ -65,7 +66,9 @@ public class GameManager {
 	public GameManager(JTextField filename, JTextField directory){
 	
 		currentTime = 0;
-		pause=false;
+		shot=false;
+		pauseOptionDialog=false;
+		paused = false;
 		numberOfEnemyToSpawn = 3;
 		numberOfEnemyOnMap = 0;
 		numberOfEnemyReadyToSpwan = 0;
@@ -112,7 +115,7 @@ public class GameManager {
 //			getMatrix().print();
 //			System.out.println();
 			
-			if(!pause){
+			if(!pauseOptionDialog){
 
 				for(int i=0;i<boom.size();i++){
 					 if(boom.get(i) instanceof Tank) 
@@ -150,7 +153,7 @@ public class GameManager {
 
 		public void run(){
 			
-			if(!pause){
+			if(!pauseOptionDialog){
 				currentTime = (currentTime + 1 ) % 60;
 			}
 		}
@@ -644,6 +647,9 @@ public class GameManager {
 
 			if (tmp == Direction.STOP && tank instanceof PlayerTank) // serve quando nasce playerTank, essendo STOP spara verso l alto
 				tmp = Direction.UP;
+			
+			if(tank instanceof PlayerTank)
+				((PlayerTank)tank).setShot(true);
 
 			rocket.add(new Rocket(tank.getX(), tank.getY(), matrix, tmp, tank));
 			

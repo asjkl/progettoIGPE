@@ -9,6 +9,7 @@ public class PlayerTank extends Tank {
 	private boolean first;
 	private int bornX;
 	private int bornY;
+	private boolean shot;
 	
 	public PlayerTank(int x, int y, World world) {
 		super(x, y, world, Speed.NORMAL, Speed.FAST, Direction.STOP, 1);
@@ -24,6 +25,7 @@ public class PlayerTank extends Tank {
 		this.first=true;
 		this.setBornX(x);
 		this.setBornY(y);
+		setShot(false);
 	} 
 
 	@Override
@@ -127,5 +129,13 @@ public class PlayerTank extends Tank {
 
 	public void setBornY(int bornY) {
 		this.bornY = bornY;
+	}
+
+	public boolean isShot() {
+		return shot;
+	}
+
+	public void setShot(boolean shot) {
+		this.shot = shot;
 	}
 }
