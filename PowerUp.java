@@ -54,7 +54,7 @@ public class PowerUp extends AbstractStaticObject {
 	
 	public int duration(){
 		if(powerUp == Power.SHOVEL || powerUp == Power.HELMET || powerUp == Power.TIMER)
-			return 5;
+			return 10;
 		return 0;
 	}
 	public Power getPowerUp() {

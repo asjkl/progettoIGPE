@@ -60,7 +60,6 @@ public class GameManager {
 	private JTextField filename;
 	private JTextField directory;
 	
-	public Lock lock;
 
 	public GameManager(JTextField filename, JTextField directory){
 	
@@ -86,7 +85,6 @@ public class GameManager {
 		boom = new ArrayList<>();
 		random = new Random();
 		rocketFin=new ArrayList<>();
-		lock=new ReentrantLock();
 		setStatistics(new Statistics());
 		
 		this.setDirectory(directory);
@@ -515,6 +513,8 @@ public class GameManager {
 				}
 			}	
 		}
+		if(S == "recover")
+			recoveryWall.clear();
 	}
 	
 	// ---------------------------------------ROCKET----------------------------------------
@@ -525,7 +525,6 @@ public class GameManager {
 	}
 
 	public void crashRocket(Rocket rocket) {
-			lock.lock();
 			//WALL
 			if(rocket.getNext() instanceof Wall){
 				damageWall(rocket);
@@ -567,7 +566,6 @@ public class GameManager {
 			}
 			
 			destroyRocket(rocket);
-			lock.unlock();
 	}
 
 	public void destroyRocket(Rocket r){	
