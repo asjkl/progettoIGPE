@@ -245,16 +245,28 @@ public class GameManager {
 
 	}
 
-	public int returnSpeed(Speed speed) {
+	public double returnSpeed(Speed speed, AbstractStaticObject object) {
 		//SERVE PER CONVERTIRE LA SPEED AD UN INTERO
-		if(speed==Speed.SLOW)
-			return 1;
-		else if(speed==Speed.NORMAL)
-			return 2;
-		else if(speed==Speed.FAST)
-			return 3;
+		if(speed==Speed.SLOW){
+			return 0.1d;
+		}
+		else if(speed==Speed.NORMAL){
+			return 0.2d;
+		}
+		else if(speed==Speed.FAST){
+			return 0.3d;
+		}
+		else if(speed==Speed.SLOWROCKET){
+			return 0.4d;
+		}
+		else if(speed==Speed.NORMALROCKET){
+			return 0.5d;
+		}
+		else if(speed==Speed.FASTROCKET){
+			return 0.6d;
+		}
 		
-		return 0;
+		return 0.0d;
 	}
 		
 	// ----------------------------------------POWERUP-------------------------------------
@@ -298,17 +310,17 @@ public class GameManager {
 
 		for (int a = 0; a < power.size(); a++){
 			if (power.get(a).isActivate()) {
-				System.out.println(power.get(a) + "---------- attivo!");
+//				System.out.println(power.get(a) + "---------- attivo!");
 				
 				long tmp = (power.get(a).getTimer() + power.get(a).getDuration()) % 60;
 
-				System.out.println("CURRENT:   "+ currentTime);
-				System.out.println("getTimer:  "+power.get(a).getTimer());
-				System.out.println("tmpTimeOut: " + tmp);
+//				System.out.println("CURRENT:   "+ currentTime);
+//				System.out.println("getTimer:  "+power.get(a).getTimer());
+//				System.out.println("tmpTimeOut: " + tmp);
 			
 				
 				if (tmp == currentTime) {
-					System.out.println(power.get(a) + "---------- disattivo!");
+//					System.out.println(power.get(a) + "---------- disattivo!");
 					managePowerUp(power.get(a));
 					power.remove(a);
 					a--;
@@ -441,16 +453,7 @@ public class GameManager {
 			player.setProtection(false);
 		}
 		else if(p.getPowerUp() == Power.SHOVEL) {
-				int x = 0;
-				for (int i = height - 2; i < height; i++){
-					for (int j = (width / 2) - 1; j <= (width / 2)+1; j++){
-						if (!(getMatrix().world[i][j] instanceof Flag)){
-							if (x < recoveryWall.size())
-								getMatrix().world[i][j] = recoveryWall.get(x++);
-						}
-					}
-				}
-				recoveryWall.clear();
+			buildWall("recover");
 		}
 		else if(p.getPowerUp() == Power.TIMER){
 			for(int i=0;i<enemy.size();i++){
@@ -467,23 +470,14 @@ public class GameManager {
 		case GRENADE:
 			
 			for (int i = 0; i < enemy.size(); i++)
-				if (enemy.get(i).isAppearsInTheMap()){
+				if (enemy.get(i).isAppearsInTheMap())
 					destroyEnemyTank(enemy.get(i--));
-				}
-			
 			break;
 		case HELMET:
 			player.setProtection(true);
 			break;
 		case SHOVEL:
-			for (int i = height - 2; i < height; i++){
-				for (int j = (width / 2) - 1; j <= (width / 2)+1; j++){
-					if (!(getMatrix().world[i][j] instanceof Flag)) {
-						recoveryWall.add(getMatrix().world[i][j]);
-						getMatrix().world[i][j] = new SteelWall(i, j, getMatrix(), 4);
-					}
-				}
-			}
+				buildWall("steel");
 			break;
 		case STAR:
 			if(player.getLevel()<3)
@@ -501,7 +495,28 @@ public class GameManager {
 			break;
 		}
 	}
-
+	
+	private void buildWall(String S){
+		
+		int x = flag.getX();
+		int y = flag.getY();
+		int reset=0;
+		for(int i=x-1;i<=x+1;i++){
+			for(int j=y-1;j<=y+1;j++){
+			
+				if(!(i == x && j == y) && i>=0 && j >=0 && i<width && j<height ){
+					if(S == "steel"){
+						recoveryWall.add(getMatrix().world[i][j]);
+						matrix.world[i][j] = new SteelWall(i, j, matrix, 4);
+					}
+					else if(S == "recover"){
+						getMatrix().world[i][j] = recoveryWall.get(reset++);
+					}
+				}
+			}	
+		}
+	}
+	
 	// ---------------------------------------ROCKET----------------------------------------
 
 	public void updateRocket(Rocket rocket) {

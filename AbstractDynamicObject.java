@@ -11,7 +11,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	protected AbstractStaticObject next;
 	private int contRocket;
 	public boolean canGo;
-	private int contP; //conta pixel
+	private double contP; //conta pixel
 	private boolean updateObject; //switcha dalla logica alla grafica
 	private int rotateDegrees; // rotazione oggetto
 	private boolean firstTime; // booleana per entrare una sola volta
@@ -175,11 +175,11 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		this.updateObject = updateObject;
 	}
 
-	public int getCont() {
+	public double getCont() {
 		return contP;
 	}
 
-	public void setCont(int contP) {
+	public void setCont(double contP) {
 		this.contP = contP;
 	}
 

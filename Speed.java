@@ -1,5 +1,5 @@
 package progettoIGPE.davide.giovanni.unical2016;
 
 public enum Speed {
-	SLOW, NORMAL, FAST;
+	SLOW, NORMAL, FAST, SLOWROCKET, NORMALROCKET, FASTROCKET;
 }

@@ -1,11 +1,10 @@
 package progettoIGPE.davide.giovanni.unical2016;
 
-import java.awt.Point;
-
 public abstract class AbstractStaticObject implements StaticObject {
 	private int x;
 	private int y;
-	private Point pixelPosition;
+	private double xGraphics;
+	private double yGraphics;
 	private int sizePixel;
 	protected World world;
 	
@@ -13,7 +12,8 @@ public abstract class AbstractStaticObject implements StaticObject {
 		this.x = x;
 		this.y = y;
 		this.sizePixel=35;
-		this.setPixelPosition(new Point(x*sizePixel, y*sizePixel));
+		setxGraphics(x*sizePixel);
+		setyGraphics(y*sizePixel);
 		this.world = world;
 	}
 
@@ -50,12 +50,19 @@ public abstract class AbstractStaticObject implements StaticObject {
 		return "AbstractStaticObject [x=" + x + ", y=" + y + ", mondo=" + world + "]";
 	}
 
-	public Point getPixelPosition() {
-		return pixelPosition;
+	public double getxGraphics() {
+		return xGraphics;
 	}
 
-	public void setPixelPosition(Point pixelPosition) {
-		this.pixelPosition = pixelPosition;
+	public void setxGraphics(double xGrafica) {
+		this.xGraphics = xGrafica;
 	}
 
+	public double getyGraphics() {
+		return yGraphics;
+	}
+
+	public void setyGraphics(double yGrafica) {
+		this.yGraphics = yGrafica;
+	}
 }
