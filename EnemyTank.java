@@ -7,7 +7,6 @@ import java.util.Random;
 
 public class EnemyTank extends Tank {
 
-	
 	private int point;
 	private boolean appearsInTheMap;
 	private boolean powerUpOn;
@@ -70,22 +69,19 @@ public class EnemyTank extends Tank {
 		if (!(next instanceof Wall) && !(next instanceof Tank) && !(next instanceof Water) && !(next instanceof Rocket)
 				&& !(next instanceof Flag)) {
 
-			if (next instanceof PowerUp && ((PowerUp) next).getPowerUp() == Power.HELMET ){
-					
+			if (next instanceof PowerUp && ((PowerUp) next).getPowerUp() == Power.HELMET) {
+
 				setProtection(true);
-				if(!(((PowerUp) next).getBefore() instanceof Tree) && !(((PowerUp) next).getBefore() instanceof Ice) 
-					&& !(((PowerUp) next).getBefore() instanceof Water)) {
+				if (!(((PowerUp) next).getBefore() instanceof Tree) && !(((PowerUp) next).getBefore() instanceof Ice)
+						&& !(((PowerUp) next).getBefore() instanceof Water)) {
 					curr = null;
-				} 
-				else if(((PowerUp)next).getBefore() instanceof Water){
-					curr = ((PowerUp)next).getBeforeWater();
-				}
-				else if (((PowerUp) next).getBefore() instanceof Tree || ((PowerUp) next).getBefore() instanceof Ice)
+				} else if (((PowerUp) next).getBefore() instanceof Water) {
+					curr = ((PowerUp) next).getBeforeWater();
+				} else if (((PowerUp) next).getBefore() instanceof Tree || ((PowerUp) next).getBefore() instanceof Ice)
 					curr = ((PowerUp) next).getBefore();
-				}
-				else
-					curr = next;
-			
+			} else
+				curr = next;
+
 			return true;
 		}
 		return false;
@@ -159,6 +155,7 @@ public class EnemyTank extends Tank {
 	}
 	////////////////////////////// MEDIUM
 	////////////////////////////// //////////////////////////////////////////////////////////////////////
+	// TODO
 
 	////////////////////////////// DIFFICULT
 	////////////////////////////// ///////////////////////////////////////////////////////////////////
@@ -236,9 +233,9 @@ public class EnemyTank extends Tank {
 		for (int i = 0; i < x; ++i) {
 			for (int j = 0; j < y; ++j) {
 				grid[i][j] = new Cell(i, j);
-				if(world.world[i][j]instanceof BrickWall)
-					grid[i][j].heuristicCost = (Math.abs(i - endI) + Math.abs(j - endJ))+V_H_COST_BRICK;
-				else{
+				if (world.world[i][j] instanceof BrickWall)
+					grid[i][j].heuristicCost = (Math.abs(i - endI) + Math.abs(j - endJ)) + V_H_COST_BRICK;
+				else {
 					grid[i][j].heuristicCost = Math.abs(i - endI) + Math.abs(j - endJ);
 				}
 			}

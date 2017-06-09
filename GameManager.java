@@ -516,6 +516,11 @@ public class GameManager {
 	
 	// ---------------------------------------ROCKET----------------------------------------
 
+	public void updateRocket(Rocket rocket) {
+		rocket.update();				
+		rocket.setUpdateObject(false);
+	}
+	
 	public void crashRocket(Rocket rocket) {
 			//WALL
 			if(rocket.getNext() instanceof Wall){
