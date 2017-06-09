@@ -28,7 +28,9 @@ public class EnemyTank extends Tank {
 	private int endI, endJ;
 	public final int V_H_COST = 5;
 	public final int V_H_COST_BRICK = 20;
-	private boolean hasApath=false;		//IL NEMICO CON LA DIFFICOLTA' MASSIMA: CI DICE SE HA TROVATO UN PERCORSO O MENO
+	private boolean hasApath = false; // IL NEMICO CON LA DIFFICOLTA' MASSIMA:
+										// CI DICE SE HA TROVATO UN PERCORSO O
+										// MENO
 
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health,
 			int point) {
@@ -246,29 +248,31 @@ public class EnemyTank extends Tank {
 		for (int i = 0; i < blocchi2.size(); ++i) {
 			setBlocked((int) blocchi2.get(i).getX(), (int) blocchi2.get(i).getY());
 		}
+
 		AStar();
 
 		if (closed[endI][endJ]) {
 			Cell current = grid[endI][endJ];
 			minimalRoute[current.i][current.j] = true;
 			while (current.parent != null) {
-				System.out.println("-> "+ current);
 				current = current.parent;
 				minimalRoute[current.i][current.j] = true;
 			}
-			hasApath=true;
-		}else{
-			hasApath=false;
+			hasApath = true;
+		} else {
+			hasApath = false;
 		}
 	}
 
 	public void difficult() {
-		
+
 		blocchi.clear();
 		for (int a = 0; a < world.getRow(); a++) {
 			for (int b = 0; b < world.getColumn(); b++) {
-				if (world.world[a][b] != null && world.world[a][b] != this && (world.world[a][b] instanceof SteelWall
-						|| world.world[a][b] instanceof Water || world.world[a][b] instanceof EnemyTank)) {
+				if (world.world[a][b] != null && world.world[a][b] != this
+						&& (world.world[a][b] instanceof SteelWall || world.world[a][b] instanceof EnemyTank
+								|| (world.world[a][b] instanceof Water && a != GameManager.flag.getX()
+										&& b != GameManager.flag.getY()))) {
 					blocchi.add(new Point(a, b));
 				}
 			}
