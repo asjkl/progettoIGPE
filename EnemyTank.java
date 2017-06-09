@@ -267,13 +267,11 @@ public class EnemyTank extends Tank {
 		blocchi.clear();
 		for (int a = 0; a < world.getRow(); a++) {
 			for (int b = 0; b < world.getColumn(); b++) {
-				System.out.print(world.world[a][b]);
 				if (world.world[a][b] != null && world.world[a][b] != this && (world.world[a][b] instanceof SteelWall
 						|| world.world[a][b] instanceof Water || world.world[a][b] instanceof EnemyTank)) {
 					blocchi.add(new Point(a, b));
 				}
 			}
-			System.out.println();
 		}
 
 		for (int i = 0; i < world.getRow(); i++) {
