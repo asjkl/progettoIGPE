@@ -16,6 +16,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	private int rotateDegrees; // rotazione oggetto
 	private boolean firstTime; // booleana per entrare una sola volta
 	private int inc; // serve per gli effetti di Tank (PowerUp ha il suo)
+	private boolean onBorder;
 
 	public AbstractDynamicObject(int x, int y, World mondo, Speed speed, Speed speedShot, Direction direction,int health) {
 		super(x, y, mondo);
@@ -46,6 +47,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	public void update() {
 		
 		canGo=true;
+		onBorder=false;
 		
 		// rimette l oggetto di prima
 		if (!(curr instanceof Tank)) {
@@ -62,8 +64,11 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 				else
 					canGo=false;
 			}
-			else 
+			else {
 				canGo=false;
+//				System.out.println("up");
+				onBorder=true;
+			}
 			break;
 		case DOWN:
 			if (getX() + 1 < getWorld().getRow()) {
@@ -74,8 +79,11 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 				else
 					canGo=false;
 			}	
-			else 
+			else {
 				canGo=false;
+//				System.out.println("down");
+				onBorder=true;
+			}
 			break;
 		case LEFT:
 			if (getY() - 1 >= 0) {
@@ -86,8 +94,11 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 				else
 					canGo=false;
 			}
-			else 
+			else {
 				canGo=false;
+//				System.out.println("left");
+				onBorder=true;
+			}
 			break;
 		case RIGHT:
 			if (getY() + 1 < getWorld().getColumn()) {
@@ -98,8 +109,11 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 				else
 					canGo=false;
 			}
-			else 
+			else {
 				canGo=false;
+//				System.out.println("right");
+				onBorder=true;
+			}
 			break;
 		default:
 			break;
@@ -205,6 +219,14 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 
 	public void setInc(int inc) {
 		this.inc = inc;
+	}
+
+	public boolean isOnBorder() {
+		return onBorder;
+	}
+
+	public void setOnBorder(boolean onBorder) {
+		this.onBorder = onBorder;
 	}
 	
 }

@@ -56,7 +56,7 @@ public class GameManager {
 	
 	private JTextField filename;
 	private JTextField directory;
-	
+	private boolean explosion;
 
 	public GameManager(JTextField filename, JTextField directory){
 	
@@ -72,6 +72,7 @@ public class GameManager {
 		yTmp = -1;
 		blinkTime = 5; //quanti secondi alla fine deve lampeggiare
 		soundPowerUp = false;
+		explosion=false;
 		
 		matrix = new World(height, width);
 		enemy = new ArrayList<>();
@@ -100,6 +101,11 @@ public class GameManager {
 		
 	// --------------------------------------OTHER-----------------------------------------
 		
+	public GameManager(World world, Flag flag) { //SERVE PER IL CONSTRUCTION
+		this.matrix=world;
+		GameManager.flag=flag;
+	}
+
 	public class MyTask extends TimerTask {
 
 		public void run(){
@@ -169,9 +175,11 @@ public class GameManager {
 					switch (tmp) {
 					case ("null"):
 						getMatrix().world[i][j] = null;
+						System.out.println("ok");
 						break;
 					case ("[//]"):
 						getMatrix().world[i][j] = new SteelWall(i, j, getMatrix(), 4);
+						System.out.println("ciaooo");
 						break;
 					case ("@@@@"):
 						getMatrix().world[i][j] = new Ice(i, j, getMatrix());
@@ -604,7 +612,7 @@ public class GameManager {
 		PlayerTank old = player;
 		boom.add(old);
 		getMatrix().world[old.getX()][old.getY()] = old.getCurr();
-		
+		explosion=true;
 		player = new PlayerTank(player.getBornX(),player.getBornY(),matrix);
 		matrix.world[player.getX()][player.getY()] = player;
 		
@@ -645,6 +653,7 @@ public class GameManager {
 		boom.add(enemyT);
 		points.add(enemyT);
 		enemy.remove(enemyT);
+		explosion=true;
 	}
 
 	public void createRocketTank(Direction tmp, AbstractDynamicObject tank) {
@@ -892,5 +901,14 @@ public class GameManager {
 	public void setDirectory(JTextField directory) {
 		this.directory = directory;
 	}
+	
+	public boolean isExplosion() {
+		return explosion;
+	}
+
+	public void setExplosion(boolean explosion) {
+		this.explosion = explosion;
+	}
+
 }
 

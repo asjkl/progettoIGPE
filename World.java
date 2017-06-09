@@ -14,8 +14,9 @@ public class World {
 	}
 
 	public World() {
-		row = 10;
-		column = 10;
+		row = 20;
+		column = 21;
+		this.world = new AbstractStaticObject[row][column];
 	}
 
 	public int getRow() {
