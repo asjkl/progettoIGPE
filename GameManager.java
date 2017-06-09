@@ -8,8 +8,6 @@ import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import javax.swing.JTextField;
 
 public class GameManager {
@@ -53,7 +51,6 @@ public class GameManager {
 	//Timer
 	public Timer timer;
 	public TimerTask task;
-	
 	public Timer timer2;
 	public TimerTask task2;
 	
@@ -502,7 +499,7 @@ public class GameManager {
 		for(int i=x-1;i<=x+1;i++){
 			for(int j=y-1;j<=y+1;j++){
 			
-				if(!(i == x && j == y) && i>=0 && j >=0 && i<width && j<height ){
+				if(!(i == x && j == y) && i>=0 && j >=0 && j<width && i<height ){
 					if(S == "steel"){
 						recoveryWall.add(getMatrix().world[i][j]);
 						matrix.world[i][j] = new SteelWall(i, j, matrix, 4);
@@ -518,11 +515,6 @@ public class GameManager {
 	}
 	
 	// ---------------------------------------ROCKET----------------------------------------
-
-	public void updateRocket(Rocket rocket) {
-		rocket.update();				
-		rocket.setUpdateObject(false);
-	}
 
 	public void crashRocket(Rocket rocket) {
 			//WALL
@@ -561,7 +553,7 @@ public class GameManager {
 			}
 			
 			//ROCKET
-			if(rocket.getNext() instanceof Rocket){
+			if((rocket.getNext() instanceof Rocket || rocket.getCurr() instanceof Rocket) && rocket.getCurr() != rocket){
 				destroyRocket((Rocket)rocket.getNext());
 			}
 			
@@ -729,15 +721,7 @@ public class GameManager {
 				count++;
 			}
 	}
-  	
-	public void enemyUpdate(int a) {
 
-	    if (enemy.get(a).isAppearsInTheMap() && !enemy.get(a).isStopEnemy()) {
-	        enemy.get(a).update();
-	        matrix.world[enemy.get(a).getX()][enemy.get(a).getY()] = enemy.get(a);
-	    }
-	  }
-	
 	// -----------------------------SET & GET-----------------------------------------------
 
 	public int getWidth() {
