@@ -66,7 +66,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 			}
 			else {
 				canGo=false;
-//				System.out.println("up");
+				//System.out.println("up");
 				onBorder=true;
 			}
 			break;
@@ -81,7 +81,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 			}	
 			else {
 				canGo=false;
-//				System.out.println("down");
+				//System.out.println("down");
 				onBorder=true;
 			}
 			break;
@@ -96,7 +96,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 			}
 			else {
 				canGo=false;
-//				System.out.println("left");
+				//System.out.println("left");
 				onBorder=true;
 			}
 			break;
@@ -111,7 +111,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 			}
 			else {
 				canGo=false;
-//				System.out.println("right");
+				//System.out.println("right");
 				onBorder=true;
 			}
 			break;

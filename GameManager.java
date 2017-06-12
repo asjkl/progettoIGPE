@@ -175,7 +175,6 @@ public class GameManager {
 					switch (tmp) {
 					case ("null"):
 						getMatrix().world[i][j] = null;
-						System.out.println("ok");
 						break;
 					case ("[//]"):
 						getMatrix().world[i][j] = new SteelWall(i, j, getMatrix(), 4);
@@ -569,7 +568,6 @@ public class GameManager {
 			if((rocket.getNext() instanceof Rocket || rocket.getCurr() instanceof Rocket) && rocket.getCurr() != rocket){
 				destroyRocket((Rocket)rocket.getNext());
 			}
-			
 			destroyRocket(rocket);
 	}
 
