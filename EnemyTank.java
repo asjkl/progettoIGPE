@@ -65,7 +65,8 @@ public class EnemyTank extends Tank {
 	@Override
 	public boolean sameObject() {
 
-		if (next instanceof Rocket && ((Rocket) next).getTank() instanceof EnemyTank) {
+		// DA CONTROLLARE CAMBIATO THIS PRIMA ERA ENEMYTANK
+		if (next instanceof Rocket && ((Rocket) next).getTank() == this) {
 			next = ((Rocket) next).getCurr();
 		}
 

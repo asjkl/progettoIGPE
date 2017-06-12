@@ -27,10 +27,10 @@ public class Rocket extends AbstractDynamicObject {
 	@Override
 	public boolean sameObject() {
 		
-		if(next instanceof Tank && (Tank)next == getTank()){
-			next = ((Tank)next).getCurr();
-			return true;
-		}
+//		if(next instanceof Tank && (Tank)next == getTank()){
+//			next = ((Tank)next).getCurr();
+//			return true;
+//		}
 			
 		if(firstAnimationNo && next == tank){
 			return true;							

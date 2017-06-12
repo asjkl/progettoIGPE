@@ -577,6 +577,7 @@ public class GameManager {
 			matrix.world[r.getX()][r.getY()] = r.getCurr();	
 		boom.add(r);
 		rocket.remove(r);	
+	
 	}
 
 	public void countRockets(Rocket r) {
