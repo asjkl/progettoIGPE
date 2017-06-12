@@ -178,7 +178,6 @@ public class GameManager {
 						break;
 					case ("[//]"):
 						getMatrix().world[i][j] = new SteelWall(i, j, getMatrix(), 4);
-						System.out.println("ciaooo");
 						break;
 					case ("@@@@"):
 						getMatrix().world[i][j] = new Ice(i, j, getMatrix());
@@ -511,7 +510,7 @@ public class GameManager {
 						recoveryWall.add(getMatrix().world[i][j]);
 						matrix.world[i][j] = new SteelWall(i, j, matrix, 4);
 					}
-					else if(S == "recover"){
+					else if(S == "recover" && reset < recoveryWall.size()){
 						getMatrix().world[i][j] = recoveryWall.get(reset++);
 					}
 				}
@@ -613,7 +612,7 @@ public class GameManager {
 		explosion=true;
 		player = new PlayerTank(player.getBornX(),player.getBornY(),matrix);
 		matrix.world[player.getX()][player.getY()] = player;
-		
+		player.setOldDirection(false);
 		player.setResume(old.getResume()-1);
 		player.setDied(true);
 		player.setSpawnTime((currentTime+4)%60);

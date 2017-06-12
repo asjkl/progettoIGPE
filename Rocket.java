@@ -31,14 +31,7 @@ public class Rocket extends AbstractDynamicObject {
 			next = ((Tank)next).getCurr();
 			return true;
 		}
-		
-//		//rende trasparente il primo dal secondo rocket (player TANK) 
-		if(next instanceof Rocket && ((Rocket) next).getTank() == this.getTank()){
-			this.setNext(((Rocket) next).getCurr());
-			//TODO problema rocket
-			return true;
-		}
-		
+			
 		if(firstAnimationNo && next == tank){
 			return true;							
 		}
