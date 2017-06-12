@@ -4,15 +4,13 @@ public class Rocket extends AbstractDynamicObject {
 
 	private AbstractDynamicObject tank;
 	private boolean firstAnimationNo;
-	private boolean rocketForPlayer;	
-	private boolean finishAnimation;  
+	private boolean rocketForPlayer;	 
 
 	public Rocket(int x, int y, World world, Direction direction, AbstractDynamicObject tank) {		
 		super(x, y, world, direction);
 		this.tank = tank;
-		this.curr = tank; //quando viene creato il Rocket il suo curr sarà il TANK	
+		this.curr = tank; //quando viene creato il Rocket il suo curr sarï¿½ il TANK	
 		this.firstAnimationNo = true;
-		this.finishAnimation = false;
 		rocketForPlayer(); //spostato in una funzione
 	}
 	
@@ -27,10 +25,10 @@ public class Rocket extends AbstractDynamicObject {
 	@Override
 	public boolean sameObject() {
 		
-//		if(next instanceof Tank && (Tank)next == getTank()){
-//			next = ((Tank)next).getCurr();
-//			return true;
-//		}
+		if(next instanceof Tank && (Tank)next == getTank()){
+			next = ((Tank)next).getCurr();
+			return true;
+		}
 			
 		if(firstAnimationNo && next == tank){
 			return true;							
@@ -93,13 +91,5 @@ public class Rocket extends AbstractDynamicObject {
 
 	public void setRocketForPlayer(boolean rocketForPlayer) {
 		this.rocketForPlayer = rocketForPlayer;
-	}
-
-	public boolean isFinishAnimation() {
-		return finishAnimation;
-	}
-
-	public void setFinishAnimation(boolean finishAnimation) {
-		this.finishAnimation = finishAnimation;
 	}
 }
