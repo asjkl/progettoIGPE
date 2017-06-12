@@ -617,6 +617,13 @@ public class GameManager {
 		player.setResume(old.getResume()-1);
 		player.setDied(true);
 		player.setSpawnTime((currentTime+4)%60);
+		for(int a=0; a<rocket.size(); a++){
+			if(rocket.get(a).getTank() instanceof PlayerTank){
+				rocket.remove(a);
+				a--;
+			}
+		}
+		
 	}
 
 	private void destroyWall(Rocket rocket) {
