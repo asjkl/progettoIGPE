@@ -2,6 +2,7 @@ package progettoIGPE.davide.giovanni.unical2016;
 
 public class Statistics {
 
+	private int currScore;
 	private int highScore; //record
 	private int totalEnemies; //indica il numero di nemici uccisi
 	
@@ -19,6 +20,8 @@ public class Statistics {
 	private int fastTankOcc;
 	
 	public Statistics() {
+		
+		this.currScore = 0;
 		this.highScore = 0;
 		this.totalEnemies = 0;
 		this.basicTank = 0;
@@ -35,19 +38,19 @@ public class Statistics {
 	public void calculate(AbstractStaticObject A){
 		if(A instanceof BasicTank){
 			basicTank+=100;
-			totalEnemies+=100;
+			currScore += 100;
 			basicTankOcc++;
 		}else if(A instanceof PowerTank){
 			powerTank+=300;
-			totalEnemies+=300;
+			currScore += 300;
 			powerTankOcc++;
 		}else if(A instanceof ArmorTank){
 			armorTank+=400;
-			totalEnemies+=400;
+			currScore += 400;
 			armorTankOcc++;
 		}else if(A instanceof FastTank){
 			fastTank+=200;
-			totalEnemies+=200;
+			currScore += 200;
 			fastTankOcc++;
 		}else if(A instanceof PowerUp){
 			other+=500;
@@ -58,12 +61,10 @@ public class Statistics {
 		return (basicTankOcc + fastTankOcc + armorTankOcc + powerTankOcc);
 	}
 	
-	public int getNewRecord() {
+	public void setNewRecord() {
 		
-		if(totalEnemies > highScore)
-			return highScore = totalEnemies;
-			 
-		return highScore;
+		if(currScore > highScore)
+			highScore = currScore;
 	}
 	
 	public int getBasicTankOcc() {
@@ -96,6 +97,10 @@ public class Statistics {
 
 	public void setFastTankOcc(int fastTankOcc) {
 		this.fastTankOcc = fastTankOcc;
+	}
+	
+	public int getCurrScore() {
+		return currScore;
 	}
 	
 	public int getHighScore() {
