@@ -474,7 +474,6 @@ public class GameManager {
 	}
 
 	public void usePowerUp(PowerUp power) {
-	
 		switch (power.getPowerUp()) {
 		case GRENADE:
 			
