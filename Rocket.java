@@ -17,14 +17,14 @@ public class Rocket extends AbstractDynamicObject {
 	@Override
 	public void update() {
 		super.update();
-		
+
 		if (curr != tank)
 			getWorld().world[getX()][getY()] = this;
 	}
 	
 	@Override
 	public boolean sameObject() {
-		
+
 		if(next instanceof Tank && (Tank)next == getTank()){
 			next = ((Tank)next).getCurr();
 			return true;

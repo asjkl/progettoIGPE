@@ -113,8 +113,8 @@ public class GameManager {
 		public void run(){
 			
 			//STAMPA 
-//			getMatrix().print();
-//			System.out.println();
+			getMatrix().print();
+			System.out.println();
 			
 			if(!pauseOptionDialog){
 
@@ -572,7 +572,7 @@ public class GameManager {
 			}
 			
 			//ROCKET
-			if((rocket.getNext() instanceof Rocket || rocket.getCurr() instanceof Rocket) && rocket.getCurr() != rocket){
+			if(rocket.getNext() instanceof Rocket){
 				destroyRocket((Rocket)rocket.getNext());
 			}
 			destroyRocket(rocket);
@@ -581,8 +581,11 @@ public class GameManager {
 	public void destroyRocket(Rocket r){	
 		
 		countRockets(r);
+		
+	
 		if (r.getCurr() != r.getTank())
 			matrix.world[r.getX()][r.getY()] = r.getCurr();	
+		
 		boom.add(r);
 		rocket.remove(r);	
 	

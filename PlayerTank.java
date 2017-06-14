@@ -24,7 +24,7 @@ public class PlayerTank extends Tank {
 		super(x, y, world, Speed.NORMAL, Speed.FASTROCKET, Direction.STOP, 1);
 		this.resume = 3;
 		this.point = 0;
-		this.level = 3;
+		this.level = 0;
 		this.died = false;
 		this.setReadyToSpawn(true);
 		this.setCountdown(0);
