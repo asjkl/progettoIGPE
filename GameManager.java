@@ -26,7 +26,7 @@ public class GameManager {
 	private Random random;
 	private World matrix;
 	public static Flag flag;
-	public static LinkedList<PlayerTank> playersArray;
+	private LinkedList<PlayerTank> playersArray;
 	private Statistics statistics;
 	private ArrayList<EnemyTank> enemy;
 	private ArrayList<PowerUp> power; 
@@ -710,19 +710,18 @@ public class GameManager {
 	}
 
 	private void chooseEnemy(String typology, int y) {
-		
 		switch (typology) {
 		case "basic":
-			enemy.add(new BasicTank(0, y, matrix, Direction.STOP));
+			enemy.add(new BasicTank(0, y, matrix, Direction.STOP, playersArray.size()));
 			break;
 		case "fast":
-			enemy.add(new FastTank(0, y, matrix, Direction.STOP));
+			enemy.add(new FastTank(0, y, matrix, Direction.STOP, playersArray.size()));
 			break;
 		case "power":
-			enemy.add(new PowerTank(0, y, matrix, Direction.STOP));
+			enemy.add(new PowerTank(0, y, matrix, Direction.STOP, playersArray.size()));
 			break;
 		case "armor":
-			enemy.add(new ArmorTank(0, y, matrix, Direction.STOP));
+			enemy.add(new ArmorTank(0, y, matrix, Direction.STOP, playersArray.size()));
 			break;
 		}
 		if ((enemy.size() % numEnemyDropsPowerUp) == 0) { // ogni quanti nemici assegnare powerUp

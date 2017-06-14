@@ -34,7 +34,7 @@ public class EnemyTank extends Tank {
 	private int randomObject;
 
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health,
-			int point) {
+			int point, int numOfPlayers) {
 		super(x, y, world, speed, speedShot, direction, health);
 
 		this.setPoint(point);
@@ -45,7 +45,7 @@ public class EnemyTank extends Tank {
 		this.stopEnemyGraphic = false;
 		this.setReadyToSpawn(false);
 		this.setUpdateObject(true);
-		this.setRandomObject(new Random().nextInt(GameManager.playersArray.size()));
+		this.setRandomObject(new Random().nextInt(numOfPlayers));
 		this.minimalRoute = new boolean[world.getRow()][world.getColumn()];
 		this.closed = new boolean[world.getRow()][world.getColumn()];
 		this.grid = new Cell[world.getRow()][world.getColumn()];
