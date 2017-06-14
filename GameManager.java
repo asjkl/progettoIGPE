@@ -113,8 +113,8 @@ public class GameManager {
 		public void run(){
 			
 			//STAMPA 
-			getMatrix().print();
-			System.out.println();
+//			getMatrix().print();
+//			System.out.println();
 			
 			if(!pauseOptionDialog){
 
@@ -565,7 +565,7 @@ public class GameManager {
 			
 			//PLAYERTANK
 			if (rocket.getNext() instanceof PlayerTank && rocket.getTank() instanceof EnemyTank) {
-				if ( ((PlayerTank)rocket.getNext()).isProtection() == false && ((PlayerTank)rocket.getNext()).isReadyToSpawn()) {
+				if ( ((PlayerTank)rocket.getNext()).isProtection() == false && !((PlayerTank)rocket.getNext()).isReadyToSpawn()) {
 					switchCurrTank(((PlayerTank)rocket.getNext()));
 					destroyPlayerTank(((PlayerTank)rocket.getNext()));
 				}
@@ -617,7 +617,6 @@ public class GameManager {
 	}
 
 	private void destroyPlayerTank(PlayerTank player) {
-		
 		PlayerTank old = player;
 		boom.add(old);
 		getMatrix().world[old.getX()][old.getY()] = old.getCurr();
@@ -628,6 +627,13 @@ public class GameManager {
 		player.setResume(old.getResume()-1);
 		player.setDied(true);
 		player.setSpawnTime((currentTime+4)%60);
+		
+		for(int a=0; a<playersArray.size(); a++){
+			if(playersArray.get(a).equals(old)){
+				playersArray.set(a, player);
+				break;
+			}
+		}
 	}
 
 	private void destroyWall(Rocket rocket) {
