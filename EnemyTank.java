@@ -185,7 +185,8 @@ public class EnemyTank extends Tank {
 	public void AStar() {
 
 		// add the start location to open list.
-		open.add(grid[startI][startJ]);
+		if(grid[startI][startJ]!=null)
+			open.add(grid[startI][startJ]);
 
 		Cell current;
 

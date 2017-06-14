@@ -18,7 +18,7 @@ public class Rocket extends AbstractDynamicObject {
 	public void update() {
 		super.update();
 
-		if (curr != tank)
+		if (curr != tank && canGo)
 			getWorld().world[getX()][getY()] = this;
 	}
 	
