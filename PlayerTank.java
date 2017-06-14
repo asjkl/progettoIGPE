@@ -1,5 +1,7 @@
 package progettoIGPE.davide.giovanni.unical2016;
 
+import java.util.ArrayList;
+
 public class PlayerTank extends Tank {
 
 	private int level;
@@ -10,6 +12,13 @@ public class PlayerTank extends Tank {
 	private int bornX;
 	private int bornY;
 	private boolean shot;
+	
+	private long keyPressedMillis=0;
+	private long keyPressLength=0;
+	private ArrayList<Integer> keys;
+	private boolean pressed;
+	private boolean releaseKeyRocket;
+	private boolean enter;
 	
 	public PlayerTank(int x, int y, World world) {
 		super(x, y, world, Speed.NORMAL, Speed.FASTROCKET, Direction.STOP, 1);
@@ -26,6 +35,10 @@ public class PlayerTank extends Tank {
 		this.setBornX(x);
 		this.setBornY(y);
 		setShot(false);
+		this.setKeys(new ArrayList<>());
+		this.setPressed(false);
+		this.setReleaseKeyRocket(false);
+		this.setEnter(false);
 	} 
 
 	@Override
@@ -138,5 +151,53 @@ public class PlayerTank extends Tank {
 
 	public void setShot(boolean shot) {
 		this.shot = shot;
+	}
+
+	public long getKeyPressedMillis() {
+		return keyPressedMillis;
+	}
+
+	public void setKeyPressedMillis(long keyPressedMillis) {
+		this.keyPressedMillis = keyPressedMillis;
+	}
+
+	public long getKeyPressLength() {
+		return keyPressLength;
+	}
+
+	public void setKeyPressLength(long keyPressLength) {
+		this.keyPressLength = keyPressLength;
+	}
+
+	public ArrayList<Integer> getKeys() {
+		return keys;
+	}
+
+	public void setKeys(ArrayList<Integer> keys) {
+		this.keys = keys;
+	}
+
+	public boolean isPressed() {
+		return pressed;
+	}
+
+	public void setPressed(boolean pressed) {
+		this.pressed = pressed;
+	}
+
+	public boolean isReleaseKeyRocket() {
+		return releaseKeyRocket;
+	}
+
+	public void setReleaseKeyRocket(boolean releaseKeyRocket) {
+		this.releaseKeyRocket = releaseKeyRocket;
+	}
+
+	public boolean isEnter() {
+		return enter;
+	}
+
+	public void setEnter(boolean enter) {
+		this.enter = enter;
 	}
 }

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.Timer;
@@ -25,7 +26,7 @@ public class GameManager {
 	private Random random;
 	private World matrix;
 	public static Flag flag;
-	private PlayerTank player;
+	private LinkedList<PlayerTank> playersArray;
 	private Statistics statistics;
 	private ArrayList<EnemyTank> enemy;
 	private ArrayList<PowerUp> power; 
@@ -83,6 +84,7 @@ public class GameManager {
 		boom = new ArrayList<>();
 		random = new Random();
 		rocketFin=new ArrayList<>();
+		playersArray=new LinkedList<>();
 		setStatistics(new Statistics());
 		
 		this.setDirectory(directory);
@@ -138,11 +140,13 @@ public class GameManager {
 					}
 				}
 				
-				//EFFETTO SPAWN / PROTEZIONE PLAYER 
-				if(currentTime == player.getSpawnTime())
-						player.setReadyToSpawn(false);
-				if(player.isReadyToSpawn() || player.isProtection()){
-					player.setCountdown((player.getCountdown()+1)%2);
+				for(int a=0; a<playersArray.size(); a++){
+					//EFFETTO SPAWN / PROTEZIONE PLAYER 
+					if(currentTime == playersArray.get(a).getSpawnTime())
+						playersArray.get(a).setReadyToSpawn(false);
+					if(playersArray.get(a).isReadyToSpawn() || playersArray.get(a).isProtection()){
+						playersArray.get(a).setCountdown((playersArray.get(a).getCountdown()+1)%2);
+					}
 				}
 			}	 
 		}
@@ -194,9 +198,13 @@ public class GameManager {
 						getMatrix().world[i][j] = new Water(i, j, getMatrix());
 						getMatrix().objectStatic[i][j] =new Water(i, j, getMatrix());
 						break;
-					case ("****"):
-						player = new PlayerTank(i, j, getMatrix());
-						getMatrix().world[i][j] = player;
+					case ("P1"):
+						playersArray.addFirst(new PlayerTank(i, j, getMatrix()));
+						getMatrix().world[i][j] = playersArray.get(playersArray.size()-1);
+						break;
+					case ("P2"):
+						playersArray.addLast(new PlayerTank(i, j, getMatrix()));
+						getMatrix().world[i][j] = playersArray.get(playersArray.size()-1);
 						break;
 					case ("FLAG"):
 						flag = new Flag(i, j, matrix);
@@ -451,7 +459,7 @@ public class GameManager {
 		statistics.calculate(p);
 		
 		if(p.getPowerUp() == Power.HELMET) {
-			player.setProtection(false);
+			((Tank)p.getTank()).setProtection(false);
 		}
 		else if(p.getPowerUp() == Power.SHOVEL) {
 			buildWall("recover");
@@ -475,17 +483,17 @@ public class GameManager {
 					destroyEnemyTank(enemy.get(i--));
 			break;
 		case HELMET:
-			player.setProtection(true);
+			((Tank)power.getTank()).setProtection(true);
 			break;
 		case SHOVEL:
 				buildWall("steel");
 			break;
 		case STAR:
-			if(player.getLevel()<3)
-				player.setLevel(player.getLevel() + 1);
+			if(((PlayerTank)power.getTank()).getLevel()<3)
+				((PlayerTank)power.getTank()).setLevel(((PlayerTank)power.getTank()).getLevel()+1);
 			break;
 		case TANK:
-			player.setResume(player.getResume() + 1);
+			((PlayerTank)power.getTank()).setResume(((PlayerTank)power.getTank()).getResume()+1);
 			break;
 		case TIMER: //STOPPO SOLO NEMICI PRESENTI SULLA MAPPA IN QUEL MOMENTO
 			for(int i=0;i<enemy.size();i++){
@@ -557,9 +565,9 @@ public class GameManager {
 			
 			//PLAYERTANK
 			if (rocket.getNext() instanceof PlayerTank && rocket.getTank() instanceof EnemyTank) {
-				if (player.isProtection() == false && !player.isReadyToSpawn()) {
-					switchCurrTank(player);
-					destroyPlayerTank();
+				if ( ((PlayerTank)rocket.getNext()).isProtection() == false && ((PlayerTank)rocket.getNext()).isReadyToSpawn()) {
+					switchCurrTank(((PlayerTank)rocket.getNext()));
+					destroyPlayerTank(((PlayerTank)rocket.getNext()));
 				}
 			}
 			
@@ -581,8 +589,8 @@ public class GameManager {
 	}
 
 	public void countRockets(Rocket r) {
-		if (!(r.getTank() instanceof EnemyTank) && player.getContRocket() > 0)
-			player.setContRocket(player.getContRocket() - 1);
+		if (!(r.getTank() instanceof EnemyTank) && r.getTank().getContRocket() > 0)
+			r.getTank().setContRocket(r.getTank().getContRocket() - 1);
 		else {
 			for (int b = 0; b < enemy.size(); b++) {
 				if (enemy.get(b) == r.getTank()) {
@@ -599,13 +607,13 @@ public class GameManager {
 
 	private void damageWall(Rocket rocket) {
 
-		if (rocket.getTank() instanceof PlayerTank && player.getLevel() == 3)
+		if (rocket.getTank() instanceof PlayerTank && ((PlayerTank)rocket.getTank()).getLevel() == 3)
 			((Wall) rocket.getNext()).setHealth(((Wall) rocket.getNext()).getHealth() - 2);
 		else if (!(rocket.getNext() instanceof SteelWall)) // e non � SteelWall
 			((Wall) rocket.getNext()).setHealth(((Wall) rocket.getNext()).getHealth() - 1);
 	}
 
-	private void destroyPlayerTank() {
+	private void destroyPlayerTank(PlayerTank player) {
 		
 		PlayerTank old = player;
 		boom.add(old);
@@ -656,8 +664,8 @@ public class GameManager {
 
 	public void createRocketTank(Direction tmp, AbstractDynamicObject tank) {
 
-		if ((tank instanceof PlayerTank && player.getLevel() > 0 && player.getContRocket() < 2)
-				|| (tank instanceof PlayerTank && player.getLevel() == 0 && player.getContRocket() == 0)
+		if ((tank instanceof PlayerTank && ((PlayerTank)tank).getLevel() > 0 && tank.getContRocket() < 2)
+				|| (tank instanceof PlayerTank && ((PlayerTank)tank).getLevel() == 0 && tank.getContRocket() == 0)
 				|| (tank instanceof EnemyTank && tank.getContRocket() == 0)) {
 
 			if (tmp == Direction.STOP && tank instanceof PlayerTank) // serve quando nasce playerTank, essendo STOP spara verso l alto
@@ -775,15 +783,7 @@ public class GameManager {
 	public void setMatrix(World matrix) {
 		this.matrix = matrix;
 	}
-
-	public PlayerTank getPlayer() {
-		return player;
-	}
-
-	public void setPlayer(PlayerTank player) {
-		this.player = player;
-	}
-
+	
 	public ArrayList<EnemyTank> getEnemy() {
 		return enemy;
 	}
@@ -906,6 +906,14 @@ public class GameManager {
 
 	public void setExplosion(boolean explosion) {
 		this.explosion = explosion;
+	}
+	
+	public LinkedList<PlayerTank> getPlayersArray() {
+		return playersArray;
+	}
+
+	public void setPlayersArray(LinkedList<PlayerTank> playersArray) {
+		this.playersArray = playersArray;
 	}
 
 }
