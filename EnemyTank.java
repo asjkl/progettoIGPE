@@ -31,6 +31,7 @@ public class EnemyTank extends Tank {
 	private boolean hasApath = false; // IL NEMICO CON LA DIFFICOLTA' MASSIMA:
 										// CI DICE SE HA TROVATO UN PERCORSO O
 										// MENO
+	private int randomObject;
 
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health,
 			int point) {
@@ -44,7 +45,7 @@ public class EnemyTank extends Tank {
 		this.stopEnemyGraphic = false;
 		this.setReadyToSpawn(false);
 		this.setUpdateObject(true);
-
+		this.setRandomObject(new Random().nextInt(GameManager.playersArray.size()));
 		this.minimalRoute = new boolean[world.getRow()][world.getColumn()];
 		this.closed = new boolean[world.getRow()][world.getColumn()];
 		this.grid = new Cell[world.getRow()][world.getColumn()];
@@ -266,7 +267,7 @@ public class EnemyTank extends Tank {
 		}
 	}
 
-	public void difficult() {
+	public void difficult(int objectX, int objectY) {
 
 		blocchi.clear();
 		for (int a = 0; a < world.getRow(); a++) {
@@ -288,7 +289,7 @@ public class EnemyTank extends Tank {
 			}
 		}
 
-		searchRoute(world.getRow(), world.getColumn(), getX(), getY(), GameManager.flag.getX(), GameManager.flag.getY(),
+		searchRoute(world.getRow(), world.getColumn(), getX(), getY(), objectX, objectY,
 				blocchi);
 
 		int currX = getX();
@@ -428,6 +429,14 @@ public class EnemyTank extends Tank {
 
 	public void setHasApath(boolean hasApath) {
 		this.hasApath = hasApath;
+	}
+
+	public int getRandomObject() {
+		return randomObject;
+	}
+
+	public void setRandomObject(int randomObject) {
+		this.randomObject = randomObject;
 	}
 
 }

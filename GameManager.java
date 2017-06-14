@@ -26,7 +26,7 @@ public class GameManager {
 	private Random random;
 	private World matrix;
 	public static Flag flag;
-	private LinkedList<PlayerTank> playersArray;
+	public static LinkedList<PlayerTank> playersArray;
 	private Statistics statistics;
 	private ArrayList<EnemyTank> enemy;
 	private ArrayList<PowerUp> power; 
