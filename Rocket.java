@@ -17,7 +17,7 @@ public class Rocket extends AbstractDynamicObject {
 	@Override
 	public void update() {
 		super.update();
-
+				
 		if (curr != tank && canGo)
 			getWorld().world[getX()][getY()] = this;
 	}
@@ -40,6 +40,18 @@ public class Rocket extends AbstractDynamicObject {
 			return true;
 		}
 		return false;
+	}
+	
+	public void updateRect() {
+		if (this.getDirection() == Direction.UP) {
+			rect.setLocation((int) (getxGraphics() + (sizePixel - 9)),  (int) getyGraphics() + ((sizePixel / 2) - 4));
+		} else if (getDirection() == Direction.DOWN) {
+			rect.setLocation((int) getxGraphics(), (int) getyGraphics() + ((sizePixel / 2) - 4));
+		} else if (getDirection() == Direction.LEFT) {
+			rect.setLocation((int) (getxGraphics() + ((sizePixel / 2) - 4)), (int) getyGraphics() + (sizePixel- 9));
+		} else if (getDirection() == Direction.RIGHT) {
+			rect.setLocation((int) (getxGraphics() + ((sizePixel / 2) - 4)), (int) getyGraphics());
+		}	
 	}
 	
 	void rocketForPlayer(){

@@ -1,12 +1,16 @@
 package progettoIGPE.davide.giovanni.unical2016;
 
+import java.awt.Rectangle;
+
 public abstract class AbstractStaticObject implements StaticObject {
 	private int x;
 	private int y;
 	private double xGraphics;
 	private double yGraphics;
-	private int sizePixel;
+	public int sizePixel;
 	protected World world;
+	
+	public Rectangle rect;
 	
 	public AbstractStaticObject(int x, int y, World world) {
 		this.x = x;
@@ -15,6 +19,8 @@ public abstract class AbstractStaticObject implements StaticObject {
 		setxGraphics(x*sizePixel);
 		setyGraphics(y*sizePixel);
 		this.world = world;
+		
+		this.rect=new Rectangle(x*sizePixel, y*sizePixel, sizePixel, sizePixel);
 	}
 
 	@Override

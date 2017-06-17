@@ -438,5 +438,4 @@ public class EnemyTank extends Tank {
 	public void setRandomObject(int randomObject) {
 		this.randomObject = randomObject;
 	}
-
 }

@@ -1,5 +1,7 @@
 package progettoIGPE.davide.giovanni.unical2016;
 
+import java.awt.Rectangle;
+
 public abstract class AbstractDynamicObject extends AbstractStaticObject implements DynamicObject {
 	
 	private Speed speed;
@@ -10,13 +12,14 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	protected AbstractStaticObject curr;
 	protected AbstractStaticObject next;
 	private int contRocket;
-	public boolean canGo;
+	public boolean canGo=true;
 	private double contP; //conta pixel
 	private boolean updateObject; //switcha dalla logica alla grafica
 	private int rotateDegrees; // rotazione oggetto
 	private boolean firstTime; // booleana per entrare una sola volta
 	private int inc; // serve per gli effetti di Tank (PowerUp ha il suo)
 	private boolean onBorder;
+	
 
 	public AbstractDynamicObject(int x, int y, World mondo, Speed speed, Speed speedShot, Direction direction,int health) {
 		super(x, y, mondo);
@@ -31,6 +34,8 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		this.firstTime=true;
 		this.inc=0;
 		FPS();
+		
+		rect=new Rectangle((int)getxGraphics(), (int)getyGraphics(), sizePixel, sizePixel);
 	}
 
 	//COSTRUTTORE SOLO PER IL ROCKET
@@ -38,6 +43,24 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		super(x, y, mondo);
 		this.direction = direction;
 		FPS();	
+		
+		createRectForRocket();
+	}
+
+	private void createRectForRocket() {
+		if (this.getDirection() == Direction.UP) {
+			rect = new Rectangle((int) (getxGraphics() + (sizePixel - 9)),
+					(int) getyGraphics() + ((sizePixel / 2) - 4), 9, 9);
+		} else if (getDirection() == Direction.DOWN) {
+			rect = new Rectangle((int) getxGraphics(), (int) getyGraphics() + ((sizePixel / 2) - 4),
+					9, 9);
+		} else if (getDirection() == Direction.LEFT) {
+			rect = new Rectangle((int) (getxGraphics() + ((sizePixel / 2) - 4)),
+					(int) getyGraphics() + (sizePixel- 9), 9, 9);
+		} else if (getDirection() == Direction.RIGHT) {
+			rect = new Rectangle((int) (getxGraphics() + ((sizePixel / 2) - 4)),
+					(int) getyGraphics(), 9, 9);
+		}
 	}
 
 	public void FPS(){

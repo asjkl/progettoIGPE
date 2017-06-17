@@ -24,6 +24,10 @@ public abstract class Tank extends AbstractDynamicObject{
 	public void update(){
 		super.update();
 	}
+	
+	public void updateRect() {
+		rect.setLocation((int)getxGraphics(),(int)getyGraphics());
+	}
 
 	public boolean isReadyToSpawn() {
 		return readyToSpawn;
