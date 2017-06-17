@@ -546,12 +546,12 @@ public class GameManager {
 		// BORDO
         if (object == null) {
             up = 0;
-            down = (getMatrix().getRow() * tile)+(9);
-            right = (getMatrix().getColumn() * tile)+(9);
+            down = (getMatrix().getRow() * tile);
+            right = (getMatrix().getColumn() * tile);
             left = 0;
             if (rocket.rect.getX() < up) {
                 return true;
-            }else if( (rocket.rect.getX() + 9) >down){
+            }else if( (rocket.rect.getX() + 9) > down){
                 return true;
             }else if(rocket.rect.getY() < left){
                 return true;
@@ -599,7 +599,7 @@ public class GameManager {
 		
 		//CONTORLLO SE IL ROCKET HA INTERESECATO UN ENEMY  OK (V)
 		for(int a=0; a<getEnemy().size(); a++){
-			if(getEnemy().get(a).rect.intersects(rocket.rect) && rocket.getTank()!=getEnemy().get(a)){
+			if(getEnemy().get(a).isAppearsInTheMap() && getEnemy().get(a).rect.intersects(rocket.rect) && rocket.getTank()!=getEnemy().get(a)){
 				if(rocket.getTank() instanceof PlayerTank){
 					if(getEnemy().get(a).isProtection()==false ){
 						damageEnemyTank(getEnemy().get(a));

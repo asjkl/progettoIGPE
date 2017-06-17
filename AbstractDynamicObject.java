@@ -12,7 +12,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	protected AbstractStaticObject curr;
 	protected AbstractStaticObject next;
 	private int contRocket;
-	public boolean canGo=true;
+	public boolean canGo;
 	private double contP; //conta pixel
 	private boolean updateObject; //switcha dalla logica alla grafica
 	private int rotateDegrees; // rotazione oggetto
