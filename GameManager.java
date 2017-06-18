@@ -297,20 +297,9 @@ public class GameManager {
 					} else {
 
 						if (power.get(a).getBefore() instanceof BrickWall)
-							((BrickWall) power.get(a).getBefore()).setBefore(null); // se
-																					// PowerUp
-																					// scaduto
-																					// deve
-																					// essere
-																					// cancellato
+							((BrickWall) power.get(a).getBefore()).setBefore(null);
 						else if (power.get(a).getBefore() instanceof SteelWall)
-							((SteelWall) power.get(a).getBefore()).setBefore(null); // se
-																					// PowerUp
-																					// scaduto
-																					// deve
-																					// essere
-																					// cancellato
-						else
+							((SteelWall) power.get(a).getBefore()).setBefore(null);
 							getMatrix().world[power.get(a).getX()][power.get(a).getY()] = power.get(a).getBefore();
 					}
 					power.remove(a);
@@ -324,17 +313,16 @@ public class GameManager {
 
 		for (int a = 0; a < power.size(); a++) {
 			if (power.get(a).isActivate()) {
-				// System.out.println(power.get(a) + "---------- attivo!");
+				 System.out.println(power.get(a) + "---------- attivo!");
 
 				long tmp = (power.get(a).getTimer() + power.get(a).getDuration()) % 60;
 
-				// System.out.println("CURRENT: "+ currentTime);
-				// System.out.println("getTimer: "+power.get(a).getTimer());
-				// System.out.println("tmpTimeOut: " + tmp);
+				 System.out.println("CURRENT: "+ currentTime);
+				 System.out.println("getTimer: "+power.get(a).getTimer());
+				 System.out.println("tmpTimeOut: " + tmp);
 
 				if (tmp == currentTime) {
-					// System.out.println(power.get(a) + "----------
-					// disattivo!");
+					 System.out.println(power.get(a) + "---------- disattivo!");
 					managePowerUp(power.get(a));
 					power.remove(a);
 					a--;
@@ -712,8 +700,7 @@ public class GameManager {
 
 	private void destroyEnemyTank(EnemyTank enemyT) {
 
-		statistics.calculate(enemyT); // gli passo l'enemy ucciso e verr�
-										// gestito tutto nella classe statistics
+		statistics.calculate(enemyT); 
 
 		if (numberOfEnemyOnMap > 0)
 			numberOfEnemyOnMap--;
@@ -830,8 +817,7 @@ public class GameManager {
 		}
 	}
 
-	// -----------------------------SET &
-	// GET-----------------------------------------------
+	// -----------------------------SET & GET--------------------------------------
 
 	public int getWidth() {
 		return width;

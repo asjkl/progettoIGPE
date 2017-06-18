@@ -75,8 +75,6 @@ public class EnemyTank extends Tank {
 				&& !(next instanceof Flag)) {
 
 			if (next instanceof PowerUp && ((PowerUp) next).getPowerUp() == Power.HELMET) {
-
-				setProtection(true);
 				if (!(((PowerUp) next).getBefore() instanceof Tree) && !(((PowerUp) next).getBefore() instanceof Ice)
 						&& !(((PowerUp) next).getBefore() instanceof Water)) {
 					curr = null;
@@ -91,8 +89,7 @@ public class EnemyTank extends Tank {
 		}
 		return false;
 	}
-	////////////////////////////// EASY
-	////////////////////////////// ////////////////////////////////////////////////////////////////////////
+	////////////////////////////// EASY//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public void easy() {
 
