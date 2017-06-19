@@ -92,11 +92,11 @@ public class GameManager {
 
 		importMap(filename, directory);
 
-		if(playersArray.size() == 1)
+		if (playersArray.size() == 1)
 			numberOfEnemyToSpawn = 4;
-			else
-			numberOfEnemyToSpawn = 6;	
-		
+		else
+			numberOfEnemyToSpawn = 6;
+
 		timer = new Timer();
 		task = new MyTask();
 		timer.schedule(task, 85, 85);
@@ -204,11 +204,11 @@ public class GameManager {
 						getMatrix().objectStatic[i][j] = new Water(i, j, getMatrix());
 						break;
 					case ("P1"):
-						playersArray.addFirst(new PlayerTank(i, j, getMatrix()));
+						playersArray.addFirst(new PlayerTank(i, j, getMatrix(), "P1"));
 						getMatrix().world[i][j] = playersArray.get(playersArray.size() - 1);
 						break;
 					case ("P2"):
-						playersArray.addLast(new PlayerTank(i, j, getMatrix()));
+						playersArray.addLast(new PlayerTank(i, j, getMatrix(), "P2"));
 						getMatrix().world[i][j] = playersArray.get(playersArray.size() - 1);
 						break;
 					case ("FLAG"):
@@ -304,7 +304,7 @@ public class GameManager {
 							((BrickWall) power.get(a).getBefore()).setBefore(null);
 						else if (power.get(a).getBefore() instanceof SteelWall)
 							((SteelWall) power.get(a).getBefore()).setBefore(null);
-							getMatrix().world[power.get(a).getX()][power.get(a).getY()] = power.get(a).getBefore();
+						getMatrix().world[power.get(a).getX()][power.get(a).getY()] = power.get(a).getBefore();
 					}
 					power.remove(a);
 					a--;
@@ -317,16 +317,10 @@ public class GameManager {
 
 		for (int a = 0; a < power.size(); a++) {
 			if (power.get(a).isActivate()) {
-//				 System.out.println(power.get(a) + "---------- attivo!");
 
-				long tmp = (power.get(a).getTimer() + power.get(a).getDuration()) % 60;
+				power.get(a).setTmpDuration((power.get(a).getTimer() + power.get(a).getDuration()) % 60);
 
-//				 System.out.println("CURRENT: "+ currentTime);
-//				 System.out.println("getTimer: "+power.get(a).getTimer());
-//				 System.out.println("tmpTimeOut: " + tmp);
-
-				if (tmp == currentTime) {
-//					 System.out.println(power.get(a) + "---------- disattivo!");
+				if (power.get(a).getTmpDuration() == currentTime) {
 					managePowerUp(power.get(a));
 					power.remove(a);
 					a--;
@@ -381,7 +375,6 @@ public class GameManager {
 			extendAddPowerUp(tmp);
 			break;
 		case 2:
-
 			tmp = new PowerUp(getX(), getY(), getMatrix(), Power.SHOVEL);
 			extendAddPowerUp(tmp);
 			break;
@@ -474,9 +467,10 @@ public class GameManager {
 			buildWall("recover");
 		} else if (p.getPowerUp() == Power.TIMER) {
 			for (int i = 0; i < enemy.size(); i++) {
-				if (enemy.get(i).isStopEnemy())
+				if (enemy.get(i).isStopEnemy()){
 					enemy.get(i).setStopEnemy(false);
-				enemy.get(i).setStopEnemyGraphic(false);
+					enemy.get(i).setStopEnemyGraphic(false);
+				}
 			}
 		}
 	}
@@ -534,6 +528,18 @@ public class GameManager {
 			recoveryWall.clear();
 	}
 
+	public boolean isPresent(Tank t, PowerUp p){
+		for(int i=0;i<power.size();i++)
+			if(power.get(i).getTank() == t && power.get(i).getPowerUp() == p.getPowerUp())
+				return true;
+		return false;
+	}
+	
+	public void sumPowerUp( PowerUp p){
+		for(int i=0;i<power.size();i++)
+			if(power.get(i).getPowerUp() == p.getPowerUp())
+				power.get(i).setTmpDuration((power.get(i).getTmpDuration() + power.get(i).getDuration()) % 60);
+	}
 	// ---------------------------------------ROCKET----------------------------------------
 
 	public void updateRocket(Rocket rocket) {
@@ -567,61 +573,64 @@ public class GameManager {
 			}
 		}
 
-		// FLAG
-		if (object instanceof Flag) {
-			if (object.rect.intersects(rocket.rect))
-				flag.setHit(true);
-		}
-
-		// WALL
-		if ((object instanceof Wall) && (object instanceof BrickWall || object instanceof SteelWall)) {
-			if (object.rect.intersects(rocket.rect)) {
-				damageWall(rocket);
-				if (((Wall) object).getHealth() <= 0)
-					destroyWall(rocket);
-				return true;
+		if (!rocket.rect.contains(rocket.getTank().rect)) {
+			// FLAG
+			if (object instanceof Flag) {
+				if (object.rect.intersects(rocket.rect))
+					flag.setHit(true);
 			}
-		}
 
-		// CONTROLLO SE IL ROCKET HA INTERSECATO QUALCHE ROCKET
-		for (int b = 0; b < getRocket().size(); b++) {
-			if (rocket != getRocket().get(b) && rocket.rect.intersects(getRocket().get(b).rect)
-					&& rocket.getTank() != getRocket().get(b).getTank()) {
-				destroyRocket(getRocket().get(b));
-				return true;
-			}
-		}
-
-		// CONTROLLO SE IL ROCKET HA INTERSECATO UN PLAYER TANK
-		for (int a = 0; a < getPlayersArray().size(); a++) {
-			if (!getPlayersArray().get(a).isDied() && rocket.rect.intersects(getPlayersArray().get(a).rect) && rocket.getTank() != getPlayersArray().get(a)) {
-				if (rocket.getTank() instanceof EnemyTank) {
-					if (!getPlayersArray().get(a).isProtection() && !getPlayersArray().get(a).isReadyToSpawn()) {
-						switchCurrTank(getPlayersArray().get(a));
-						destroyPlayerTank(getPlayersArray().get(a));
-					}
+			// WALL
+			if ((object instanceof Wall) && (object instanceof BrickWall || object instanceof SteelWall)) {
+				if (object.rect.intersects(rocket.rect)) {
+					damageWall(rocket);
+					if (((Wall) object).getHealth() <= 0)
+						destroyWall(rocket);
+					return true;
 				}
-				return true;
 			}
-		}
 
-		// CONTORLLO SE IL ROCKET HA INTERESECATO UN ENEMY OK (V)
-		for (int a = 0; a < getEnemy().size(); a++) {
-			if (getEnemy().get(a).isAppearsInTheMap() && getEnemy().get(a).rect.intersects(rocket.rect)
-					&& rocket.getTank() != getEnemy().get(a)) {
-				if (rocket.getTank() instanceof PlayerTank) {
-					if (getEnemy().get(a).isProtection() == false) {
-						damageEnemyTank(getEnemy().get(a));
-					} else {
-						getEnemy().get(a).setProtection(true);
-					}
-
-					if (getEnemy().get(a).getHealth() == 0) {
-						switchCurrTank(getEnemy().get(a));
-						destroyEnemyTank(getEnemy().get(a));
-					}
+			// CONTROLLO SE IL ROCKET HA INTERSECATO QUALCHE ROCKET
+			for (int b = 0; b < getRocket().size(); b++) {
+				if (rocket != getRocket().get(b) && rocket.rect.intersects(getRocket().get(b).rect)
+						&& rocket.getTank() != getRocket().get(b).getTank()) {
+					destroyRocket(getRocket().get(b));
+					return true;
 				}
-				return true;
+			}
+
+			// CONTROLLO SE IL ROCKET HA INTERSECATO UN PLAYER TANK
+			for (int a = 0; a < getPlayersArray().size(); a++) {
+				if (!getPlayersArray().get(a).isDied() && rocket.rect.intersects(getPlayersArray().get(a).rect)
+						&& rocket.getTank() != getPlayersArray().get(a)) {
+					if (rocket.getTank() instanceof EnemyTank) {
+						if (!getPlayersArray().get(a).isProtection() && !getPlayersArray().get(a).isReadyToSpawn()) {
+							switchCurrTank(getPlayersArray().get(a));
+							destroyPlayerTank(getPlayersArray().get(a));
+						}
+					}
+					return true;
+				}
+			}
+
+			// CONTORLLO SE IL ROCKET HA INTERESECATO UN ENEMY OK (V)
+			for (int a = 0; a < getEnemy().size(); a++) {
+				if (getEnemy().get(a).isAppearsInTheMap() && getEnemy().get(a).rect.intersects(rocket.rect)
+						&& rocket.getTank() != getEnemy().get(a)) {
+					if (rocket.getTank() instanceof PlayerTank) {
+						if (getEnemy().get(a).isProtection() == false) {
+							damageEnemyTank(getEnemy().get(a));
+						} else {
+							getEnemy().get(a).setProtection(true);
+						}
+
+						if (getEnemy().get(a).getHealth() == 0) {
+							switchCurrTank(getEnemy().get(a));
+							destroyEnemyTank(getEnemy().get(a));
+						}
+					}
+					return true;
+				}
 			}
 		}
 		return false;
@@ -670,12 +679,12 @@ public class GameManager {
 		boom.add(old);
 		getMatrix().world[old.getX()][old.getY()] = old.getCurr();
 		explosion = true;
-		player = new PlayerTank(player.getBornX(), player.getBornY(), matrix);
+		player = new PlayerTank(player.getBornX(), player.getBornY(), matrix, old.toString());
 		matrix.world[player.getX()][player.getY()] = player;
 		player.setOldDirection(false);
 		player.setResume(old.getResume() - 1);
-		if(player.getResume()<0){
-			matrix.world[player.getX()][player.getY()]=null;
+		if (player.getResume() < 0) {
+			matrix.world[player.getX()][player.getY()] = null;
 		}
 		player.setDied(true);
 		player.setSpawnTime((currentTime + 4) % 60);
@@ -686,7 +695,7 @@ public class GameManager {
 				break;
 			}
 		}
-		
+
 	}
 
 	private void destroyWall(Rocket rocket) {
@@ -704,7 +713,7 @@ public class GameManager {
 
 	private void destroyEnemyTank(EnemyTank enemyT) {
 
-		statistics.calculate(enemyT); 
+		statistics.calculate(enemyT);
 
 		if (numberOfEnemyOnMap > 0)
 			numberOfEnemyOnMap--;
@@ -821,7 +830,7 @@ public class GameManager {
 		}
 	}
 
-	// -----------------------------SET & GET--------------------------------------
+	// -----------------------------SET&GET--------------------------------------
 
 	public int getWidth() {
 		return width;

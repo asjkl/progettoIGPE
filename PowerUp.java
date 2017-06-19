@@ -15,6 +15,7 @@ public class PowerUp extends AbstractStaticObject {
 	private long dropTime; //salva il tempo quando cade
 	private boolean blink;
 	private int inc; // serve per gli effetti di powerUp
+	private long tmpDuration;			//	vecchio tmp
 
 	public PowerUp(int x, int y, World world, Power powerUp) {
 		super(x, y, world);
@@ -159,6 +160,14 @@ public class PowerUp extends AbstractStaticObject {
 
 	public void setBeforeWater(AbstractStaticObject beforeWater) {
 		this.beforeWater = beforeWater;
+	}
+
+	public long getTmpDuration() {
+		return tmpDuration;
+	}
+
+	public void setTmpDuration(long tmpDuration) {
+		this.tmpDuration = tmpDuration;
 	}
 
 }

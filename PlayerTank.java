@@ -6,6 +6,7 @@ public class PlayerTank extends Tank {
 
 	private int level;
 	private int resume;
+	private String id; //id player
 	private int point;
 	private boolean died;
 	private boolean first;
@@ -20,7 +21,7 @@ public class PlayerTank extends Tank {
 	private boolean releaseKeyRocket;
 	private boolean enter;
 	
-	public PlayerTank(int x, int y, World world) {
+	public PlayerTank(int x, int y, World world, String id) {
 		super(x, y, world, Speed.NORMAL, Speed.FASTROCKET, Direction.STOP, 1);
 		this.resume = 3;
 		this.point = 0;
@@ -39,6 +40,7 @@ public class PlayerTank extends Tank {
 		this.setPressed(false);
 		this.setReleaseKeyRocket(false);
 		this.setEnter(false);
+		this.id=id;
 	} 
 
 	@Override
@@ -110,7 +112,7 @@ public class PlayerTank extends Tank {
 
 	@Override
 	public String toString() {
-		return " ** ";
+		return id;
 	}
 
 	public boolean isDied() {
