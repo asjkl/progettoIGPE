@@ -64,7 +64,6 @@ public class GameManager {
 		currentTime = 0;
 		pauseOptionDialog = false;
 		paused = false;
-		numberOfEnemyToSpawn = 3;
 		numberOfEnemyOnMap = 0;
 		numberOfEnemyReadyToSpwan = 0;
 		durationPowerUp = 20;
@@ -93,6 +92,11 @@ public class GameManager {
 
 		importMap(filename, directory);
 
+		if(playersArray.size() == 1)
+			numberOfEnemyToSpawn = 4;
+			else
+			numberOfEnemyToSpawn = 6;	
+		
 		timer = new Timer();
 		task = new MyTask();
 		timer.schedule(task, 85, 85);
@@ -313,16 +317,16 @@ public class GameManager {
 
 		for (int a = 0; a < power.size(); a++) {
 			if (power.get(a).isActivate()) {
-				 System.out.println(power.get(a) + "---------- attivo!");
+//				 System.out.println(power.get(a) + "---------- attivo!");
 
 				long tmp = (power.get(a).getTimer() + power.get(a).getDuration()) % 60;
 
-				 System.out.println("CURRENT: "+ currentTime);
-				 System.out.println("getTimer: "+power.get(a).getTimer());
-				 System.out.println("tmpTimeOut: " + tmp);
+//				 System.out.println("CURRENT: "+ currentTime);
+//				 System.out.println("getTimer: "+power.get(a).getTimer());
+//				 System.out.println("tmpTimeOut: " + tmp);
 
 				if (tmp == currentTime) {
-					 System.out.println(power.get(a) + "---------- disattivo!");
+//					 System.out.println(power.get(a) + "---------- disattivo!");
 					managePowerUp(power.get(a));
 					power.remove(a);
 					a--;
