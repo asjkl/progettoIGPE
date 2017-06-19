@@ -537,9 +537,11 @@ public class GameManager {
 	
 	public void sumPowerUp( PowerUp p){
 		for(int i=0;i<power.size();i++)
-			if(power.get(i).getPowerUp() == p.getPowerUp())
-				power.get(i).setTmpDuration((power.get(i).getTmpDuration() + power.get(i).getDuration()) % 60);
+			if(power.get(i).getPowerUp() == p.getPowerUp()){
+				power.get(i).setTimer((power.get(i).getTimer() + p.getDuration()) % 60);
+			}
 	}
+	
 	// ---------------------------------------ROCKET----------------------------------------
 
 	public void updateRocket(Rocket rocket) {
@@ -723,7 +725,8 @@ public class GameManager {
 
 		// GENERA POWERUP
 		if (enemyT.isPowerUpOn())
-			addPowerUp(new Random().nextInt(6));
+//			addPowerUp(new Random().nextInt(6));
+			addPowerUp(2);
 
 		// RIMETTI CURR
 		matrix.world[enemyT.getX()][enemyT.getY()] = enemyT.getCurr();
