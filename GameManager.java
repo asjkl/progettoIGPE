@@ -539,9 +539,9 @@ public class GameManager {
 		return false;
 	}
 	
-	public void sumPowerUp( PowerUp p){
+	public void sumPowerUp(Tank t, PowerUp p){
 		for(int i=0;i<power.size();i++)
-			if(power.get(i).getPowerUp().equals(p.getPowerUp())){
+			if(power.get(i).getPowerUp().equals(p.getPowerUp()) && power.get(i).getTank() == t){
 				power.get(i).setTime(power.get(i).getTime() + power.get(i).getDuration());
 			}
 	}
@@ -607,7 +607,7 @@ public class GameManager {
 
 			// CONTROLLO SE IL ROCKET HA INTERSECATO UN PLAYER TANK
 			for (int a = 0; a < getPlayersArray().size(); a++) {
-				if (!getPlayersArray().get(a).isDied() && rocket.rect.intersects(getPlayersArray().get(a).rect)
+				if (rocket.rect.intersects(getPlayersArray().get(a).rect)
 						&& rocket.getTank() != getPlayersArray().get(a)) {
 					if (rocket.getTank() instanceof EnemyTank) {
 						if (!getPlayersArray().get(a).isProtection() && !getPlayersArray().get(a).isReadyToSpawn()) {
@@ -696,8 +696,8 @@ public class GameManager {
 		player.setResume(old.getResume() - 1);
 		if (player.getResume() < 0) {
 			matrix.world[player.getX()][player.getY()] = null;
+			player.setDied(true);
 		}
-		player.setDied(true);
 		player.setSpawnTime((currentTime + 4) % 60);
 
 		for (int a = 0; a < playersArray.size(); a++) {
