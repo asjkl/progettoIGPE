@@ -20,6 +20,7 @@ public class PlayerTank extends Tank {
 	private boolean pressed;
 	private boolean releaseKeyRocket;
 	private boolean enter;
+	private Statistics statistics;
 	
 	public PlayerTank(int x, int y, World world, String id) {
 		super(x, y, world, Speed.NORMAL, Speed.FASTROCKET, Direction.STOP, 1);
@@ -27,6 +28,7 @@ public class PlayerTank extends Tank {
 		this.point = 0;
 		this.level = 1;
 		this.died = false;
+		this.setStatistics(new Statistics());
 		this.setReadyToSpawn(true);
 		this.setCountdown(0);
 		this.setInc(0);
@@ -201,5 +203,13 @@ public class PlayerTank extends Tank {
 
 	public void setEnter(boolean enter) {
 		this.enter = enter;
+	}
+
+	public Statistics getStatistics() {
+		return statistics;
+	}
+
+	public void setStatistics(Statistics statistics) {
+		this.statistics = statistics;
 	}
 }

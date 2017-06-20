@@ -10,7 +10,6 @@ import java.util.StringTokenizer;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JTextField;
-import javax.swing.plaf.synth.SynthSeparatorUI;
 
 public class GameManager {
 
@@ -28,7 +27,7 @@ public class GameManager {
 	private World matrix;
 	public static Flag flag;
 	private LinkedList<PlayerTank> playersArray;
-	private Statistics statistics;
+	//private Statistics statistics;
 	private ArrayList<EnemyTank> enemy;
 	private ArrayList<PowerUp> power;
 	private ArrayList<Rocket> rocket;
@@ -59,6 +58,8 @@ public class GameManager {
 	private JTextField filename;
 	private JTextField directory;
 	private boolean explosion;
+	
+	private PlayerTank playerTmp;
 
 	public GameManager(JTextField filename, JTextField directory) {
 
@@ -85,7 +86,7 @@ public class GameManager {
 		random = new Random();
 		rocketFin = new ArrayList<>();
 		playersArray = new LinkedList<>();
-		setStatistics(new Statistics());
+		//setStatistics(new Statistics());
 
 		this.setDirectory(directory);
 		this.setFilename(filename);
@@ -462,7 +463,7 @@ public class GameManager {
 
 	private void managePowerUp(PowerUp p) {
 
-		statistics.calculate(p);
+		playerTmp.getStatistics().calculate(p);
 
 		if (p.getPowerUp() == Power.HELMET) {
 			((Tank) p.getTank()).setProtection(false);
@@ -623,6 +624,10 @@ public class GameManager {
 				if (getEnemy().get(a).isAppearsInTheMap() && getEnemy().get(a).rect.intersects(rocket.rect)
 						&& rocket.getTank() != getEnemy().get(a)) {
 					if (rocket.getTank() instanceof PlayerTank) {
+						
+						//TODO 
+						playerTmp = (PlayerTank)rocket.getTank(); 
+						
 						if (getEnemy().get(a).isProtection() == false) {
 							damageEnemyTank(getEnemy().get(a));
 						} else {
@@ -719,7 +724,7 @@ public class GameManager {
 
 	private void destroyEnemyTank(EnemyTank enemyT) {
 
-		statistics.calculate(enemyT);
+		playerTmp.getStatistics().calculate(enemyT);
 
 		if (numberOfEnemyOnMap > 0)
 			numberOfEnemyOnMap--;
@@ -946,13 +951,13 @@ public class GameManager {
 		this.soundPowerUp = soundPowerUp;
 	}
 
-	public Statistics getStatistics() {
-		return statistics;
-	}
-
-	public void setStatistics(Statistics statistics) {
-		this.statistics = statistics;
-	}
+//	public Statistics getStatistics() {
+//		return statistics;
+//	}
+//
+//	public void setStatistics(Statistics statistics) {
+//		this.statistics = statistics;
+//	}
 
 	public ArrayList<Rocket> getRocketFin() {
 		return rocketFin;
