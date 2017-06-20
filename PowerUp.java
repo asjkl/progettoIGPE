@@ -11,17 +11,15 @@ public class PowerUp extends AbstractStaticObject {
 	private boolean dropOnBorder;
 	private Direction dropDirection;
 	private long duration;
-	private long timer;
-	private long dropTime; //salva il tempo quando cade
+	private long dropTime; //dropped
 	private boolean blink;
 	private int inc; // serve per gli effetti di powerUp
-	private long tmpDuration;			//	vecchio tmp
+	private long time; //timeout
 
 	public PowerUp(int x, int y, World world, Power powerUp) {
 		super(x, y, world);
 		this.powerUp = powerUp;
 		this.beforeWater=null;
-		this.timer=0;
 		this.activate=false;
 		this.duration=duration();
 		this.drop=true;
@@ -31,6 +29,7 @@ public class PowerUp extends AbstractStaticObject {
 		this.setDropDirection(null);
 		this.blink=false;
 		this.inc=0;
+		time=0;
 	}
 	
 	@Override
@@ -72,14 +71,6 @@ public class PowerUp extends AbstractStaticObject {
 
 	public void setTank(AbstractDynamicObject tank) {
 		this.tank = tank;
-	}
-
-	public long getTimer() {
-		return timer;
-	}
-
-	public void setTimer(long timer) {
-		this.timer = timer;
 	}
 
 	public boolean isActivate() {
@@ -162,12 +153,12 @@ public class PowerUp extends AbstractStaticObject {
 		this.beforeWater = beforeWater;
 	}
 
-	public long getTmpDuration() {
-		return tmpDuration;
+	public long getTime() {
+		return time;
 	}
 
-	public void setTmpDuration(long tmpDuration) {
-		this.tmpDuration = tmpDuration;
+	public void setTime(long time) {
+		this.time = time;
 	}
 
 }

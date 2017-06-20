@@ -183,7 +183,7 @@ public class EnemyTank extends Tank {
 	public void AStar() {
 
 		// add the start location to open list.
-		if(grid[startI][startJ]!=null)
+		if (grid[startI][startJ] != null)
 			open.add(grid[startI][startJ]);
 
 		Cell current;
@@ -271,8 +271,11 @@ public class EnemyTank extends Tank {
 			for (int b = 0; b < world.getColumn(); b++) {
 				if (world.world[a][b] != null && world.world[a][b] != this
 						&& (world.world[a][b] instanceof SteelWall || world.world[a][b] instanceof EnemyTank
-								|| (world.world[a][b] instanceof Water && a != GameManager.flag.getX()
-										&& b != GameManager.flag.getY()))) {
+								|| (world.world[a][b] instanceof Water && (a != GameManager.flag.getX()
+										&& b != GameManager.flag.getY()))
+								|| (world.world[a][b] instanceof Water
+										&& (a == GameManager.flag.getX() || b == GameManager.flag.getY())
+										&& noPresentSteelWall(a,b)))) {
 					blocchi.add(new Point(a, b));
 				}
 			}
@@ -286,8 +289,7 @@ public class EnemyTank extends Tank {
 			}
 		}
 
-		searchRoute(world.getRow(), world.getColumn(), getX(), getY(), objectX, objectY,
-				blocchi);
+		searchRoute(world.getRow(), world.getColumn(), getX(), getY(), objectX, objectY, blocchi);
 
 		int currX = getX();
 		int currY = getY();
@@ -317,6 +319,21 @@ public class EnemyTank extends Tank {
 				setDirection(Direction.DOWN);
 			}
 		}
+	}
+
+	private boolean noPresentSteelWall(int x, int y) {
+		for (int b = 0; b < world.getColumn(); b++) {
+			if ( ((b>y && b<GameManager.flag.getY())||(b<y && b>GameManager.flag.getY()))  && world.world[GameManager.flag.getX()][b] instanceof SteelWall) {
+				return true;
+			}
+		}
+
+		for (int b = 0; b < world.getRow(); b++) {
+			if ( ((b>x && b<GameManager.flag.getX())||(b<x && b>GameManager.flag.getX()))  && world.world[b][GameManager.flag.getY()] instanceof SteelWall) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	class Cell {

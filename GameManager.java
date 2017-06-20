@@ -10,6 +10,7 @@ import java.util.StringTokenizer;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JTextField;
+import javax.swing.plaf.synth.SynthSeparatorUI;
 
 public class GameManager {
 
@@ -168,7 +169,52 @@ public class GameManager {
 		public void run() {
 
 			if (!pauseOptionDialog) {
-				currentTime = (currentTime + 1) % 60;
+				
+				currentTime = (currentTime + 1) % 60; 
+				
+//				System.out.println(currentTime);
+				
+				//Manage PowerUp
+				for(int a=0;a<power.size();a++){
+					
+					if(power.get(a).isActivate() ){ //timeout
+						power.get(a).setTime(power.get(a).getTime()-1);
+						
+						if (power.get(a).getTime() <= 0) {
+							managePowerUp(power.get(a));
+							power.remove(a);
+							a--;
+						}		
+					}
+					else if (power.get(a).isDrop() && !power.get(a).isActivate()) { // Dropped
+						
+						power.get(a).setDropTime(power.get(a).getDropTime()-1);
+						
+						// EFFETTO LAMPEGGIO
+						if (power.get(a).getDropTime() == blinkTime){
+							power.get(a).setBlink(true);
+						}
+					
+						if (power.get(a).getDropTime() <= 0) {
+							power.get(a).setDrop(false);
+
+							if (power.get(a).getBefore() instanceof Water) {
+								getMatrix().world[power.get(a).getX()][power.get(a).getY()] = power.get(a).getBeforeWater();
+								getMatrix().world[((Water) power.get(a).getBefore()).getX()][((Water) power.get(a).getBefore())
+										.getY()] = power.get(a).getBefore();
+							} else {
+
+								if (power.get(a).getBefore() instanceof BrickWall)
+									((BrickWall) power.get(a).getBefore()).setBefore(null);
+								else if (power.get(a).getBefore() instanceof SteelWall)
+									((SteelWall) power.get(a).getBefore()).setBefore(null);
+								getMatrix().world[power.get(a).getX()][power.get(a).getY()] = power.get(a).getBefore();
+							}
+							power.remove(a);
+							a--;
+						}
+					}
+				}
 			}
 		}
 	}
@@ -286,58 +332,9 @@ public class GameManager {
 
 	// ----------------------------------------POWERUP-------------------------------------
 
-	public void isDroppedOnTheMap() {
-
-		for (int a = 0; a < power.size(); a++) {
-			if (power.get(a).isDrop() && !power.get(a).isActivate()) {
-
-				long tmp = (power.get(a).getDropTime() + getDurationPowerUp()) % 60;
-
-				// EFFETTO LAMPEGGIO
-				if (currentTime == (power.get(a).getDropTime() + (getDurationPowerUp() - blinkTime)) % 60)
-					power.get(a).setBlink(true);
-
-				if (currentTime == tmp) {
-					power.get(a).setDrop(false);
-
-					if (power.get(a).getBefore() instanceof Water) {
-						getMatrix().world[power.get(a).getX()][power.get(a).getY()] = power.get(a).getBeforeWater();
-						getMatrix().world[((Water) power.get(a).getBefore()).getX()][((Water) power.get(a).getBefore())
-								.getY()] = power.get(a).getBefore();
-					} else {
-
-						if (power.get(a).getBefore() instanceof BrickWall)
-							((BrickWall) power.get(a).getBefore()).setBefore(null);
-						else if (power.get(a).getBefore() instanceof SteelWall)
-							((SteelWall) power.get(a).getBefore()).setBefore(null);
-						getMatrix().world[power.get(a).getX()][power.get(a).getY()] = power.get(a).getBefore();
-					}
-					power.remove(a);
-					a--;
-				}
-			}
-		}
-	}
-
-	public void timeOut() {
-
-		for (int a = 0; a < power.size(); a++) {
-			if (power.get(a).isActivate()) {
-
-				power.get(a).setTmpDuration((power.get(a).getTimer() + power.get(a).getDuration()) % 60);
-
-				if (power.get(a).getTmpDuration() == currentTime) {
-					managePowerUp(power.get(a));
-					power.remove(a);
-					a--;
-				}
-			}
-		}
-	}
-
 	private void extendAddPowerUp(PowerUp tmp) {
 
-		tmp.setDropTime(currentTime);
+		tmp.setDropTime(durationPowerUp);
 		tmp.setBefore(getMatrix().world[getX()][getY()]); // prima di spostare
 															// powerUp mi salvo
 															// l oggetto su cui
@@ -544,7 +541,7 @@ public class GameManager {
 	public void sumPowerUp( PowerUp p){
 		for(int i=0;i<power.size();i++)
 			if(power.get(i).getPowerUp().equals(p.getPowerUp())){
-				power.get(i).setTimer((power.get(i).getTimer() + p.getDuration()) % 60);
+				power.get(i).setTime(power.get(i).getTime() + power.get(i).getDuration());
 			}
 	}
 	
