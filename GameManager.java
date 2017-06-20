@@ -32,8 +32,8 @@ public class GameManager {
 	private ArrayList<PowerUp> power;
 	private ArrayList<Rocket> rocket;
 	private ArrayList<AbstractStaticObject> recoveryWall;
-	private ArrayList<AbstractStaticObject> points;
-	private ArrayList<AbstractStaticObject> boom;
+	private ArrayList<AbstractStaticObject> effects;
+	
 	private ArrayList<Rocket> rocketFin;
 
 	// ENEMY
@@ -80,8 +80,7 @@ public class GameManager {
 		rocket = new ArrayList<>();
 		power = new ArrayList<>();
 		recoveryWall = new ArrayList<>();
-		points = new ArrayList<>();
-		boom = new ArrayList<>();
+		effects = new ArrayList<>();
 		random = new Random();
 		rocketFin = new ArrayList<>();
 		playersArray = new LinkedList<>();
@@ -123,15 +122,14 @@ public class GameManager {
 
 			if (!pauseOptionDialog) {
 
-				for (int i = 0; i < boom.size(); i++) {
-					if (boom.get(i) instanceof Tank)
-						((Tank) (boom.get(i))).setInc(((Tank) (boom.get(i))).getInc() + 1);
-					if (boom.get(i) instanceof Rocket)
-						((Rocket) (boom.get(i))).setInc(((Rocket) (boom.get(i))).getInc() + 1);
-				}
-				for (int i = 0; i < points.size(); i++) {
-					if (points.get(i) instanceof PowerUp)
-						((PowerUp) (points.get(i))).setInc(((PowerUp) (points.get(i))).getInc() + 1);
+				//EFFECTS
+				for (int i = 0; i < effects.size(); i++) {
+					if (effects.get(i) instanceof Tank)
+						((Tank) ( effects.get(i))).setInc(((Tank) ( effects.get(i))).getInc() + 1);
+					else if ( effects.get(i) instanceof Rocket)
+						((Rocket) ( effects.get(i))).setInc(((Rocket) ( effects.get(i))).getInc() + 1);
+					else if (effects.get(i) instanceof PowerUp)
+						((PowerUp) ( effects.get(i))).setInc(((PowerUp) ( effects.get(i))).getInc() + 1);
 				}
 
 				for (int i = 0; i < getEnemy().size(); i++) {
@@ -155,6 +153,14 @@ public class GameManager {
 				}
 			}
 		}
+	}
+
+	public ArrayList<AbstractStaticObject> getEffects() {
+		return effects;
+	}
+
+	public void setEffects(ArrayList<AbstractStaticObject> effects) {
+		this.effects = effects;
 	}
 
 	public class CurrentTime extends TimerTask {
@@ -537,7 +543,7 @@ public class GameManager {
 	
 	public void sumPowerUp( PowerUp p){
 		for(int i=0;i<power.size();i++)
-			if(power.get(i).getPowerUp() == p.getPowerUp()){
+			if(power.get(i).getPowerUp().equals(p.getPowerUp())){
 				power.get(i).setTimer((power.get(i).getTimer() + p.getDuration()) % 60);
 			}
 	}
@@ -645,7 +651,7 @@ public class GameManager {
 		if (r.getCurr() != r.getTank())
 			matrix.world[r.getX()][r.getY()] = r.getCurr();
 
-		boom.add(r);
+		effects.add(r);
 		rocket.remove(r);
 
 	}
@@ -678,7 +684,8 @@ public class GameManager {
 
 	private void destroyPlayerTank(PlayerTank player) {
 		PlayerTank old = player;
-		boom.add(old);
+//		boom.add(old);
+		effects.add(old);
 		getMatrix().world[old.getX()][old.getY()] = old.getCurr();
 		explosion = true;
 		player = new PlayerTank(player.getBornX(), player.getBornY(), matrix, old.toString());
@@ -726,12 +733,11 @@ public class GameManager {
 		// GENERA POWERUP
 		if (enemyT.isPowerUpOn())
 //			addPowerUp(new Random().nextInt(6));
-			addPowerUp(2);
+			addPowerUp(1);
 
 		// RIMETTI CURR
 		matrix.world[enemyT.getX()][enemyT.getY()] = enemyT.getCurr();
-		boom.add(enemyT);
-		points.add(enemyT);
+		effects.add(enemyT);
 		enemy.remove(enemyT);
 		explosion = true;
 	}
@@ -949,22 +955,6 @@ public class GameManager {
 
 	public void setStatistics(Statistics statistics) {
 		this.statistics = statistics;
-	}
-
-	public ArrayList<AbstractStaticObject> getPoints() {
-		return points;
-	}
-
-	public void setPoints(ArrayList<AbstractStaticObject> points) {
-		this.points = points;
-	}
-
-	public ArrayList<AbstractStaticObject> getBoom() {
-		return boom;
-	}
-
-	public void setBoom(ArrayList<AbstractStaticObject> boom) {
-		this.boom = boom;
 	}
 
 	public ArrayList<Rocket> getRocketFin() {
