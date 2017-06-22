@@ -705,6 +705,13 @@ public class GameManager {
 		if (player.getResume() < 0) {
 			matrix.world[player.getX()][player.getY()] = null;
 			player.setDied(true);
+			for(int a=0; a<enemy.size(); a++){
+				int random=0;
+				do{
+					random=new Random().nextInt(playersArray.size());
+				}while(playersArray.get(random).isDied());
+				enemy.get(a).setRandomObject(random);
+			}
 		}
 		player.setSpawnTime((currentTime + 4) % 60);
 

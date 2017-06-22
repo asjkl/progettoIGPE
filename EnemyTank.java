@@ -32,6 +32,8 @@ public class EnemyTank extends Tank {
 										// CI DICE SE HA TROVATO UN PERCORSO O
 										// MENO
 	private int randomObject;
+	private int xPast = 0;
+	private int yPast = 0;
 
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health,
 			int point, int numOfPlayers) {
@@ -59,6 +61,8 @@ public class EnemyTank extends Tank {
 
 	@Override
 	public void update() {
+		xPast = getX();
+		yPast = getY();
 		super.update();
 		getWorld().world[getX()][getY()] = this;
 	}
@@ -71,11 +75,11 @@ public class EnemyTank extends Tank {
 			next = ((Rocket) next).getCurr();
 		}
 
-		if(next instanceof Rocket){
-			curr = ((Rocket)next).getCurr();
+		if (next instanceof Rocket) {
+			curr = ((Rocket) next).getCurr();
 			return true;
 		}
-		
+
 		if (!(next instanceof Wall) && !(next instanceof Tank) && !(next instanceof Water) && !(next instanceof Rocket)
 				&& !(next instanceof Flag)) {
 
@@ -256,16 +260,30 @@ public class EnemyTank extends Tank {
 
 		AStar();
 
-		if (closed[endI][endJ]) {
-			Cell current = grid[endI][endJ];
-			minimalRoute[current.i][current.j] = true;
-			while (current.parent != null) {
-				current = current.parent;
-				minimalRoute[current.i][current.j] = true;
+		if (getX() == xPast && getY() == yPast) {
+			int random = new Random().nextInt(4);
+			if (random == 0) {
+				setDirection(Direction.UP);
+			} else if (random == 1) {
+				setDirection(Direction.DOWN);
+			} else if (random == 2) {
+				setDirection(Direction.LEFT);
+			} else if (random == 3) {
+				setDirection(Direction.RIGHT);
 			}
-			hasApath = true;
-		} else {
 			hasApath = false;
+		} else {
+			if (closed[endI][endJ]) {
+				Cell current = grid[endI][endJ];
+				minimalRoute[current.i][current.j] = true;
+				while (current.parent != null) {
+					current = current.parent;
+					minimalRoute[current.i][current.j] = true;
+				}
+				hasApath = true;
+			} else {
+				hasApath = false;
+			}
 		}
 	}
 
@@ -275,12 +293,12 @@ public class EnemyTank extends Tank {
 		for (int a = 0; a < world.getRow(); a++) {
 			for (int b = 0; b < world.getColumn(); b++) {
 				if (world.world[a][b] != null && world.world[a][b] != this
-						&& (world.world[a][b] instanceof SteelWall || world.world[a][b] instanceof EnemyTank
-								|| (world.world[a][b] instanceof Water && (a != GameManager.flag.getX()
-										&& b != GameManager.flag.getY()))
+						&& (world.world[a][b] instanceof SteelWall
+								|| (world.world[a][b] instanceof Water
+										&& (a != GameManager.flag.getX() && b != GameManager.flag.getY()))
 								|| (world.world[a][b] instanceof Water
 										&& (a == GameManager.flag.getX() || b == GameManager.flag.getY())
-										&& noPresentSteelWall(a,b)))) {
+										&& noPresentSteelWall(a, b)))) {
 					blocchi.add(new Point(a, b));
 				}
 			}
@@ -323,18 +341,22 @@ public class EnemyTank extends Tank {
 			if (minimalRoute[currX + 1][currY]) {
 				setDirection(Direction.DOWN);
 			}
+
 		}
+
 	}
 
 	private boolean noPresentSteelWall(int x, int y) {
 		for (int b = 0; b < world.getColumn(); b++) {
-			if ( ((b>y && b<GameManager.flag.getY())||(b<y && b>GameManager.flag.getY()))  && world.world[GameManager.flag.getX()][b] instanceof SteelWall) {
+			if (((b > y && b < GameManager.flag.getY()) || (b < y && b > GameManager.flag.getY()))
+					&& world.world[GameManager.flag.getX()][b] instanceof SteelWall) {
 				return true;
 			}
 		}
 
 		for (int b = 0; b < world.getRow(); b++) {
-			if ( ((b>x && b<GameManager.flag.getX())||(b<x && b>GameManager.flag.getX()))  && world.world[b][GameManager.flag.getY()] instanceof SteelWall) {
+			if (((b > x && b < GameManager.flag.getX()) || (b < x && b > GameManager.flag.getX()))
+					&& world.world[b][GameManager.flag.getY()] instanceof SteelWall) {
 				return true;
 			}
 		}
@@ -456,5 +478,21 @@ public class EnemyTank extends Tank {
 
 	public void setRandomObject(int randomObject) {
 		this.randomObject = randomObject;
+	}
+
+	public int getxPast() {
+		return xPast;
+	}
+
+	public void setxPast(int xPast) {
+		this.xPast = xPast;
+	}
+
+	public int getyPast() {
+		return yPast;
+	}
+
+	public void setyPast(int yPast) {
+		this.yPast = yPast;
 	}
 }
