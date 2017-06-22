@@ -261,7 +261,7 @@ public class EnemyTank extends Tank {
 		AStar();
 
 		if (getX() == xPast && getY() == yPast) {
-			hasApath = false;
+			setDirectionRandomForBlock();
 		} else {
 			if (closed[endI][endJ]) {
 				Cell current = grid[endI][endJ];
@@ -309,33 +309,35 @@ public class EnemyTank extends Tank {
 
 		minimalRoute[currX][currY] = false;
 
-		if (currX - 1 >= 0) {
-			if (minimalRoute[currX - 1][currY]) {
-				setDirection(Direction.UP);
-			}
-		}
-
-		if (currY - 1 >= 0) {
-			if (minimalRoute[currX][currY - 1]) {
-				setDirection(Direction.LEFT);
-			}
-		}
-
-		if (currY + 1 < world.getColumn() - 1) {
-			if (minimalRoute[currX][currY + 1]) {
-				setDirection(Direction.RIGHT);
-			}
-		}
-
-		if (currX + 1 < world.getRow() - 1) {
-			if (minimalRoute[currX + 1][currY]) {
-				setDirection(Direction.DOWN);
+		if (hasApath) {
+			if (currX - 1 >= 0) {
+				if (minimalRoute[currX - 1][currY]) {
+					setDirection(Direction.UP);
+				}
 			}
 
+			if (currY - 1 >= 0) {
+				if (minimalRoute[currX][currY - 1]) {
+					setDirection(Direction.LEFT);
+				}
+			}
+
+			if (currY + 1 < world.getColumn() - 1) {
+				if (minimalRoute[currX][currY + 1]) {
+					setDirection(Direction.RIGHT);
+				}
+			}
+
+			if (currX + 1 < world.getRow() - 1) {
+				if (minimalRoute[currX + 1][currY]) {
+					setDirection(Direction.DOWN);
+				}
+
+			}
 		}
 
 	}
-	
+
 	public void setDirectionRandomForBlock() {
 		int random = new Random().nextInt(4);
 		if (random == 0) {
