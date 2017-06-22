@@ -55,8 +55,9 @@ public class GameManager {
 	private JTextField filename;
 	private JTextField directory;
 	private boolean explosion;
-	
+
 	private PlayerTank playerTmp;
+	int pos[] = { 0, width / 2, width - 1 };
 
 	public GameManager(JTextField filename, JTextField directory) {
 
@@ -106,7 +107,7 @@ public class GameManager {
 		this.matrix = world;
 		GameManager.flag = flag;
 	}
-	
+
 	// --------------------------------------OTHER-----------------------------------------
 
 	public class MyTask extends TimerTask {
@@ -119,14 +120,14 @@ public class GameManager {
 
 			if (!pauseOptionDialog) {
 
-				//EFFECTS
+				// EFFECTS
 				for (int i = 0; i < effects.size(); i++) {
 					if (effects.get(i) instanceof Tank)
-						((Tank) ( effects.get(i))).setInc(((Tank) ( effects.get(i))).getInc() + 1);
-					else if ( effects.get(i) instanceof Rocket)
-						((Rocket) ( effects.get(i))).setInc(((Rocket) ( effects.get(i))).getInc() + 1);
+						((Tank) (effects.get(i))).setInc(((Tank) (effects.get(i))).getInc() + 1);
+					else if (effects.get(i) instanceof Rocket)
+						((Rocket) (effects.get(i))).setInc(((Rocket) (effects.get(i))).getInc() + 1);
 					else if (effects.get(i) instanceof PowerUp)
-						((PowerUp) ( effects.get(i))).setInc(((PowerUp) ( effects.get(i))).getInc() + 1);
+						((PowerUp) (effects.get(i))).setInc(((PowerUp) (effects.get(i))).getInc() + 1);
 				}
 
 				for (int i = 0; i < getEnemy().size(); i++) {
@@ -165,39 +166,39 @@ public class GameManager {
 		public void run() {
 
 			if (!pauseOptionDialog) {
-				
-				currentTime = (currentTime + 1) % 60; 
-				
-//				System.out.println(currentTime);
-				
-				//Manage PowerUp
-				for(int a=0;a<power.size();a++){
-					
-					if(power.get(a).isActivate() ){ //timeout
-						power.get(a).setTime(power.get(a).getTime()-1);
-						
+
+				currentTime = (currentTime + 1) % 60;
+
+				// System.out.println(currentTime);
+
+				// Manage PowerUp
+				for (int a = 0; a < power.size(); a++) {
+
+					if (power.get(a).isActivate()) { // timeout
+						power.get(a).setTime(power.get(a).getTime() - 1);
+
 						if (power.get(a).getTime() <= 0) {
 							managePowerUp(power.get(a));
 							power.remove(a);
 							a--;
-						}		
-					}
-					else if (power.get(a).isDrop() && !power.get(a).isActivate()) { // Dropped
-						
-						power.get(a).setDropTime(power.get(a).getDropTime()-1);
-						
+						}
+					} else if (power.get(a).isDrop() && !power.get(a).isActivate()) { // Dropped
+
+						power.get(a).setDropTime(power.get(a).getDropTime() - 1);
+
 						// EFFETTO LAMPEGGIO
-						if (power.get(a).getDropTime() == blinkTime){
+						if (power.get(a).getDropTime() == blinkTime) {
 							power.get(a).setBlink(true);
 						}
-					
+
 						if (power.get(a).getDropTime() <= 0) {
 							power.get(a).setDrop(false);
 
 							if (power.get(a).getBefore() instanceof Water) {
-								getMatrix().world[power.get(a).getX()][power.get(a).getY()] = power.get(a).getBeforeWater();
-								getMatrix().world[((Water) power.get(a).getBefore()).getX()][((Water) power.get(a).getBefore())
-										.getY()] = power.get(a).getBefore();
+								getMatrix().world[power.get(a).getX()][power.get(a).getY()] = power.get(a)
+										.getBeforeWater();
+								getMatrix().world[((Water) power.get(a).getBefore())
+										.getX()][((Water) power.get(a).getBefore()).getY()] = power.get(a).getBefore();
 							} else {
 
 								if (power.get(a).getBefore() instanceof BrickWall)
@@ -466,7 +467,7 @@ public class GameManager {
 			buildWall("recover");
 		} else if (p.getPowerUp() == Power.TIMER) {
 			for (int i = 0; i < enemy.size(); i++) {
-				if (enemy.get(i).isStopEnemy()){
+				if (enemy.get(i).isStopEnemy()) {
 					enemy.get(i).setStopEnemy(false);
 					enemy.get(i).setStopEnemyGraphic(false);
 				}
@@ -489,16 +490,16 @@ public class GameManager {
 			buildWall("steel");
 			break;
 		case STAR:
-			if (((PlayerTank) power.getTank()).getLevel() < 3){
+			if (((PlayerTank) power.getTank()).getLevel() < 3) {
 				((PlayerTank) power.getTank()).setLevel(((PlayerTank) power.getTank()).getLevel() + 1);
-				
-				if(((PlayerTank) power.getTank()).getLevel() == 1){
+
+				if (((PlayerTank) power.getTank()).getLevel() == 1) {
 					((PlayerTank) power.getTank()).setSpeed(Speed.NORMAL);
 					((PlayerTank) power.getTank()).setSpeedShot(Speed.FASTROCKET);
-				}else if(((PlayerTank) power.getTank()).getLevel() == 2){
+				} else if (((PlayerTank) power.getTank()).getLevel() == 2) {
 					((PlayerTank) power.getTank()).setSpeed(Speed.NORMAL);
 					((PlayerTank) power.getTank()).setSpeedShot(Speed.NORMALROCKET);
-				}else if(((PlayerTank) power.getTank()).getLevel() == 3){
+				} else if (((PlayerTank) power.getTank()).getLevel() == 3) {
 					((PlayerTank) power.getTank()).setSpeed(Speed.SLOW);
 					((PlayerTank) power.getTank()).setSpeedShot(Speed.FASTROCKET);
 				}
@@ -539,20 +540,20 @@ public class GameManager {
 			recoveryWall.clear();
 	}
 
-	public boolean isPresent(Tank t, PowerUp p){
-		for(int i=0;i<power.size();i++)
-			if(power.get(i).getTank() == t && power.get(i).getPowerUp() == p.getPowerUp())
+	public boolean isPresent(Tank t, PowerUp p) {
+		for (int i = 0; i < power.size(); i++)
+			if (power.get(i).getTank() == t && power.get(i).getPowerUp() == p.getPowerUp())
 				return true;
 		return false;
 	}
-	
-	public void sumPowerUp(Tank t, PowerUp p){
-		for(int i=0;i<power.size();i++)
-			if(power.get(i).getPowerUp().equals(p.getPowerUp()) && power.get(i).getTank() == t){
+
+	public void sumPowerUp(Tank t, PowerUp p) {
+		for (int i = 0; i < power.size(); i++)
+			if (power.get(i).getPowerUp().equals(p.getPowerUp()) && power.get(i).getTank() == t) {
 				power.get(i).setTime(power.get(i).getTime() + power.get(i).getDuration());
 			}
 	}
-	
+
 	// ---------------------------------------ROCKET----------------------------------------
 
 	public void updateRocket(Rocket rocket) {
@@ -631,10 +632,10 @@ public class GameManager {
 				if (getEnemy().get(a).isAppearsInTheMap() && getEnemy().get(a).rect.intersects(rocket.rect)
 						&& rocket.getTank() != getEnemy().get(a)) {
 					if (rocket.getTank() instanceof PlayerTank) {
-						
-						//TODO 
-						playerTmp = (PlayerTank)rocket.getTank(); 
-						
+
+						// TODO
+						playerTmp = (PlayerTank) rocket.getTank();
+
 						if (getEnemy().get(a).isProtection() == false) {
 							damageEnemyTank(getEnemy().get(a));
 						} else {
@@ -693,7 +694,7 @@ public class GameManager {
 
 	private void destroyPlayerTank(PlayerTank player) {
 		PlayerTank old = player;
-//		boom.add(old);
+		// boom.add(old);
 		effects.add(old);
 		getMatrix().world[old.getX()][old.getY()] = old.getCurr();
 		explosion = true;
@@ -741,7 +742,7 @@ public class GameManager {
 
 		// GENERA POWERUP
 		if (enemyT.isPowerUpOn())
-//			addPowerUp(new Random().nextInt(6));
+			// addPowerUp(new Random().nextInt(6));
 			addPowerUp(1);
 
 		// RIMETTI CURR
@@ -757,7 +758,7 @@ public class GameManager {
 				|| (tank instanceof PlayerTank && ((PlayerTank) tank).getLevel() <= 1 && tank.getContRocket() == 0)
 				|| (tank instanceof EnemyTank && tank.getContRocket() == 0)) {
 
-			if (tmp == Direction.STOP && tank instanceof PlayerTank) 
+			if (tmp == Direction.STOP && tank instanceof PlayerTank)
 				tmp = Direction.UP;
 
 			if (tank instanceof PlayerTank)
@@ -779,8 +780,6 @@ public class GameManager {
 
 	public void addEnemies(String T, int N) {
 
-		int pos[] = { 0, width / 2, width - 1 }; // possibili posizioni per far
-													// spawnare enemies
 		int c = 0;
 		int saveLastPosition = 0;
 
@@ -821,10 +820,20 @@ public class GameManager {
 			if (numberOfEnemyReadyToSpwan < numberOfEnemyToSpawn && !enemy.get(count).isReadyToSpawn()
 					&& !enemy.get(count).isAppearsInTheMap() && isFree(enemy.get(count))) {
 				enemy.get(count).setReadyToSpawn(true);
-				enemy.get(count).setSpawnTime((currentTime + 4) % 60); // +4 spawntime
+				enemy.get(count).setSpawnTime((currentTime + 4) % 60); // +4
+																		// spawntime
 				numberOfEnemyReadyToSpwan++;
 			}
-			if (enemy.get(count).isReadyToSpawn() && currentTime == enemy.get(count).getSpawnTime()) {
+
+			else if (enemy.get(count).isReadyToSpawn() && !(isFree(enemy.get(count)))) {
+				enemy.get(count).setY(changeSpawnPosition(enemy.get(count)));
+				enemy.get(count).setReadyToSpawn(false);
+				enemy.get(count).setSpawnTime(0); // +4 spawntime
+				numberOfEnemyReadyToSpwan--;
+				return;
+			}
+
+			else if (enemy.get(count).isReadyToSpawn() && currentTime == enemy.get(count).getSpawnTime()) {
 				enemy.get(count).setAppearsInTheMap(true);
 				enemy.get(count).setReadyToSpawn(false);
 				numberOfEnemyOnMap++;
@@ -833,19 +842,29 @@ public class GameManager {
 		}
 	}
 
-	public boolean isFree(EnemyTank e){
-		for(int i=0;i<enemy.size();i++)
-			if( (e.getX() == enemy.get(i).getX() && e.getY() == enemy.get(i).getY() && enemy.get(i).isAppearsInTheMap()) || 
-				(e.getX() == enemy.get(i).getX() && e.getY() == enemy.get(i).getY() && enemy.get(i).isReadyToSpawn()))
+	private int changeSpawnPosition(EnemyTank e) {
+
+		for (int i = 0; i < pos.length; i++)
+			if (e.getY() == pos[i])
+				return pos[(i + 1) % pos.length];
+		return 0;
+	}
+
+	public boolean isFree(EnemyTank e) {
+		for (int i = 0; i < enemy.size(); i++)
+			if ((e.getX() == enemy.get(i).getX() && e.getY() == enemy.get(i).getY()
+					&& enemy.get(i).isAppearsInTheMap()))
 				return false;
-		
-		for(int i=0; i<playersArray.size();i++)
-			if(e.getX() == playersArray.get(i).getX() && e.getY() == playersArray.get(i).getY())
+
+		for (int i = 0; i < playersArray.size(); i++)
+			if (e.getX() == playersArray.get(i).getX() && e.getY() == playersArray.get(i).getY()) {
+				System.out.println("OK");
 				return false;
-		
+			}
+
 		return true;
 	}
-	
+
 	// -----------------------------SET&GET--------------------------------------
 
 	public int getWidth() {
