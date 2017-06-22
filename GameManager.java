@@ -493,7 +493,7 @@ public class GameManager {
 				((PlayerTank) power.getTank()).setLevel(((PlayerTank) power.getTank()).getLevel() + 1);
 				
 				if(((PlayerTank) power.getTank()).getLevel() == 1){
-					((PlayerTank) power.getTank()).setSpeed(Speed.FAST);
+					((PlayerTank) power.getTank()).setSpeed(Speed.NORMAL);
 					((PlayerTank) power.getTank()).setSpeedShot(Speed.FASTROCKET);
 				}else if(((PlayerTank) power.getTank()).getLevel() == 2){
 					((PlayerTank) power.getTank()).setSpeed(Speed.NORMAL);
@@ -742,7 +742,7 @@ public class GameManager {
 		// GENERA POWERUP
 		if (enemyT.isPowerUpOn())
 //			addPowerUp(new Random().nextInt(6));
-			addPowerUp(3);
+			addPowerUp(1);
 
 		// RIMETTI CURR
 		matrix.world[enemyT.getX()][enemyT.getY()] = enemyT.getCurr();
@@ -835,8 +835,14 @@ public class GameManager {
 
 	public boolean isFree(EnemyTank e){
 		for(int i=0;i<enemy.size();i++)
-			if(e.getX() == enemy.get(i).getX() && e.getY() == enemy.get(i).getY() && enemy.get(i).isReadyToSpawn())
+			if( (e.getX() == enemy.get(i).getX() && e.getY() == enemy.get(i).getY() && enemy.get(i).isAppearsInTheMap()) || 
+				(e.getX() == enemy.get(i).getX() && e.getY() == enemy.get(i).getY() && enemy.get(i).isReadyToSpawn()))
 				return false;
+		
+		for(int i=0; i<playersArray.size();i++)
+			if(e.getX() == playersArray.get(i).getX() && e.getY() == playersArray.get(i).getY())
+				return false;
+		
 		return true;
 	}
 	
