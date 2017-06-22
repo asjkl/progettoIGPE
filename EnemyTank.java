@@ -261,16 +261,6 @@ public class EnemyTank extends Tank {
 		AStar();
 
 		if (getX() == xPast && getY() == yPast) {
-			int random = new Random().nextInt(4);
-			if (random == 0) {
-				setDirection(Direction.UP);
-			} else if (random == 1) {
-				setDirection(Direction.DOWN);
-			} else if (random == 2) {
-				setDirection(Direction.LEFT);
-			} else if (random == 3) {
-				setDirection(Direction.RIGHT);
-			}
 			hasApath = false;
 		} else {
 			if (closed[endI][endJ]) {
@@ -344,6 +334,19 @@ public class EnemyTank extends Tank {
 
 		}
 
+	}
+	
+	public void setDirectionRandomForBlock() {
+		int random = new Random().nextInt(4);
+		if (random == 0) {
+			setDirection(Direction.UP);
+		} else if (random == 1) {
+			setDirection(Direction.DOWN);
+		} else if (random == 2) {
+			setDirection(Direction.LEFT);
+		} else if (random == 3) {
+			setDirection(Direction.RIGHT);
+		}
 	}
 
 	private boolean noPresentSteelWall(int x, int y) {
