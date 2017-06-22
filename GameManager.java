@@ -821,15 +821,9 @@ public class GameManager {
 		while (count < enemy.size() && numberOfEnemyOnMap < numberOfEnemyToSpawn) {
 
 			if (numberOfEnemyReadyToSpwan < numberOfEnemyToSpawn && !enemy.get(count).isReadyToSpawn()
-					&& !enemy.get(count).isAppearsInTheMap()) {
+					&& !enemy.get(count).isAppearsInTheMap() && isFree(enemy.get(count))) {
 				enemy.get(count).setReadyToSpawn(true);
-				enemy.get(count).setSpawnTime((currentTime + 4) % 60); // il +4
-																		// indica
-																		// i
-																		// secondi
-																		// che
-																		// ci
-																		// metter�..
+				enemy.get(count).setSpawnTime((currentTime + 4) % 60); // +4 spawntime
 				numberOfEnemyReadyToSpwan++;
 			}
 			if (enemy.get(count).isReadyToSpawn() && currentTime == enemy.get(count).getSpawnTime()) {
@@ -841,6 +835,13 @@ public class GameManager {
 		}
 	}
 
+	public boolean isFree(EnemyTank e){
+		for(int i=0;i<enemy.size();i++)
+			if(e.getX() == enemy.get(i).getX() && e.getY() == enemy.get(i).getY() && enemy.get(i).isReadyToSpawn())
+				return false;
+		return true;
+	}
+	
 	// -----------------------------SET&GET--------------------------------------
 
 	public int getWidth() {
