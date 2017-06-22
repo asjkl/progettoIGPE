@@ -614,7 +614,7 @@ public class GameManager {
 
 			// CONTROLLO SE IL ROCKET HA INTERSECATO UN PLAYER TANK
 			for (int a = 0; a < getPlayersArray().size(); a++) {
-				if (rocket.rect.intersects(getPlayersArray().get(a).rect)
+				if (!getPlayersArray().get(a).isDied() && rocket.rect.intersects(getPlayersArray().get(a).rect)
 						&& rocket.getTank() != getPlayersArray().get(a)) {
 					if (rocket.getTank() instanceof EnemyTank) {
 						if (!getPlayersArray().get(a).isProtection() && !getPlayersArray().get(a).isReadyToSpawn()) {
