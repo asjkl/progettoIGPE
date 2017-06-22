@@ -27,14 +27,11 @@ public class GameManager {
 	private World matrix;
 	public static Flag flag;
 	private LinkedList<PlayerTank> playersArray;
-	//private Statistics statistics;
 	private ArrayList<EnemyTank> enemy;
 	private ArrayList<PowerUp> power;
 	private ArrayList<Rocket> rocket;
 	private ArrayList<AbstractStaticObject> recoveryWall;
 	private ArrayList<AbstractStaticObject> effects;
-	
-	private ArrayList<Rocket> rocketFin;
 
 	// ENEMY
 	private int numberOfEnemyToSpawn;
@@ -84,9 +81,7 @@ public class GameManager {
 		recoveryWall = new ArrayList<>();
 		effects = new ArrayList<>();
 		random = new Random();
-		rocketFin = new ArrayList<>();
 		playersArray = new LinkedList<>();
-		//setStatistics(new Statistics());
 
 		this.setDirectory(directory);
 		this.setFilename(filename);
@@ -107,12 +102,12 @@ public class GameManager {
 		timer2.schedule(task2, 0, 1000);
 	}
 
-	// --------------------------------------OTHER-----------------------------------------
-
 	public GameManager(World world, Flag flag) { // SERVE PER IL CONSTRUCTION
 		this.matrix = world;
 		GameManager.flag = flag;
 	}
+	
+	// --------------------------------------OTHER-----------------------------------------
 
 	public class MyTask extends TimerTask {
 
@@ -494,8 +489,20 @@ public class GameManager {
 			buildWall("steel");
 			break;
 		case STAR:
-			if (((PlayerTank) power.getTank()).getLevel() < 3)
+			if (((PlayerTank) power.getTank()).getLevel() < 3){
 				((PlayerTank) power.getTank()).setLevel(((PlayerTank) power.getTank()).getLevel() + 1);
+				
+				if(((PlayerTank) power.getTank()).getLevel() == 1){
+					((PlayerTank) power.getTank()).setSpeed(Speed.FAST);
+					((PlayerTank) power.getTank()).setSpeedShot(Speed.FASTROCKET);
+				}else if(((PlayerTank) power.getTank()).getLevel() == 2){
+					((PlayerTank) power.getTank()).setSpeed(Speed.NORMAL);
+					((PlayerTank) power.getTank()).setSpeedShot(Speed.NORMALROCKET);
+				}else if(((PlayerTank) power.getTank()).getLevel() == 3){
+					((PlayerTank) power.getTank()).setSpeed(Speed.SLOW);
+					((PlayerTank) power.getTank()).setSpeedShot(Speed.FASTROCKET);
+				}
+			}
 			break;
 		case TANK:
 			((PlayerTank) power.getTank()).setResume(((PlayerTank) power.getTank()).getResume() + 1);
@@ -735,7 +742,7 @@ public class GameManager {
 		// GENERA POWERUP
 		if (enemyT.isPowerUpOn())
 //			addPowerUp(new Random().nextInt(6));
-			addPowerUp(1);
+			addPowerUp(3);
 
 		// RIMETTI CURR
 		matrix.world[enemyT.getX()][enemyT.getY()] = enemyT.getCurr();
@@ -746,20 +753,11 @@ public class GameManager {
 
 	public void createRocketTank(Direction tmp, AbstractDynamicObject tank) {
 
-		if ((tank instanceof PlayerTank && ((PlayerTank) tank).getLevel() > 0 && tank.getContRocket() < 2)
-				|| (tank instanceof PlayerTank && ((PlayerTank) tank).getLevel() == 0 && tank.getContRocket() == 0)
+		if ((tank instanceof PlayerTank && ((PlayerTank) tank).getLevel() > 1 && tank.getContRocket() < 2)
+				|| (tank instanceof PlayerTank && ((PlayerTank) tank).getLevel() <= 1 && tank.getContRocket() == 0)
 				|| (tank instanceof EnemyTank && tank.getContRocket() == 0)) {
 
-			if (tmp == Direction.STOP && tank instanceof PlayerTank) // serve
-																		// quando
-																		// nasce
-																		// playerTank,
-																		// essendo
-																		// STOP
-																		// spara
-																		// verso
-																		// l
-																		// alto
+			if (tmp == Direction.STOP && tank instanceof PlayerTank) 
 				tmp = Direction.UP;
 
 			if (tank instanceof PlayerTank)
@@ -950,22 +948,6 @@ public class GameManager {
 
 	public void setSoundPowerUp(boolean soundPowerUp) {
 		this.soundPowerUp = soundPowerUp;
-	}
-
-//	public Statistics getStatistics() {
-//		return statistics;
-//	}
-//
-//	public void setStatistics(Statistics statistics) {
-//		this.statistics = statistics;
-//	}
-
-	public ArrayList<Rocket> getRocketFin() {
-		return rocketFin;
-	}
-
-	public void setRocketFin(ArrayList<Rocket> rocketFin) {
-		this.rocketFin = rocketFin;
 	}
 
 	public JTextField getFilename() {

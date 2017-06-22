@@ -23,10 +23,10 @@ public class PlayerTank extends Tank {
 	private Statistics statistics;
 	
 	public PlayerTank(int x, int y, World world, String id) {
-		super(x, y, world, Speed.NORMAL, Speed.FASTROCKET, Direction.STOP, 1);
+		super(x, y, world, Speed.NORMAL, Speed.NORMALROCKET, Direction.STOP, 1);
 		this.resume = 3;
 		this.point = 0;
-		this.level = 1;
+		this.level = 0;
 		this.died = false;
 		this.setStatistics(new Statistics());
 		this.setReadyToSpawn(true);
