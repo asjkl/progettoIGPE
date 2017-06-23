@@ -128,6 +128,8 @@ public class GameManager {
 						((Rocket) (effects.get(i))).setInc(((Rocket) (effects.get(i))).getInc() + 1);
 					else if (effects.get(i) instanceof PowerUp)
 						((PowerUp) (effects.get(i))).setInc(((PowerUp) (effects.get(i))).getInc() + 1);
+					else if (effects.get(i) instanceof Flag)
+						((Flag) (effects.get(i))).setInc(((Flag) (effects.get(i))).getInc() + 1);
 				}
 
 				for (int i = 0; i < getEnemy().size(); i++) {
@@ -590,8 +592,13 @@ public class GameManager {
 		if (!rocket.rect.contains(rocket.getTank().rect)) {
 			// FLAG
 			if (object instanceof Flag) {
-				if (object.rect.intersects(rocket.rect))
-					flag.setHit(true);
+				if (object.rect.intersects(rocket.rect)){
+					if(!effects.contains(flag)){
+					     effects.add(flag);
+					  flag.setHit(true);
+					  return true;
+					}
+				}
 			}
 
 			// WALL
@@ -694,7 +701,6 @@ public class GameManager {
 
 	private void destroyPlayerTank(PlayerTank player) {
 		PlayerTank old = player;
-		// boom.add(old);
 		effects.add(old);
 		getMatrix().world[old.getX()][old.getY()] = old.getCurr();
 		explosion = true;
