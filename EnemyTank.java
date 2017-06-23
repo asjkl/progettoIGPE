@@ -283,7 +283,7 @@ public class EnemyTank extends Tank {
 		for (int a = 0; a < world.getRow(); a++) {
 			for (int b = 0; b < world.getColumn(); b++) {
 				if (world.world[a][b] != null && world.world[a][b] != this
-						&& (world.world[a][b] instanceof SteelWall
+						&& (world.world[a][b] instanceof SteelWall || world.world[a][b] instanceof EnemyTank
 								|| (world.world[a][b] instanceof Water
 										&& (a != GameManager.flag.getX() && b != GameManager.flag.getY()))
 								|| (world.world[a][b] instanceof Water
