@@ -32,8 +32,8 @@ public class EnemyTank extends Tank {
 										// CI DICE SE HA TROVATO UN PERCORSO O
 										// MENO
 	private int randomObject;
-	private int xPast = 0;
-	private int yPast = 0;
+	private int xPast = -1;
+	private int yPast = -1;
 
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health,
 			int point, int numOfPlayers) {
