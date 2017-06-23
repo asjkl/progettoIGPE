@@ -596,6 +596,7 @@ public class GameManager {
 					if(!effects.contains(flag)){
 					     effects.add(flag);
 					  flag.setHit(true);
+					  explosion=true;
 					  return true;
 					}
 				}
