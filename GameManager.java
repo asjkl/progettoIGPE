@@ -11,6 +11,9 @@ import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import javax.swing.JTextField;
 
 public class GameManager {
@@ -62,7 +65,9 @@ public class GameManager {
 	private boolean exit;
 	private boolean waitToExit;
 	public Runnable runnable = null;
-
+	
+	public Lock lock=new ReentrantLock();
+	
 	// OFFLINE
 	public GameManager(JTextField filename, boolean singlePlayer) {
 		GameManager.offline = true;
@@ -954,8 +959,8 @@ public class GameManager {
 	public void parseStatusFromString(String status) {
 		String [] elements=status.split("#");
 		String [] players=elements[0].split(";");
-//		String [] rockets=elements[1].split(";");
 		String [] enemy=elements[1].split(";");
+		String [] rockets=elements[2].split(";");
 	
 		for(String s : players){
 			String [] split= s.split(":");
@@ -983,24 +988,19 @@ public class GameManager {
 			}
 		}	
 		
-//		rocket.clear();
-//		if(!rockets[0].trim().isEmpty()){
-//			for(String s : rockets){
-//				String [] split= s.split(":");
-//				for(int a=0; a<getPlayersArray().size(); a++){
-//					if(split[5].equals(getPlayersArray().get(a).toString())){
-//						getRocket().add(new Rocket(Integer.parseInt(split[0]), Integer.parseInt(split[1]), matrix, Direction.valueOf(split[2]), getPlayersArray().get(a) ));
-//					}
-//				}
-//	//			for(int a=0; a<getRocket().size(); a++){
-//	//				if(getRocket().get(a).getTank().equals(split[0])){
-//	//					getRocket().get(a).setxGraphics(Double.parseDouble(split[1]));
-//	//					getRocket().get(a).setyGraphics(Double.parseDouble(split[2]));
-//	//			   }
-//	//		    }
-//			}
-//		}
-			
+		//HO DOVUTO METTERE IL LOCK QUI XK è LA PARTE DOVE VIENE FATTO CLEAR E VIENE ANCHE DISEGNATO...XK C'è ANCHE IL LOCK NEL PAINT COMPONENT NELLA PARTE ROCKET
+		lock.lock();
+		if (rockets.length > 1 || rockets.length == 1 && !rockets[0].trim().isEmpty()) {
+			rocket.clear();
+			for(String s : rockets){
+				String [] split= s.split(":");
+				getRocket().add(new Rocket(Integer.parseInt(split[0]), Integer.parseInt(split[1]), matrix, Direction.valueOf(split[2]), null));
+				getRocket().get(getRocket().size()-1).setxGraphics(Double.parseDouble(split[3]));
+				getRocket().get(getRocket().size()-1).setyGraphics(Double.parseDouble(split[4]));
+				getRocket().get(getRocket().size()-1).setFirstAnimationNo(Boolean.parseBoolean(split[5]));
+			}
+		}
+		lock.unlock();			
 	}
 
 	// DATA TO STRING
@@ -1015,18 +1015,16 @@ public class GameManager {
 		for(int a=0; a<getEnemy().size(); a++){
 			stringBuilder.append(build(getEnemy().get(a)));
 		}
+		stringBuilder.append("#");
 		
-		
-//		if (getRocket().isEmpty()) {
-//			stringBuilder.append(" ");
-//		} else {
-//			for (int a = 0; a < getRocket().size(); a++) {
-//				stringBuilder.append(build(getRocket().get(a)));
-//			}
-//		}
-//		stringBuilder.append("#");
-		
-		
+		if (getRocket().isEmpty()) {
+			stringBuilder.append(" ");
+		} else {
+			for (int a = 0; a < getRocket().size(); a++) {
+				stringBuilder.append(build(getRocket().get(a)));
+			}
+		}
+			
 		return stringBuilder.toString();
 	}
 
@@ -1042,7 +1040,7 @@ public class GameManager {
 		} else if (ob instanceof Rocket) {
 			Rocket r = ((Rocket) ob);
 			return (r.getX() + ":" + r.getY() + ":" + r.getDirection() + ":" + r.getxGraphics()
-					+ ":" + r.getyGraphics()+":"+r.getTank() + ";");
+					+ ":" + r.getyGraphics()+":"+r.isFirstAnimationNo()+";");
 		} else if (ob instanceof PowerUp) {
 
 		}
