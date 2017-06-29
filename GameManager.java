@@ -83,7 +83,7 @@ public class GameManager {
 	// ONLINE CLIENT
 	public GameManager(JTextField filename, String name) {
 		matrix = new World(height, width);
-		enemy=new ArrayList<>();
+		enemy = new ArrayList<>();
 		rocket = new ArrayList<>();
 		effects = new ArrayList<>();
 		playersArray = new LinkedList<>();
@@ -965,36 +965,49 @@ public class GameManager {
 
 	// STRING TO DATA
 	public void parseStatusFromString(String status) {
-		String [] elements=status.split("#");
-		String [] variableOfSystem=elements[0].split(";");
-		String [] map=elements[1].split(";");
-		String [] players=elements[2].split(";");
-		String [] enemy=elements[3].split(";");
-		String [] rockets=elements[4].split(";");
-	
-		for(String s : variableOfSystem){
-			String [] split= s.split(":");
-			numbersOfEnemy=Integer.parseInt(split[0]);
-		}	
-		
-		int x=0;
-		for(String s : map){
-			String [] split= s.split(":");
-			int y=0;
-			for(String s1: split){
-				if(s1.equals("null")){
-					getMatrix().world[x][y]=null;
-				}else if(s1.equals("[//]")){
+		String[] elements = status.split("#");
+		String[] variableOfSystem = elements[0].split(";");
+		String[] map = elements[1].split(";");
+		String[] players = elements[2].split(";");
+		String[] enemy = elements[3].split(";");
+		String[] rockets = elements[4].split(";");
+		String[] powerUp = elements[5].split(";");
+
+		for (String s : variableOfSystem) {
+			String[] split = s.split(":");
+			numbersOfEnemy = Integer.parseInt(split[0]);
+		}
+
+		int x = 0;
+		for (String s : map) {
+			String[] split = s.split(":");
+			int y = 0;
+			for (String s1 : split) {
+				if (s1.equals("null")) {
+					getMatrix().world[x][y] = null;
+				} else if (s1.equals("[//]")) {
 					getMatrix().world[x][y] = new SteelWall(x, y, getMatrix(), 4);
-				}else if(s1.equals("@@@@")){
+				} else if (s1.equals("@@@@")) {
 					getMatrix().world[x][y] = new Ice(x, y, getMatrix());
-				}else if(s1.equals("TTTT")){
-					getMatrix().world[x][y] = new Tree(x,y, getMatrix());
-				}else if(s1.equals("[  ]")){
+				} else if (s1.equals("TTTT")) {
+					getMatrix().world[x][y] = new Tree(x, y, getMatrix());
+				} else if (s1.equals("[  ]")) {
 					getMatrix().world[x][y] = new BrickWall(x, y, getMatrix(), 2);
-				}else if(s1.equals("~~~~")){
+				} else if (s1.equals("~~~~")) {
 					getMatrix().world[x][y] = new Water(x, y, getMatrix());
-				}else if(s1.equals(" && ")){
+				}else if (s1.equals("GRENADE")) {
+					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.GRENADE);
+				}else if (s1.equals("HELMET")) {
+					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.HELMET);
+				}else if (s1.equals("SHOVEL")) {
+					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.SHOVEL);
+				}else if (s1.equals("STAR")) {
+					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.STAR);
+				}else if (s1.equals("TANK")) {
+					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.TANK);
+				}else if (s1.equals("TIMER")) {
+					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.TIMER);
+				}else if (s1.equals(" && ")) {
 					flag = new Flag(x, y, matrix);
 					getMatrix().world[x][y] = flag;
 				}
@@ -1003,11 +1016,10 @@ public class GameManager {
 			x++;
 		}
 
-		
-		for(String s : players){
-			String [] split= s.split(":");
-			for(int a=0; a<getPlayersArray().size(); a++){
-				if(getPlayersArray().get(a).toString().equals(split[0])){
+		for (String s : players) {
+			String[] split = s.split(":");
+			for (int a = 0; a < getPlayersArray().size(); a++) {
+				if (getPlayersArray().get(a).toString().equals(split[0])) {
 					getPlayersArray().get(a).setxGraphics(Double.parseDouble(split[1]));
 					getPlayersArray().get(a).setyGraphics(Double.parseDouble(split[2]));
 					getPlayersArray().get(a).setTmpDirection(Direction.valueOf(split[3]));
@@ -1016,57 +1028,116 @@ public class GameManager {
 				}
 			}
 		}
-		
+
 		lock.lock();
 		getEnemy().clear();
-		for(String s : enemy){
-			String [] split= s.split(":");
-			if(split[0].equals(" AT ")){
-				getEnemy().add(new ArmorTank(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix, Direction.valueOf(split[5]),2));
-			}else if(split[0].equals(" BT ")){
-				getEnemy().add(new BasicTank(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix, Direction.valueOf(split[5]),2));
-			}else if(split[0].equals(" FT ")){
-				getEnemy().add(new FastTank(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix, Direction.valueOf(split[5]),2));
-			}else if(split[0].equals(" PT ")){
-				getEnemy().add(new FastTank(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix, Direction.valueOf(split[5]),2));
+		for (String s : enemy) {
+			String[] split = s.split(":");
+			if (split[0].equals(" AT ")) {
+				getEnemy().add(new ArmorTank(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix,
+						Direction.valueOf(split[5]), 2));
+			} else if (split[0].equals(" BT ")) {
+				getEnemy().add(new BasicTank(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix,
+						Direction.valueOf(split[5]), 2));
+			} else if (split[0].equals(" FT ")) {
+				getEnemy().add(new FastTank(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix,
+						Direction.valueOf(split[5]), 2));
+			} else if (split[0].equals(" PT ")) {
+				getEnemy().add(new FastTank(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix,
+						Direction.valueOf(split[5]), 2));
 			}
-			getEnemy().get(getEnemy().size()-1).setxGraphics(Double.parseDouble(split[3]));
-			getEnemy().get(getEnemy().size()-1).setyGraphics(Double.parseDouble(split[4]));
-			getEnemy().get(getEnemy().size()-1).setTmpDirection(Direction.valueOf(split[5]));
-			getEnemy().get(getEnemy().size()-1).setAppearsInTheMap(Boolean.parseBoolean(split[6]));
-			getEnemy().get(getEnemy().size()-1).setReadyToSpawn(Boolean.parseBoolean(split[7]));
-		}	
+			getEnemy().get(getEnemy().size() - 1).setxGraphics(Double.parseDouble(split[3]));
+			getEnemy().get(getEnemy().size() - 1).setyGraphics(Double.parseDouble(split[4]));
+			getEnemy().get(getEnemy().size() - 1).setTmpDirection(Direction.valueOf(split[5]));
+			getEnemy().get(getEnemy().size() - 1).setAppearsInTheMap(Boolean.parseBoolean(split[6]));
+			getEnemy().get(getEnemy().size() - 1).setReadyToSpawn(Boolean.parseBoolean(split[7]));
+		}
 		lock.unlock();
-		
-		//HO DOVUTO METTERE IL LOCK QUI XK è LA PARTE DOVE VIENE FATTO CLEAR E VIENE ANCHE DISEGNATO...XK C'è ANCHE IL LOCK NEL PAINT COMPONENT NELLA PARTE ROCKET
+
+		// HO DOVUTO METTERE IL LOCK QUI XK è LA PARTE DOVE VIENE FATTO CLEAR E
+		// VIENE ANCHE DISEGNATO...XK C'è ANCHE IL LOCK NEL PAINT COMPONENT
+		// NELLA PARTE ROCKET
 		lock.lock();
 		if (rockets.length > 1 || rockets.length == 1 && !rockets[0].trim().isEmpty()) {
 			rocket.clear();
-			for(String s : rockets){
-				String [] split= s.split(":");
-				getRocket().add(new Rocket(Integer.parseInt(split[0]), Integer.parseInt(split[1]), matrix, Direction.valueOf(split[2]), null));
-				getRocket().get(getRocket().size()-1).setxGraphics(Double.parseDouble(split[3]));
-				getRocket().get(getRocket().size()-1).setyGraphics(Double.parseDouble(split[4]));
-				getRocket().get(getRocket().size()-1).setFirstAnimationNo(Boolean.parseBoolean(split[5]));
+			for (String s : rockets) {
+				String[] split = s.split(":");
+				getRocket().add(new Rocket(Integer.parseInt(split[0]), Integer.parseInt(split[1]), matrix,
+						Direction.valueOf(split[2]), null));
+				getRocket().get(getRocket().size() - 1).setxGraphics(Double.parseDouble(split[3]));
+				getRocket().get(getRocket().size() - 1).setyGraphics(Double.parseDouble(split[4]));
+				getRocket().get(getRocket().size() - 1).setFirstAnimationNo(Boolean.parseBoolean(split[5]));
 			}
 		}
-		lock.unlock();			
+		lock.unlock();
+
+		lock.lock();
+		if (powerUp.length > 1 || powerUp.length == 1 && !powerUp[0].trim().isEmpty()) {
+			power.clear();
+			for (String s : powerUp) {
+				String[] split = s.split(":");
+				if (split[0].equals("GRENADE")) {
+					power.add(
+							new PowerUp(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix, Power.GRENADE));
+				} else if (split[0].equals("HELMET")) {
+					power.add(
+							new PowerUp(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix, Power.HELMET));
+				} else if (split[0].equals("SHOVEL")) {
+					power.add(
+							new PowerUp(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix, Power.SHOVEL));
+				} else if (split[0].equals("STAR")) {
+					power.add(new PowerUp(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix, Power.STAR));
+				} else if (split[0].equals("TANK")) {
+					power.add(new PowerUp(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix, Power.TANK));
+				} else if (split[0].equals("TIMER")) {
+					power.add(new PowerUp(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix, Power.TIMER));
+				}
+				power.get(power.size() - 1).setBlink(Boolean.parseBoolean(split[3]));
+				if (split[4].equals(" @@ ")) {
+					power.get(power.size() - 1).setBefore(new Ice(0, 0, matrix));
+				} else if (split[4].equals("[//]")) {
+					power.get(power.size() - 1).setBefore(new SteelWall(0, 0, matrix, 4));
+				} else if (split[4].equals(" TT ")) {
+					power.get(power.size() - 1).setBefore(new Tree(0, 0, matrix));
+				} else if (split[4].equals(" ~~ ")) {
+					power.get(power.size() - 1).setBefore(new Water(0, 0, matrix));
+				} else if (split[4].equals("[  ]")) {
+					power.get(power.size() - 1).setBefore(new BrickWall(0, 0, matrix, 4));
+				}
+
+				if (split[5].equals("[  ]")) {
+					power.get(power.size() - 1).setBeforeWater(new BrickWall(0, 0, matrix, 1));
+				} else if (split[5].equals("[//]")) {
+					power.get(power.size() - 1).setBeforeWater(new SteelWall(0, 0, matrix, 1));
+				} else if (split[5].equals(" TT ")) {
+					power.get(power.size() - 1).setBeforeWater(new Tree(0, 0, matrix));
+				} else if (split[5].equals(" @@ ")) {
+					power.get(power.size() - 1).setBeforeWater(new Ice(0, 0, matrix));
+				}
+				if(!split[6].equals("null"))
+					power.get(power.size() - 1).setDropDirection(Direction.valueOf(split[6]));
+				else
+					power.get(power.size() - 1).setDropDirection(null);
+			}
+		}
+		lock.unlock();
+
 	}
 
 	// DATA TO STRING
 	public String statusToString() {
 		StringBuilder stringBuilder = new StringBuilder();
-		
-		//QUI MANDO VARIABILI DI SISTEMA, COME PER ESEMPIO SIZE DEGLI ENEMY ECC
-		stringBuilder.append(getEnemy().size()+";");
+
+		// QUI MANDO VARIABILI DI SISTEMA, COME PER ESEMPIO SIZE DEGLI ENEMY ECC
+		stringBuilder.append(getEnemy().size() + ";");
 		stringBuilder.append("#");
-		
+
 		for (int a = 0; a < getMatrix().getRow(); a++) {
 			for (int b = 0; b < getMatrix().getColumn(); b++) {
-				if(matrix.world[a][b]==null){
-					stringBuilder.append("null"+":");
-				}else{
-					stringBuilder.append(matrix.world[a][b].toString()+":");
+				if (matrix.world[a][b] == null) {
+					stringBuilder.append("null" + ":");
+				} else {
+					stringBuilder.append(matrix.world[a][b].toString() + ":");
 				}
 			}
 			stringBuilder.append(";");
@@ -1090,7 +1161,15 @@ public class GameManager {
 				stringBuilder.append(build(getRocket().get(a)));
 			}
 		}
+		stringBuilder.append("#");
 
+		if (getPower().isEmpty()) {
+			stringBuilder.append(" ");
+		} else {
+			for (int a = 0; a < getPower().size(); a++) {
+				stringBuilder.append(build(getPower().get(a)));
+			}
+		}
 		return stringBuilder.toString();
 	}
 
@@ -1109,7 +1188,24 @@ public class GameManager {
 			return (r.getX() + ":" + r.getY() + ":" + r.getDirection() + ":" + r.getxGraphics() + ":" + r.getyGraphics()
 					+ ":" + r.isFirstAnimationNo() + ";");
 		} else if (ob instanceof PowerUp) {
+			PowerUp pu = (PowerUp) ob;
+			AbstractStaticObject getbef = pu.getBefore();
+			AbstractStaticObject getbefWa = pu.getBeforeWater();
+			String s1, s2;
 
+			if (getbef == null) {
+				s1 = "null";
+			} else {
+				s1 = getbef.toString();
+			}
+			if (getbefWa == null) {
+				s2 = "null";
+			} else {
+				s2 = getbefWa.toString();
+			}
+
+			return (pu.toString() + ":" + pu.getX() + ":" + pu.getY() + ":" + pu.isBlink() + ":" + s1 + ":" + s2 + ":"
+					+ pu.getDropDirection() + ";");
 		}
 
 		return " ";
