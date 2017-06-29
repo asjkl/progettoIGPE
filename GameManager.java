@@ -63,18 +63,18 @@ public class GameManager {
 	private boolean waitToExit;
 	public Runnable runnable = null;
 
-	//OFFLINE
+	// OFFLINE
 	public GameManager(JTextField filename, boolean singlePlayer) {
 		GameManager.offline = true;
 		if (singlePlayer) {
-			startGameManager(filename, 1); 	// IL NUMERO MI STA A DIRE SE C'è UN
+			startGameManager(filename, 1); // IL NUMERO MI STA A DIRE SE C'è UN
 											// SINGOLO GIOCATORE O DI PIù
 		} else {
 			startGameManager(filename, 2);
 		}
 	}
 
-	//ONLINE CLIENT
+	// ONLINE CLIENT
 	public GameManager(JTextField filename, String name) {
 		startGameManager(filename, 2);
 		GameManager.offline = false;
@@ -82,19 +82,19 @@ public class GameManager {
 		if (name.equals("P1")) {
 			playersArray.addFirst(new PlayerTank(19, 5, getMatrix(), name));
 			getMatrix().world[19][5] = playersArray.get(0);
-			
+
 			playersArray.addLast(new PlayerTank(19, 14, getMatrix(), "P2"));
 			getMatrix().world[19][14] = playersArray.get(1);
 		} else if (name.equals("P2")) {
 			playersArray.addFirst(new PlayerTank(19, 14, getMatrix(), name));
 			getMatrix().world[19][14] = playersArray.get(0);
-			
+
 			playersArray.addLast(new PlayerTank(19, 5, getMatrix(), "P1"));
 			getMatrix().world[19][5] = playersArray.get(1);
 		}
 	}
 
-	//ONLINE SERVER
+	// ONLINE SERVER
 	public GameManager(Runnable runnable, List<String> names, JTextField filename) {
 		GameManager.offline = false;
 		this.runnable = runnable;
@@ -113,12 +113,11 @@ public class GameManager {
 
 	}
 
-	//USED FOR CONSTRUCTION
+	// USED FOR CONSTRUCTION
 	public GameManager(World world, Flag flag) {
 		this.matrix = world;
 		GameManager.flag = flag;
 	}
-
 
 	// --------------------------------------OTHER-----------------------------------------
 	public void startGameManager(JTextField filename, int numOfPlayer) {
@@ -277,18 +276,18 @@ public class GameManager {
 		int i = 0;// indice di riga
 		try {
 			BufferedReader reader = null;
-			File career = new File("./maps/career/"+filename.getText());
-				if(!career.exists()){
-					File multiplayer = new File("./maps/editor/multiplayer/"+filename.getText());
-					if(!multiplayer.exists()){
-						File singleplayer = new File("./maps/editor/singleplayer/"+filename.getText());
-						reader = new BufferedReader(new FileReader(singleplayer.toString()));
-					}else{
-						reader = new BufferedReader(new FileReader(multiplayer.toString()));
-					}
-				}else{
-					reader = new BufferedReader(new FileReader(career.toString()));
+			File career = new File("./maps/career/" + filename.getText());
+			if (!career.exists()) {
+				File multiplayer = new File("./maps/editor/multiplayer/" + filename.getText());
+				if (!multiplayer.exists()) {
+					File singleplayer = new File("./maps/editor/singleplayer/" + filename.getText());
+					reader = new BufferedReader(new FileReader(singleplayer.toString()));
+				} else {
+					reader = new BufferedReader(new FileReader(multiplayer.toString()));
 				}
+			} else {
+				reader = new BufferedReader(new FileReader(career.toString()));
+			}
 			String line = reader.readLine();
 			while (i < height) {
 
@@ -869,25 +868,25 @@ public class GameManager {
 		int saveLastPosition = 0;
 
 		while (c < N) {
-			chooseEnemy(T, pos[saveLastPosition % 3], numOfPlayer);
+			chooseEnemy(T, pos[saveLastPosition % 3], numOfPlayer, c);
 			saveLastPosition++;
 			c++;
 		}
 	}
 
-	private void chooseEnemy(String typology, int y, int numOfPlayer) {
+	private void chooseEnemy(String typology, int y, int numOfPlayer, int c) {
 		switch (typology) {
 		case "basic":
-			enemy.add(new BasicTank(0, y, matrix, Direction.STOP, numOfPlayer));
+			enemy.add(new BasicTank(0, y, matrix, Direction.STOP, numOfPlayer, c));
 			break;
 		case "fast":
-			enemy.add(new FastTank(0, y, matrix, Direction.STOP, numOfPlayer));
+			enemy.add(new FastTank(0, y, matrix, Direction.STOP, numOfPlayer, c));
 			break;
 		case "power":
-			enemy.add(new PowerTank(0, y, matrix, Direction.STOP, numOfPlayer));
+			enemy.add(new PowerTank(0, y, matrix, Direction.STOP, numOfPlayer, c));
 			break;
 		case "armor":
-			enemy.add(new ArmorTank(0, y, matrix, Direction.STOP, numOfPlayer));
+			enemy.add(new ArmorTank(0, y, matrix, Direction.STOP, numOfPlayer, c));
 			break;
 		}
 		if ((enemy.size() % numEnemyDropsPowerUp) == 0) { // ogni quanti nemici
@@ -955,8 +954,9 @@ public class GameManager {
 	public void parseStatusFromString(String status) {
 		String [] elements=status.split("#");
 		String [] players=elements[0].split(";");
+		String [] rockets=elements[1].split(";");
+		String [] enemy=elements[2].split(";");
 	
-		//P2:19:4;P1:19:5;#
 		for(String s : players){
 			String [] split= s.split(":");
 			for(int a=0; a<getPlayersArray().size(); a++){
@@ -969,6 +969,40 @@ public class GameManager {
 				}
 			}
 		}
+		
+//		rocket.clear();
+//		if(!rockets[0].trim().isEmpty()){
+//			for(String s : rockets){
+//				String [] split= s.split(":");
+//				for(int a=0; a<getPlayersArray().size(); a++){
+//					if(split[5].equals(getPlayersArray().get(a).toString())){
+//						getRocket().add(new Rocket(Integer.parseInt(split[0]), Integer.parseInt(split[1]), matrix, Direction.valueOf(split[2]), getPlayersArray().get(a) ));
+//					}
+//				}
+//	//			for(int a=0; a<getRocket().size(); a++){
+//	//				if(getRocket().get(a).getTank().equals(split[0])){
+//	//					getRocket().get(a).setxGraphics(Double.parseDouble(split[1]));
+//	//					getRocket().get(a).setyGraphics(Double.parseDouble(split[2]));
+//	//			   }
+//	//		    }
+//			}
+//		}
+		
+		
+		for(String s : enemy){
+			String [] split= s.split(":");
+			for(int a=0; a<getEnemy().size(); a++){
+				if(getEnemy().get(a).toString().equals(split[0])){
+					getEnemy().get(a).setxGraphics(Double.parseDouble(split[1]));
+					getEnemy().get(a).setyGraphics(Double.parseDouble(split[2]));
+					getEnemy().get(a).setTmpDirection(Direction.valueOf(split[3]));
+					getEnemy().get(a).setAppearsInTheMap(Boolean.parseBoolean(split[4]));
+					getEnemy().get(a).setReadyToSpawn(Boolean.parseBoolean(split[5]));
+				}
+			}
+		}
+		
+		
 	}
 
 	// DATA TO STRING
@@ -980,6 +1014,19 @@ public class GameManager {
 		}
 		stringBuilder.append("#");
 
+		if (getRocket().isEmpty()) {
+			stringBuilder.append(" ");
+		} else {
+			for (int a = 0; a < getRocket().size(); a++) {
+				stringBuilder.append(build(getRocket().get(a)));
+			}
+		}
+		
+		stringBuilder.append("#");
+		for(int a=0; a<getEnemy().size(); a++){
+			stringBuilder.append(build(getEnemy().get(a)));
+		}
+		
 		return stringBuilder.toString();
 	}
 
@@ -987,11 +1034,15 @@ public class GameManager {
 
 		if (ob instanceof PlayerTank) {
 			PlayerTank p = ((PlayerTank) ob);
-			return (p.toString() + ":" + p.getxGraphics() + ":" + p.getyGraphics() + ":"+p.getTmpDirection()+":"+p.getKeyPressedMillis()+":"+p.isPressed()+";");
+			return (p.toString() + ":" + p.getxGraphics() + ":" + p.getyGraphics() + ":" + p.getTmpDirection() + ":"
+					+ p.getKeyPressedMillis() + ":" + p.isPressed() + ";");
 		} else if (ob instanceof EnemyTank) {
-
+			EnemyTank e= ((EnemyTank)ob);
+			return (e.toString()+":"+e.getxGraphics()+":"+e.getyGraphics()+":"+e.getTmpDirection()+":"+e.isAppearsInTheMap()+":"+e.isReadyToSpawn());
 		} else if (ob instanceof Rocket) {
-
+			Rocket r = ((Rocket) ob);
+			return (r.getX() + ":" + r.getY() + ":" + r.getDirection() + ":" + r.getxGraphics()
+					+ ":" + r.getyGraphics()+":"+r.getTank() + ";");
 		} else if (ob instanceof PowerUp) {
 
 		}
