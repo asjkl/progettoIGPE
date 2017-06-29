@@ -954,8 +954,8 @@ public class GameManager {
 	public void parseStatusFromString(String status) {
 		String [] elements=status.split("#");
 		String [] players=elements[0].split(";");
-		String [] rockets=elements[1].split(";");
-		String [] enemy=elements[2].split(";");
+//		String [] rockets=elements[1].split(";");
+		String [] enemy=elements[1].split(";");
 	
 		for(String s : players){
 			String [] split= s.split(":");
@@ -969,6 +969,19 @@ public class GameManager {
 				}
 			}
 		}
+		
+		for(String s : enemy){
+			String [] split= s.split(":");
+			for(int a=0; a<getEnemy().size(); a++){
+				if(getEnemy().get(a).toString().equals(split[0])){
+					getEnemy().get(a).setxGraphics(Double.parseDouble(split[1]));
+					getEnemy().get(a).setyGraphics(Double.parseDouble(split[2]));
+					getEnemy().get(a).setTmpDirection(Direction.valueOf(split[3]));
+					getEnemy().get(a).setAppearsInTheMap(Boolean.parseBoolean(split[4]));
+					getEnemy().get(a).setReadyToSpawn(Boolean.parseBoolean(split[5]));
+				}
+			}
+		}	
 		
 //		rocket.clear();
 //		if(!rockets[0].trim().isEmpty()){
@@ -987,22 +1000,7 @@ public class GameManager {
 //	//		    }
 //			}
 //		}
-		
-		
-		for(String s : enemy){
-			String [] split= s.split(":");
-			for(int a=0; a<getEnemy().size(); a++){
-				if(getEnemy().get(a).toString().equals(split[0])){
-					getEnemy().get(a).setxGraphics(Double.parseDouble(split[1]));
-					getEnemy().get(a).setyGraphics(Double.parseDouble(split[2]));
-					getEnemy().get(a).setTmpDirection(Direction.valueOf(split[3]));
-					getEnemy().get(a).setAppearsInTheMap(Boolean.parseBoolean(split[4]));
-					getEnemy().get(a).setReadyToSpawn(Boolean.parseBoolean(split[5]));
-				}
-			}
-		}
-		
-		
+			
 	}
 
 	// DATA TO STRING
@@ -1014,18 +1012,20 @@ public class GameManager {
 		}
 		stringBuilder.append("#");
 
-		if (getRocket().isEmpty()) {
-			stringBuilder.append(" ");
-		} else {
-			for (int a = 0; a < getRocket().size(); a++) {
-				stringBuilder.append(build(getRocket().get(a)));
-			}
-		}
-		
-		stringBuilder.append("#");
 		for(int a=0; a<getEnemy().size(); a++){
 			stringBuilder.append(build(getEnemy().get(a)));
 		}
+		
+		
+//		if (getRocket().isEmpty()) {
+//			stringBuilder.append(" ");
+//		} else {
+//			for (int a = 0; a < getRocket().size(); a++) {
+//				stringBuilder.append(build(getRocket().get(a)));
+//			}
+//		}
+//		stringBuilder.append("#");
+		
 		
 		return stringBuilder.toString();
 	}
@@ -1038,7 +1038,7 @@ public class GameManager {
 					+ p.getKeyPressedMillis() + ":" + p.isPressed() + ";");
 		} else if (ob instanceof EnemyTank) {
 			EnemyTank e= ((EnemyTank)ob);
-			return (e.toString()+":"+e.getxGraphics()+":"+e.getyGraphics()+":"+e.getTmpDirection()+":"+e.isAppearsInTheMap()+":"+e.isReadyToSpawn());
+			return (e.toString()+":"+e.getxGraphics()+":"+e.getyGraphics()+":"+e.getTmpDirection()+":"+e.isAppearsInTheMap()+":"+e.isReadyToSpawn()+";");
 		} else if (ob instanceof Rocket) {
 			Rocket r = ((Rocket) ob);
 			return (r.getX() + ":" + r.getY() + ":" + r.getDirection() + ":" + r.getxGraphics()
