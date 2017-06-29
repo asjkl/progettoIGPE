@@ -34,7 +34,7 @@ public class EnemyTank extends Tank {
 	private int randomObject;
 	private int xPast = -1;
 	private int yPast = -1;
-
+	
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health,
 			int point, int numOfPlayers) {
 		super(x, y, world, speed, speedShot, direction, health);

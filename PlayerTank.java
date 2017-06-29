@@ -1,6 +1,7 @@
 package progettoIGPE.davide.giovanni.unical2016;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 
 public class PlayerTank extends Tank {
 
@@ -13,7 +14,6 @@ public class PlayerTank extends Tank {
 	private int bornX;
 	private int bornY;
 	private boolean shot;
-	
 	private long keyPressedMillis=0;
 	private long keyPressLength=0;
 	private ArrayList<Integer> keys;
@@ -21,6 +21,9 @@ public class PlayerTank extends Tank {
 	private boolean releaseKeyRocket;
 	private boolean enter;
 	private Statistics statistics;
+	private ArrayList<Integer> defaultKeysPlayer;
+	private boolean finish;
+	public BitSet keyBits;
 	
 	public PlayerTank(int x, int y, World world, String id) {
 		super(x, y, world, Speed.NORMAL, Speed.NORMALROCKET, Direction.STOP, 1);
@@ -43,6 +46,9 @@ public class PlayerTank extends Tank {
 		this.setReleaseKeyRocket(false);
 		this.setEnter(false);
 		this.id=id;
+		this.setFinish(false);
+		defaultKeys();
+		this.keyBits = new BitSet(128);
 	} 
 
 	@Override
@@ -81,7 +87,46 @@ public class PlayerTank extends Tank {
 		}
 		return false;
 	}
-
+	
+	private void defaultKeys(){
+		if(GameManager.offline){
+			if(id.equals("P1"))  {
+				this.setDefaultKeysPlayer(new ArrayList<Integer>() {
+					{
+						add(37);
+						add(38);
+						add(39);
+						add(40);
+						add(32);
+					}
+				});
+			}else if(id.equals("P2")){
+				this.setDefaultKeysPlayer(new ArrayList<Integer>() {
+					{
+						add(87);
+						add(83);
+						add(68);
+						add(65);
+						add(17);
+		
+					}
+				});
+			}}
+			else{
+				this.setDefaultKeysPlayer(new ArrayList<Integer>() {
+					{
+						add(37);
+						add(38);
+						add(39);
+						add(40);
+						add(32);
+						add(10);
+						add(27);
+					}
+				});
+			}
+	}
+	
 	@Override
 	public Direction getDirection() {
 		return super.getDirection();
@@ -215,5 +260,21 @@ public class PlayerTank extends Tank {
 
 	public void setStatistics(Statistics statistics) {
 		this.statistics = statistics;
+	}
+
+	public ArrayList<Integer> getDefaultKeysPlayer() {
+		return defaultKeysPlayer;
+	}
+
+	public void setDefaultKeysPlayer(ArrayList<Integer> defaultKeysPlayer) {
+		this.defaultKeysPlayer = defaultKeysPlayer;
+	}
+
+	public boolean isFinish() {
+		return finish;
+	}
+
+	public void setFinish(boolean finish) {
+		this.finish = finish;
 	}
 }

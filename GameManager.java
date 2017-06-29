@@ -1,10 +1,12 @@
 package progettoIGPE.davide.giovanni.unical2016;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.Timer;
@@ -15,10 +17,9 @@ public class GameManager {
 
 	private final int width = 21;
 	private final int height = 20;
-
-	// OTHER
 	private int x;
 	private int y;
+	public static boolean offline = false;
 	public static long currentTime;
 	private boolean soundPowerUp;
 	public boolean pauseOptionDialog;
@@ -53,14 +54,74 @@ public class GameManager {
 	public TimerTask task2;
 
 	private JTextField filename;
-	private JTextField directory;
 	private boolean explosion;
 
 	private PlayerTank playerTmp;
 	int pos[] = { 0, width / 2, width - 1 };
 
-	public GameManager(JTextField filename, JTextField directory) {
+	private boolean exit;
+	private boolean waitToExit;
+	public Runnable runnable = null;
 
+	//OFFLINE
+	public GameManager(JTextField filename, boolean singlePlayer) {
+		GameManager.offline = true;
+		if (singlePlayer) {
+			startGameManager(filename, 1); 	// IL NUMERO MI STA A DIRE SE C'è UN
+											// SINGOLO GIOCATORE O DI PIù
+		} else {
+			startGameManager(filename, 2);
+		}
+	}
+
+	//ONLINE CLIENT
+	public GameManager(JTextField filename, String name) {
+		startGameManager(filename, 2);
+		GameManager.offline = false;
+		// crea player
+		if (name.equals("P1")) {
+			playersArray.addFirst(new PlayerTank(19, 5, getMatrix(), name));
+			getMatrix().world[19][5] = playersArray.get(0);
+			
+			playersArray.addLast(new PlayerTank(19, 14, getMatrix(), "P2"));
+			getMatrix().world[19][14] = playersArray.get(1);
+		} else if (name.equals("P2")) {
+			playersArray.addFirst(new PlayerTank(19, 14, getMatrix(), name));
+			getMatrix().world[19][14] = playersArray.get(0);
+			
+			playersArray.addLast(new PlayerTank(19, 5, getMatrix(), "P1"));
+			getMatrix().world[19][5] = playersArray.get(1);
+		}
+	}
+
+	//ONLINE SERVER
+	public GameManager(Runnable runnable, List<String> names, JTextField filename) {
+		GameManager.offline = false;
+		this.runnable = runnable;
+		startGameManager(filename, 2);
+
+		for (int i = 0; i < names.size(); i++) {
+			// crea player
+			if (names.get(i).equals("P1")) {
+				playersArray.add(new PlayerTank(19, 5, getMatrix(), names.get(i)));
+				getMatrix().world[19][5] = playersArray.get(0);
+			} else if (names.get(i).equals("P2")) {
+				playersArray.add(new PlayerTank(19, 14, getMatrix(), names.get(i)));
+				getMatrix().world[19][14] = playersArray.get(0);
+			}
+		}
+
+	}
+
+	//USED FOR CONSTRUCTION
+	public GameManager(World world, Flag flag) {
+		this.matrix = world;
+		GameManager.flag = flag;
+	}
+
+
+	// --------------------------------------OTHER-----------------------------------------
+	public void startGameManager(JTextField filename, int numOfPlayer) {
 		currentTime = 0;
 		pauseOptionDialog = false;
 		paused = false;
@@ -84,10 +145,9 @@ public class GameManager {
 		random = new Random();
 		playersArray = new LinkedList<>();
 
-		this.setDirectory(directory);
 		this.setFilename(filename);
 
-		importMap(filename, directory);
+		importMap(filename, numOfPlayer);
 
 		if (playersArray.size() == 1)
 			numberOfEnemyToSpawn = 4;
@@ -101,14 +161,9 @@ public class GameManager {
 		timer2 = new Timer();
 		task2 = new CurrentTime();
 		timer2.schedule(task2, 0, 1000);
+		setExit(false);
+		waitToExit = false;
 	}
-
-	public GameManager(World world, Flag flag) { // SERVE PER IL CONSTRUCTION
-		this.matrix = world;
-		GameManager.flag = flag;
-	}
-
-	// --------------------------------------OTHER-----------------------------------------
 
 	public class MyTask extends TimerTask {
 
@@ -218,10 +273,22 @@ public class GameManager {
 		}
 	}
 
-	public void importMap(JTextField filename, JTextField dir) {
+	public void importMap(JTextField filename, int numOfPlayer) {
 		int i = 0;// indice di riga
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(dir.getText() + "/" + filename.getText()));
+			BufferedReader reader = null;
+			File career = new File("./maps/career/"+filename.getText());
+				if(!career.exists()){
+					File multiplayer = new File("./maps/editor/multiplayer/"+filename.getText());
+					if(!multiplayer.exists()){
+						File singleplayer = new File("./maps/editor/singleplayer/"+filename.getText());
+						reader = new BufferedReader(new FileReader(singleplayer.toString()));
+					}else{
+						reader = new BufferedReader(new FileReader(multiplayer.toString()));
+					}
+				}else{
+					reader = new BufferedReader(new FileReader(career.toString()));
+				}
 			String line = reader.readLine();
 			while (i < height) {
 
@@ -255,12 +322,16 @@ public class GameManager {
 						getMatrix().objectStatic[i][j] = new Water(i, j, getMatrix());
 						break;
 					case ("P1"):
-						playersArray.addFirst(new PlayerTank(i, j, getMatrix(), "P1"));
-						getMatrix().world[i][j] = playersArray.get(playersArray.size() - 1);
+						if (offline) {
+							playersArray.addFirst(new PlayerTank(i, j, getMatrix(), "P1"));
+							getMatrix().world[i][j] = playersArray.get(playersArray.size() - 1);
+						}
 						break;
 					case ("P2"):
-						playersArray.addLast(new PlayerTank(i, j, getMatrix(), "P2"));
-						getMatrix().world[i][j] = playersArray.get(playersArray.size() - 1);
+						if (offline) {
+							playersArray.addLast(new PlayerTank(i, j, getMatrix(), "P2"));
+							getMatrix().world[i][j] = playersArray.get(playersArray.size() - 1);
+						}
 						break;
 					case ("FLAG"):
 						flag = new Flag(i, j, matrix);
@@ -275,7 +346,7 @@ public class GameManager {
 				line = reader.readLine();
 			} // while
 
-			importEnemies(reader, line);
+			importEnemies(reader, line, numOfPlayer);
 			reader.close();
 
 		} // try
@@ -285,7 +356,7 @@ public class GameManager {
 		}
 	}
 
-	public void importEnemies(BufferedReader reader, String line) {
+	public void importEnemies(BufferedReader reader, String line, int numOfPlayer) {
 
 		while (line != null) {
 			StringTokenizer st = new StringTokenizer(line, " ");
@@ -299,7 +370,7 @@ public class GameManager {
 				number = st.nextToken();
 
 			if (typology != null && number != null)
-				addEnemies(typology, Integer.parseInt(number));
+				addEnemies(typology, Integer.parseInt(number), numOfPlayer);
 
 			try {
 				line = reader.readLine();
@@ -592,12 +663,12 @@ public class GameManager {
 		if (!rocket.rect.contains(rocket.getTank().rect)) {
 			// FLAG
 			if (object instanceof Flag) {
-				if (object.rect.intersects(rocket.rect)){
-					if(!effects.contains(flag)){
-					     effects.add(flag);
-					  flag.setHit(true);
-					  explosion=true;
-					  return true;
+				if (object.rect.intersects(rocket.rect)) {
+					if (!effects.contains(flag)) {
+						effects.add(flag);
+						flag.setHit(true);
+						explosion = true;
+						return true;
 					}
 				}
 			}
@@ -712,11 +783,11 @@ public class GameManager {
 		if (player.getResume() < 0) {
 			matrix.world[player.getX()][player.getY()] = null;
 			player.setDied(true);
-			for(int a=0; a<enemy.size(); a++){
-				int random=0;
-				do{
-					random=new Random().nextInt(playersArray.size());
-				}while(playersArray.get(random).isDied());
+			for (int a = 0; a < enemy.size(); a++) {
+				int random = 0;
+				do {
+					random = new Random().nextInt(playersArray.size());
+				} while (playersArray.get(random).isDied());
 				enemy.get(a).setRandomObject(random);
 			}
 		}
@@ -792,31 +863,31 @@ public class GameManager {
 
 	// -------------------------------------ENEMY-------------------------------------------
 
-	public void addEnemies(String T, int N) {
+	public void addEnemies(String T, int N, int numOfPlayer) {
 
 		int c = 0;
 		int saveLastPosition = 0;
 
 		while (c < N) {
-			chooseEnemy(T, pos[saveLastPosition % 3]);
+			chooseEnemy(T, pos[saveLastPosition % 3], numOfPlayer);
 			saveLastPosition++;
 			c++;
 		}
 	}
 
-	private void chooseEnemy(String typology, int y) {
+	private void chooseEnemy(String typology, int y, int numOfPlayer) {
 		switch (typology) {
 		case "basic":
-			enemy.add(new BasicTank(0, y, matrix, Direction.STOP, playersArray.size()));
+			enemy.add(new BasicTank(0, y, matrix, Direction.STOP, numOfPlayer));
 			break;
 		case "fast":
-			enemy.add(new FastTank(0, y, matrix, Direction.STOP, playersArray.size()));
+			enemy.add(new FastTank(0, y, matrix, Direction.STOP, numOfPlayer));
 			break;
 		case "power":
-			enemy.add(new PowerTank(0, y, matrix, Direction.STOP, playersArray.size()));
+			enemy.add(new PowerTank(0, y, matrix, Direction.STOP, numOfPlayer));
 			break;
 		case "armor":
-			enemy.add(new ArmorTank(0, y, matrix, Direction.STOP, playersArray.size()));
+			enemy.add(new ArmorTank(0, y, matrix, Direction.STOP, numOfPlayer));
 			break;
 		}
 		if ((enemy.size() % numEnemyDropsPowerUp) == 0) { // ogni quanti nemici
@@ -872,11 +943,60 @@ public class GameManager {
 
 		for (int i = 0; i < playersArray.size(); i++)
 			if (e.getX() == playersArray.get(i).getX() && e.getY() == playersArray.get(i).getY()) {
-				System.out.println("OK");
 				return false;
 			}
 
 		return true;
+	}
+
+	// ------------------------------ONLINE------------------------------------------
+
+	// STRING TO DATA
+	public void parseStatusFromString(String status) {
+		String [] elements=status.split("#");
+		String [] players=elements[0].split(";");
+	
+		//P2:19:4;P1:19:5;#
+		for(String s : players){
+			String [] split= s.split(":");
+			for(int a=0; a<getPlayersArray().size(); a++){
+				if(getPlayersArray().get(a).toString().equals(split[0])){
+					getPlayersArray().get(a).setxGraphics(Double.parseDouble(split[1]));
+					getPlayersArray().get(a).setyGraphics(Double.parseDouble(split[2]));
+					getPlayersArray().get(a).setTmpDirection(Direction.valueOf(split[3]));
+					getPlayersArray().get(a).setKeyPressedMillis(Long.parseLong(split[4]));
+					getPlayersArray().get(a).setPressed(Boolean.parseBoolean(split[5]));
+				}
+			}
+		}
+	}
+
+	// DATA TO STRING
+	public String statusToString() {
+		StringBuilder stringBuilder = new StringBuilder();
+
+		for (int a = 0; a < getPlayersArray().size(); a++) {
+			stringBuilder.append(build(getPlayersArray().get(a)));
+		}
+		stringBuilder.append("#");
+
+		return stringBuilder.toString();
+	}
+
+	private String build(AbstractStaticObject ob) {
+
+		if (ob instanceof PlayerTank) {
+			PlayerTank p = ((PlayerTank) ob);
+			return (p.toString() + ":" + p.getxGraphics() + ":" + p.getyGraphics() + ":"+p.getTmpDirection()+":"+p.getKeyPressedMillis()+":"+p.isPressed()+";");
+		} else if (ob instanceof EnemyTank) {
+
+		} else if (ob instanceof Rocket) {
+
+		} else if (ob instanceof PowerUp) {
+
+		}
+
+		return " ";
 	}
 
 	// -----------------------------SET&GET--------------------------------------
@@ -997,14 +1117,6 @@ public class GameManager {
 		this.filename = filename;
 	}
 
-	public JTextField getDirectory() {
-		return directory;
-	}
-
-	public void setDirectory(JTextField directory) {
-		this.directory = directory;
-	}
-
 	public boolean isExplosion() {
 		return explosion;
 	}
@@ -1021,4 +1133,19 @@ public class GameManager {
 		this.playersArray = playersArray;
 	}
 
+	public boolean isExit() {
+		return exit;
+	}
+
+	public void setExit(boolean exit) {
+		this.exit = exit;
+	}
+
+	public boolean isWaitToExit() {
+		return waitToExit;
+	}
+
+	public void setWaitToExit(boolean waitToExit) {
+		this.waitToExit = waitToExit;
+	}
 }
