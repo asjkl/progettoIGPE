@@ -41,6 +41,7 @@ public class GameManager {
 	private int numberOfEnemyToSpawn;
 	private int numberOfEnemyOnMap;
 	private int numberOfEnemyReadyToSpwan;
+	private int numbersOfEnemy;
 
 	// POWERUPS
 	private int durationPowerUp;
@@ -65,9 +66,9 @@ public class GameManager {
 	private boolean exit;
 	private boolean waitToExit;
 	public Runnable runnable = null;
-	
-	public Lock lock=new ReentrantLock();
-	
+
+	public Lock lock = new ReentrantLock();
+
 	// OFFLINE
 	public GameManager(JTextField filename, boolean singlePlayer) {
 		GameManager.offline = true;
@@ -81,7 +82,12 @@ public class GameManager {
 
 	// ONLINE CLIENT
 	public GameManager(JTextField filename, String name) {
-		startGameManager(filename, 2);
+		matrix = new World(height, width);
+		enemy=new ArrayList<>();
+		rocket = new ArrayList<>();
+		effects = new ArrayList<>();
+		playersArray = new LinkedList<>();
+		power = new ArrayList<>();
 		GameManager.offline = false;
 		// crea player
 		if (name.equals("P1")) {
@@ -167,6 +173,7 @@ public class GameManager {
 		timer2.schedule(task2, 0, 1000);
 		setExit(false);
 		waitToExit = false;
+		setNumbersOfEnemy(enemy.size());
 	}
 
 	public class MyTask extends TimerTask {
@@ -836,6 +843,7 @@ public class GameManager {
 
 		// RIMETTI CURR
 		matrix.world[enemyT.getX()][enemyT.getY()] = enemyT.getCurr();
+		setNumbersOfEnemy(getNumbersOfEnemy() - 1);
 		effects.add(enemyT);
 		enemy.remove(enemyT);
 		explosion = true;
@@ -873,25 +881,25 @@ public class GameManager {
 		int saveLastPosition = 0;
 
 		while (c < N) {
-			chooseEnemy(T, pos[saveLastPosition % 3], numOfPlayer, c);
+			chooseEnemy(T, pos[saveLastPosition % 3], numOfPlayer);
 			saveLastPosition++;
 			c++;
 		}
 	}
 
-	private void chooseEnemy(String typology, int y, int numOfPlayer, int c) {
+	private void chooseEnemy(String typology, int y, int numOfPlayer) {
 		switch (typology) {
 		case "basic":
-			enemy.add(new BasicTank(0, y, matrix, Direction.STOP, numOfPlayer, c));
+			enemy.add(new BasicTank(0, y, matrix, Direction.STOP, numOfPlayer));
 			break;
 		case "fast":
-			enemy.add(new FastTank(0, y, matrix, Direction.STOP, numOfPlayer, c));
+			enemy.add(new FastTank(0, y, matrix, Direction.STOP, numOfPlayer));
 			break;
 		case "power":
-			enemy.add(new PowerTank(0, y, matrix, Direction.STOP, numOfPlayer, c));
+			enemy.add(new PowerTank(0, y, matrix, Direction.STOP, numOfPlayer));
 			break;
 		case "armor":
-			enemy.add(new ArmorTank(0, y, matrix, Direction.STOP, numOfPlayer, c));
+			enemy.add(new ArmorTank(0, y, matrix, Direction.STOP, numOfPlayer));
 			break;
 		}
 		if ((enemy.size() % numEnemyDropsPowerUp) == 0) { // ogni quanti nemici
@@ -958,10 +966,44 @@ public class GameManager {
 	// STRING TO DATA
 	public void parseStatusFromString(String status) {
 		String [] elements=status.split("#");
-		String [] players=elements[0].split(";");
-		String [] enemy=elements[1].split(";");
-		String [] rockets=elements[2].split(";");
+		String [] variableOfSystem=elements[0].split(";");
+		String [] map=elements[1].split(";");
+		String [] players=elements[2].split(";");
+		String [] enemy=elements[3].split(";");
+		String [] rockets=elements[4].split(";");
 	
+		for(String s : variableOfSystem){
+			String [] split= s.split(":");
+			numbersOfEnemy=Integer.parseInt(split[0]);
+		}	
+		
+		int x=0;
+		for(String s : map){
+			String [] split= s.split(":");
+			int y=0;
+			for(String s1: split){
+				if(s1.equals("null")){
+					getMatrix().world[x][y]=null;
+				}else if(s1.equals("[//]")){
+					getMatrix().world[x][y] = new SteelWall(x, y, getMatrix(), 4);
+				}else if(s1.equals("@@@@")){
+					getMatrix().world[x][y] = new Ice(x, y, getMatrix());
+				}else if(s1.equals("TTTT")){
+					getMatrix().world[x][y] = new Tree(x,y, getMatrix());
+				}else if(s1.equals("[  ]")){
+					getMatrix().world[x][y] = new BrickWall(x, y, getMatrix(), 2);
+				}else if(s1.equals("~~~~")){
+					getMatrix().world[x][y] = new Water(x, y, getMatrix());
+				}else if(s1.equals(" && ")){
+					flag = new Flag(x, y, matrix);
+					getMatrix().world[x][y] = flag;
+				}
+				y++;
+			}
+			x++;
+		}
+
+		
 		for(String s : players){
 			String [] split= s.split(":");
 			for(int a=0; a<getPlayersArray().size(); a++){
@@ -975,18 +1017,26 @@ public class GameManager {
 			}
 		}
 		
+		lock.lock();
+		getEnemy().clear();
 		for(String s : enemy){
 			String [] split= s.split(":");
-			for(int a=0; a<getEnemy().size(); a++){
-				if(getEnemy().get(a).toString().equals(split[0])){
-					getEnemy().get(a).setxGraphics(Double.parseDouble(split[1]));
-					getEnemy().get(a).setyGraphics(Double.parseDouble(split[2]));
-					getEnemy().get(a).setTmpDirection(Direction.valueOf(split[3]));
-					getEnemy().get(a).setAppearsInTheMap(Boolean.parseBoolean(split[4]));
-					getEnemy().get(a).setReadyToSpawn(Boolean.parseBoolean(split[5]));
-				}
+			if(split[0].equals(" AT ")){
+				getEnemy().add(new ArmorTank(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix, Direction.valueOf(split[5]),2));
+			}else if(split[0].equals(" BT ")){
+				getEnemy().add(new BasicTank(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix, Direction.valueOf(split[5]),2));
+			}else if(split[0].equals(" FT ")){
+				getEnemy().add(new FastTank(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix, Direction.valueOf(split[5]),2));
+			}else if(split[0].equals(" PT ")){
+				getEnemy().add(new FastTank(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix, Direction.valueOf(split[5]),2));
 			}
+			getEnemy().get(getEnemy().size()-1).setxGraphics(Double.parseDouble(split[3]));
+			getEnemy().get(getEnemy().size()-1).setyGraphics(Double.parseDouble(split[4]));
+			getEnemy().get(getEnemy().size()-1).setTmpDirection(Direction.valueOf(split[5]));
+			getEnemy().get(getEnemy().size()-1).setAppearsInTheMap(Boolean.parseBoolean(split[6]));
+			getEnemy().get(getEnemy().size()-1).setReadyToSpawn(Boolean.parseBoolean(split[7]));
 		}	
+		lock.unlock();
 		
 		//HO DOVUTO METTERE IL LOCK QUI XK è LA PARTE DOVE VIENE FATTO CLEAR E VIENE ANCHE DISEGNATO...XK C'è ANCHE IL LOCK NEL PAINT COMPONENT NELLA PARTE ROCKET
 		lock.lock();
@@ -1006,17 +1056,33 @@ public class GameManager {
 	// DATA TO STRING
 	public String statusToString() {
 		StringBuilder stringBuilder = new StringBuilder();
+		
+		//QUI MANDO VARIABILI DI SISTEMA, COME PER ESEMPIO SIZE DEGLI ENEMY ECC
+		stringBuilder.append(getEnemy().size()+";");
+		stringBuilder.append("#");
+		
+		for (int a = 0; a < getMatrix().getRow(); a++) {
+			for (int b = 0; b < getMatrix().getColumn(); b++) {
+				if(matrix.world[a][b]==null){
+					stringBuilder.append("null"+":");
+				}else{
+					stringBuilder.append(matrix.world[a][b].toString()+":");
+				}
+			}
+			stringBuilder.append(";");
+		}
+		stringBuilder.append("#");
 
 		for (int a = 0; a < getPlayersArray().size(); a++) {
 			stringBuilder.append(build(getPlayersArray().get(a)));
 		}
 		stringBuilder.append("#");
 
-		for(int a=0; a<getEnemy().size(); a++){
+		for (int a = 0; a < getEnemy().size(); a++) {
 			stringBuilder.append(build(getEnemy().get(a)));
 		}
 		stringBuilder.append("#");
-		
+
 		if (getRocket().isEmpty()) {
 			stringBuilder.append(" ");
 		} else {
@@ -1024,7 +1090,7 @@ public class GameManager {
 				stringBuilder.append(build(getRocket().get(a)));
 			}
 		}
-			
+
 		return stringBuilder.toString();
 	}
 
@@ -1035,12 +1101,13 @@ public class GameManager {
 			return (p.toString() + ":" + p.getxGraphics() + ":" + p.getyGraphics() + ":" + p.getTmpDirection() + ":"
 					+ p.getKeyPressedMillis() + ":" + p.isPressed() + ";");
 		} else if (ob instanceof EnemyTank) {
-			EnemyTank e= ((EnemyTank)ob);
-			return (e.toString()+":"+e.getxGraphics()+":"+e.getyGraphics()+":"+e.getTmpDirection()+":"+e.isAppearsInTheMap()+":"+e.isReadyToSpawn()+";");
+			EnemyTank e = ((EnemyTank) ob);
+			return (e.toString() + ":" + e.getX() + ":" + e.getY() + ":" + e.getxGraphics() + ":" + e.getyGraphics()
+					+ ":" + e.getTmpDirection() + ":" + e.isAppearsInTheMap() + ":" + e.isReadyToSpawn() + ";");
 		} else if (ob instanceof Rocket) {
 			Rocket r = ((Rocket) ob);
-			return (r.getX() + ":" + r.getY() + ":" + r.getDirection() + ":" + r.getxGraphics()
-					+ ":" + r.getyGraphics()+":"+r.isFirstAnimationNo()+";");
+			return (r.getX() + ":" + r.getY() + ":" + r.getDirection() + ":" + r.getxGraphics() + ":" + r.getyGraphics()
+					+ ":" + r.isFirstAnimationNo() + ";");
 		} else if (ob instanceof PowerUp) {
 
 		}
@@ -1196,5 +1263,13 @@ public class GameManager {
 
 	public void setWaitToExit(boolean waitToExit) {
 		this.waitToExit = waitToExit;
+	}
+
+	public int getNumbersOfEnemy() {
+		return numbersOfEnemy;
+	}
+
+	public void setNumbersOfEnemy(int numbersOfEnemy) {
+		this.numbersOfEnemy = numbersOfEnemy;
 	}
 }

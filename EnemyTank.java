@@ -34,10 +34,9 @@ public class EnemyTank extends Tank {
 	private int randomObject;
 	private int xPast = -1;
 	private int yPast = -1;
-	private int nameEnemy;
 	
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health,
-			int point, int numOfPlayers, int c) {
+			int point, int numOfPlayers) {
 		super(x, y, world, speed, speedShot, direction, health);
 
 		this.setPoint(point);
@@ -58,7 +57,6 @@ public class EnemyTank extends Tank {
 		for (int i = 0; i < directions.length; i++) {
 			directions[i] = false;
 		}
-		this.setNameEnemy(c);
 	}
 
 	@Override
@@ -501,13 +499,5 @@ public class EnemyTank extends Tank {
 
 	public void setyPast(int yPast) {
 		this.yPast = yPast;
-	}
-
-	public int getNameEnemy() {
-		return nameEnemy;
-	}
-
-	public void setNameEnemy(int nameEnemy) {
-		this.nameEnemy = nameEnemy;
 	}
 }

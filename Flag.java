@@ -30,5 +30,4 @@ public class Flag extends AbstractStaticObject {
 	public void setInc(int inc) {
 		this.inc = inc;
 	}
-
 }
