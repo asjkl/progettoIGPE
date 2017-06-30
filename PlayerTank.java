@@ -88,6 +88,7 @@ public class PlayerTank extends Tank {
 		return false;
 	}
 	
+	@SuppressWarnings("serial")
 	private void defaultKeys(){
 		if(GameManager.offline){
 			if(id.equals("P1"))  {

@@ -79,7 +79,6 @@ public class GameManager {
 			startGameManager(filename, 2);
 		}
 	}
-
 	// ONLINE CLIENT
 	public GameManager(JTextField filename, String name) {
 		matrix = new World(height, width);
