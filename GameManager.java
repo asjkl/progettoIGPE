@@ -1026,6 +1026,9 @@ public class GameManager {
 					getPlayersArray().get(a).setTmpDirection(Direction.valueOf(split[3]));
 					getPlayersArray().get(a).setKeyPressedMillis(Long.parseLong(split[4]));
 					getPlayersArray().get(a).setPressed(Boolean.parseBoolean(split[5]));
+					getPlayersArray().get(a).setProtection(Boolean.parseBoolean(split[6]));
+					getPlayersArray().get(a).setReadyToSpawn(Boolean.parseBoolean(split[7]));
+					getPlayersArray().get(a).setCountdown(Integer.parseInt(split[8]));
 				}
 			}
 		}
@@ -1052,6 +1055,8 @@ public class GameManager {
 			getEnemy().get(getEnemy().size() - 1).setTmpDirection(Direction.valueOf(split[6]));
 			getEnemy().get(getEnemy().size() - 1).setAppearsInTheMap(Boolean.parseBoolean(split[7]));
 			getEnemy().get(getEnemy().size() - 1).setReadyToSpawn(Boolean.parseBoolean(split[8]));
+			getEnemy().get(getEnemy().size() - 1).setProtection(Boolean.parseBoolean(split[10]));
+			getEnemy().get(getEnemy().size() - 1).setCountdown(Integer.parseInt(split[11]));
 		}
 		lock.unlock();
 
@@ -1250,12 +1255,12 @@ public class GameManager {
 		if (ob instanceof PlayerTank) {
 			PlayerTank p = ((PlayerTank) ob);
 			return (p.toString() + ":" + p.getxGraphics() + ":" + p.getyGraphics() + ":" + p.getTmpDirection() + ":"
-					+ p.getKeyPressedMillis() + ":" + p.isPressed() + ";");
+					+ p.getKeyPressedMillis() + ":" + p.isPressed() + ":"+p.isProtection()+":"+p.isReadyToSpawn()+":"+p.getCountdown()+";");
 		} else if (ob instanceof EnemyTank) {
 			EnemyTank e = ((EnemyTank) ob);
 			return ("ENEMY" + ":" + e.toString() + ":" + e.getX() + ":" + e.getY() + ":" + e.getxGraphics() + ":"
 					+ e.getyGraphics() + ":" + e.getTmpDirection() + ":" + e.isAppearsInTheMap() + ":"
-					+ e.isReadyToSpawn() + ":" + e.getInc() + ";");
+					+ e.isReadyToSpawn() + ":" + e.getInc() + ":"+ e.isProtection()+":"+e.getCountdown()+";");
 		} else if (ob instanceof Rocket) {
 			Rocket r = ((Rocket) ob);
 			return (r.toString() + ":" + r.getX() + ":" + r.getY() + ":" + r.getDirection() + ":" + r.getxGraphics()
