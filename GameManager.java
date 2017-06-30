@@ -79,6 +79,7 @@ public class GameManager {
 			startGameManager(filename, 2);
 		}
 	}
+
 	// ONLINE CLIENT
 	public GameManager(JTextField filename, String name) {
 		matrix = new World(height, width);
@@ -971,6 +972,7 @@ public class GameManager {
 		String[] enemy = elements[3].split(";");
 		String[] rockets = elements[4].split(";");
 		String[] powerUp = elements[5].split(";");
+		String[] effects = elements[6].split(";");
 
 		for (String s : variableOfSystem) {
 			String[] split = s.split(":");
@@ -994,19 +996,19 @@ public class GameManager {
 					getMatrix().world[x][y] = new BrickWall(x, y, getMatrix(), 2);
 				} else if (s1.equals("~~~~")) {
 					getMatrix().world[x][y] = new Water(x, y, getMatrix());
-				}else if (s1.equals("GRENADE")) {
+				} else if (s1.equals("GRENADE")) {
 					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.GRENADE);
-				}else if (s1.equals("HELMET")) {
+				} else if (s1.equals("HELMET")) {
 					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.HELMET);
-				}else if (s1.equals("SHOVEL")) {
+				} else if (s1.equals("SHOVEL")) {
 					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.SHOVEL);
-				}else if (s1.equals("STAR")) {
+				} else if (s1.equals("STAR")) {
 					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.STAR);
-				}else if (s1.equals("TANK")) {
+				} else if (s1.equals("TANK")) {
 					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.TANK);
-				}else if (s1.equals("TIMER")) {
+				} else if (s1.equals("TIMER")) {
 					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.TIMER);
-				}else if (s1.equals(" && ")) {
+				} else if (s1.equals(" && ")) {
 					flag = new Flag(x, y, matrix);
 					getMatrix().world[x][y] = flag;
 				}
@@ -1032,24 +1034,24 @@ public class GameManager {
 		getEnemy().clear();
 		for (String s : enemy) {
 			String[] split = s.split(":");
-			if (split[0].equals(" AT ")) {
-				getEnemy().add(new ArmorTank(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix,
-						Direction.valueOf(split[5]), 2));
-			} else if (split[0].equals(" BT ")) {
-				getEnemy().add(new BasicTank(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix,
-						Direction.valueOf(split[5]), 2));
-			} else if (split[0].equals(" FT ")) {
-				getEnemy().add(new FastTank(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix,
-						Direction.valueOf(split[5]), 2));
-			} else if (split[0].equals(" PT ")) {
-				getEnemy().add(new FastTank(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix,
-						Direction.valueOf(split[5]), 2));
+			if (split[1].equals(" AT ")) {
+				getEnemy().add(new ArmorTank(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix,
+						Direction.valueOf(split[6]), 2));
+			} else if (split[1].equals(" BT ")) {
+				getEnemy().add(new BasicTank(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix,
+						Direction.valueOf(split[6]), 2));
+			} else if (split[1].equals(" FT ")) {
+				getEnemy().add(new FastTank(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix,
+						Direction.valueOf(split[6]), 2));
+			} else if (split[1].equals(" PT ")) {
+				getEnemy().add(new FastTank(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix,
+						Direction.valueOf(split[6]), 2));
 			}
-			getEnemy().get(getEnemy().size() - 1).setxGraphics(Double.parseDouble(split[3]));
-			getEnemy().get(getEnemy().size() - 1).setyGraphics(Double.parseDouble(split[4]));
-			getEnemy().get(getEnemy().size() - 1).setTmpDirection(Direction.valueOf(split[5]));
-			getEnemy().get(getEnemy().size() - 1).setAppearsInTheMap(Boolean.parseBoolean(split[6]));
-			getEnemy().get(getEnemy().size() - 1).setReadyToSpawn(Boolean.parseBoolean(split[7]));
+			getEnemy().get(getEnemy().size() - 1).setxGraphics(Double.parseDouble(split[4]));
+			getEnemy().get(getEnemy().size() - 1).setyGraphics(Double.parseDouble(split[5]));
+			getEnemy().get(getEnemy().size() - 1).setTmpDirection(Direction.valueOf(split[6]));
+			getEnemy().get(getEnemy().size() - 1).setAppearsInTheMap(Boolean.parseBoolean(split[7]));
+			getEnemy().get(getEnemy().size() - 1).setReadyToSpawn(Boolean.parseBoolean(split[8]));
 		}
 		lock.unlock();
 
@@ -1061,11 +1063,11 @@ public class GameManager {
 			rocket.clear();
 			for (String s : rockets) {
 				String[] split = s.split(":");
-				getRocket().add(new Rocket(Integer.parseInt(split[0]), Integer.parseInt(split[1]), matrix,
-						Direction.valueOf(split[2]), null));
-				getRocket().get(getRocket().size() - 1).setxGraphics(Double.parseDouble(split[3]));
-				getRocket().get(getRocket().size() - 1).setyGraphics(Double.parseDouble(split[4]));
-				getRocket().get(getRocket().size() - 1).setFirstAnimationNo(Boolean.parseBoolean(split[5]));
+				getRocket().add(new Rocket(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix,
+						Direction.valueOf(split[3]), null));
+				getRocket().get(getRocket().size() - 1).setxGraphics(Double.parseDouble(split[4]));
+				getRocket().get(getRocket().size() - 1).setyGraphics(Double.parseDouble(split[5]));
+				getRocket().get(getRocket().size() - 1).setFirstAnimationNo(Boolean.parseBoolean(split[6]));
 			}
 		}
 		lock.unlock();
@@ -1075,48 +1077,109 @@ public class GameManager {
 			power.clear();
 			for (String s : powerUp) {
 				String[] split = s.split(":");
-				if (split[0].equals("GRENADE")) {
+				if (split[1].equals("GRENADE")) {
 					power.add(
-							new PowerUp(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix, Power.GRENADE));
-				} else if (split[0].equals("HELMET")) {
+							new PowerUp(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix, Power.GRENADE));
+				} else if (split[1].equals("HELMET")) {
 					power.add(
-							new PowerUp(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix, Power.HELMET));
-				} else if (split[0].equals("SHOVEL")) {
+							new PowerUp(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix, Power.HELMET));
+				} else if (split[1].equals("SHOVEL")) {
 					power.add(
-							new PowerUp(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix, Power.SHOVEL));
-				} else if (split[0].equals("STAR")) {
-					power.add(new PowerUp(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix, Power.STAR));
-				} else if (split[0].equals("TANK")) {
-					power.add(new PowerUp(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix, Power.TANK));
-				} else if (split[0].equals("TIMER")) {
-					power.add(new PowerUp(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix, Power.TIMER));
+							new PowerUp(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix, Power.SHOVEL));
+				} else if (split[1].equals("STAR")) {
+					power.add(new PowerUp(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix, Power.STAR));
+				} else if (split[1].equals("TANK")) {
+					power.add(new PowerUp(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix, Power.TANK));
+				} else if (split[1].equals("TIMER")) {
+					power.add(new PowerUp(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix, Power.TIMER));
 				}
-				power.get(power.size() - 1).setBlink(Boolean.parseBoolean(split[3]));
-				if (split[4].equals(" @@ ")) {
+				power.get(power.size() - 1).setBlink(Boolean.parseBoolean(split[4]));
+				if (split[5].equals(" @@ ")) {
 					power.get(power.size() - 1).setBefore(new Ice(0, 0, matrix));
-				} else if (split[4].equals("[//]")) {
+				} else if (split[5].equals("[//]")) {
 					power.get(power.size() - 1).setBefore(new SteelWall(0, 0, matrix, 4));
-				} else if (split[4].equals(" TT ")) {
+				} else if (split[5].equals(" TT ")) {
 					power.get(power.size() - 1).setBefore(new Tree(0, 0, matrix));
-				} else if (split[4].equals(" ~~ ")) {
+				} else if (split[5].equals(" ~~ ")) {
 					power.get(power.size() - 1).setBefore(new Water(0, 0, matrix));
-				} else if (split[4].equals("[  ]")) {
+				} else if (split[5].equals("[  ]")) {
 					power.get(power.size() - 1).setBefore(new BrickWall(0, 0, matrix, 4));
 				}
 
-				if (split[5].equals("[  ]")) {
+				if (split[6].equals("[  ]")) {
 					power.get(power.size() - 1).setBeforeWater(new BrickWall(0, 0, matrix, 1));
-				} else if (split[5].equals("[//]")) {
+				} else if (split[6].equals("[//]")) {
 					power.get(power.size() - 1).setBeforeWater(new SteelWall(0, 0, matrix, 1));
-				} else if (split[5].equals(" TT ")) {
+				} else if (split[6].equals(" TT ")) {
 					power.get(power.size() - 1).setBeforeWater(new Tree(0, 0, matrix));
-				} else if (split[5].equals(" @@ ")) {
+				} else if (split[6].equals(" @@ ")) {
 					power.get(power.size() - 1).setBeforeWater(new Ice(0, 0, matrix));
 				}
-				if(!split[6].equals("null"))
-					power.get(power.size() - 1).setDropDirection(Direction.valueOf(split[6]));
+				if (!split[7].equals("null"))
+					power.get(power.size() - 1).setDropDirection(Direction.valueOf(split[7]));
 				else
 					power.get(power.size() - 1).setDropDirection(null);
+			}
+		}
+		lock.unlock();
+
+		lock.lock();
+		if (effects.length > 1 || effects.length == 1 && !effects[0].trim().isEmpty()) {
+			getEffects().clear();
+			for (String s : effects) {
+				String[] split = s.split(":");
+				if (split[0].equals(" -- ")) {
+					getEffects().add(new Rocket(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix,
+							Direction.valueOf(split[3]), null));
+					((Rocket) getEffects().get(getEffects().size() - 1)).setInc(Integer.parseInt(split[7]));
+					getEffects().get(getEffects().size() - 1).setxGraphics(Double.parseDouble(split[4]));
+					getEffects().get(getEffects().size() - 1).setyGraphics(Double.parseDouble(split[5]));
+				} else if (split[0].equals(" && ")) {
+					getEffects().add(new Flag(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix));
+					((Flag) getEffects().get(getEffects().size() - 1)).setInc(Integer.parseInt(split[5]));
+					getEffects().get(getEffects().size() - 1).setxGraphics(Double.parseDouble(split[3]));
+					getEffects().get(getEffects().size() - 1).setyGraphics(Double.parseDouble(split[4]));
+
+				} else if (split[0].equals("ENEMY")) {
+					if (split[1].equals(" AT ")) {
+						getEffects().add(new ArmorTank(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix,
+								Direction.valueOf(split[6]), 2));
+					} else if (split[1].equals(" BT ")) {
+						getEffects().add(new BasicTank(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix,
+								Direction.valueOf(split[6]), 2));
+					} else if (split[1].equals(" FT ")) {
+						getEffects().add(new FastTank(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix,
+								Direction.valueOf(split[6]), 2));
+					} else if (split[1].equals(" PT ")) {
+						getEffects().add(new FastTank(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix,
+								Direction.valueOf(split[6]), 2));
+					}
+					getEffects().get(getEffects().size() - 1).setxGraphics(Double.parseDouble(split[4]));
+					getEffects().get(getEffects().size() - 1).setyGraphics(Double.parseDouble(split[5]));
+					((EnemyTank) getEffects().get(getEffects().size() - 1)).setInc(Integer.parseInt(split[9]));
+
+				} else if (split[0].equals("POWERUP")) {
+					if (split[1].equals("GRENADE")) {
+						getEffects().add(new PowerUp(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix,
+								Power.GRENADE));
+					} else if (split[1].equals("HELMET")) {
+						getEffects().add(new PowerUp(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix,
+								Power.HELMET));
+					} else if (split[1].equals("SHOVEL")) {
+						getEffects().add(new PowerUp(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix,
+								Power.SHOVEL));
+					} else if (split[1].equals("STAR")) {
+						getEffects().add(new PowerUp(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix,
+								Power.STAR));
+					} else if (split[1].equals("TANK")) {
+						getEffects().add(new PowerUp(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix,
+								Power.TANK));
+					} else if (split[1].equals("TIMER")) {
+						getEffects().add(new PowerUp(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix,
+								Power.TIMER));
+					}
+					((PowerUp) getEffects().get(getEffects().size() - 1)).setInc(Integer.parseInt(split[8]));
+				}
 			}
 		}
 		lock.unlock();
@@ -1169,6 +1232,16 @@ public class GameManager {
 				stringBuilder.append(build(getPower().get(a)));
 			}
 		}
+		stringBuilder.append("#");
+
+		if (getEffects().isEmpty()) {
+			stringBuilder.append(" ");
+		} else {
+			for (int a = 0; a < getEffects().size(); a++) {
+				stringBuilder.append(build(getEffects().get(a)));
+			}
+		}
+
 		return stringBuilder.toString();
 	}
 
@@ -1180,12 +1253,13 @@ public class GameManager {
 					+ p.getKeyPressedMillis() + ":" + p.isPressed() + ";");
 		} else if (ob instanceof EnemyTank) {
 			EnemyTank e = ((EnemyTank) ob);
-			return (e.toString() + ":" + e.getX() + ":" + e.getY() + ":" + e.getxGraphics() + ":" + e.getyGraphics()
-					+ ":" + e.getTmpDirection() + ":" + e.isAppearsInTheMap() + ":" + e.isReadyToSpawn() + ";");
+			return ("ENEMY" + ":" + e.toString() + ":" + e.getX() + ":" + e.getY() + ":" + e.getxGraphics() + ":"
+					+ e.getyGraphics() + ":" + e.getTmpDirection() + ":" + e.isAppearsInTheMap() + ":"
+					+ e.isReadyToSpawn() + ":" + e.getInc() + ";");
 		} else if (ob instanceof Rocket) {
 			Rocket r = ((Rocket) ob);
-			return (r.getX() + ":" + r.getY() + ":" + r.getDirection() + ":" + r.getxGraphics() + ":" + r.getyGraphics()
-					+ ":" + r.isFirstAnimationNo() + ";");
+			return (r.toString() + ":" + r.getX() + ":" + r.getY() + ":" + r.getDirection() + ":" + r.getxGraphics()
+					+ ":" + r.getyGraphics() + ":" + r.isFirstAnimationNo() + ":" + r.getInc() + ";");
 		} else if (ob instanceof PowerUp) {
 			PowerUp pu = (PowerUp) ob;
 			AbstractStaticObject getbef = pu.getBefore();
@@ -1203,8 +1277,12 @@ public class GameManager {
 				s2 = getbefWa.toString();
 			}
 
-			return (pu.toString() + ":" + pu.getX() + ":" + pu.getY() + ":" + pu.isBlink() + ":" + s1 + ":" + s2 + ":"
-					+ pu.getDropDirection() + ";");
+			return ("POWERUP" + ":" + pu.toString() + ":" + pu.getX() + ":" + pu.getY() + ":" + pu.isBlink() + ":" + s1
+					+ ":" + s2 + ":" + pu.getDropDirection() + ":" + pu.getInc() + ";");
+		} else if (ob instanceof Flag) {
+			Flag f = (Flag) ob;
+			return (f.toString() + ":" + f.getX() + ":" + f.getY() + ":" + f.getxGraphics() + ":" + f.getyGraphics()
+					+ ":" + f.getInc() + ";");
 		}
 
 		return " ";
