@@ -30,6 +30,7 @@ public class GameManager {
 	private Random random;
 	private World matrix;
 	public static Flag flag;
+	private boolean shotEnabled;
 	private LinkedList<PlayerTank> playersArray;
 	private ArrayList<EnemyTank> enemy;
 	private ArrayList<PowerUp> power;
@@ -138,8 +139,8 @@ public class GameManager {
 		numberOfEnemyOnMap = 0;
 		numberOfEnemyReadyToSpwan = 0;
 		durationPowerUp = 20;
-		numEnemyDropsPowerUp = 1; // indica ogni quanti enemie far cadere
-									// powerUp
+		numEnemyDropsPowerUp = 1; // indica ogni quanti enemie far cadere powerUp
+		shotEnabled = true; //i nemici possono sparare
 		xTmp = -1;
 		yTmp = -1;
 		blinkTime = 5; // quanti secondi alla fine deve lampeggiare
@@ -223,10 +224,6 @@ public class GameManager {
 
 	public ArrayList<AbstractStaticObject> getEffects() {
 		return effects;
-	}
-
-	public void setEffects(ArrayList<AbstractStaticObject> effects) {
-		this.effects = effects;
 	}
 
 	public class CurrentTime extends TimerTask {
@@ -996,19 +993,21 @@ public class GameManager {
 					getMatrix().world[x][y] = new BrickWall(x, y, getMatrix(), 2);
 				} else if (s1.equals("~~~~")) {
 					getMatrix().world[x][y] = new Water(x, y, getMatrix());
-				} else if (s1.equals("GRENADE")) {
-					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.GRENADE);
-				} else if (s1.equals("HELMET")) {
-					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.HELMET);
-				} else if (s1.equals("SHOVEL")) {
-					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.SHOVEL);
-				} else if (s1.equals("STAR")) {
-					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.STAR);
-				} else if (s1.equals("TANK")) {
-					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.TANK);
-				} else if (s1.equals("TIMER")) {
-					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.TIMER);
-				} else if (s1.equals(" && ")) {
+				}
+//				else if (s1.equals("GRENADE")) {
+//					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.GRENADE);
+//				} else if (s1.equals("HELMET")) {
+//					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.HELMET);
+//				} else if (s1.equals("SHOVEL")) {
+//					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.SHOVEL);
+//				} else if (s1.equals("STAR")) {
+//					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.STAR);
+//				} else if (s1.equals("TANK")) {
+//					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.TANK);
+//				} else if (s1.equals("TIMER")) {
+//					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.TIMER);
+//				} 
+				else if (s1.equals(" && ")) {
 					flag = new Flag(x, y, matrix);
 					getMatrix().world[x][y] = flag;
 				}
@@ -1460,8 +1459,24 @@ public class GameManager {
 	public int getNumbersOfEnemy() {
 		return numbersOfEnemy;
 	}
-
+	
+	public void setEffects(ArrayList<AbstractStaticObject> effects) {
+		this.effects = effects;
+	}
+	
 	public void setNumbersOfEnemy(int numbersOfEnemy) {
 		this.numbersOfEnemy = numbersOfEnemy;
+	}
+
+	
+	public boolean isShotEnabled() {
+		return shotEnabled;
+	}
+
+	
+	
+	
+	public void setShotEnabled(boolean shotEnabled) {
+		this.shotEnabled = shotEnabled;
 	}
 }
