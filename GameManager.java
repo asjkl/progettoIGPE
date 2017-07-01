@@ -139,8 +139,9 @@ public class GameManager {
 		numberOfEnemyOnMap = 0;
 		numberOfEnemyReadyToSpwan = 0;
 		durationPowerUp = 20;
-		numEnemyDropsPowerUp = 1; // indica ogni quanti enemie far cadere powerUp
-		shotEnabled = true; //i nemici possono sparare
+		numEnemyDropsPowerUp = 1; // indica ogni quanti enemie far cadere
+									// powerUp
+		shotEnabled = true; // i nemici possono sparare
 		xTmp = -1;
 		yTmp = -1;
 		blinkTime = 5; // quanti secondi alla fine deve lampeggiare
@@ -993,21 +994,7 @@ public class GameManager {
 					getMatrix().world[x][y] = new BrickWall(x, y, getMatrix(), 2);
 				} else if (s1.equals("~~~~")) {
 					getMatrix().world[x][y] = new Water(x, y, getMatrix());
-				}
-//				else if (s1.equals("GRENADE")) {
-//					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.GRENADE);
-//				} else if (s1.equals("HELMET")) {
-//					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.HELMET);
-//				} else if (s1.equals("SHOVEL")) {
-//					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.SHOVEL);
-//				} else if (s1.equals("STAR")) {
-//					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.STAR);
-//				} else if (s1.equals("TANK")) {
-//					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.TANK);
-//				} else if (s1.equals("TIMER")) {
-//					getMatrix().world[x][y] = new PowerUp(x, y, matrix, Power.TIMER);
-//				} 
-				else if (s1.equals(" && ")) {
+				} else if (s1.equals(" && ")) {
 					flag = new Flag(x, y, matrix);
 					getMatrix().world[x][y] = flag;
 				}
@@ -1016,7 +1003,6 @@ public class GameManager {
 			x++;
 		}
 
-		
 		for (String s : players) {
 			String[] split = s.split(":");
 			for (int a = 0; a < getPlayersArray().size(); a++) {
@@ -1029,7 +1015,7 @@ public class GameManager {
 					getPlayersArray().get(a).setProtection(Boolean.parseBoolean(split[6]));
 					getPlayersArray().get(a).setReadyToSpawn(Boolean.parseBoolean(split[7]));
 					getPlayersArray().get(a).setCountdown(Integer.parseInt(split[8]));
-					getPlayersArray().get(a).setResume(Integer.parseInt(split[9]));	
+					getPlayersArray().get(a).setResume(Integer.parseInt(split[9]));
 				}
 			}
 		}
@@ -1125,9 +1111,9 @@ public class GameManager {
 					power.get(power.size() - 1).setDropDirection(Direction.valueOf(split[7]));
 				else
 					power.get(power.size() - 1).setDropDirection(null);
-				
+
 				power.get(power.size() - 1).setActivate(Boolean.parseBoolean(split[9]));
-				if(split[10].equals("P1") ||split[10].equals("P2"))
+				if (split[10].equals("P1") || split[10].equals("P2"))
 					power.get(power.size() - 1).setTank(new PlayerTank(0, 0, matrix, split[10]));
 				power.get(power.size() - 1).setTime(Integer.parseInt(split[11]));
 			}
@@ -1262,7 +1248,7 @@ public class GameManager {
 			PlayerTank p = ((PlayerTank) ob);
 			return (p.toString() + ":" + p.getxGraphics() + ":" + p.getyGraphics() + ":" + p.getTmpDirection() + ":"
 					+ p.getKeyPressedMillis() + ":" + p.isPressed() + ":" + p.isProtection() + ":" + p.isReadyToSpawn()
-					+ ":" + p.getCountdown() + ":"+p.getResume()+";");
+					+ ":" + p.getCountdown() + ":" + p.getResume() + ";");
 		} else if (ob instanceof EnemyTank) {
 			EnemyTank e = ((EnemyTank) ob);
 			return ("ENEMY" + ":" + e.toString() + ":" + e.getX() + ":" + e.getY() + ":" + e.getxGraphics() + ":"
@@ -1276,8 +1262,8 @@ public class GameManager {
 			PowerUp pu = (PowerUp) ob;
 			AbstractStaticObject getbef = pu.getBefore();
 			AbstractStaticObject getbefWa = pu.getBeforeWater();
-			AbstractStaticObject getTan=pu.getTank();
-			String s1, s2,s3;
+			AbstractStaticObject getTan = pu.getTank();
+			String s1, s2, s3;
 
 			if (getbef == null) {
 				s1 = "null";
@@ -1289,14 +1275,15 @@ public class GameManager {
 			} else {
 				s2 = getbefWa.toString();
 			}
-			if(getTan == null){
-				s3="null";
-			}else{
-				s3=pu.getTank().toString();
+			if (getTan == null) {
+				s3 = "null";
+			} else {
+				s3 = pu.getTank().toString();
 			}
 
 			return ("POWERUP" + ":" + pu.toString() + ":" + pu.getX() + ":" + pu.getY() + ":" + pu.isBlink() + ":" + s1
-					+ ":" + s2 + ":" + pu.getDropDirection() + ":" + pu.getInc() + ":"+pu.isActivate()+":"+s3+":"+pu.getTime()+";");
+					+ ":" + s2 + ":" + pu.getDropDirection() + ":" + pu.getInc() + ":" + pu.isActivate() + ":" + s3
+					+ ":" + pu.getTime() + ";");
 		} else if (ob instanceof Flag) {
 			Flag f = (Flag) ob;
 			return (f.toString() + ":" + f.getX() + ":" + f.getY() + ":" + f.getxGraphics() + ":" + f.getyGraphics()
@@ -1459,23 +1446,19 @@ public class GameManager {
 	public int getNumbersOfEnemy() {
 		return numbersOfEnemy;
 	}
-	
+
 	public void setEffects(ArrayList<AbstractStaticObject> effects) {
 		this.effects = effects;
 	}
-	
+
 	public void setNumbersOfEnemy(int numbersOfEnemy) {
 		this.numbersOfEnemy = numbersOfEnemy;
 	}
 
-	
 	public boolean isShotEnabled() {
 		return shotEnabled;
 	}
 
-	
-	
-	
 	public void setShotEnabled(boolean shotEnabled) {
 		this.shotEnabled = shotEnabled;
 	}
