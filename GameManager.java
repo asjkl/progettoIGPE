@@ -1126,6 +1126,11 @@ public class GameManager {
 					power.get(power.size() - 1).setDropDirection(Direction.valueOf(split[7]));
 				else
 					power.get(power.size() - 1).setDropDirection(null);
+				
+				power.get(power.size() - 1).setActivate(Boolean.parseBoolean(split[9]));
+				if(split[10].equals("P1") ||split[10].equals("P2"))
+					power.get(power.size() - 1).setTank(new PlayerTank(0, 0, matrix, split[10]));
+				power.get(power.size() - 1).setTime(Integer.parseInt(split[11]));
 			}
 		}
 		lock.unlock();
@@ -1272,7 +1277,8 @@ public class GameManager {
 			PowerUp pu = (PowerUp) ob;
 			AbstractStaticObject getbef = pu.getBefore();
 			AbstractStaticObject getbefWa = pu.getBeforeWater();
-			String s1, s2;
+			AbstractStaticObject getTan=pu.getTank();
+			String s1, s2,s3;
 
 			if (getbef == null) {
 				s1 = "null";
@@ -1284,9 +1290,14 @@ public class GameManager {
 			} else {
 				s2 = getbefWa.toString();
 			}
+			if(getTan == null){
+				s3="null";
+			}else{
+				s3=pu.getTank().toString();
+			}
 
 			return ("POWERUP" + ":" + pu.toString() + ":" + pu.getX() + ":" + pu.getY() + ":" + pu.isBlink() + ":" + s1
-					+ ":" + s2 + ":" + pu.getDropDirection() + ":" + pu.getInc() + ";");
+					+ ":" + s2 + ":" + pu.getDropDirection() + ":" + pu.getInc() + ":"+pu.isActivate()+":"+s3+":"+pu.getTime()+";");
 		} else if (ob instanceof Flag) {
 			Flag f = (Flag) ob;
 			return (f.toString() + ":" + f.getX() + ":" + f.getY() + ":" + f.getxGraphics() + ":" + f.getyGraphics()
