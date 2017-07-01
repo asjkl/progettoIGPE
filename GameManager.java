@@ -1017,6 +1017,7 @@ public class GameManager {
 			x++;
 		}
 
+		
 		for (String s : players) {
 			String[] split = s.split(":");
 			for (int a = 0; a < getPlayersArray().size(); a++) {
@@ -1029,6 +1030,7 @@ public class GameManager {
 					getPlayersArray().get(a).setProtection(Boolean.parseBoolean(split[6]));
 					getPlayersArray().get(a).setReadyToSpawn(Boolean.parseBoolean(split[7]));
 					getPlayersArray().get(a).setCountdown(Integer.parseInt(split[8]));
+					getPlayersArray().get(a).setResume(Integer.parseInt(split[9]));	
 				}
 			}
 		}
@@ -1255,12 +1257,13 @@ public class GameManager {
 		if (ob instanceof PlayerTank) {
 			PlayerTank p = ((PlayerTank) ob);
 			return (p.toString() + ":" + p.getxGraphics() + ":" + p.getyGraphics() + ":" + p.getTmpDirection() + ":"
-					+ p.getKeyPressedMillis() + ":" + p.isPressed() + ":"+p.isProtection()+":"+p.isReadyToSpawn()+":"+p.getCountdown()+";");
+					+ p.getKeyPressedMillis() + ":" + p.isPressed() + ":" + p.isProtection() + ":" + p.isReadyToSpawn()
+					+ ":" + p.getCountdown() + ":"+p.getResume()+";");
 		} else if (ob instanceof EnemyTank) {
 			EnemyTank e = ((EnemyTank) ob);
 			return ("ENEMY" + ":" + e.toString() + ":" + e.getX() + ":" + e.getY() + ":" + e.getxGraphics() + ":"
 					+ e.getyGraphics() + ":" + e.getTmpDirection() + ":" + e.isAppearsInTheMap() + ":"
-					+ e.isReadyToSpawn() + ":" + e.getInc() + ":"+ e.isProtection()+":"+e.getCountdown()+";");
+					+ e.isReadyToSpawn() + ":" + e.getInc() + ":" + e.isProtection() + ":" + e.getCountdown() + ";");
 		} else if (ob instanceof Rocket) {
 			Rocket r = ((Rocket) ob);
 			return (r.toString() + ":" + r.getX() + ":" + r.getY() + ":" + r.getDirection() + ":" + r.getxGraphics()
