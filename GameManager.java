@@ -780,17 +780,17 @@ public class GameManager {
 			((Wall) rocket.getNext()).setHealth(((Wall) rocket.getNext()).getHealth() - 1);
 	}
 
-	private void destroyPlayerTank(PlayerTank player) {
+	public void destroyPlayerTank(PlayerTank player) {
 		PlayerTank old = player;
 		effects.add(old);
 		getMatrix().world[old.getX()][old.getY()] = old.getCurr();
 		explosion = true;
 		player = new PlayerTank(player.getBornX(), player.getBornY(), matrix, old.toString());
-		matrix.world[player.getX()][player.getY()] = player;
 		player.setOldDirection(false);
 		player.setResume(old.getResume() - 1);
 		if (player.getResume() < 0) {
-			matrix.world[player.getX()][player.getY()] = null;
+			// matrix.world[player.getX()][player.getY()] = new BrickWall(0, 0,
+			// matrix,10);
 			player.setDied(true);
 			for (int a = 0; a < enemy.size(); a++) {
 				int random = 0;
@@ -800,6 +800,8 @@ public class GameManager {
 				enemy.get(a).setRandomObject(random);
 			}
 		}
+		if (!player.isDied())
+			matrix.world[player.getX()][player.getY()] = player;
 		player.setSpawnTime((currentTime + 4) % 60);
 
 		for (int a = 0; a < playersArray.size(); a++) {
@@ -1016,6 +1018,7 @@ public class GameManager {
 					getPlayersArray().get(a).setReadyToSpawn(Boolean.parseBoolean(split[7]));
 					getPlayersArray().get(a).setCountdown(Integer.parseInt(split[8]));
 					getPlayersArray().get(a).setResume(Integer.parseInt(split[9]));
+					getPlayersArray().get(a).setDied(Boolean.parseBoolean(split[10]));
 				}
 			}
 		}
@@ -1248,7 +1251,7 @@ public class GameManager {
 			PlayerTank p = ((PlayerTank) ob);
 			return (p.toString() + ":" + p.getxGraphics() + ":" + p.getyGraphics() + ":" + p.getTmpDirection() + ":"
 					+ p.getKeyPressedMillis() + ":" + p.isPressed() + ":" + p.isProtection() + ":" + p.isReadyToSpawn()
-					+ ":" + p.getCountdown() + ":" + p.getResume() + ";");
+					+ ":" + p.getCountdown() + ":" + p.getResume() + ":" + p.isDied() + ";");
 		} else if (ob instanceof EnemyTank) {
 			EnemyTank e = ((EnemyTank) ob);
 			return ("ENEMY" + ":" + e.toString() + ":" + e.getX() + ":" + e.getY() + ":" + e.getxGraphics() + ":"
