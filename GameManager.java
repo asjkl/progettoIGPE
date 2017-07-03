@@ -1022,29 +1022,31 @@ public class GameManager {
 		}
 
 		lock.lock();
-		getEnemy().clear();
-		for (String s : enemy) {
-			String[] split = s.split(":");
-			if (split[1].equals(" AT ")) {
-				getEnemy().add(new ArmorTank(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix,
-						Direction.valueOf(split[6]), 2));
-			} else if (split[1].equals(" BT ")) {
-				getEnemy().add(new BasicTank(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix,
-						Direction.valueOf(split[6]), 2));
-			} else if (split[1].equals(" FT ")) {
-				getEnemy().add(new FastTank(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix,
-						Direction.valueOf(split[6]), 2));
-			} else if (split[1].equals(" PT ")) {
-				getEnemy().add(new FastTank(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix,
-						Direction.valueOf(split[6]), 2));
+		if (enemy.length > 1 || enemy.length == 1 && !enemy[0].trim().isEmpty()) {
+			getEnemy().clear();
+			for (String s : enemy) {
+				String[] split = s.split(":");
+				if (split[1].equals(" AT ")) {
+					getEnemy().add(new ArmorTank(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix,
+							Direction.valueOf(split[6]), 2));
+				} else if (split[1].equals(" BT ")) {
+					getEnemy().add(new BasicTank(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix,
+							Direction.valueOf(split[6]), 2));
+				} else if (split[1].equals(" FT ")) {
+					getEnemy().add(new FastTank(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix,
+							Direction.valueOf(split[6]), 2));
+				} else if (split[1].equals(" PT ")) {
+					getEnemy().add(new FastTank(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix,
+							Direction.valueOf(split[6]), 2));
+				}
+				getEnemy().get(getEnemy().size() - 1).setxGraphics(Double.parseDouble(split[4]));
+				getEnemy().get(getEnemy().size() - 1).setyGraphics(Double.parseDouble(split[5]));
+				getEnemy().get(getEnemy().size() - 1).setTmpDirection(Direction.valueOf(split[6]));
+				getEnemy().get(getEnemy().size() - 1).setAppearsInTheMap(Boolean.parseBoolean(split[7]));
+				getEnemy().get(getEnemy().size() - 1).setReadyToSpawn(Boolean.parseBoolean(split[8]));
+				getEnemy().get(getEnemy().size() - 1).setProtection(Boolean.parseBoolean(split[10]));
+				getEnemy().get(getEnemy().size() - 1).setCountdown(Integer.parseInt(split[11]));
 			}
-			getEnemy().get(getEnemy().size() - 1).setxGraphics(Double.parseDouble(split[4]));
-			getEnemy().get(getEnemy().size() - 1).setyGraphics(Double.parseDouble(split[5]));
-			getEnemy().get(getEnemy().size() - 1).setTmpDirection(Direction.valueOf(split[6]));
-			getEnemy().get(getEnemy().size() - 1).setAppearsInTheMap(Boolean.parseBoolean(split[7]));
-			getEnemy().get(getEnemy().size() - 1).setReadyToSpawn(Boolean.parseBoolean(split[8]));
-			getEnemy().get(getEnemy().size() - 1).setProtection(Boolean.parseBoolean(split[10]));
-			getEnemy().get(getEnemy().size() - 1).setCountdown(Integer.parseInt(split[11]));
 		}
 		lock.unlock();
 
@@ -1217,9 +1219,13 @@ public class GameManager {
 		}
 		stringBuilder.append("#");
 
-		for (int a = 0; a < getEnemy().size(); a++) {
-			stringBuilder.append(build(getEnemy().get(a)));
-		}
+		if(getEnemy().isEmpty()){
+			stringBuilder.append(" ");
+		}else{
+			for (int a = 0; a < getEnemy().size(); a++) {
+				stringBuilder.append(build(getEnemy().get(a)));
+			}
+		}		
 		stringBuilder.append("#");
 
 		if (getRocket().isEmpty()) {
