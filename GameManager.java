@@ -973,7 +973,8 @@ public class GameManager {
 		String[] rockets = elements[4].split(";");
 		String[] powerUp = elements[5].split(";");
 		String[] effects = elements[6].split(";");
-
+		String[] flagElement=elements[7].split(";");
+		
 		for (String s : variableOfSystem) {
 			String[] split = s.split(":");
 			numbersOfEnemy = Integer.parseInt(split[0]);
@@ -996,9 +997,6 @@ public class GameManager {
 					getMatrix().world[x][y] = new BrickWall(x, y, getMatrix(), 2);
 				} else if (s1.equals("~~~~")) {
 					getMatrix().world[x][y] = new Water(x, y, getMatrix());
-				} else if (s1.equals(" && ")) {
-					flag = new Flag(x, y, matrix);
-					getMatrix().world[x][y] = flag;
 				}
 				y++;
 			}
@@ -1139,7 +1137,7 @@ public class GameManager {
 					((Flag) getEffects().get(getEffects().size() - 1)).setInc(Integer.parseInt(split[5]));
 					getEffects().get(getEffects().size() - 1).setxGraphics(Double.parseDouble(split[3]));
 					getEffects().get(getEffects().size() - 1).setyGraphics(Double.parseDouble(split[4]));
-
+					((Flag) getEffects().get(getEffects().size() - 1)).setHit(Boolean.parseBoolean(split[6]));
 				} else if (split[0].equals("ENEMY")) {
 					if (split[1].equals(" AT ")) {
 						getEffects().add(new ArmorTank(Integer.parseInt(split[2]), Integer.parseInt(split[3]), matrix,
@@ -1183,7 +1181,15 @@ public class GameManager {
 			}
 		}
 		lock.unlock();
-
+		
+		lock.lock();
+		flag=new Flag(0, 0, matrix);
+		for (String s : flagElement) {
+				String[] split = s.split(":");
+			flag.setHit(Boolean.parseBoolean(split[6]));
+			getMatrix().world[Integer.parseInt(split[1])][Integer.parseInt(split[2])]=flag;
+		}
+		lock.unlock();
 	}
 
 	// DATA TO STRING
@@ -1241,6 +1247,8 @@ public class GameManager {
 				stringBuilder.append(build(getEffects().get(a)));
 			}
 		}
+		stringBuilder.append("#");
+		stringBuilder.append(build(flag));
 
 		return stringBuilder.toString();
 	}
@@ -1290,7 +1298,7 @@ public class GameManager {
 		} else if (ob instanceof Flag) {
 			Flag f = (Flag) ob;
 			return (f.toString() + ":" + f.getX() + ":" + f.getY() + ":" + f.getxGraphics() + ":" + f.getyGraphics()
-					+ ":" + f.getInc() + ";");
+					+ ":" + f.getInc() + ":"+f.isHit()+";");
 		}
 
 		return " ";
