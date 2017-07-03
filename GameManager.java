@@ -186,8 +186,6 @@ public class GameManager {
 			// getMatrix().print();
 			// System.out.println();
 
-			if (!pauseOptionDialog) {
-
 				// EFFECTS
 				for (int i = 0; i < effects.size(); i++) {
 					if (effects.get(i) instanceof Tank)
@@ -220,7 +218,6 @@ public class GameManager {
 					}
 				}
 			}
-		}
 	}
 
 	public ArrayList<AbstractStaticObject> getEffects() {
@@ -230,8 +227,6 @@ public class GameManager {
 	public class CurrentTime extends TimerTask {
 
 		public void run() {
-
-			if (!pauseOptionDialog) {
 
 				currentTime = (currentTime + 1) % 60;
 
@@ -279,7 +274,6 @@ public class GameManager {
 					}
 				}
 			}
-		}
 	}
 
 	public void importMap(JTextField filename, int numOfPlayer) {
