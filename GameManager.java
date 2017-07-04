@@ -1117,7 +1117,7 @@ public class GameManager {
 			}
 		}
 		lock.unlock();
-
+		
 		lock.lock();
 		if (effects.length > 1 || effects.length == 1 && !effects[0].trim().isEmpty()) {
 			getEffects().clear();
