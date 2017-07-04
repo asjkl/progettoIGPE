@@ -92,17 +92,17 @@ public class GameManager {
 		GameManager.offline = false;
 		// crea player
 		if (name.equals("P1")) {
-			playersArray.addFirst(new PlayerTank(19, 8, getMatrix(), name));
-			getMatrix().world[19][8] = playersArray.get(0);
-			
-			playersArray.addLast(new PlayerTank(19, 12, getMatrix(), "P2"));
-			getMatrix().world[19][12] = playersArray.get(1);
+			playersArray.addFirst(new PlayerTank(19, 5, getMatrix(), name));
+			getMatrix().world[19][5] = playersArray.get(0);
+
+			playersArray.addLast(new PlayerTank(19, 14, getMatrix(), "P2"));
+			getMatrix().world[19][14] = playersArray.get(1);
 		} else if (name.equals("P2")) {
-			playersArray.addFirst(new PlayerTank(19, 12, getMatrix(), name));
-			getMatrix().world[19][12] = playersArray.get(0);
-			
-			playersArray.addLast(new PlayerTank(19, 8, getMatrix(), "P1"));
-			getMatrix().world[19][8] = playersArray.get(1);
+			playersArray.addFirst(new PlayerTank(19, 14, getMatrix(), name));
+			getMatrix().world[19][14] = playersArray.get(0);
+
+			playersArray.addLast(new PlayerTank(19, 5, getMatrix(), "P1"));
+			getMatrix().world[19][5] = playersArray.get(1);
 		}
 	}
 
@@ -972,7 +972,6 @@ public class GameManager {
 		for (String s : variableOfSystem) {
 			String[] split = s.split(":");
 			numbersOfEnemy = Integer.parseInt(split[0]);
-			exit=Boolean.parseBoolean(split[1]);
 		}
 
 		int x = 0;
@@ -1174,11 +1173,6 @@ public class GameManager {
 								Power.TIMER));
 					}
 					((PowerUp) getEffects().get(getEffects().size() - 1)).setInc(Integer.parseInt(split[8]));
-				}else if(split[0].equals("P1") || split[0].equals("P2")){
-					getEffects().add(new PlayerTank(0, 0, matrix, ""));
-					getEffects().get(getEffects().size() - 1).setxGraphics(Double.parseDouble(split[1]));
-					getEffects().get(getEffects().size() - 1).setyGraphics(Double.parseDouble(split[2]));
-					((PlayerTank)getEffects().get(getEffects().size() - 1)).setInc(Integer.parseInt(split[11]));
 				}
 			}
 		}
@@ -1199,7 +1193,7 @@ public class GameManager {
 		StringBuilder stringBuilder = new StringBuilder();
 
 		// QUI MANDO VARIABILI DI SISTEMA, COME PER ESEMPIO SIZE DEGLI ENEMY ECC
-		stringBuilder.append(getEnemy().size() + ":"+exit+";");
+		stringBuilder.append(getEnemy().size() + ";");
 		stringBuilder.append("#");
 
 		for (int a = 0; a < getMatrix().getRow(); a++) {
@@ -1265,7 +1259,7 @@ public class GameManager {
 			PlayerTank p = ((PlayerTank) ob);
 			return (p.toString() + ":" + p.getxGraphics() + ":" + p.getyGraphics() + ":" + p.getTmpDirection() + ":"
 					+ p.getKeyPressedMillis() + ":" + p.isPressed() + ":" + p.isProtection() + ":" + p.isReadyToSpawn()
-					+ ":" + p.getCountdown() + ":" + p.getResume() + ":" + p.isDied() + ":"+p.getInc()+";");
+					+ ":" + p.getCountdown() + ":" + p.getResume() + ":" + p.isDied() + ";");
 		} else if (ob instanceof EnemyTank) {
 			EnemyTank e = ((EnemyTank) ob);
 			return ("ENEMY" + ":" + e.toString() + ":" + e.getX() + ":" + e.getY() + ":" + e.getxGraphics() + ":"
