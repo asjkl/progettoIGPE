@@ -115,11 +115,11 @@ public class GameManager {
 		for (int i = 0; i < names.size(); i++) {
 			// crea player
 			if (names.get(i).equals("P1")) {
-				playersArray.add(new PlayerTank(19, 5, getMatrix(), names.get(i)));
-				getMatrix().world[19][5] = playersArray.get(0);
+				playersArray.addFirst(new PlayerTank(19, 8, getMatrix(), names.get(1)));
+				getMatrix().world[19][8] = playersArray.get(0);
 			} else if (names.get(i).equals("P2")) {
-				playersArray.add(new PlayerTank(19, 14, getMatrix(), names.get(i)));
-				getMatrix().world[19][14] = playersArray.get(0);
+				playersArray.add(new PlayerTank(19, 12, getMatrix(), names.get(i)));
+				getMatrix().world[19][12] = playersArray.get(0);
 			}
 		}
 
