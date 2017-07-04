@@ -92,17 +92,17 @@ public class GameManager {
 		GameManager.offline = false;
 		// crea player
 		if (name.equals("P1")) {
-			playersArray.addFirst(new PlayerTank(19, 5, getMatrix(), name));
-			getMatrix().world[19][5] = playersArray.get(0);
-
-			playersArray.addLast(new PlayerTank(19, 14, getMatrix(), "P2"));
-			getMatrix().world[19][14] = playersArray.get(1);
+			playersArray.addFirst(new PlayerTank(19, 8, getMatrix(), name));
+			getMatrix().world[19][8] = playersArray.get(0);
+			
+			playersArray.addLast(new PlayerTank(19, 12, getMatrix(), "P2"));
+			getMatrix().world[19][12] = playersArray.get(1);
 		} else if (name.equals("P2")) {
-			playersArray.addFirst(new PlayerTank(19, 14, getMatrix(), name));
-			getMatrix().world[19][14] = playersArray.get(0);
-
-			playersArray.addLast(new PlayerTank(19, 5, getMatrix(), "P1"));
-			getMatrix().world[19][5] = playersArray.get(1);
+			playersArray.addFirst(new PlayerTank(19, 12, getMatrix(), name));
+			getMatrix().world[19][12] = playersArray.get(0);
+			
+			playersArray.addLast(new PlayerTank(19, 8, getMatrix(), "P1"));
+			getMatrix().world[19][8] = playersArray.get(1);
 		}
 	}
 
