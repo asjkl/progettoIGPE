@@ -18,6 +18,7 @@ public class Statistics {
 	private int powerTankOcc;
 	private int armorTankOcc;
 	private int fastTankOcc;
+	private int powerUpOcc;
 	
 	public Statistics() {
 		
@@ -32,6 +33,7 @@ public class Statistics {
 		this.powerTankOcc = 0;
 		this.armorTankOcc = 0;
 		this.fastTankOcc = 0;
+		this.powerUpOcc = 0;
 		this.other = 0;
 	}
 
@@ -54,11 +56,12 @@ public class Statistics {
 			fastTankOcc++;
 		}else if(A instanceof PowerUp){
 			other+=500;
+			powerUpOcc++;
 		}
 	}
 	
 	public int getTotalOccurr() {
-		return (basicTankOcc + fastTankOcc + armorTankOcc + powerTankOcc);
+		return (basicTankOcc + fastTankOcc + armorTankOcc + powerTankOcc + powerUpOcc);
 	}
 	
 	public void setNewRecord() {
@@ -97,6 +100,14 @@ public class Statistics {
 
 	public void setFastTankOcc(int fastTankOcc) {
 		this.fastTankOcc = fastTankOcc;
+	}
+	
+	public int getPowerUpOcc() {
+		return powerUpOcc;
+	}
+
+	public void setPowerUpOcc(int powerUpOcc) {
+		this.powerUpOcc = powerUpOcc;
 	}
 	
 	public int getCurrScore() {

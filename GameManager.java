@@ -67,21 +67,21 @@ public class GameManager {
 	private boolean exit;
 	private boolean waitToExit;
 	public Runnable runnable = null;
-
+	
 	public Lock lock = new ReentrantLock();
 
-	// OFFLINE
+	//OFFLINE
 	public GameManager(JTextField filename, boolean singlePlayer) {
 		GameManager.offline = true;
 		if (singlePlayer) {
-			startGameManager(filename, 1); // IL NUMERO MI STA A DIRE SE C'è UN
+			startGameManager(filename, 1); 	// IL NUMERO MI STA A DIRE SE C'è UN
 											// SINGOLO GIOCATORE O DI PIù
 		} else {
 			startGameManager(filename, 2);
 		}
 	}
 
-	// ONLINE CLIENT
+	//ONLINE CLIENT
 	public GameManager(JTextField filename, String name) {
 		matrix = new World(height, width);
 		enemy = new ArrayList<>();
@@ -92,21 +92,21 @@ public class GameManager {
 		GameManager.offline = false;
 		// crea player
 		if (name.equals("P1")) {
-			playersArray.addFirst(new PlayerTank(19, 5, getMatrix(), name));
-			getMatrix().world[19][5] = playersArray.get(0);
-
-			playersArray.addLast(new PlayerTank(19, 14, getMatrix(), "P2"));
-			getMatrix().world[19][14] = playersArray.get(1);
+			playersArray.addFirst(new PlayerTank(19, 8, getMatrix(), name));
+			getMatrix().world[19][8] = playersArray.get(0);
+			
+			playersArray.addLast(new PlayerTank(19, 12, getMatrix(), "P2"));
+			getMatrix().world[19][12] = playersArray.get(1);
 		} else if (name.equals("P2")) {
-			playersArray.addFirst(new PlayerTank(19, 14, getMatrix(), name));
-			getMatrix().world[19][14] = playersArray.get(0);
+			playersArray.addFirst(new PlayerTank(19, 12, getMatrix(), name));
+			getMatrix().world[19][12] = playersArray.get(0);
 
 			playersArray.addLast(new PlayerTank(19, 5, getMatrix(), "P1"));
-			getMatrix().world[19][5] = playersArray.get(1);
+			getMatrix().world[19][8] = playersArray.get(1);
 		}
 	}
 
-	// ONLINE SERVER
+	//ONLINE SERVER
 	public GameManager(Runnable runnable, List<String> names, JTextField filename) {
 		GameManager.offline = false;
 		this.runnable = runnable;
@@ -115,21 +115,22 @@ public class GameManager {
 		for (int i = 0; i < names.size(); i++) {
 			// crea player
 			if (names.get(i).equals("P1")) {
-				playersArray.add(new PlayerTank(19, 5, getMatrix(), names.get(i)));
-				getMatrix().world[19][5] = playersArray.get(0);
-			} else if (names.get(i).equals("P2")) {
-				playersArray.add(new PlayerTank(19, 14, getMatrix(), names.get(i)));
-				getMatrix().world[19][14] = playersArray.get(0);
+				playersArray.add(new PlayerTank(19, 8, getMatrix(), names.get(i)));
+				getMatrix().world[19][8] = playersArray.get(0);
+			} else if (!names.get(i).equals("P2")) {
+				playersArray.add(new PlayerTank(19, 12, getMatrix(), names.get(i)));
+				getMatrix().world[19][12] = playersArray.get(0);
 			}
 		}
 
 	}
 
-	// USED FOR CONSTRUCTION
+	//USED FOR CONSTRUCTION
 	public GameManager(World world, Flag flag) {
 		this.matrix = world;
 		GameManager.flag = flag;
 	}
+
 
 	// --------------------------------------OTHER-----------------------------------------
 	public void startGameManager(JTextField filename, int numOfPlayer) {
@@ -141,7 +142,7 @@ public class GameManager {
 		durationPowerUp = 20;
 		numEnemyDropsPowerUp = 1; // indica ogni quanti enemie far cadere
 									// powerUp
-		shotEnabled = true; // i nemici possono sparare
+		shotEnabled = true; 	  // i nemici possono sparare
 		xTmp = -1;
 		yTmp = -1;
 		blinkTime = 5; // quanti secondi alla fine deve lampeggiare
@@ -186,6 +187,8 @@ public class GameManager {
 			// getMatrix().print();
 			// System.out.println();
 
+			if (!pauseOptionDialog) {
+
 				// EFFECTS
 				for (int i = 0; i < effects.size(); i++) {
 					if (effects.get(i) instanceof Tank)
@@ -218,15 +221,22 @@ public class GameManager {
 					}
 				}
 			}
+		}
 	}
 
 	public ArrayList<AbstractStaticObject> getEffects() {
 		return effects;
 	}
 
+	public void setEffects(ArrayList<AbstractStaticObject> effects) {
+		this.effects = effects;
+	}
+
 	public class CurrentTime extends TimerTask {
 
 		public void run() {
+
+			if (!pauseOptionDialog) {
 
 				currentTime = (currentTime + 1) % 60;
 
@@ -274,24 +284,30 @@ public class GameManager {
 					}
 				}
 			}
+		}
 	}
 
 	public void importMap(JTextField filename, int numOfPlayer) {
 		int i = 0;// indice di riga
 		try {
 			BufferedReader reader = null;
-			File career = new File("./maps/career/" + filename.getText());
-			if (!career.exists()) {
-				File multiplayer = new File("./maps/editor/multiplayer/" + filename.getText());
-				if (!multiplayer.exists()) {
-					File singleplayer = new File("./maps/editor/singleplayer/" + filename.getText());
-					reader = new BufferedReader(new FileReader(singleplayer.toString()));
-				} else {
-					reader = new BufferedReader(new FileReader(multiplayer.toString()));
+			File career = null;
+			if(numOfPlayer == 1)
+				 career = new File("./maps/career/singleplayer/"+filename.getText());
+			else
+				career = new File("./maps/career/multiplayer/"+filename.getText());
+			
+			if(!career.exists()){
+					File multiplayer = new File("./maps/career/multiplayer/"+filename.getText());
+					if(!multiplayer.exists()){
+						File singleplayer = new File("./maps/career/singleplayer/"+filename.getText());
+						reader = new BufferedReader(new FileReader(singleplayer.toString()));
+					}else{
+						reader = new BufferedReader(new FileReader(multiplayer.toString()));
+					}
+				}else{
+					reader = new BufferedReader(new FileReader(career.toString()));
 				}
-			} else {
-				reader = new BufferedReader(new FileReader(career.toString()));
-			}
 			String line = reader.readLine();
 			while (i < height) {
 
@@ -1453,7 +1469,7 @@ public class GameManager {
 	public void setWaitToExit(boolean waitToExit) {
 		this.waitToExit = waitToExit;
 	}
-
+	
 	public int getNumbersOfEnemy() {
 		return numbersOfEnemy;
 	}
@@ -1465,12 +1481,20 @@ public class GameManager {
 	public void setNumbersOfEnemy(int numbersOfEnemy) {
 		this.numbersOfEnemy = numbersOfEnemy;
 	}
-
+	
 	public boolean isShotEnabled() {
 		return shotEnabled;
 	}
 
 	public void setShotEnabled(boolean shotEnabled) {
 		this.shotEnabled = shotEnabled;
+	}
+	
+	public ArrayList<AbstractStaticObject> getEffects() {
+		return effects;
+	}
+
+	public void setEffects(ArrayList<AbstractStaticObject> effects) {
+		this.effects = effects;
 	}
 }
