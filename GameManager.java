@@ -974,6 +974,7 @@ public class GameManager {
 		String[] powerUp = elements[5].split(";");
 		String[] effects = elements[6].split(";");
 		String[] flagElement=elements[7].split(";");
+		String[] sounds=elements[8].split(";");
 		
 		for (String s : variableOfSystem) {
 			String[] split = s.split(":");
@@ -1198,6 +1199,16 @@ public class GameManager {
 			getMatrix().world[Integer.parseInt(split[1])][Integer.parseInt(split[2])]=flag;
 		}
 		lock.unlock();
+		
+		for (String s : sounds) {
+			String[] split = s.split(":");
+			setSoundPowerUp(Boolean.parseBoolean(split[0]));
+			setExplosion(Boolean.parseBoolean(split[1]));
+			getPlayersArray().get(0).setShot(Boolean.parseBoolean(split[2]));
+			getPlayersArray().get(1).setShot(Boolean.parseBoolean(split[3]));
+			getPlayersArray().get(0).setShot(Boolean.parseBoolean(split[4]));
+			getPlayersArray().get(1).setShot(Boolean.parseBoolean(split[5]));
+		}
 	}
 
 	// DATA TO STRING
@@ -1261,8 +1272,15 @@ public class GameManager {
 		}
 		stringBuilder.append("#");
 		stringBuilder.append(build(flag));
+		stringBuilder.append("#");
+		stringBuilder.append(sounds());
 
 		return stringBuilder.toString();
+	}
+
+	private Object sounds() {
+		return isSoundPowerUp()+":"+isExplosion()+":"+getPlayersArray().get(0).isShot()+":"+getPlayersArray().get(1).isShot()
+				+":"+getPlayersArray().get(0).isPressed()+":"+getPlayersArray().get(1).isPressed()+";";
 	}
 
 	private String build(AbstractStaticObject ob) {
