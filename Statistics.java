@@ -11,13 +11,14 @@ public class Statistics {
 	private int powerTank;
 	private int armorTank;
 	private int fastTank;
-	private int other; //powerUp
+	private int powerUp; //powerUp
 	
 	//numero di enemy per ogni tipo
 	private int basicTankOcc;
 	private int powerTankOcc;
 	private int armorTankOcc;
 	private int fastTankOcc;
+	private int powerUpOcc;
 	
 	public Statistics() {
 		
@@ -28,37 +29,39 @@ public class Statistics {
 		this.powerTank = 0;
 		this.armorTank = 0;
 		this.fastTank = 0;
+		this.powerUp = 0;
 		this.basicTankOcc = 0;
 		this.powerTankOcc = 0;
 		this.armorTankOcc = 0;
 		this.fastTankOcc = 0;
-		this.other = 0;
+		this.powerUpOcc = 0;
 	}
 
 	public void calculate(AbstractStaticObject A){
 		if(A instanceof BasicTank){
-			basicTank+=100;
+			basicTank += 100;
 			currScore += 100;
 			basicTankOcc++;
 		}else if(A instanceof PowerTank){
-			powerTank+=300;
+			powerTank += 300;
 			currScore += 300;
 			powerTankOcc++;
 		}else if(A instanceof ArmorTank){
-			armorTank+=400;
+			armorTank += 400;
 			currScore += 400;
 			armorTankOcc++;
 		}else if(A instanceof FastTank){
-			fastTank+=200;
+			fastTank += 200;
 			currScore += 200;
 			fastTankOcc++;
 		}else if(A instanceof PowerUp){
-			other+=500;
+			powerUp += 500;
+			powerUpOcc++;
 		}
 	}
 	
 	public int getTotalOccurr() {
-		return (basicTankOcc + fastTankOcc + armorTankOcc + powerTankOcc);
+		return (basicTankOcc + fastTankOcc + armorTankOcc + powerTankOcc + powerUpOcc);
 	}
 	
 	public void setNewRecord() {
@@ -150,11 +153,19 @@ public class Statistics {
 		this.fastTank = fastTank;
 	}
 
-	public int getOther() {
-		return other;
+	public int getPowerUp() {
+		return powerUp;
 	}
 
-	public void setOther(int other) {
-		this.other = other;
+	public void setPowerUp(int powerUp) {
+		this.powerUp = powerUp;
+	}
+
+	public int getPowerUpOcc() {
+		return powerUpOcc;
+	}
+
+	public void setPowerUpOcc(int powerUpOcc) {
+		this.powerUpOcc = powerUpOcc;
 	}
 }

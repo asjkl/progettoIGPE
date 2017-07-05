@@ -280,7 +280,13 @@ public class GameManager {
 		int i = 0;// indice di riga
 		try {
 			BufferedReader reader = null;
-			File career = new File("./maps/career/" + filename.getText());
+			File career = null;
+			
+			if(numOfPlayer == 1)
+				career = new File("./maps/career/singleplayer/" + filename.getText());
+			else
+				career = new File("./maps/career/multiplayer/" + filename.getText());
+			
 			if (!career.exists()) {
 				File multiplayer = new File("./maps/editor/multiplayer/" + filename.getText());
 				if (!multiplayer.exists()) {
