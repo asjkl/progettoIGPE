@@ -72,15 +72,9 @@ public class GameManager {
 	public Lock lock = new ReentrantLock();
 
 	// OFFLINE
-	public GameManager(JTextField filename, boolean singlePlayer) {
+	public GameManager(JTextField filename) {
 		GameManager.offline = true;
-		GameManager.singlePlayer=singlePlayer;
-		if (singlePlayer) {
-			startGameManager(filename, 1); // IL NUMERO MI STA A DIRE SE C'è UN
-											// SINGOLO GIOCATORE O DI PIù
-		} else {
-			startGameManager(filename, 2);
-		}
+		startGameManager(filename);
 	}
 
 	// ONLINE CLIENT
@@ -112,7 +106,7 @@ public class GameManager {
 	public GameManager(Runnable runnable, List<String> names, JTextField filename) {
 		GameManager.offline = false;
 		this.runnable = runnable;
-		startGameManager(filename, 2);
+		startGameManager(filename);
 
 		for (int i = 0; i < names.size(); i++) {
 			// crea player
@@ -134,7 +128,7 @@ public class GameManager {
 	}
 
 	// --------------------------------------OTHER-----------------------------------------
-	public void startGameManager(JTextField filename, int numOfPlayer) {
+	public void startGameManager(JTextField filename) {
 		currentTime = 0;
 		pauseOptionDialog = false;
 		paused = false;
@@ -162,7 +156,7 @@ public class GameManager {
 
 		this.setFilename(filename);
 
-		importMap(filename, numOfPlayer);
+		importMap(filename);
 
 		if (playersArray.size() == 1)
 			numberOfEnemyToSpawn = 4;
@@ -284,28 +278,17 @@ public class GameManager {
 		}
 	}
 
-	public void importMap(JTextField filename, int numOfPlayer) {
+	public void importMap(JTextField filename) {
 		int i = 0;// indice di riga
 		try {
 			BufferedReader reader = null;
-			File career = null;
-			
-			if(numOfPlayer == 1)
-				career = new File("./maps/career/singleplayer/" + filename.getText());
-			else
-				career = new File("./maps/career/multiplayer/" + filename.getText());
-			
-			if (!career.exists()) {
-				File multiplayer = new File("./maps/editor/multiplayer/" + filename.getText());
-				if (!multiplayer.exists()) {
-					File singleplayer = new File("./maps/editor/singleplayer/" + filename.getText());
-					reader = new BufferedReader(new FileReader(singleplayer.toString()));
-				} else {
-					reader = new BufferedReader(new FileReader(multiplayer.toString()));
-				}
-			} else {
-				reader = new BufferedReader(new FileReader(career.toString()));
+			if(filename.getText().contains("single")){
+				GameManager.singlePlayer=true;
+			}else{
+				GameManager.singlePlayer=false;
 			}
+			reader = new BufferedReader(new FileReader(filename.getText()));
+
 			String line = reader.readLine();
 			while (i < height) {
 
@@ -362,8 +345,12 @@ public class GameManager {
 				i++;
 				line = reader.readLine();
 			} // while
-
-			importEnemies(reader, line, numOfPlayer);
+		
+			if(singlePlayer){
+				importEnemies(reader, line, 1);
+			}else{
+				importEnemies(reader, line, 2);
+			}
 			reader.close();
 
 		} // try
