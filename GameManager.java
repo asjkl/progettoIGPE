@@ -20,6 +20,7 @@ public class GameManager {
 
 	private final int width = 21;
 	private final int height = 20;
+	public static boolean singlePlayer; //SERVE PER I TASTI DEL PLAYER
 	private int x;
 	private int y;
 	public static boolean offline = false;
@@ -73,6 +74,7 @@ public class GameManager {
 	// OFFLINE
 	public GameManager(JTextField filename, boolean singlePlayer) {
 		GameManager.offline = true;
+		this.singlePlayer=singlePlayer;
 		if (singlePlayer) {
 			startGameManager(filename, 1); // IL NUMERO MI STA A DIRE SE C'è UN
 											// SINGOLO GIOCATORE O DI PIù

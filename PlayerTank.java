@@ -91,7 +91,7 @@ public class PlayerTank extends Tank {
 	@SuppressWarnings("serial")
 	private void defaultKeys(){
 		if(GameManager.offline){
-			if(id.equals("P1"))  {
+			if(id.equals("P1") || (id.equals("P2") && GameManager.singlePlayer ))  {
 				this.setDefaultKeysPlayer(new ArrayList<Integer>() {
 					{
 						add(37);
