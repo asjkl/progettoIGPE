@@ -74,7 +74,7 @@ public class GameManager {
 	// OFFLINE
 	public GameManager(JTextField filename, boolean singlePlayer) {
 		GameManager.offline = true;
-		this.singlePlayer=singlePlayer;
+		GameManager.singlePlayer=singlePlayer;
 		if (singlePlayer) {
 			startGameManager(filename, 1); // IL NUMERO MI STA A DIRE SE C'è UN
 											// SINGOLO GIOCATORE O DI PIù
@@ -618,6 +618,8 @@ public class GameManager {
 
 				if (!(i == x && j == y) && i >= 0 && j >= 0 && j < width && i < height) {
 					if (S == "steel") {
+						if(!(getMatrix().world[i][j] instanceof Tank) &&
+							!(getMatrix().world[i][j] instanceof Rocket))
 						recoveryWall.add(getMatrix().world[i][j]);
 						matrix.world[i][j] = new SteelWall(i, j, matrix, 4);
 					} else if (S == "recover" && reset < recoveryWall.size()) {
@@ -982,13 +984,14 @@ public class GameManager {
 		String[] elements = status.split("#");
 		String[] variableOfSystem = elements[0].split(";");
 		String[] map = elements[1].split(";");
-		String[] players = elements[2].split(";");
-		String[] enemy = elements[3].split(";");
-		String[] rockets = elements[4].split(";");
-		String[] powerUp = elements[5].split(";");
-		String[] effects = elements[6].split(";");
-		String[] flagElement=elements[7].split(";");
-		String[] sounds=elements[8].split(";");
+		String[] mapObjectStatic=elements[2].split(";");
+		String[] players = elements[3].split(";");
+		String[] enemy = elements[4].split(";");
+		String[] rockets = elements[5].split(";");
+		String[] powerUp = elements[6].split(";");
+		String[] effects = elements[7].split(";");
+		String[] flagElement=elements[8].split(";");
+		String[] sounds=elements[9].split(";");
 		
 		for (String s : variableOfSystem) {
 			String[] split = s.split(":");
@@ -1005,18 +1008,31 @@ public class GameManager {
 					getMatrix().world[x][y] = null;
 				} else if (s1.equals("[//]")) {
 					getMatrix().world[x][y] = new SteelWall(x, y, getMatrix(), 4);
-				} else if (s1.equals("@@@@")) {
-					getMatrix().world[x][y] = new Ice(x, y, getMatrix());
-				} else if (s1.equals("TTTT")) {
-					getMatrix().world[x][y] = new Tree(x, y, getMatrix());
-				} else if (s1.equals("[  ]")) {
+				}  else if (s1.equals("[  ]")) {
 					getMatrix().world[x][y] = new BrickWall(x, y, getMatrix(), 2);
-				} else if (s1.equals("~~~~")) {
-					getMatrix().world[x][y] = new Water(x, y, getMatrix());
 				}
 				y++;
 			}
 			x++;
+		}
+		
+		x=0;
+		for (String s : mapObjectStatic) {
+			String[] split = s.split(":");
+			int y = 0;
+			for (String s1 : split) {
+				if (s1.equals("null")) {
+					getMatrix().objectStatic[x][y] = null;
+				}else if (s1.equals(" @@ ")) {
+					getMatrix().objectStatic[x][y] = new Ice(x, y, getMatrix());
+				}else if (s1.equals(" TT ")) {
+					getMatrix().objectStatic[x][y] = new Tree(x, y, getMatrix());
+				}else if (s1.equals(" ~~ ")) {
+					getMatrix().objectStatic[x][y] = new Water(x, y, getMatrix());
+				}
+				y++;
+			}
+		x++;
 		}
 
 		for (String s : players) {
@@ -1239,6 +1255,18 @@ public class GameManager {
 					stringBuilder.append("null" + ":");
 				} else {
 					stringBuilder.append(matrix.world[a][b].toString() + ":");
+				}
+			}
+			stringBuilder.append(";");
+		}
+		stringBuilder.append("#");
+		
+		for (int a = 0; a < getMatrix().getRow(); a++) {
+			for (int b = 0; b < getMatrix().getColumn(); b++) {
+				if (matrix.objectStatic[a][b] == null) {
+					stringBuilder.append("null" + ":");
+				} else {
+					stringBuilder.append(matrix.objectStatic[a][b].toString() + ":");
 				}
 			}
 			stringBuilder.append(";");
