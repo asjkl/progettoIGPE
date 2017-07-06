@@ -74,7 +74,7 @@ public class GameManager {
 	// OFFLINE
 	public GameManager(JTextField filename, boolean singlePlayer) {
 		GameManager.offline = true;
-		this.singlePlayer=singlePlayer;
+		GameManager.singlePlayer=singlePlayer;
 		if (singlePlayer) {
 			startGameManager(filename, 1); // IL NUMERO MI STA A DIRE SE C'è UN
 											// SINGOLO GIOCATORE O DI PIù
@@ -618,6 +618,8 @@ public class GameManager {
 
 				if (!(i == x && j == y) && i >= 0 && j >= 0 && j < width && i < height) {
 					if (S == "steel") {
+						if(!(getMatrix().world[i][j] instanceof Tank) &&
+							!(getMatrix().world[i][j] instanceof Rocket))
 						recoveryWall.add(getMatrix().world[i][j]);
 						matrix.world[i][j] = new SteelWall(i, j, matrix, 4);
 					} else if (S == "recover" && reset < recoveryWall.size()) {
