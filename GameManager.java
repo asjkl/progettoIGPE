@@ -137,6 +137,7 @@ public class GameManager {
 		pauseOptionDialog = false;
 		paused = false;
 		numberOfEnemyOnMap = 0;
+		
 		numberOfEnemyReadyToSpwan = 0;
 		durationPowerUp = 20;
 		numEnemyDropsPowerUp = 1; // indica ogni quanti enemie far cadere
@@ -182,6 +183,8 @@ public class GameManager {
 
 		public void run() {
 
+
+			if(!paused) {
 			// STAMPA
 			// getMatrix().print();
 			// System.out.println();
@@ -218,6 +221,7 @@ public class GameManager {
 					}
 				}
 			}
+		}
 	}
 
 	public ArrayList<AbstractStaticObject> getEffects() {
@@ -228,6 +232,7 @@ public class GameManager {
 
 		public void run() {
 
+			if(!paused) {
 				currentTime = (currentTime + 1) % 60;
 
 				// System.out.println(currentTime);
@@ -274,6 +279,7 @@ public class GameManager {
 					}
 				}
 			}
+		}
 	}
 
 	public void importMap(JTextField filename, int numOfPlayer) {
@@ -675,6 +681,7 @@ public class GameManager {
 				if (object.rect.intersects(rocket.rect)) {
 					if (!effects.contains(flag)) {
 						effects.add(flag);
+//						System.out.println("collision - >flag");
 						flag.setHit(true);
 						explosion = true;
 						return true;
@@ -749,7 +756,9 @@ public class GameManager {
 		if (r.getCurr() != r.getTank())
 			matrix.world[r.getX()][r.getY()] = r.getCurr();
 
-		effects.add(r);
+		if(!effects.contains(r))
+			effects.add(r);
+//		System.out.println("destroyRocket");
 		rocket.remove(r);
 
 	}
@@ -783,6 +792,7 @@ public class GameManager {
 	public void destroyPlayerTank(PlayerTank player) {
 		PlayerTank old = player;
 		effects.add(old);
+//		System.out.println("PlayerTank");
 		getMatrix().world[old.getX()][old.getY()] = old.getCurr();
 		explosion = true;
 		player = new PlayerTank(player.getBornX(), player.getBornY(), matrix, old.toString());
@@ -838,13 +848,14 @@ public class GameManager {
 
 		// GENERA POWERUP
 		if (enemyT.isPowerUpOn())
-			// addPowerUp(new Random().nextInt(6));
-			addPowerUp(1);
+			 addPowerUp(new Random().nextInt(6));
+//			addPowerUp(1); // da provare il problema dell add che aggiunge migliaia di powerups
 
 		// RIMETTI CURR
 		matrix.world[enemyT.getX()][enemyT.getY()] = enemyT.getCurr();
 		setNumbersOfEnemy(getNumbersOfEnemy() - 1);
 		effects.add(enemyT);
+//		System.out.println("destroyenemy");
 		enemy.remove(enemyT);
 		explosion = true;
 	}
