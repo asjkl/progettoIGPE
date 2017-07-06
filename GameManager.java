@@ -681,7 +681,6 @@ public class GameManager {
 				if (object.rect.intersects(rocket.rect)) {
 					if (!effects.contains(flag)) {
 						effects.add(flag);
-//						System.out.println("collision - >flag");
 						flag.setHit(true);
 						explosion = true;
 						return true;
@@ -791,6 +790,7 @@ public class GameManager {
 
 	public void destroyPlayerTank(PlayerTank player) {
 		PlayerTank old = player;
+		if(!effects.contains(old))
 		effects.add(old);
 //		System.out.println("PlayerTank");
 		getMatrix().world[old.getX()][old.getY()] = old.getCurr();
@@ -854,6 +854,7 @@ public class GameManager {
 		// RIMETTI CURR
 		matrix.world[enemyT.getX()][enemyT.getY()] = enemyT.getCurr();
 		setNumbersOfEnemy(getNumbersOfEnemy() - 1);
+		if(!effects.contains(enemyT))
 		effects.add(enemyT);
 //		System.out.println("destroyenemy");
 		enemy.remove(enemyT);
