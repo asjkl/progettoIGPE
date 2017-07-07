@@ -19,9 +19,15 @@ public class GameManager {
 
 	private final int width = 21;
 	private final int height = 20;
+	
+	//OTHER
 	public static boolean singlePlayer; //SERVE PER I TASTI DEL PLAYER
-	private int x;
-	private int y;
+	private boolean exit;
+	private boolean waitToExit;
+	private JTextField filename;
+	private boolean explosion;
+	public Lock lock = new ReentrantLock();
+	public Runnable runnable = null;
 	public static boolean offline = false;
 	public static long currentTime;
 	private boolean soundPowerUp;
@@ -39,12 +45,15 @@ public class GameManager {
 	private ArrayList<AbstractStaticObject> effects;
 
 	// ENEMY
+	int pos[] = { 0, width / 2, width - 1 };
 	private int numberOfEnemyToSpawn;
 	private int numberOfEnemyOnMap;
 	private int numberOfEnemyReadyToSpwan;
 	private int numbersOfEnemy;
 
 	// POWERUPS
+	private int x;
+	private int y;
 	private int durationPowerUp;
 	private int numEnemyDropsPowerUp;
 	private int xTmp;
@@ -58,18 +67,9 @@ public class GameManager {
 	public Timer timer2;
 	public TimerTask task2;
 
-	private JTextField filename;
-	private boolean explosion;
-
+	//TODO MA SERVE ??
 	private PlayerTank playerTmp;
-	int pos[] = { 0, width / 2, width - 1 };
-
-	private boolean exit;
-	private boolean waitToExit;
-	public Runnable runnable = null;
-
-	public Lock lock = new ReentrantLock();
-
+	
 	// OFFLINE
 	public GameManager(JTextField filename) {
 		GameManager.offline = true;
@@ -217,24 +217,33 @@ public class GameManager {
 		}
 	}
 
-	public ArrayList<AbstractStaticObject> getEffects() {
-		return effects;
-	}
-
+	
 	public class CurrentTime extends TimerTask {
 
 		public void run() {
-
+			// System.out.println(currentTime);
 			if(!paused) {
 				currentTime = (currentTime + 1) % 60;
-
-				// System.out.println(currentTime);
 
 				// Manage PowerUp
 				for (int a = 0; a < power.size(); a++) {
 
 					if (power.get(a).isActivate()) { // timeout
 						power.get(a).setTime(power.get(a).getTime() - 1);
+						
+						// EFFETTO LAMPEGGIO SHOVEL
+						if(power.get(a).getPowerUp() == Power.SHOVEL && power.get(a).getTime() <= 5) {
+						
+							if(power.get(a).isBlinkShovel()) {
+								buildWall("steel");
+								power.get(a).setBlinkShovel(false);
+							}
+							else {
+								
+								buildWall("recover");
+								power.get(a).setBlinkShovel(true);
+							}
+						}
 
 						if (power.get(a).getTime() <= 0) {
 							managePowerUp(power.get(a));
@@ -248,8 +257,7 @@ public class GameManager {
 						// EFFETTO LAMPEGGIO
 						if (power.get(a).getDropTime() == blinkTime) {
 							power.get(a).setBlink(true);
-						}
-
+						}	
 						if (power.get(a).getDropTime() <= 0) {
 							power.get(a).setDrop(false);
 
@@ -270,8 +278,8 @@ public class GameManager {
 							a--;
 						}
 					}
-				}
-			}
+				}		
+			}// paused
 		}
 	}
 
@@ -520,7 +528,7 @@ public class GameManager {
 			y = random.nextInt(width);
 			if (!(getMatrix().world[x][y] instanceof PlayerTank) && !(getMatrix().world[x][y] instanceof EnemyTank)
 					&& !(getMatrix().world[x][y] instanceof PowerUp) && !(getMatrix().world[x][y] instanceof Rocket)
-					&& !(getMatrix().world[x][y] instanceof Flag && getMatrix().world[x][y] != null)) {
+					&& !(getMatrix().world[x][y] instanceof Flag && getMatrix().world[x][y] != null) && !spawnPosition(x,y)) {
 				flag = true;
 			}
 			if (getMatrix().world[x][y] instanceof Water) // se cade nell'acqua
@@ -630,6 +638,12 @@ public class GameManager {
 			}
 	}
 
+	public boolean spawnPosition(int x, int y) {
+		if( (x == 0 && y == 0) || (x == 0 && y == width/2 ) || (x == 0 && y == width - 1 ))
+			return true;
+		return false;
+	}
+	
 	// ---------------------------------------ROCKET----------------------------------------
 
 	public void updateRocket(Rocket rocket) {
@@ -1529,4 +1543,9 @@ public class GameManager {
 	public void setShotEnabled(boolean shotEnabled) {
 		this.shotEnabled = shotEnabled;
 	}
+
+	public ArrayList<AbstractStaticObject> getEffects() {
+		return effects;
+	}
+
 }

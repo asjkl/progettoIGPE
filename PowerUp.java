@@ -15,6 +15,7 @@ public class PowerUp extends AbstractStaticObject {
 	private boolean blink;
 	private int inc; // serve per gli effetti di powerUp
 	private long time; //timeout
+	private boolean blinkShovel;
 
 	public PowerUp(int x, int y, World world, Power powerUp) {
 		super(x, y, world);
@@ -29,6 +30,7 @@ public class PowerUp extends AbstractStaticObject {
 		this.setDropDirection(null);
 		this.blink=false;
 		this.inc=0;
+		this.setBlinkShovel(false);
 		time=0;
 	}
 	
@@ -53,8 +55,10 @@ public class PowerUp extends AbstractStaticObject {
 	}
 	
 	public int duration(){
-		if(powerUp == Power.SHOVEL || powerUp == Power.HELMET || powerUp == Power.TIMER)
+		if(powerUp == Power.HELMET || powerUp == Power.TIMER)
 			return 10;
+		if(powerUp == Power.SHOVEL)
+			return 12;
 		return 0;
 	}
 	public Power getPowerUp() {
@@ -159,6 +163,14 @@ public class PowerUp extends AbstractStaticObject {
 
 	public void setTime(long time) {
 		this.time = time;
+	}
+
+	public boolean isBlinkShovel() {
+		return blinkShovel;
+	}
+
+	public void setBlinkShovel(boolean blinkShovel) {
+		this.blinkShovel = blinkShovel;
 	}
 
 }
