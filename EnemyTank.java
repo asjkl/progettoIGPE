@@ -170,7 +170,7 @@ public class EnemyTank extends Tank {
 		
 		long curr = (System.currentTimeMillis() / 1000) % 60;
 		
-		if(curr < 30)	
+		if(curr < 50)	
 			difficult(GameManager.flag.getX(), GameManager.flag.getY());
 		else
 			easy();
