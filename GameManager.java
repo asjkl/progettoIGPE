@@ -522,7 +522,7 @@ public class GameManager {
 			y = random.nextInt(width);
 			if (!(getMatrix().world[x][y] instanceof PlayerTank) && !(getMatrix().world[x][y] instanceof EnemyTank)
 					&& !(getMatrix().world[x][y] instanceof PowerUp) && !(getMatrix().world[x][y] instanceof Rocket)
-					&& !(getMatrix().world[x][y] instanceof Flag && getMatrix().world[x][y] != null)) {
+					&& !(getMatrix().world[x][y] instanceof Flag && getMatrix().world[x][y] != null) && !spawnPosition(x,y)) {
 				flag = true;
 			}
 			if (getMatrix().world[x][y] instanceof Water) // se cade nell'acqua
@@ -632,6 +632,12 @@ public class GameManager {
 			}
 	}
 
+	public boolean spawnPosition(int x, int y) {
+		if( (x == 0 && y == 0) || (x == 0 && y == width/2 ) || (x == 0 && y == width - 1 ))
+			return true;
+		return false;
+	}
+	
 	// ---------------------------------------ROCKET----------------------------------------
 
 	public void updateRocket(Rocket rocket) {
