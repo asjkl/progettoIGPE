@@ -108,12 +108,16 @@ public class GameManager {
 		startGameManager(filename);
 
 		for (int i = 0; i < names.size(); i++) {
+			System.out.println(names.get(i));
 			if (names.get(i).equals("P1")) {
 				playersArray.addFirst(new PlayerTank(19, 8, getMatrix(), names.get(i)));
 				getMatrix().world[19][8] = playersArray.get(0);
 			} else if (names.get(i).equals("P2")) {
 				playersArray.add(new PlayerTank(19, 12, getMatrix(), names.get(i)));
-				getMatrix().world[19][12] = playersArray.get(1);
+				if(playersArray.size()==1)
+					getMatrix().world[19][12] = playersArray.get(0);
+				else
+					getMatrix().world[19][12] = playersArray.get(1);
 			}
 		}
 	}
@@ -217,7 +221,6 @@ public class GameManager {
 		}
 	}
 
-	
 	public class CurrentTime extends TimerTask {
 
 		public void run() {
