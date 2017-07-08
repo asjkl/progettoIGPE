@@ -23,7 +23,6 @@ public class GameManager {
 	//OTHER
 	public static boolean singlePlayer; //SERVE PER I TASTI DEL PLAYER
 	private boolean exit;
-	private boolean waitToExit;
 	private JTextField filename;
 	private boolean explosion;
 	public Lock lock = new ReentrantLock();
@@ -172,7 +171,6 @@ public class GameManager {
 		task2 = new CurrentTime();
 		timer2.schedule(task2, 0, 1000);
 		setExit(false);
-		waitToExit = false;
 		setNumbersOfEnemiesOnline(enemy.size());
 	}
 
@@ -224,7 +222,6 @@ public class GameManager {
 	public class CurrentTime extends TimerTask {
 
 		public void run() {
-			// System.out.println(currentTime);
 			if(!paused) {
 				currentTime = (currentTime + 1) % 60;
 
@@ -233,13 +230,13 @@ public class GameManager {
 
 					if (power.get(a).isActivate()) { // timeout
 						
-						System.out.println(power.get(a) + "---------- attivo!");
+//						System.out.println(power.get(a) + "---------- attivo!");
 						
 						power.get(a).setTime(power.get(a).getTime() - 1);
 						
 
 //						System.out.println("CURRENT:   "+ currentTime);
-						System.out.println("getTime:  "+power.get(a).getTime());
+//						System.out.println("getTime:  "+power.get(a).getTime());
 						
 						// EFFETTO LAMPEGGIO SHOVEL
 						if(power.get(a).getPowerUp() == Power.SHOVEL && power.get(a).getTime() <= 5) {
@@ -250,13 +247,13 @@ public class GameManager {
 							}
 							else {
 								
-								buildWall("recover");
+								buildWall("brick");
 								power.get(a).setBlinkShovel(true);
 							}
 						}
 
 						if (power.get(a).getTime() <= 0) {
-							System.out.println(power.get(a) + "---------- disattivo!");
+//							System.out.println(power.get(a) + "---------- disattivo!");
 							managePowerUp(power.get(a));
 							power.remove(a);
 							a--;
@@ -625,9 +622,17 @@ public class GameManager {
 							!(getMatrix().world[i][j] instanceof Rocket))
 						recoveryWall.add(getMatrix().world[i][j]);
 						matrix.world[i][j] = new SteelWall(i, j, matrix, 4);
-					} else if (S == "recover" && reset < recoveryWall.size()) {
+					}
+					else if(S == "brick"){
+						if(!(getMatrix().world[i][j] instanceof Tank) &&
+								!(getMatrix().world[i][j] instanceof Rocket))
+							recoveryWall.add(getMatrix().world[i][j]);
+							matrix.world[i][j] = recoveryWall.get(reset++);
+					}
+					else if (S == "recover" && reset < recoveryWall.size()) {
 						getMatrix().world[i][j] = recoveryWall.get(reset++);
 					}
+					
 				}
 			}
 		}
@@ -862,14 +867,14 @@ public class GameManager {
 		// GENERA POWERUP
 		if (enemyT.isPowerUpOn())
 			 addPowerUp(new Random().nextInt(6));
-//			addPowerUp(1); // da provare il problema dell add che aggiunge migliaia di powerups
+			
 
 		// RIMETTI CURR
 		matrix.world[enemyT.getX()][enemyT.getY()] = enemyT.getCurr();
 		setNumbersOfEnemiesOnline(getNumbersOfEnemiesOnline() - 1);
 		if(!effects.contains(enemyT))
 		effects.add(enemyT);
-//		System.out.println("destroyenemy");
+
 		enemy.remove(enemyT);
 		explosion = true;
 	}
@@ -1527,14 +1532,6 @@ public class GameManager {
 		this.exit = exit;
 	}
 
-	public boolean isWaitToExit() {
-		return waitToExit;
-	}
-
-	public void setWaitToExit(boolean waitToExit) {
-		this.waitToExit = waitToExit;
-	}
-
 	public int getNumbersOfEnemiesOnline() {
 		return numbersOfEnemiesOnline;
 	}
@@ -1547,7 +1544,6 @@ public class GameManager {
 		this.effects = effects;
 	}
 
-	
 
 	public boolean isShotEnabled() {
 		return shotEnabled;
