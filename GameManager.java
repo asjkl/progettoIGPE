@@ -49,7 +49,7 @@ public class GameManager {
 	private int numberOfEnemyToSpawn;
 	private int numberOfEnemyOnMap;
 	private int numberOfEnemyReadyToSpwan;
-	private int numbersOfEnemy;
+	private int numbersOfEnemiesOnline;
 
 	// POWERUPS
 	private int x;
@@ -173,7 +173,7 @@ public class GameManager {
 		timer2.schedule(task2, 0, 1000);
 		setExit(false);
 		waitToExit = false;
-		setNumbersOfEnemy(enemy.size());
+		setNumbersOfEnemiesOnline(enemy.size());
 	}
 
 	public class MyTask extends TimerTask {
@@ -232,7 +232,14 @@ public class GameManager {
 				for (int a = 0; a < power.size(); a++) {
 
 					if (power.get(a).isActivate()) { // timeout
+						
+						System.out.println(power.get(a) + "---------- attivo!");
+						
 						power.get(a).setTime(power.get(a).getTime() - 1);
+						
+
+//						System.out.println("CURRENT:   "+ currentTime);
+						System.out.println("getTime:  "+power.get(a).getTime());
 						
 						// EFFETTO LAMPEGGIO SHOVEL
 						if(power.get(a).getPowerUp() == Power.SHOVEL && power.get(a).getTime() <= 5) {
@@ -249,6 +256,7 @@ public class GameManager {
 						}
 
 						if (power.get(a).getTime() <= 0) {
+							System.out.println(power.get(a) + "---------- disattivo!");
 							managePowerUp(power.get(a));
 							power.remove(a);
 							a--;
@@ -858,7 +866,7 @@ public class GameManager {
 
 		// RIMETTI CURR
 		matrix.world[enemyT.getX()][enemyT.getY()] = enemyT.getCurr();
-		setNumbersOfEnemy(getNumbersOfEnemy() - 1);
+		setNumbersOfEnemiesOnline(getNumbersOfEnemiesOnline() - 1);
 		if(!effects.contains(enemyT))
 		effects.add(enemyT);
 //		System.out.println("destroyenemy");
@@ -996,7 +1004,7 @@ public class GameManager {
 		
 		for (String s : variableOfSystem) {
 			String[] split = s.split(":");
-			numbersOfEnemy = Integer.parseInt(split[0]);
+			setNumbersOfEnemiesOnline(Integer.parseInt(split[0]));
 			exit=Boolean.parseBoolean(split[1]);
 		}
 
@@ -1527,17 +1535,19 @@ public class GameManager {
 		this.waitToExit = waitToExit;
 	}
 
-	public int getNumbersOfEnemy() {
-		return numbersOfEnemy;
+	public int getNumbersOfEnemiesOnline() {
+		return numbersOfEnemiesOnline;
 	}
 
+	public void setNumbersOfEnemiesOnline(int numbersOfEnemiesOnline) {
+		this.numbersOfEnemiesOnline = numbersOfEnemiesOnline;
+	}
+	
 	public void setEffects(ArrayList<AbstractStaticObject> effects) {
 		this.effects = effects;
 	}
 
-	public void setNumbersOfEnemy(int numbersOfEnemy) {
-		this.numbersOfEnemy = numbersOfEnemy;
-	}
+	
 
 	public boolean isShotEnabled() {
 		return shotEnabled;
