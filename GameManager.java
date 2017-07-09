@@ -4,8 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.Timer;
@@ -101,24 +102,40 @@ public class GameManager {
 	}
 
 	// ONLINE SERVER
-	public GameManager(Runnable runnable, List<String> names, JTextField filename) {
+	public GameManager(Runnable runnable, HashMap<String, String> name, JTextField filename) {
 		GameManager.offline = false;
 		this.runnable = runnable;
 		startGameManager(filename);
 
-		for (int i = 0; i < names.size(); i++) {
-			System.out.println(names.get(i));
-			if (names.get(i).equals("P1")) {
-				playersArray.addFirst(new PlayerTank(19, 8, getMatrix(), names.get(i)));
+		
+		for(Map.Entry<String, String> entry : name.entrySet()) {
+		    String names= entry.getValue();	
+		    if (names.equals("P1")) {
+				playersArray.addFirst(new PlayerTank(19, 8, getMatrix(), names));
 				getMatrix().world[19][8] = playersArray.get(0);
-			} else if (names.get(i).equals("P2")) {
-				playersArray.add(new PlayerTank(19, 12, getMatrix(), names.get(i)));
+			} else if (names.equals("P2")) {
+				playersArray.add(new PlayerTank(19, 12, getMatrix(), names));
 				if(playersArray.size()==1)
 					getMatrix().world[19][12] = playersArray.get(0);
 				else
 					getMatrix().world[19][12] = playersArray.get(1);
 			}
 		}
+		
+		
+//		for (int i = 0; i < name.size(); i++) {
+//			System.out.println(name.get(i));
+//			if (name.get(i).equals("P1")) {
+//				playersArray.addFirst(new PlayerTank(19, 8, getMatrix(), name.get(i)));
+//				getMatrix().world[19][8] = playersArray.get(0);
+//			} else if (name.get(i).equals("P2")) {
+//				playersArray.add(new PlayerTank(19, 12, getMatrix(), name.get(i)));
+//				if(playersArray.size()==1)
+//					getMatrix().world[19][12] = playersArray.get(0);
+//				else
+//					getMatrix().world[19][12] = playersArray.get(1);
+//			}
+//		}
 	}
 
 	// USED FOR CONSTRUCTION
