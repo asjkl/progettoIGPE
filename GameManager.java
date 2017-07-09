@@ -176,7 +176,7 @@ public class GameManager {
 		importMap(filename);
 
 		if (playersArray.size() == 1)
-			numberOfEnemyToSpawn = 1;
+			numberOfEnemyToSpawn = 4;
 		else
 			numberOfEnemyToSpawn = 6;
 
@@ -751,7 +751,7 @@ public class GameManager {
 
 			// CONTROLLO SE IL ROCKET HA INTERSECATO UN PLAYER TANK
 			for (int a = 0; a < getPlayersArray().size(); a++) {
-				if (!getPlayersArray().get(a).isDied() && rocket.rect.intersects(getPlayersArray().get(a).rect)
+				if (rocket.rect.intersects(getPlayersArray().get(a).rect)
 						&& rocket.getTank() != getPlayersArray().get(a)) {
 					if (rocket.getTank() instanceof EnemyTank) {
 						if (!getPlayersArray().get(a).isProtection() && !getPlayersArray().get(a).isReadyToSpawn()) {
@@ -829,40 +829,43 @@ public class GameManager {
 	}
 
 	public void destroyPlayerTank(PlayerTank player) {
-		PlayerTank old = player;
-		if(!effects.contains(old))
-		effects.add(old);
+		
+		PlayerTank playerExplosion = player;
+		if(!effects.contains(playerExplosion))
+			effects.add(playerExplosion);
 
-		getMatrix().world[old.getX()][old.getY()] = old.getCurr();
-		explosion = true;
-		player = new PlayerTank(player.getBornX(), player.getBornY(), matrix, old.toString());
+		getMatrix().world[player.getX()][player.getY()] = player.getCurr();
+		explosion = true; //sound
 		player.setOldDirection(false);
-		player.setResume(old.getResume() - 1);
-		player.setStatistics(old.getStatistics());
-		if (!player.isDied())
-			matrix.world[player.getX()][player.getY()] = player;
-		player.setSpawnTime((currentTime + 4) % 60);
-		
-		//---------
-		
-		//A-STAR ALGORITHM
-		if (player.getResume() < 0) {
-			player.setDied(true);
-			for (int a = 0; a < enemy.size(); a++) {
-				int random = 0;
-				do {
-					random = new Random().nextInt(playersArray.size());
-				} while (playersArray.get(random).isDied());
-				enemy.get(a).setRandomObject(random);
-			}
-		}
-		for (int a = 0; a < playersArray.size(); a++) {
-			if (playersArray.get(a).equals(old)) {
-				playersArray.set(a, player);
-				break;
-			}
-		}
+		player.setResume(player.getResume() - 1);
 
+		player.setX(player.getBornX());
+		player.setY(player.getBornY());
+	
+		matrix.world[player.getBornX()][player.getBornY()] = player;
+		player.setSpawnTime((currentTime + 4) % 60);
+		player.setLevel(0);
+		player.setReadyToSpawn(true);
+		player.setCountdown(0);
+		player.setInc(0);
+		player.setRotateDegrees(0);
+		player.setDirection(Direction.STOP);
+		player.setTmpDirection(Direction.UP);
+		player.setCurr(null);
+		
+
+		//---------
+		//A-STAR ALGORITHM
+//		if (player.getResume() < 0) {
+//			player.setDied(true);
+//			for (int a = 0; a < enemy.size(); a++) {
+//				int random = 0;
+//				do {
+//					random = new Random().nextInt(playersArray.size());
+//				} while (playersArray.get(random).isDied());
+//				enemy.get(a).setRandomObject(random);
+//			}
+//		}
 	}
 
 	private void destroyWall(Rocket rocket) {
@@ -1085,7 +1088,6 @@ public class GameManager {
 					getPlayersArray().get(a).setReadyToSpawn(Boolean.parseBoolean(split[7]));
 					getPlayersArray().get(a).setCountdown(Integer.parseInt(split[8]));
 					getPlayersArray().get(a).setResume(Integer.parseInt(split[9]));
-					getPlayersArray().get(a).setDied(Boolean.parseBoolean(split[10]));
 					getPlayersArray().get(a).setExitOnline(Boolean.parseBoolean(split[12]));
 				}
 			}
@@ -1369,7 +1371,7 @@ public class GameManager {
 			PlayerTank p = ((PlayerTank) ob);
 			return (p.toString() + ":" + p.getxGraphics() + ":" + p.getyGraphics() + ":" + p.getTmpDirection() + ":"
 					+ p.getKeyPressedMillis() + ":" + p.isPressed() + ":" + p.isProtection() + ":" + p.isReadyToSpawn()
-					+ ":" + p.getCountdown() + ":" + p.getResume() + ":" + p.isDied() + ":"+p.getInc()+":"+p.isExitOnline()+";");
+					+ ":" + p.getCountdown() + ":" + p.getResume() +":"+p.getInc()+":"+p.isExitOnline()+";");
 		} else if (ob instanceof EnemyTank) {
 			EnemyTank e = ((EnemyTank) ob);
 			return ("ENEMY" + ":" + e.toString() + ":" + e.getX() + ":" + e.getY() + ":" + e.getxGraphics() + ":"
@@ -1567,7 +1569,6 @@ public class GameManager {
 	public void setEffects(ArrayList<AbstractStaticObject> effects) {
 		this.effects = effects;
 	}
-
 
 	public boolean isShotEnabled() {
 		return shotEnabled;

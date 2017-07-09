@@ -9,7 +9,6 @@ public class PlayerTank extends Tank {
 	private int resume;
 	private String id; //id player
 	private int point;
-	private boolean died;
 	private boolean first;
 	private int bornX;
 	private int bornY;
@@ -31,7 +30,6 @@ public class PlayerTank extends Tank {
 		this.resume = 3;
 		this.point = 0;
 		this.level = 0;
-		this.died = false;
 		this.setStatistics(new Statistics());
 		this.setReadyToSpawn(true);
 		this.setCountdown(0);
@@ -174,14 +172,6 @@ public class PlayerTank extends Tank {
 	@Override
 	public String toString() {
 		return id;
-	}
-
-	public boolean isDied() {
-		return died;
-	}
-
-	public void setDied(boolean died) {
-		this.died = died;
 	}
 
 	public boolean isFirst() {
