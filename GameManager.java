@@ -250,6 +250,7 @@ public class GameManager {
 					}
 				}
 				
+				
 				for (int a = 0; a < power.size(); a++) {
 
 					if (power.get(a).isActivate()) {			
@@ -830,14 +831,11 @@ public class GameManager {
 
 	public void destroyPlayerTank(PlayerTank player) {
 		
-		if(!effects.contains(player))
-			effects.add(player);
+		PlayerTank tmp = new PlayerTank(player.getX(), player.getY(), matrix, player.toString());
+		if(!effects.contains(tmp))
+			effects.add(tmp);
 
 		matrix.world[player.getX()][player.getY()] = player.getCurr();
-		player.setX(player.getBornX());
-		player.setY(player.getBornY());
-		matrix.world[player.getX()][player.getY()] = player;
-		
 		explosion = true; //sound
 		player.setOldDirection(false);
 		player.setResume(player.getResume() - 1);

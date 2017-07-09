@@ -113,10 +113,10 @@ public class EnemyTank extends Tank {
 			int dir = -1;
 			do {
 				dir = new Random().nextInt(4);
-			} while (!directions[dir]);
+			} while (!directions[dir] || allFalse());
 			setDir(dir);
 			ok = true;
-			nextDirTime = ((GameManager.currentTime + 2) % 60);
+			nextDirTime = ((GameManager.currentTime + 1) % 60);
 		}
 
 		if (nextDirTime == GameManager.currentTime)
@@ -171,6 +171,12 @@ public class EnemyTank extends Tank {
 			directions[3] = false;
 	}
 	
+	private boolean allFalse() {
+		for(int i=0;i<4;i++)
+			if(directions[i]==true)
+				return false;
+		return true;
+	}
 	////////////////////////////// MEDIUM //////////////////////////////////////////////////////////	
 	
 	public void medium() { // DA CONTROLLARE
@@ -190,7 +196,6 @@ public class EnemyTank extends Tank {
 			}
 			
 	}
-
 	
 	////////////////////////////// DIFFICULT //////////////////////////////////////////////////////
 
