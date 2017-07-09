@@ -14,9 +14,12 @@ public class EnemyTank extends Tank {
 	private boolean stopEnemy; // powerUp TIMER
 	private boolean stopEnemyGraphic; // powerUp TIMER
 
+	///////////////////////// EASY | MEDIUM ///////////////////////////
 	private boolean[] directions;
 	private boolean ok = false;
 	private long nextDirTime = 0;
+	private long switchT = 0; //cambia da easy a medium
+	private boolean easy=true;
 
 	/////////////////// DIFFICULT ////////////////////////////////
 	private ArrayList<Point> blocchi;
@@ -97,9 +100,12 @@ public class EnemyTank extends Tank {
 		}
 		return false;
 	}
-	////////////////////////////// EASY//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////// EASY////////////////////////////////////////////////////////////
 
 	public void easy() {
+
+		System.out.println("Enemy in pos: "+ getX() +" "+ getY() + "| dir:  " + directions[0] + " " + directions[1] + " " +directions[2] + " " +directions[3]);
 
 		if (!canGo && !ok) {
 			chooseDirection();
@@ -109,7 +115,7 @@ public class EnemyTank extends Tank {
 			} while (!directions[dir]);
 			setDir(dir);
 			ok = true;
-			nextDirTime = ((GameManager.currentTime + 1) % 60);
+			nextDirTime = ((GameManager.currentTime + 2) % 60);
 		}
 
 		if (nextDirTime == GameManager.currentTime)
@@ -163,21 +169,29 @@ public class EnemyTank extends Tank {
 		} else
 			directions[3] = false;
 	}
-	////////////////////////////// MEDIUM
-	////////////////////////////// //////////////////////////////////////////////////////////////////////	
-	public void medium() {
-		
-		long curr = (System.currentTimeMillis() / 1000) % 60;
-		
-		if(curr < 50)	
-			difficult(GameManager.flag.getX(), GameManager.flag.getY());
-		else
-			easy();
+	
+	////////////////////////////// MEDIUM //////////////////////////////////////////////////////////	
+	
+	public void medium() { // DA CONTROLLARE
+	
+			if(easy && switchT < 10)	
+				easy();
+			
+			else if(!easy && switchT < 4)	
+				difficult(GameManager.flag.getX(), GameManager.flag.getY());
+			
+			if(switchT >= 15 && easy) {
+				switchT = 0;
+				easy = false;
+			}else if( switchT >= 5 && !easy) {
+				switchT = 0;
+				easy = true;
+			}
+			
 	}
 
 	
-	////////////////////////////// DIFFICULT
-	////////////////////////////// ///////////////////////////////////////////////////////////////////
+	////////////////////////////// DIFFICULT //////////////////////////////////////////////////////
 
 	void checkAndUpdateCost(Cell current, Cell t, int cost) {
 
@@ -407,7 +421,7 @@ public class EnemyTank extends Tank {
 		endJ = j;
 	}
 
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public void setDir(int dir) {
 		switch (dir) {
@@ -507,5 +521,13 @@ public class EnemyTank extends Tank {
 
 	public void setyPast(int yPast) {
 		this.yPast = yPast;
+	}
+
+	public long getSwitchT() {
+		return switchT;
+	}
+
+	public void setSwitchT(long switchT) {
+		this.switchT = switchT;
 	}
 }

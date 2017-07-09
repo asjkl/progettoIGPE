@@ -22,20 +22,22 @@ public class GameManager {
 	private final int height = 20;
 	
 	//OTHER
+	public static Flag flag;
 	public static boolean singlePlayer; 
+	public static boolean offline = false;
+	public static long currentTime;
+	private boolean medium = false;
+	
 	private boolean exit;
 	private JTextField filename;
 	private boolean explosion;
 	public Lock lock = new ReentrantLock();
 	public Runnable runnable = null;
-	public static boolean offline = false;
-	public static long currentTime;
 	private boolean soundPowerUp;
 	public boolean pauseOptionDialog;
 	public boolean paused;
 	private Random random;
 	private World matrix;
-	public static Flag flag;
 	private boolean shotEnabled;
 	private LinkedList<PlayerTank> playersArray;
 	private ArrayList<EnemyTank> enemy;
@@ -174,7 +176,7 @@ public class GameManager {
 		importMap(filename);
 
 		if (playersArray.size() == 1)
-			numberOfEnemyToSpawn = 4;
+			numberOfEnemyToSpawn = 1;
 		else
 			numberOfEnemyToSpawn = 6;
 
@@ -185,6 +187,7 @@ public class GameManager {
 		timer2 = new Timer();
 		task2 = new CurrentTime();
 		timer2.schedule(task2, 0, 1000);
+		
 		setExit(false);
 		setNumbersOfEnemiesOnline(enemy.size());
 	}
@@ -240,18 +243,17 @@ public class GameManager {
 			if(!paused) {
 				currentTime = (currentTime + 1) % 60;
 
-				// Manage PowerUp
+				if(medium) { //difficoltà media
+					for(int i=0;i<enemy.size();i++) {
+						if(enemy.get(i).isAppearsInTheMap())
+							enemy.get(i).setSwitchT(enemy.get(i).getSwitchT()+1);
+					}
+				}
+				
 				for (int a = 0; a < power.size(); a++) {
 
-					if (power.get(a).isActivate()) { // timeout
-						
-//						System.out.println(power.get(a) + "---------- attivo!");
-						
-						power.get(a).setTime(power.get(a).getTime() - 1);
-						
-
-//						System.out.println("CURRENT:   "+ currentTime);
-//						System.out.println("getTime:  "+power.get(a).getTime());
+					if (power.get(a).isActivate()) {			
+						power.get(a).setTime(power.get(a).getTime() - 1);		
 						
 						// EFFETTO LAMPEGGIO SHOVEL
 						if(power.get(a).getPowerUp() == Power.SHOVEL && power.get(a).getTime() <= 5) {
@@ -617,11 +619,7 @@ public class GameManager {
 			((PlayerTank) power.getTank()).setResume(((PlayerTank) power.getTank()).getResume() + 1);
 			break;
 		case TIMER: // STOPPO SOLO NEMICI PRESENTI SULLA MAPPA IN QUEL MOMENTO
-			for (int i = 0; i < enemy.size(); i++) {
-				if (enemy.get(i).isAppearsInTheMap()) {
-					enemy.get(i).setStopEnemy(true);
-				}
-			}
+			stopEnemies();
 			break;
 		}
 	}
@@ -678,6 +676,14 @@ public class GameManager {
 		return false;
 	}
 	
+	public void stopEnemies() {
+		for (int i = 0; i < enemy.size(); i++) {
+			if (enemy.get(i).isAppearsInTheMap()) {
+				enemy.get(i).setStopEnemy(true);
+			}
+		}
+		
+	}
 	// ---------------------------------------ROCKET----------------------------------------
 
 	public void updateRocket(Rocket rocket) {
@@ -882,7 +888,8 @@ public class GameManager {
 
 		// GENERA POWERUP
 		if (enemyT.isPowerUpOn())
-			 addPowerUp(new Random().nextInt(6));
+//			 addPowerUp(new Random().nextInt(6));
+			addPowerUp(5);
 			
 
 		// RIMETTI CURR
@@ -1571,6 +1578,14 @@ public class GameManager {
 
 	public ArrayList<AbstractStaticObject> getEffects() {
 		return effects;
+	}
+
+	public boolean isMedium() {
+		return medium;
+	}
+
+	public void setMedium(boolean medium) {
+		this.medium = medium;
 	}
 
 }
