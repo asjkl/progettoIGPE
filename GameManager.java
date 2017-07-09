@@ -22,7 +22,7 @@ public class GameManager {
 	private final int height = 20;
 	
 	//OTHER
-	public static boolean singlePlayer; //SERVE PER I TASTI DEL PLAYER
+	public static boolean singlePlayer; 
 	private boolean exit;
 	private JTextField filename;
 	private boolean explosion;
@@ -585,8 +585,10 @@ public class GameManager {
 		case GRENADE:
 
 			for (int i = 0; i < enemy.size(); i++)
-				if (enemy.get(i).isAppearsInTheMap())
+				if (enemy.get(i).isAppearsInTheMap()) {
+					((PlayerTank)power.getTank()).getStatistics().calculate(power);
 					destroyEnemyTank(enemy.get(i--));
+				}
 			break;
 		case HELMET:
 			((Tank) power.getTank()).setProtection(true);
