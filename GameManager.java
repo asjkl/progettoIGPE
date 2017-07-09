@@ -66,9 +66,6 @@ public class GameManager {
 	public TimerTask task;
 	public Timer timer2;
 	public TimerTask task2;
-
-	//TODO MA SERVE ??
-	private PlayerTank playerTmp;
 	
 	// OFFLINE
 	public GameManager(JTextField filename) {
@@ -565,8 +562,9 @@ public class GameManager {
 	}
 
 	private void managePowerUp(PowerUp p) {
-
-		playerTmp.getStatistics().calculate(p);
+		
+		if(p.getTank() instanceof PlayerTank)
+			((PlayerTank)p.getTank()).getStatistics().calculate(p);
 
 		if (p.getPowerUp() == Power.HELMET) {
 			((Tank) p.getTank()).setProtection(false);
@@ -762,9 +760,6 @@ public class GameManager {
 						&& rocket.getTank() != getEnemy().get(a)) {
 					if (rocket.getTank() instanceof PlayerTank) {
 
-						// TODO
-						playerTmp = (PlayerTank) rocket.getTank();
-
 						if (getEnemy().get(a).isProtection() == false) {
 							damageEnemyTank(getEnemy().get(a));
 						} else {
@@ -772,6 +767,7 @@ public class GameManager {
 						}
 
 						if (getEnemy().get(a).getHealth() == 0) {
+							((PlayerTank)rocket.getTank()).getStatistics().calculate(getEnemy().get(a));
 							switchCurrTank(getEnemy().get(a));
 							destroyEnemyTank(getEnemy().get(a));
 						}
@@ -827,15 +823,21 @@ public class GameManager {
 		PlayerTank old = player;
 		if(!effects.contains(old))
 		effects.add(old);
-//		System.out.println("PlayerTank");
+
 		getMatrix().world[old.getX()][old.getY()] = old.getCurr();
 		explosion = true;
 		player = new PlayerTank(player.getBornX(), player.getBornY(), matrix, old.toString());
 		player.setOldDirection(false);
 		player.setResume(old.getResume() - 1);
+		player.setStatistics(old.getStatistics());
+		if (!player.isDied())
+			matrix.world[player.getX()][player.getY()] = player;
+		player.setSpawnTime((currentTime + 4) % 60);
+		
+		//---------
+		
+		//A-STAR ALGORITHM
 		if (player.getResume() < 0) {
-			// matrix.world[player.getX()][player.getY()] = new BrickWall(0, 0,
-			// matrix,10);
 			player.setDied(true);
 			for (int a = 0; a < enemy.size(); a++) {
 				int random = 0;
@@ -845,10 +847,6 @@ public class GameManager {
 				enemy.get(a).setRandomObject(random);
 			}
 		}
-		if (!player.isDied())
-			matrix.world[player.getX()][player.getY()] = player;
-		player.setSpawnTime((currentTime + 4) % 60);
-
 		for (int a = 0; a < playersArray.size(); a++) {
 			if (playersArray.get(a).equals(old)) {
 				playersArray.set(a, player);
@@ -872,8 +870,6 @@ public class GameManager {
 	}
 
 	private void destroyEnemyTank(EnemyTank enemyT) {
-
-		playerTmp.getStatistics().calculate(enemyT);
 
 		if (numberOfEnemyOnMap > 0)
 			numberOfEnemyOnMap--;
