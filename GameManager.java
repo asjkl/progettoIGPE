@@ -101,6 +101,7 @@ public class GameManager {
 	// ONLINE SERVER
 	public GameManager(Runnable runnable, HashMap<String, String> name, JTextField filename) {
 		GameManager.offline = false;
+		GameManager.singlePlayer=false;
 		this.runnable = runnable;
 		startGameManager(filename);
 
