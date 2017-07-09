@@ -109,33 +109,24 @@ public class GameManager {
 
 		
 		for(Map.Entry<String, String> entry : name.entrySet()) {
+			String key=entry.getKey();
 		    String names= entry.getValue();	
 		    if (names.equals("P1")) {
 				playersArray.addFirst(new PlayerTank(19, 8, getMatrix(), names));
+				((PlayerTank)getPlayersArray().get(0)).setNameOfPlayerTank(key);
 				getMatrix().world[19][8] = playersArray.get(0);
 			} else if (names.equals("P2")) {
 				playersArray.add(new PlayerTank(19, 12, getMatrix(), names));
-				if(playersArray.size()==1)
+				if(playersArray.size()==1){
 					getMatrix().world[19][12] = playersArray.get(0);
-				else
+					((PlayerTank)getPlayersArray().get(0)).setNameOfPlayerTank(key);
+				}
+				else{
 					getMatrix().world[19][12] = playersArray.get(1);
+					((PlayerTank)getPlayersArray().get(1)).setNameOfPlayerTank(key);
+				}
 			}
 		}
-		
-		
-//		for (int i = 0; i < name.size(); i++) {
-//			System.out.println(name.get(i));
-//			if (name.get(i).equals("P1")) {
-//				playersArray.addFirst(new PlayerTank(19, 8, getMatrix(), name.get(i)));
-//				getMatrix().world[19][8] = playersArray.get(0);
-//			} else if (name.get(i).equals("P2")) {
-//				playersArray.add(new PlayerTank(19, 12, getMatrix(), name.get(i)));
-//				if(playersArray.size()==1)
-//					getMatrix().world[19][12] = playersArray.get(0);
-//				else
-//					getMatrix().world[19][12] = playersArray.get(1);
-//			}
-//		}
 	}
 
 	// USED FOR CONSTRUCTION
@@ -1085,7 +1076,8 @@ public class GameManager {
 					getPlayersArray().get(a).setReadyToSpawn(Boolean.parseBoolean(split[7]));
 					getPlayersArray().get(a).setCountdown(Integer.parseInt(split[8]));
 					getPlayersArray().get(a).setResume(Integer.parseInt(split[9]));
-					getPlayersArray().get(a).setExitOnline(Boolean.parseBoolean(split[12]));
+					getPlayersArray().get(a).setExitOnline(Boolean.parseBoolean(split[11]));
+					getPlayersArray().get(a).setNameOfPlayerTank(split[12]);
 				}
 			}
 		}
@@ -1252,7 +1244,7 @@ public class GameManager {
 						getEffects().add(new PlayerTank(0, 0, matrix, ""));
 						getEffects().get(getEffects().size() - 1).setxGraphics(Double.parseDouble(split[1]));
 						getEffects().get(getEffects().size() - 1).setyGraphics(Double.parseDouble(split[2]));
-						((PlayerTank)getEffects().get(getEffects().size() - 1)).setInc(Integer.parseInt(split[11]));
+						((PlayerTank)getEffects().get(getEffects().size() - 1)).setInc(Integer.parseInt(split[10]));
 				}
 			}
 		}
@@ -1368,7 +1360,7 @@ public class GameManager {
 			PlayerTank p = ((PlayerTank) ob);
 			return (p.toString() + ":" + p.getxGraphics() + ":" + p.getyGraphics() + ":" + p.getTmpDirection() + ":"
 					+ p.getKeyPressedMillis() + ":" + p.isPressed() + ":" + p.isProtection() + ":" + p.isReadyToSpawn()
-					+ ":" + p.getCountdown() + ":" + p.getResume() +":"+p.getInc()+":"+p.isExitOnline()+";");
+					+ ":" + p.getCountdown() + ":" + p.getResume() +":"+p.getInc()+":"+p.isExitOnline()+":"+p.getNameOfPlayerTank()+";");
 		} else if (ob instanceof EnemyTank) {
 			EnemyTank e = ((EnemyTank) ob);
 			return ("ENEMY" + ":" + e.toString() + ":" + e.getX() + ":" + e.getY() + ":" + e.getxGraphics() + ":"

@@ -25,6 +25,7 @@ public class PlayerTank extends Tank {
 	private boolean finish;
 	public BitSet keyBits;
 	private boolean exitOnline;
+	private String nameOfPlayerTank;
 	
 	public PlayerTank(int x, int y, World world, String id) {
 		super(x, y, world, Speed.NORMAL, Speed.NORMALROCKET, Direction.STOP, 1);
@@ -286,5 +287,13 @@ public class PlayerTank extends Tank {
 
 	public void setFinish(boolean finish) {
 		this.finish = finish;
+	}
+
+	public String getNameOfPlayerTank() {
+		return nameOfPlayerTank;
+	}
+
+	public void setNameOfPlayerTank(String nameOfPlayerTank) {
+		this.nameOfPlayerTank = nameOfPlayerTank;
 	}
 }
