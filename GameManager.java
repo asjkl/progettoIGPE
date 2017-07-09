@@ -175,7 +175,7 @@ public class GameManager {
 
 		importMap(filename);
 
-		if (playersArray.size() == 1)
+		if (singlePlayer)
 			numberOfEnemyToSpawn = 4;
 		else
 			numberOfEnemyToSpawn = 6;
@@ -830,19 +830,17 @@ public class GameManager {
 
 	public void destroyPlayerTank(PlayerTank player) {
 		
-		PlayerTank playerExplosion = player;
-		if(!effects.contains(playerExplosion))
-			effects.add(playerExplosion);
+		if(!effects.contains(player))
+			effects.add(player);
 
-		getMatrix().world[player.getX()][player.getY()] = player.getCurr();
+		matrix.world[player.getX()][player.getY()] = player.getCurr();
+		player.setX(player.getBornX());
+		player.setY(player.getBornY());
+		matrix.world[player.getX()][player.getY()] = player;
+		
 		explosion = true; //sound
 		player.setOldDirection(false);
 		player.setResume(player.getResume() - 1);
-
-		player.setX(player.getBornX());
-		player.setY(player.getBornY());
-	
-		matrix.world[player.getBornX()][player.getBornY()] = player;
 		player.setSpawnTime((currentTime + 4) % 60);
 		player.setLevel(0);
 		player.setReadyToSpawn(true);
@@ -852,20 +850,21 @@ public class GameManager {
 		player.setDirection(Direction.STOP);
 		player.setTmpDirection(Direction.UP);
 		player.setCurr(null);
+		player.setxGraphics(player.getX()*35);
+		player.setyGraphics(player.getY()*35);
 		
-
 		//---------
 		//A-STAR ALGORITHM
-//		if (player.getResume() < 0) {
-//			player.setDied(true);
-//			for (int a = 0; a < enemy.size(); a++) {
-//				int random = 0;
-//				do {
-//					random = new Random().nextInt(playersArray.size());
-//				} while (playersArray.get(random).isDied());
-//				enemy.get(a).setRandomObject(random);
-//			}
-//		}
+		if (player.getResume() <= 0) {
+			player.setDied(true);
+			for (int a = 0; a < enemy.size(); a++) {
+				int random = 0;
+				do {
+					random = new Random().nextInt(playersArray.size());
+				} while (playersArray.get(random).isDied());
+				enemy.get(a).setRandomObject(random);
+			}
+		}
 	}
 
 	private void destroyWall(Rocket rocket) {

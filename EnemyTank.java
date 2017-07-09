@@ -105,7 +105,8 @@ public class EnemyTank extends Tank {
 
 	public void easy() {
 
-		System.out.println("Enemy in pos: "+ getX() +" "+ getY() + "| dir:  " + directions[0] + " " + directions[1] + " " +directions[2] + " " +directions[3]);
+//		if(GameManager.offline)
+//		System.out.println("Enemy in pos: "+ getX() +" "+ getY() + "| dir:  " + directions[0] + " " + directions[1] + " " +directions[2] + " " +directions[3]);
 
 		if (!canGo && !ok) {
 			chooseDirection();
