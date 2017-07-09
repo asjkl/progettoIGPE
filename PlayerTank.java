@@ -24,6 +24,7 @@ public class PlayerTank extends Tank {
 	private ArrayList<Integer> defaultKeysPlayer;
 	private boolean finish;
 	public BitSet keyBits;
+	private boolean exitOnline;
 	
 	public PlayerTank(int x, int y, World world, String id) {
 		super(x, y, world, Speed.NORMAL, Speed.NORMALROCKET, Direction.STOP, 1);
@@ -50,6 +51,14 @@ public class PlayerTank extends Tank {
 		defaultKeys();
 		this.keyBits = new BitSet(128);
 	} 
+
+	public boolean isExitOnline() {
+		return exitOnline;
+	}
+
+	public void setExitOnline(boolean exitOnline) {
+		this.exitOnline = exitOnline;
+	}
 
 	@Override
 	public void update() {

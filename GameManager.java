@@ -1086,6 +1086,7 @@ public class GameManager {
 					getPlayersArray().get(a).setCountdown(Integer.parseInt(split[8]));
 					getPlayersArray().get(a).setResume(Integer.parseInt(split[9]));
 					getPlayersArray().get(a).setDied(Boolean.parseBoolean(split[10]));
+					getPlayersArray().get(a).setExitOnline(Boolean.parseBoolean(split[12]));
 				}
 			}
 		}
@@ -1368,7 +1369,7 @@ public class GameManager {
 			PlayerTank p = ((PlayerTank) ob);
 			return (p.toString() + ":" + p.getxGraphics() + ":" + p.getyGraphics() + ":" + p.getTmpDirection() + ":"
 					+ p.getKeyPressedMillis() + ":" + p.isPressed() + ":" + p.isProtection() + ":" + p.isReadyToSpawn()
-					+ ":" + p.getCountdown() + ":" + p.getResume() + ":" + p.isDied() + ":"+p.getInc()+";");
+					+ ":" + p.getCountdown() + ":" + p.getResume() + ":" + p.isDied() + ":"+p.getInc()+":"+p.isExitOnline()+";");
 		} else if (ob instanceof EnemyTank) {
 			EnemyTank e = ((EnemyTank) ob);
 			return ("ENEMY" + ":" + e.toString() + ":" + e.getX() + ":" + e.getY() + ":" + e.getxGraphics() + ":"
