@@ -1256,9 +1256,9 @@ public class GameManager {
 		lock.unlock();
 		
 		lock.lock();
-		flag=new Flag(0, 0, matrix);
 		for (String s : flagElement) {
-				String[] split = s.split(":");
+			String[] split = s.split(":");
+			flag=new Flag(Integer.parseInt(split[1]),Integer.parseInt(split[2]), matrix);
 			flag.setHit(Boolean.parseBoolean(split[6]));
 			getMatrix().world[Integer.parseInt(split[1])][Integer.parseInt(split[2])]=flag;
 		}
