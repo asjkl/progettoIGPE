@@ -190,8 +190,8 @@ public class GameManager {
 
 			if(!paused) {
 			// STAMPA
-			// getMatrix().print();
-			// System.out.println();
+//			 getMatrix().print();
+//			 System.out.println();
 
 				// EFFECTS
 				for (int i = 0; i < effects.size(); i++) {
@@ -743,7 +743,7 @@ public class GameManager {
 
 			// CONTROLLO SE IL ROCKET HA INTERSECATO UN PLAYER TANK
 			for (int a = 0; a < getPlayersArray().size(); a++) {
-				if (rocket.rect.intersects(getPlayersArray().get(a).rect)
+				if (!getPlayersArray().get(a).isDied() && rocket.rect.intersects(getPlayersArray().get(a).rect)
 						&& rocket.getTank() != getPlayersArray().get(a)) {
 					if (rocket.getTank() instanceof EnemyTank) {
 						if (!getPlayersArray().get(a).isProtection() && !getPlayersArray().get(a).isReadyToSpawn()) {
@@ -839,6 +839,8 @@ public class GameManager {
 		player.setDirection(Direction.STOP);
 		player.setTmpDirection(Direction.UP);
 		player.setCurr(null);
+		player.setX(player.getBornX());
+		player.setY(player.getBornY());
 		player.setxGraphics(player.getX()*35);
 		player.setyGraphics(player.getY()*35);
 		
@@ -846,6 +848,8 @@ public class GameManager {
 		//A-STAR ALGORITHM
 		if (player.getResume() <= 0) {
 			player.setDied(true);
+			matrix.world[player.getX()][player.getY()]=null;	
+			
 			for (int a = 0; a < enemy.size(); a++) {
 				int random = 0;
 				do {
@@ -1078,6 +1082,7 @@ public class GameManager {
 					getPlayersArray().get(a).setResume(Integer.parseInt(split[9]));
 					getPlayersArray().get(a).setExitOnline(Boolean.parseBoolean(split[11]));
 					getPlayersArray().get(a).setNameOfPlayerTank(split[12]);
+					getPlayersArray().get(a).setDied(Boolean.parseBoolean(split[13]));
 				}
 			}
 		}
@@ -1360,7 +1365,7 @@ public class GameManager {
 			PlayerTank p = ((PlayerTank) ob);
 			return (p.toString() + ":" + p.getxGraphics() + ":" + p.getyGraphics() + ":" + p.getTmpDirection() + ":"
 					+ p.getKeyPressedMillis() + ":" + p.isPressed() + ":" + p.isProtection() + ":" + p.isReadyToSpawn()
-					+ ":" + p.getCountdown() + ":" + p.getResume() +":"+p.getInc()+":"+p.isExitOnline()+":"+p.getNameOfPlayerTank()+";");
+					+ ":" + p.getCountdown() + ":" + p.getResume() +":"+p.getInc()+":"+p.isExitOnline()+":"+p.getNameOfPlayerTank()+":"+p.isDied()+";");
 		} else if (ob instanceof EnemyTank) {
 			EnemyTank e = ((EnemyTank) ob);
 			return ("ENEMY" + ":" + e.toString() + ":" + e.getX() + ":" + e.getY() + ":" + e.getxGraphics() + ":"
