@@ -310,6 +310,7 @@ public class GameManager {
 				GameManager.singlePlayer=false;
 			}
 
+			System.out.println("------------------------------------------------------------------> "+filename+" "+filename.getText());
 			reader = new BufferedReader(new FileReader(filename.getText()));
 
 			String line = reader.readLine();
