@@ -52,6 +52,7 @@ public class GameManager {
 	private int numberOfEnemyOnMap;
 	private int numberOfEnemyReadyToSpwan;
 	private int numbersOfEnemiesOnline;
+	private int spawnTimeEnemy;
 
 	// POWERUPS
 	private int x;
@@ -146,6 +147,7 @@ public class GameManager {
 		durationPowerUp = 20;
 		numEnemyDropsPowerUp = 1; // indica ogni quanti enemie far cadere
 									// powerUp
+		spawnTimeEnemy = 4;
 		shotEnabled = true; // i nemici possono sparare
 		xTmp = -1;
 		yTmp = -1;
@@ -233,15 +235,27 @@ public class GameManager {
 		public void run() {
 			if(!paused) {
 				currentTime = (currentTime + 1) % 60;
-
-				if(medium) { //difficoltà media
+				
+		
 					for(int i=0;i<enemy.size();i++) {
+						
+						//NORMAL
+						if(medium) {
 						if(enemy.get(i).isAppearsInTheMap())
 							enemy.get(i).setSwitchT(enemy.get(i).getSwitchT()+1);
+						}
+						
+						//EASY
+						if(!enemy.get(i).isEverySecond())
+							enemy.get(i).setEverySecond(true);
+						
+						if(enemy.get(i).isReadyToSpawn())
+							enemy.get(i).setSpawnTime(enemy.get(i).getSpawnTime()-1);
+						
 					}
-				}
+			
 				
-				
+				//POWERUP
 				for (int a = 0; a < power.size(); a++) {
 
 					if (power.get(a).isActivate()) {			
@@ -678,6 +692,7 @@ public class GameManager {
 		}
 		
 	}
+	
 	// ---------------------------------------ROCKET----------------------------------------
 
 	public void updateRocket(Rocket rocket) {
@@ -967,20 +982,19 @@ public class GameManager {
 			if (numberOfEnemyReadyToSpwan < numberOfEnemyToSpawn && !enemy.get(count).isReadyToSpawn()
 					&& !enemy.get(count).isAppearsInTheMap() && isFree(enemy.get(count))) {
 				enemy.get(count).setReadyToSpawn(true);
-				enemy.get(count).setSpawnTime((currentTime + 4) % 60); // +4
-																		// spawntime
+				enemy.get(count).setSpawnTime(spawnTimeEnemy); 
 				numberOfEnemyReadyToSpwan++;
 			}
 
 			else if (enemy.get(count).isReadyToSpawn() && !(isFree(enemy.get(count)))) {
 				enemy.get(count).setY(changeSpawnPosition(enemy.get(count)));
 				enemy.get(count).setReadyToSpawn(false);
-				enemy.get(count).setSpawnTime(0); // +4 spawntime
+				enemy.get(count).setSpawnTime(spawnTimeEnemy); // +4 spawntime
 				numberOfEnemyReadyToSpwan--;
 				return;
 			}
 
-			else if (enemy.get(count).isReadyToSpawn() && currentTime == enemy.get(count).getSpawnTime()) {
+			else if (enemy.get(count).isReadyToSpawn() && enemy.get(count).getSpawnTime() <= 0) {
 				enemy.get(count).setAppearsInTheMap(true);
 				enemy.get(count).setReadyToSpawn(false);
 				numberOfEnemyOnMap++;

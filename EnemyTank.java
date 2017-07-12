@@ -16,8 +16,7 @@ public class EnemyTank extends Tank {
 
 	///////////////////////// EASY | MEDIUM ///////////////////////////
 	private boolean[] directions;
-	private boolean ok = false;
-	private long nextDirTime = 0;
+	private boolean everySecond = true;
 	private long switchT = 0; //cambia da easy a medium
 	private boolean easy=true;
 
@@ -105,22 +104,15 @@ public class EnemyTank extends Tank {
 
 	public void easy() {
 
-//		if(GameManager.offline)
-//		System.out.println("Enemy in pos: "+ getX() +" "+ getY() + "| dir:  " + directions[0] + " " + directions[1] + " " +directions[2] + " " +directions[3]);
-
-		if (!canGo && !ok) {
+		if (!canGo && everySecond) {
 			chooseDirection();
 			int dir = -1;
 			do {
 				dir = new Random().nextInt(4);
-			} while (!directions[dir] || allFalse());
+			} while (!directions[dir]);
 			setDir(dir);
-			ok = true;
-			nextDirTime = ((GameManager.currentTime + 1) % 60);
-		}
-
-		if (nextDirTime == GameManager.currentTime)
-			ok = false;
+			everySecond = false;
+		}	
 	}
 
 	public void chooseDirection() {
@@ -171,12 +163,7 @@ public class EnemyTank extends Tank {
 			directions[3] = false;
 	}
 	
-	private boolean allFalse() {
-		for(int i=0;i<4;i++)
-			if(directions[i]==true)
-				return false;
-		return true;
-	}
+
 	////////////////////////////// MEDIUM //////////////////////////////////////////////////////////	
 	
 	public void medium() { // DA CONTROLLARE
@@ -532,7 +519,13 @@ public class EnemyTank extends Tank {
 	public long getSwitchT() {
 		return switchT;
 	}
+	public boolean isEverySecond() {
+		return everySecond;
+	}
 
+	public void setEverySecond(boolean everySecond) {
+		this.everySecond = everySecond;
+	}
 	public void setSwitchT(long switchT) {
 		this.switchT = switchT;
 	}
