@@ -275,9 +275,9 @@ public class EnemyTank extends Tank {
 
 		AStar();
 
-		if (getX() == xPast && getY() == yPast) {
-			setDirectionRandomForBlock();
-		} else {
+//		if (getX() == xPast && getY() == yPast) {
+//			setDirectionRandomForBlock();
+//		} else {
 			if (closed[endI][endJ]) {
 				Cell current = grid[endI][endJ];
 				minimalRoute[current.i][current.j] = true;
@@ -289,7 +289,7 @@ public class EnemyTank extends Tank {
 			} else {
 				hasApath = false;
 			}
-		}
+//		}
 	}
 
 	public void difficult(int objectX, int objectY) {
