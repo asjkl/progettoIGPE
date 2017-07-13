@@ -36,6 +36,7 @@ public class EnemyTank extends Tank {
 	private int randomObject;
 	private int xPast = -1;
 	private int yPast = -1;
+	private int shotTimeEverySecond=1;
 	
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health,
 			int point, int numOfPlayers) {
@@ -528,5 +529,13 @@ public class EnemyTank extends Tank {
 	}
 	public void setSwitchT(long switchT) {
 		this.switchT = switchT;
+	}
+
+	public int getShotTimeEverySecond() {
+		return shotTimeEverySecond;
+	}
+
+	public void setShotTimeEverySecond(int shotTimeEverySecond) {
+		this.shotTimeEverySecond = shotTimeEverySecond;
 	}
 }

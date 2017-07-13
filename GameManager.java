@@ -252,6 +252,9 @@ public class GameManager {
 						if(enemy.get(i).isReadyToSpawn())
 							enemy.get(i).setSpawnTime(enemy.get(i).getSpawnTime()-1);
 						
+						if(enemy.get(i).getShotTimeEverySecond() == 0){
+							enemy.get(i).setShotTimeEverySecond(1);
+						}
 					}
 			
 				
