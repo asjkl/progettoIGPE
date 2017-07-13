@@ -870,12 +870,14 @@ public class GameManager {
 			player.setDied(true);
 			matrix.world[player.getX()][player.getY()]=null;	
 			
-			for (int a = 0; a < enemy.size(); a++) {
-				int random = 0;
-				do {
-					random = new Random().nextInt(playersArray.size());
-				} while (playersArray.get(random).isDied());
-				enemy.get(a).setRandomObject(random);
+			if(playersArray.size()>1){
+				for (int a = 0; a < enemy.size(); a++) {
+					int random = 0;
+					do {
+						random = new Random().nextInt(playersArray.size());
+					} while (playersArray.get(random).isDied());
+					enemy.get(a).setRandomObject(random);
+				}
 			}
 		}
 	}
