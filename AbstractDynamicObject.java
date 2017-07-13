@@ -34,11 +34,11 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		this.firstTime=true;
 		this.inc=0;
 		FPS();
-		
-		rect=new Rectangle((int)getxGraphics(), (int)getyGraphics(), sizePixel, sizePixel);
+		sizePixel=29;
+		rect=new Rectangle((int)getxGraphics()+differenzTank, (int)getyGraphics()+differenzTank, sizePixel, sizePixel);
 	}
 
-	//COSTRUTTORE SOLO PER IL ROCKET
+	//COSTRUTTORE SOLO PER IL ROCKET	
 	public AbstractDynamicObject(int x, int y, World mondo, Direction direction) {		
 		super(x, y, mondo);
 		this.direction = direction;

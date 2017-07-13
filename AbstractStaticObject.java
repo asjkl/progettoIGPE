@@ -11,6 +11,7 @@ public abstract class AbstractStaticObject implements StaticObject {
 	protected World world;
 	
 	public Rectangle rect;
+	public int differenzTank=3;
 	
 	public AbstractStaticObject(int x, int y, World world) {
 		this.x = x;
@@ -19,7 +20,6 @@ public abstract class AbstractStaticObject implements StaticObject {
 		setxGraphics(x*sizePixel);
 		setyGraphics(y*sizePixel);
 		this.world = world;
-		
 		this.rect=new Rectangle(x*sizePixel, y*sizePixel, sizePixel, sizePixel);
 	}
 
