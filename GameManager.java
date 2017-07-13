@@ -905,8 +905,8 @@ public class GameManager {
 
 		// GENERA POWERUP
 		if (enemyT.isPowerUpOn())
-//			 addPowerUp(new Random().nextInt(6));
-			addPowerUp(5);
+			 addPowerUp(new Random().nextInt(6));
+//			addPowerUp(5);
 			
 
 		// RIMETTI CURR
