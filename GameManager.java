@@ -1293,8 +1293,6 @@ public class GameManager {
 			getPlayersArray().get(1).setShot(Boolean.parseBoolean(split[3]));
 			getPlayersArray().get(0).setShot(Boolean.parseBoolean(split[4]));
 			getPlayersArray().get(1).setShot(Boolean.parseBoolean(split[5]));
-			getPlayersArray().get(0).canGo=Boolean.parseBoolean(split[6]);
-			getPlayersArray().get(1).canGo=Boolean.parseBoolean(split[7]);
 		}
 	}
 
@@ -1377,10 +1375,9 @@ public class GameManager {
 		return stringBuilder.toString();
 	}
 
-	private String sounds() {
+	private Object sounds() {
 		return isSoundPowerUp()+":"+isExplosion()+":"+getPlayersArray().get(0).isShot()+":"+getPlayersArray().get(1).isShot()
-				+":"+getPlayersArray().get(0).isPressed()+":"+getPlayersArray().get(1).isPressed()+":"+getPlayersArray().get(0).canGo+":"
-				+getPlayersArray().get(1).canGo+";";
+				+":"+getPlayersArray().get(0).isPressed()+":"+getPlayersArray().get(1).isPressed()+";";
 	}
 
 	private String build(AbstractStaticObject ob) {

@@ -92,8 +92,8 @@ public class PlayerTank extends Tank {
 			}
 			else
 				curr = next;
-				
-			return true;
+			
+				return true;
 		}
 		return false;
 	}
