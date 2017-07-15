@@ -441,6 +441,28 @@ public class GameManager {
 		return 0.0d;
 	}
 
+	//++++++++++++++++++++++++++++++//VERSIONE TEST CON SLEEP//++++++++++++++++++++++++++++++//
+//	public double returnSpeed(Speed speed, AbstractStaticObject object) {
+//		// SERVE PER CONVERTIRE LA SPEED AD UN INTERO
+//		if (speed == Speed.SLOW) {
+//			return 0.7d;
+//		} else if (speed == Speed.NORMAL) {
+//			return 0.8d;
+//		} else if (speed == Speed.FAST) {
+//			return 0.9d;
+//		} else if (speed == Speed.SLOWROCKET) {
+//			return 1.6d;
+//		} else if (speed == Speed.NORMALROCKET) {
+//			return 1.7d;
+//		} else if (speed == Speed.FASTROCKET) {
+//			return 1.8d;
+//		}
+//
+//		return 0.0d;
+//	}
+	//++++++++++++++++++++++++++++++//VERSIONE TEST CON SLEEP//++++++++++++++++++++++++++++++//
+
+
 	// ----------------------------------------POWERUP-------------------------------------
 
 	private void extendAddPowerUp(PowerUp tmp) {
