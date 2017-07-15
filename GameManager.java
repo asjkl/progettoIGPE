@@ -442,17 +442,17 @@ public class GameManager {
 		}else{
 			
 			if (speed == Speed.SLOW) {
-				return 0.7d;
-			} else if (speed == Speed.NORMAL) {
 				return 0.8d;
+			} else if (speed == Speed.NORMAL) {
+				return 1.0d;
 			} else if (speed == Speed.FAST) {
-				return 0.9d;
+				return 1.2d;
 			} else if (speed == Speed.SLOWROCKET) {
-				return 1.6d;
+				return 2.4d;
 			} else if (speed == Speed.NORMALROCKET) {
-				return 1.7d;
+				return 2.6d;
 			} else if (speed == Speed.FASTROCKET) {
-				return 1.8d;
+				return 2.8d;
 			}
 		}
 		return 0.0d;
