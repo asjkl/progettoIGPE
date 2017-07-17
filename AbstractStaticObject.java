@@ -3,24 +3,25 @@ package progettoIGPE.davide.giovanni.unical2016;
 import java.awt.Rectangle;
 
 public abstract class AbstractStaticObject implements StaticObject {
+	
 	private int x;
 	private int y;
+	private int sizePixel;
+	protected World world;
+	private Rectangle rect;
 	private double xGraphics;
 	private double yGraphics;
-	public int sizePixel;
-	protected World world;
-	
-	public Rectangle rect;
-	public int differenzTank=3;
+	private int differenceTank;
 	
 	public AbstractStaticObject(int x, int y, World world) {
 		this.x = x;
 		this.y = y;
-		this.sizePixel=35;
-		setxGraphics(x*sizePixel);
-		setyGraphics(y*sizePixel);
+		this.setSizePixel(35);
+		setxGraphics(x*getSizePixel());
+		setyGraphics(y*getSizePixel());
 		this.world = world;
-		this.rect=new Rectangle(x*sizePixel, y*sizePixel, sizePixel, sizePixel);
+		setDifferenceTank(3);
+		this.setRect(new Rectangle(x*getSizePixel(), y*getSizePixel(), getSizePixel(), getSizePixel()));
 	}
 
 	@Override
@@ -28,8 +29,8 @@ public abstract class AbstractStaticObject implements StaticObject {
 		return x;
 	}
 
-	// eccezzione viene gestito nell' update
 	public void setX(int x) {
+		// eccezzione viene gestito nell' update
 		this.x = x;
 	}
 
@@ -38,8 +39,8 @@ public abstract class AbstractStaticObject implements StaticObject {
 		return y;
 	}
 
-	// eccezzione viene gestito nell' update
 	public void setY(int y) {
+		// eccezzione viene gestito nell' update
 		this.y = y;
 	}
 
@@ -70,5 +71,29 @@ public abstract class AbstractStaticObject implements StaticObject {
 
 	public void setyGraphics(double yGrafica) {
 		this.yGraphics = yGrafica;
+	}
+
+	public Rectangle getRect() {
+		return rect;
+	}
+
+	public void setRect(Rectangle rect) {
+		this.rect = rect;
+	}
+
+	public int getSizePixel() {
+		return sizePixel;
+	}
+
+	public void setSizePixel(int sizePixel) {
+		this.sizePixel = sizePixel;
+	}
+
+	public int getDifferenceTank() {
+		return differenceTank;
+	}
+
+	public void setDifferenceTank(int differenceTank) {
+		this.differenceTank = differenceTank;
 	}
 }

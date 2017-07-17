@@ -30,7 +30,7 @@ public class Rocket extends AbstractDynamicObject {
 			return true;
 		}
 	
-		if(!(this.rect.intersects(getTank().rect)) && next == tank){
+		if(!(this.getRect().intersects(getTank().getRect())) && next == tank){
 			return true;							
 		}
 		
@@ -44,13 +44,13 @@ public class Rocket extends AbstractDynamicObject {
 	
 	public void updateRect() {
 		if (this.getDirection() == Direction.UP) {
-			rect.setLocation((int) (getxGraphics() + (sizePixel - 9)),  (int) getyGraphics() + ((sizePixel / 2) - 4));
+			getRect().setLocation((int) (getxGraphics() + (getSizePixel() - 9)),  (int) getyGraphics() + ((getSizePixel() / 2) - 4));
 		} else if (getDirection() == Direction.DOWN) {
-			rect.setLocation((int) getxGraphics(), (int) getyGraphics() + ((sizePixel / 2) - 4));
+			getRect().setLocation((int) getxGraphics(), (int) getyGraphics() + ((getSizePixel() / 2) - 4));
 		} else if (getDirection() == Direction.LEFT) {
-			rect.setLocation((int) (getxGraphics() + ((sizePixel / 2) - 4)), (int) getyGraphics() + (sizePixel- 9));
+			getRect().setLocation((int) (getxGraphics() + ((getSizePixel() / 2) - 4)), (int) getyGraphics() + (getSizePixel()- 9));
 		} else if (getDirection() == Direction.RIGHT) {
-			rect.setLocation((int) (getxGraphics() + ((sizePixel / 2) - 4)), (int) getyGraphics());
+			getRect().setLocation((int) (getxGraphics() + ((getSizePixel() / 2) - 4)), (int) getyGraphics());
 		}	
 	}
 	

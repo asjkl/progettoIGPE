@@ -7,7 +7,6 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	private Speed speed;
 	private Speed speedShot;
 	private Direction direction; 
-	
 	private int health;
 	protected AbstractStaticObject curr;
 	protected AbstractStaticObject next;
@@ -20,7 +19,6 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 	private int inc; // serve per gli effetti di Tank (PowerUp ha il suo)
 	private boolean onBorder;
 	
-
 	public AbstractDynamicObject(int x, int y, World mondo, Speed speed, Speed speedShot, Direction direction,int health) {
 		super(x, y, mondo);
 		this.speed = speed;
@@ -34,12 +32,12 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		this.firstTime=true;
 		this.inc=0;
 		FPS();
-		sizePixel=29;
-		rect=new Rectangle((int)getxGraphics()+differenzTank, (int)getyGraphics()+differenzTank, sizePixel, sizePixel);
+		setSizePixel(29);
+		setRect(new Rectangle((int)getxGraphics()+getDifferenceTank(), (int)getyGraphics()+getDifferenceTank(), getSizePixel(), getSizePixel()));
 	}
 
-	//COSTRUTTORE SOLO PER IL ROCKET	
-	public AbstractDynamicObject(int x, int y, World mondo, Direction direction) {		
+	public AbstractDynamicObject(int x, int y, World mondo, Direction direction) {
+		//COSTRUTTORE SOLO PER IL ROCKET	
 		super(x, y, mondo);
 		this.direction = direction;
 		FPS();	
@@ -49,17 +47,17 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 
 	private void createRectForRocket() {
 		if (this.getDirection() == Direction.UP) {
-			rect = new Rectangle((int) (getxGraphics() + (sizePixel - 9)),
-					(int) getyGraphics() + ((sizePixel / 2) - 4), 9, 9);
+			setRect(new Rectangle((int) (getxGraphics() + (getSizePixel() - 9)),
+					(int) getyGraphics() + ((getSizePixel() / 2) - 4), 9, 9));
 		} else if (getDirection() == Direction.DOWN) {
-			rect = new Rectangle((int) getxGraphics(), (int) getyGraphics() + ((sizePixel / 2) - 4),
-					9, 9);
+			setRect(new Rectangle((int) getxGraphics(), (int) getyGraphics() + ((getSizePixel() / 2) - 4),
+					9, 9));
 		} else if (getDirection() == Direction.LEFT) {
-			rect = new Rectangle((int) (getxGraphics() + ((sizePixel / 2) - 4)),
-					(int) getyGraphics() + (sizePixel- 9), 9, 9);
+			setRect(new Rectangle((int) (getxGraphics() + ((getSizePixel() / 2) - 4)),
+					(int) getyGraphics() + (getSizePixel()- 9), 9, 9));
 		} else if (getDirection() == Direction.RIGHT) {
-			rect = new Rectangle((int) (getxGraphics() + ((sizePixel / 2) - 4)),
-					(int) getyGraphics(), 9, 9);
+			setRect(new Rectangle((int) (getxGraphics() + ((getSizePixel() / 2) - 4)),
+					(int) getyGraphics(), 9, 9));
 		}
 	}
 

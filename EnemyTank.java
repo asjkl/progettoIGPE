@@ -11,16 +11,14 @@ public class EnemyTank extends Tank {
 	private boolean appearsInTheMap;
 	private boolean powerUpOn;
 	private boolean noUpdateG;
-	private boolean stopEnemy; // powerUp TIMER
+	private boolean stopEnemy;        // powerUp TIMER
 	private boolean stopEnemyGraphic; // powerUp TIMER
-
-	///////////////////////// EASY | MEDIUM ///////////////////////////
+	///////////////////////// EASY && MEDIUM ///////////////////////////
 	private boolean[] directions;
-	private boolean everySecond = true;
-	private long switchT = 0; //cambia da easy a medium
-	private boolean easy=true;
-
-	/////////////////// DIFFICULT ////////////////////////////////
+	private boolean everySecond ;
+	private long switchT; 				//switcha da easy a medium
+	private boolean easy;
+	//////////////////////////// DIFFICULT //////////////////////////////
 	private ArrayList<Point> blocchi;
 	private Cell[][] grid;
 	private PriorityQueue<Cell> open;
@@ -28,15 +26,13 @@ public class EnemyTank extends Tank {
 	private boolean closed[][];
 	private int startI, startJ;
 	private int endI, endJ;
-	public final int V_H_COST = 5;
-	public final int V_H_COST_BRICK = 20;
-	private boolean hasApath = false; // IL NEMICO CON LA DIFFICOLTA' MASSIMA:
-										// CI DICE SE HA TROVATO UN PERCORSO O
-										// MENO
+	public final int V_H_COST;
+	public final int V_H_COST_BRICK;
+	private boolean hasApath; // IL NEMICO CON LA DIFFICOLTA' MASSIMA CI DICE SE HA TROVATO UN PERCORSO O MENO
 	private int randomObject;
-	private int xPast = -1;
-	private int yPast = -1;
-	private int shotTimeEverySecond=1;
+	private int xPast;
+	private int yPast;
+	private int shotTimeEverySecond;
 	
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health,
 			int point, int numOfPlayers) {
@@ -55,11 +51,17 @@ public class EnemyTank extends Tank {
 		this.closed = new boolean[world.getRow()][world.getColumn()];
 		this.grid = new Cell[world.getRow()][world.getColumn()];
 		this.blocchi = new ArrayList<>();
-
-		directions = new boolean[4];
-		for (int i = 0; i < directions.length; i++) {
-			directions[i] = false;
-		}
+		this.V_H_COST = 5;
+		this.V_H_COST_BRICK = 20;
+		this.hasApath = false;
+		this.everySecond = true;
+		this.switchT = 0;
+		this.easy=true;
+		this.directions = new boolean[4];
+		this.xPast = -1;
+		this.yPast = -1;
+		this.shotTimeEverySecond=1;
+		for (int i = 0; i < directions.length; i++) {directions[i] = false;}
 	}
 
 	@Override
@@ -167,7 +169,7 @@ public class EnemyTank extends Tank {
 
 	////////////////////////////// MEDIUM //////////////////////////////////////////////////////////	
 	
-	public void medium() { // DA CONTROLLARE
+	public void medium() { 
 	
 			if(easy && switchT < 10)	
 				easy();
@@ -520,6 +522,7 @@ public class EnemyTank extends Tank {
 	public long getSwitchT() {
 		return switchT;
 	}
+	
 	public boolean isEverySecond() {
 		return everySecond;
 	}
@@ -527,6 +530,7 @@ public class EnemyTank extends Tank {
 	public void setEverySecond(boolean everySecond) {
 		this.everySecond = everySecond;
 	}
+	
 	public void setSwitchT(long switchT) {
 		this.switchT = switchT;
 	}

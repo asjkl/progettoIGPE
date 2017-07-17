@@ -18,24 +18,23 @@ import javax.swing.JTextField;
 
 public class GameManager {
 
-	private final int width = 21;
-	private final int height = 20;
+	private int width = 21;
+	private int height = 20;
 
-	// OTHER
 	public static Flag flag;
 	public static boolean singlePlayer;
 	public static boolean offline = false;
 	public static long currentTime;
-	private boolean medium = false;
-
+	
+	private boolean normal = false;
 	private boolean exit;
 	private JTextField filename;
 	private boolean explosion;
-	public Lock lock = new ReentrantLock();
-	public Runnable runnable = null;
+	private Lock lock = new ReentrantLock();
+	private Runnable runnable = null;
 	private boolean soundPowerUp;
-	public boolean pauseOptionDialog;
-	public boolean paused;
+	private boolean pauseOptionDialog;
+	private boolean paused;
 	private Random random;
 	private World matrix;
 	private boolean shotEnabled;
@@ -46,8 +45,8 @@ public class GameManager {
 	private ArrayList<AbstractStaticObject> recoveryWall;
 	private ArrayList<AbstractStaticObject> effects;
 
-	// ENEMY
-	int pos[] = { 0, width / 2, width - 1 };
+	// ENEMIES
+	private int pos[] = { 0, width / 2, width - 1 };
 	private int numberOfEnemyToSpawn;
 	private int numberOfEnemyOnMap;
 	private int numberOfEnemyReadyToSpwan;
@@ -65,10 +64,10 @@ public class GameManager {
 	private long blinkTime;
 
 	// Timer
-	public Timer timer;
-	public TimerTask task;
-	public Timer timer2;
-	public TimerTask task2;
+	private Timer timer;
+	private TimerTask task;
+	private Timer timer2;
+	private TimerTask task2;
 
 	// OFFLINE
 	public GameManager(JTextField filename) {
@@ -105,7 +104,7 @@ public class GameManager {
 	public GameManager(Runnable runnable, HashMap<String, String> name, JTextField filename) {
 		GameManager.offline = false;
 		GameManager.singlePlayer = false;
-		this.runnable = runnable;
+		this.setRunnable(runnable);
 		startGameManager(filename);
 
 		for (Map.Entry<String, String> entry : name.entrySet()) {
@@ -136,9 +135,11 @@ public class GameManager {
 
 	// --------------------------------------OTHER-----------------------------------------
 	public void startGameManager(JTextField filename) {
+		width = 21;
+		height = 20;
 		currentTime = 0;
-		pauseOptionDialog = false;
-		paused = false;
+		setPauseOptionDialog(false);
+		setPaused(false);
 		numberOfEnemyOnMap = 0;
 
 		numberOfEnemyReadyToSpwan = 0;
@@ -168,16 +169,16 @@ public class GameManager {
 
 		if (singlePlayer)
 			numberOfEnemyToSpawn = 4;
-		else
+		else 
 			numberOfEnemyToSpawn = 6;
-
-		timer = new Timer();
+			
+		setTimer(new Timer());
 		task = new MyTask();
-		timer.schedule(task, 85, 85);
+		getTimer().schedule(task, 85, 85);
 
-		timer2 = new Timer();
+		setTimer2(new Timer());
 		task2 = new CurrentTime();
-		timer2.schedule(task2, 0, 1000);
+		getTimer2().schedule(task2, 0, 1000);
 
 		setExit(false);
 		setNumbersOfEnemiesOnline(enemy.size());
@@ -187,7 +188,7 @@ public class GameManager {
 
 		public void run() {
 
-			if (!paused) {
+			if (!isPaused()) {
 				// STAMPA
 				// getMatrix().print();
 				// System.out.println();
@@ -230,13 +231,13 @@ public class GameManager {
 	public class CurrentTime extends TimerTask {
 
 		public void run() {
-			if (!paused) {
+			if (!isPaused()) {
 				currentTime = (currentTime + 1) % 60;
 
 				for (int i = 0; i < enemy.size(); i++) {
 
 					// NORMAL
-					if (medium) {
+					if (normal) {
 						if (enemy.get(i).isAppearsInTheMap())
 							enemy.get(i).setSwitchT(enemy.get(i).getSwitchT() + 1);
 					}
@@ -728,21 +729,21 @@ public class GameManager {
 			down = (getMatrix().getRow() * tile);
 			right = (getMatrix().getColumn() * tile);
 			left = 0;
-			if (rocket.rect.getX() < up) {
+			if (rocket.getRect().getX() < up) {
 				return true;
-			} else if ((rocket.rect.getX() + 9) > down) {
+			} else if ((rocket.getRect().getX() + 9) > down) {
 				return true;
-			} else if (rocket.rect.getY() < left) {
+			} else if (rocket.getRect().getY() < left) {
 				return true;
-			} else if ((rocket.rect.getY() + 9) > right) {
+			} else if ((rocket.getRect().getY() + 9) > right) {
 				return true;
 			}
 		}
 
-		if (!rocket.rect.contains(rocket.getTank().rect)) {
+		if (!rocket.getRect().contains(rocket.getTank().getRect())) {
 			// FLAG
 			if (object instanceof Flag) {
-				if (object.rect.intersects(rocket.rect)) {
+				if (object.getRect().intersects(rocket.getRect())) {
 					if (!effects.contains(flag)) {
 						effects.add(flag);
 						flag.setHit(true);
@@ -754,7 +755,7 @@ public class GameManager {
 
 			// WALL
 			if ((object instanceof Wall) && (object instanceof BrickWall || object instanceof SteelWall)) {
-				if (object.rect.intersects(rocket.rect)) {
+				if (object.getRect().intersects(rocket.getRect())) {
 					damageWall(rocket);
 					if (((Wall) object).getHealth() <= 0)
 						destroyWall(rocket);
@@ -764,7 +765,7 @@ public class GameManager {
 
 			// CONTROLLO SE IL ROCKET HA INTERSECATO QUALCHE ROCKET
 			for (int b = 0; b < getRocket().size(); b++) {
-				if (rocket != getRocket().get(b) && rocket.rect.intersects(getRocket().get(b).rect)
+				if (rocket != getRocket().get(b) && rocket.getRect().intersects(getRocket().get(b).getRect())
 						&& rocket.getTank() != getRocket().get(b).getTank()) {
 					destroyRocket(getRocket().get(b));
 					return true;
@@ -773,7 +774,7 @@ public class GameManager {
 
 			// CONTROLLO SE IL ROCKET HA INTERSECATO UN PLAYER TANK
 			for (int a = 0; a < getPlayersArray().size(); a++) {
-				if (!getPlayersArray().get(a).isDied() && rocket.rect.intersects(getPlayersArray().get(a).rect)
+				if (!getPlayersArray().get(a).isDied() && rocket.getRect().intersects(getPlayersArray().get(a).getRect())
 						&& rocket.getTank() != getPlayersArray().get(a)) {
 					if (rocket.getTank() instanceof EnemyTank) {
 						if (!getPlayersArray().get(a).isProtection() && !getPlayersArray().get(a).isReadyToSpawn()) {
@@ -787,7 +788,7 @@ public class GameManager {
 
 			// CONTORLLO SE IL ROCKET HA INTERESECATO UN ENEMY OK (V)
 			for (int a = 0; a < getEnemy().size(); a++) {
-				if (getEnemy().get(a).isAppearsInTheMap() && getEnemy().get(a).rect.intersects(rocket.rect)
+				if (getEnemy().get(a).isAppearsInTheMap() && getEnemy().get(a).getRect().intersects(rocket.getRect())
 						&& rocket.getTank() != getEnemy().get(a)) {
 					if (rocket.getTank() instanceof PlayerTank) {
 
@@ -1060,7 +1061,7 @@ public class GameManager {
 			String[] split = s.split(":");
 			setNumbersOfEnemiesOnline(Integer.parseInt(split[0]));
 			exit = Boolean.parseBoolean(split[1]);
-			paused = Boolean.parseBoolean(split[2]);
+			setPaused(Boolean.parseBoolean(split[2]));
 		}
 
 		int x = 0;
@@ -1120,7 +1121,7 @@ public class GameManager {
 			}
 		}
 
-		lock.lock();
+		getLock().lock();
 		if (enemy.length > 1 || enemy.length == 1 && !enemy[0].trim().isEmpty()) {
 			getEnemy().clear();
 			for (String s : enemy) {
@@ -1147,12 +1148,12 @@ public class GameManager {
 				getEnemy().get(getEnemy().size() - 1).setCountdown(Integer.parseInt(split[11]));
 			}
 		}
-		lock.unlock();
+		getLock().unlock();
 
 		// HO DOVUTO METTERE IL LOCK QUI XK è LA PARTE DOVE VIENE FATTO CLEAR E
 		// VIENE ANCHE DISEGNATO...XK C'è ANCHE IL LOCK NEL PAINT COMPONENT
 		// NELLA PARTE ROCKET
-		lock.lock();
+		getLock().lock();
 		if (rockets.length > 1 || rockets.length == 1 && !rockets[0].trim().isEmpty()) {
 			rocket.clear();
 			for (String s : rockets) {
@@ -1164,9 +1165,9 @@ public class GameManager {
 				getRocket().get(getRocket().size() - 1).setFirstAnimationNo(Boolean.parseBoolean(split[6]));
 			}
 		}
-		lock.unlock();
+		getLock().unlock();
 
-		lock.lock();
+		getLock().lock();
 		if (powerUp.length > 1 || powerUp.length == 1 && !powerUp[0].trim().isEmpty()) {
 			power.clear();
 			for (String s : powerUp) {
@@ -1220,9 +1221,9 @@ public class GameManager {
 				power.get(power.size() - 1).setTime(Integer.parseInt(split[11]));
 			}
 		}
-		lock.unlock();
+		getLock().unlock();
 
-		lock.lock();
+		getLock().lock();
 		if (effects.length > 1 || effects.length == 1 && !effects[0].trim().isEmpty()) {
 			getEffects().clear();
 			for (String s : effects) {
@@ -1286,16 +1287,16 @@ public class GameManager {
 				}
 			}
 		}
-		lock.unlock();
+		getLock().unlock();
 
-		lock.lock();
+		getLock().lock();
 		for (String s : flagElement) {
 			String[] split = s.split(":");
 			flag = new Flag(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix);
 			flag.setHit(Boolean.parseBoolean(split[6]));
 			getMatrix().world[Integer.parseInt(split[1])][Integer.parseInt(split[2])] = flag;
 		}
-		lock.unlock();
+		getLock().unlock();
 
 		for (String s : sounds) {
 			String[] split = s.split(":");
@@ -1313,7 +1314,7 @@ public class GameManager {
 		StringBuilder stringBuilder = new StringBuilder();
 
 		// QUI MANDO VARIABILI DI SISTEMA, COME PER ESEMPIO SIZE DEGLI ENEMY ECC
-		stringBuilder.append(getEnemy().size() + ":" + exit + ":" + paused + ";");
+		stringBuilder.append(getEnemy().size() + ":" + exit + ":" + isPaused() + ";");
 		stringBuilder.append("#");
 
 		for (int a = 0; a < getMatrix().getRow(); a++) {
@@ -1612,11 +1613,59 @@ public class GameManager {
 	}
 
 	public boolean isMedium() {
-		return medium;
+		return normal;
 	}
 
 	public void setMedium(boolean medium) {
-		this.medium = medium;
+		this.normal = medium;
+	}
+
+	public Runnable getRunnable() {
+		return runnable;
+	}
+
+	public void setRunnable(Runnable runnable) {
+		this.runnable = runnable;
+	}
+
+	public boolean isPauseOptionDialog() {
+		return pauseOptionDialog;
+	}
+
+	public void setPauseOptionDialog(boolean pauseOptionDialog) {
+		this.pauseOptionDialog = pauseOptionDialog;
+	}
+
+	public boolean isPaused() {
+		return paused;
+	}
+
+	public void setPaused(boolean paused) {
+		this.paused = paused;
+	}
+
+	public Timer getTimer() {
+		return timer;
+	}
+
+	public void setTimer(Timer timer) {
+		this.timer = timer;
+	}
+
+	public Timer getTimer2() {
+		return timer2;
+	}
+
+	public void setTimer2(Timer timer2) {
+		this.timer2 = timer2;
+	}
+
+	public Lock getLock() {
+		return lock;
+	}
+
+	public void setLock(Lock lock) {
+		this.lock = lock;
 	}
 
 }
