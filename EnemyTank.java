@@ -69,7 +69,7 @@ public class EnemyTank extends Tank {
 		xPast = getX();
 		yPast = getY();
 		super.update();
-		getWorld().world[getX()][getY()] = this;
+		getWorld().getWorld()[getX()][getY()] = this;
 	}
 
 	@Override
@@ -127,7 +127,7 @@ public class EnemyTank extends Tank {
 		// up
 		if (x > 0) {
 			up = x - 1;
-			if (!(getWorld().world[up][y] instanceof SteelWall) && !(getWorld().world[up][y] instanceof Water)) {
+			if (!(getWorld().getWorld()[up][y] instanceof SteelWall) && !(getWorld().getWorld()[up][y] instanceof Water)) {
 				directions[0] = true;
 			} else
 				directions[0] = false;
@@ -137,7 +137,7 @@ public class EnemyTank extends Tank {
 		// down
 		if (x < getWorld().getRow() - 1) {
 			down = x + 1;
-			if (!(getWorld().world[down][y] instanceof SteelWall) && !(getWorld().world[down][y] instanceof Water)) {
+			if (!(getWorld().getWorld()[down][y] instanceof SteelWall) && !(getWorld().getWorld()[down][y] instanceof Water)) {
 				directions[1] = true;
 
 			} else
@@ -148,7 +148,7 @@ public class EnemyTank extends Tank {
 		// right
 		if (y < getWorld().getColumn() - 1) {
 			right = y + 1;
-			if (!(getWorld().world[x][right] instanceof SteelWall) && !(getWorld().world[x][right] instanceof Water)) {
+			if (!(getWorld().getWorld()[x][right] instanceof SteelWall) && !(getWorld().getWorld()[x][right] instanceof Water)) {
 				directions[2] = true;
 			} else
 				directions[2] = false;
@@ -158,7 +158,7 @@ public class EnemyTank extends Tank {
 		// left
 		if (y > 0) {
 			left = y - 1;
-			if (!(getWorld().world[x][left] instanceof SteelWall) && !(getWorld().world[x][left] instanceof Water)) {
+			if (!(getWorld().getWorld()[x][left] instanceof SteelWall) && !(getWorld().getWorld()[x][left] instanceof Water)) {
 				directions[3] = true;
 			} else
 				directions[3] = false;
@@ -263,7 +263,7 @@ public class EnemyTank extends Tank {
 		for (int i = 0; i < x; ++i) {
 			for (int j = 0; j < y; ++j) {
 				grid[i][j] = new Cell(i, j);
-				if (world.world[i][j] instanceof BrickWall)
+				if (world.getWorld()[i][j] instanceof BrickWall)
 					grid[i][j].heuristicCost = (Math.abs(i - endI) + Math.abs(j - endJ)) + V_H_COST_BRICK;
 				else {
 					grid[i][j].heuristicCost = Math.abs(i - endI) + Math.abs(j - endJ);
@@ -300,11 +300,11 @@ public class EnemyTank extends Tank {
 		blocchi.clear();
 		for (int a = 0; a < world.getRow(); a++) {
 			for (int b = 0; b < world.getColumn(); b++) {
-				if (world.world[a][b] != null && world.world[a][b] != this
-						&& (world.world[a][b] instanceof SteelWall || world.world[a][b] instanceof EnemyTank
-								|| (world.world[a][b] instanceof Water
+				if (world.getWorld()[a][b] != null && world.getWorld()[a][b] != this
+						&& (world.getWorld()[a][b] instanceof SteelWall || world.getWorld()[a][b] instanceof EnemyTank
+								|| (world.getWorld()[a][b] instanceof Water
 										&& (a != GameManager.flag.getX() && b != GameManager.flag.getY()))
-								|| (world.world[a][b] instanceof Water
+								|| (world.getWorld()[a][b] instanceof Water
 										&& (a == GameManager.flag.getX() || b == GameManager.flag.getY())
 										&& noPresentSteelWall(a, b)))) {
 					blocchi.add(new Point(a, b));
@@ -372,14 +372,14 @@ public class EnemyTank extends Tank {
 	private boolean noPresentSteelWall(int x, int y) {
 		for (int b = 0; b < world.getColumn(); b++) {
 			if (((b > y && b < GameManager.flag.getY()) || (b < y && b > GameManager.flag.getY()))
-					&& world.world[GameManager.flag.getX()][b] instanceof SteelWall) {
+					&& world.getWorld()[GameManager.flag.getX()][b] instanceof SteelWall) {
 				return true;
 			}
 		}
 
 		for (int b = 0; b < world.getRow(); b++) {
 			if (((b > x && b < GameManager.flag.getX()) || (b < x && b > GameManager.flag.getX()))
-					&& world.world[b][GameManager.flag.getY()] instanceof SteelWall) {
+					&& world.getWorld()[b][GameManager.flag.getY()] instanceof SteelWall) {
 				return true;
 			}
 		}

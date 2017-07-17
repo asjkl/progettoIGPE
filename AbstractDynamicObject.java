@@ -72,13 +72,13 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 		
 		// rimette l oggetto di prima
 		if (!(curr instanceof Tank)) {
-			getWorld().world[getX()][getY()] = curr;
+			getWorld().getWorld()[getX()][getY()] = curr;
 		}
 		
 		switch (getDirection()) {
 		case UP:
 			if (getX() - 1 >= 0) {
-				next = getWorld().world[getX() - 1][getY()];
+				next = getWorld().getWorld()[getX() - 1][getY()];
 				if (sameObject()) {
 					setX(getX() - 1);
 				}
@@ -93,7 +93,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 			break;
 		case DOWN:
 			if (getX() + 1 < getWorld().getRow()) {
-				next = getWorld().world[getX() + 1][getY()];
+				next = getWorld().getWorld()[getX() + 1][getY()];
 				if (sameObject()) {
 					setX(getX() + 1);
 				}
@@ -108,7 +108,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 			break;
 		case LEFT:
 			if (getY() - 1 >= 0) {
-				next = getWorld().world[getX()][getY() - 1];
+				next = getWorld().getWorld()[getX()][getY() - 1];
 				if (sameObject()) {
 					setY(getY() - 1);
 				}
@@ -123,7 +123,7 @@ public abstract class AbstractDynamicObject extends AbstractStaticObject impleme
 			break;
 		case RIGHT:
 			if (getY() + 1 < getWorld().getColumn()) {
-				next = getWorld().world[getX()][getY() + 1];
+				next = getWorld().getWorld()[getX()][getY() + 1];
 				if (sameObject()) {
 					setY(getY() + 1);
 				}

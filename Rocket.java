@@ -9,9 +9,9 @@ public class Rocket extends AbstractDynamicObject {
 	public Rocket(int x, int y, World world, Direction direction, AbstractDynamicObject tank) {		
 		super(x, y, world, direction);
 		this.tank = tank;
-		this.curr = tank; //quando viene creato il Rocket il suo curr sar� il TANK	
+		this.curr = tank; 	
 		this.setFirstAnimationNo(true);
-		rocketForPlayer(); //spostato in una funzione
+		rocketForPlayer(); 
 	}
 	
 	@Override
@@ -19,7 +19,7 @@ public class Rocket extends AbstractDynamicObject {
 		super.update();
 				
 		if (curr != tank && canGo)
-			getWorld().world[getX()][getY()] = this;
+			getWorld().getWorld()[getX()][getY()] = this;
 	}
 	
 	@Override
@@ -88,14 +88,6 @@ public class Rocket extends AbstractDynamicObject {
 	public void setTank(AbstractDynamicObject tank) {
 		this.tank = tank;
 	}
-
-//	public boolean isFirstAnimationNo() {
-//		return firstAnimationNo;
-//	}
-//
-//	public void setFirstAnimationNo(boolean firstAnimationNo) {
-//		this.firstAnimationNo = firstAnimationNo;
-//	}
 
 	public boolean isRocketForPlayer() {
 		return rocketForPlayer;

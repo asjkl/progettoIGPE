@@ -3,7 +3,7 @@ package progettoIGPE.davide.giovanni.unical2016;
 public class Statistics {
 
 	private int currScore;
-	private int highScore; //record
+	private int highScore;    //record
 	private int totalEnemies; //indica il numero di nemici uccisi
 	
 	//punteggio totale per ogni tipo di tank
@@ -121,6 +121,7 @@ public class Statistics {
 	public void setTotalEnemies(int totalEnemies) {
 		this.totalEnemies = totalEnemies;
 	}
+	
 	public int getBasicTank() {
 		return basicTank;
 	}

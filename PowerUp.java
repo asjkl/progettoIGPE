@@ -2,20 +2,20 @@ package progettoIGPE.davide.giovanni.unical2016;
 
 public class PowerUp extends AbstractStaticObject {
 
-	private AbstractStaticObject before; //salva oggetto su cui cade
-	private AbstractStaticObject beforeWater; // importante non delete
 	private Power powerUp;
-	private AbstractDynamicObject tank; //powerup appartenenza
 	private boolean activate;
 	private boolean drop;
 	private boolean dropOnBorder;
 	private Direction dropDirection;
 	private long duration;
-	private long dropTime; //dropped
+	private long dropTime;                    //dropped
 	private boolean blink;
-	private int inc; // serve per gli effetti di powerUp
-	private long time; //timeout
+	private int inc;                          // serve per gli effetti di powerUp
+	private long time;                        //timeout
 	private boolean blinkShovel;
+	private AbstractDynamicObject tank;       //powerup appartenenza
+	private AbstractStaticObject before;      //salva oggetto su cui cade
+	private AbstractStaticObject beforeWater; // importante non delete
 
 	public PowerUp(int x, int y, World world, Power powerUp) {
 		super(x, y, world);
@@ -61,6 +61,7 @@ public class PowerUp extends AbstractStaticObject {
 			return 12;
 		return 0;
 	}
+	
 	public Power getPowerUp() {
 		return powerUp;
 	}

@@ -7,15 +7,15 @@ public class PlayerTank extends Tank {
 
 	private int level;
 	private int resume;
-	private String id; //id player
+	private String id;
 	private int point;
 	private boolean died;
 	private boolean first;
 	private int bornX;
 	private int bornY;
 	private boolean shot;
-	private long keyPressedMillis=0;
-	private long keyPressLength=0;
+	private long keyPressedMillis;
+	private long keyPressLength;
 	private ArrayList<Integer> keys;
 	private boolean pressed;
 	private boolean releaseKeyRocket;
@@ -23,14 +23,18 @@ public class PlayerTank extends Tank {
 	private Statistics statistics;
 	private ArrayList<Integer> defaultKeysPlayer;
 	private boolean finish;
-	public BitSet keyBits;
+	private BitSet keyBits;
 	private boolean exitOnline;
 	private String nameOfPlayerTank;
+	private int currentResume;
+	private int currentLevel;
 	
 	public PlayerTank(int x, int y, World world, String id) {
 		super(x, y, world, Speed.NORMAL, Speed.NORMALROCKET, Direction.STOP, 1);
 		this.resume = 3;
 		this.point = 0;
+		this.keyPressedMillis=0;
+		this.keyPressLength=0;
 		this.level = 0;
 		this.died = false;
 		this.setStatistics(new Statistics());
@@ -50,7 +54,7 @@ public class PlayerTank extends Tank {
 		this.id=id;
 		this.setFinish(false);
 		defaultKeys();
-		this.keyBits = new BitSet(128);
+		this.setKeyBits(new BitSet(128));
 	} 
 
 	public boolean isExitOnline() {
@@ -64,7 +68,7 @@ public class PlayerTank extends Tank {
 	@Override
 	public void update() {
 		super.update();
-		getWorld().world[getX()][getY()] = this;
+		getWorld().getWorld()[getX()][getY()] = this;
 		setDirection(Direction.STOP); 
 	}
 
@@ -295,5 +299,29 @@ public class PlayerTank extends Tank {
 
 	public void setNameOfPlayerTank(String nameOfPlayerTank) {
 		this.nameOfPlayerTank = nameOfPlayerTank;
+	}
+
+	public BitSet getKeyBits() {
+		return keyBits;
+	}
+
+	public void setKeyBits(BitSet keyBits) {
+		this.keyBits = keyBits;
+	}
+
+	public int getCurrentResume() {
+		return currentResume;
+	}
+
+	public void setCurrentResume(int currentResume) {
+		this.currentResume = currentResume;
+	}
+
+	public int getCurrentLevel() {
+		return currentLevel;
+	}
+
+	public void setCurrentLevel(int currentLevel) {
+		this.currentLevel = currentLevel;
 	}
 }

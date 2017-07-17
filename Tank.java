@@ -2,14 +2,14 @@ package progettoIGPE.davide.giovanni.unical2016;
 
 public abstract class Tank extends AbstractDynamicObject{
 
-	private boolean readyToSpawn;
 	private int countdown;
-	private long spawnTime; //salva il tempo che ci mette per spawnare
+	private long spawnTime;
 	private boolean protection;
 	private Direction  oldD; 
 	private boolean oldDirection;
 	private Direction tmpDirection;
 	private long timerEffect;
+	private boolean readyToSpawn;
 	
 	public Tank(int x, int y, World mondo, Speed speed, Speed speedShot, Direction direction,int health) {
 		super(x, y, mondo, speed, speedShot, direction, health);

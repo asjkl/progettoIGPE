@@ -1,22 +1,23 @@
 package progettoIGPE.davide.giovanni.unical2016;
 
 public class World {
+	
 	private int row;
 	private int column;
-	public AbstractStaticObject[][] world;
-	public AbstractStaticObject[][] objectStatic;
+	private AbstractStaticObject[][] world;
+	private AbstractStaticObject[][] objectStatic;
 
 	public World(int row, int column) {
 		this.row = row;
 		this.column = column;
-		this.world = new AbstractStaticObject[row][column];
-		this.objectStatic=new AbstractStaticObject[row][column];
+		this.setWorld(new AbstractStaticObject[row][column]);
+		this.setObjectStatic(new AbstractStaticObject[row][column]);
 	}
 
 	public World() {
 		row = 20;
 		column = 21;
-		this.world = new AbstractStaticObject[row][column];
+		this.setWorld(new AbstractStaticObject[row][column]);
 	}
 
 	public int getRow() {
@@ -38,9 +39,28 @@ public class World {
 	public void print() {
 		for (int a = 0; a < row; a++) {
 			for (int b = 0; b < column; b++) {
-				System.out.print(world[a][b]);
+				System.out.print(getWorld()[a][b]);
 			}
 			System.out.println();
 		}
 	}
+
+	public AbstractStaticObject[][] getObjectStatic() {
+		return objectStatic;
+	}
+
+	public void setObjectStatic(AbstractStaticObject[][] objectStatic) {
+		this.objectStatic = objectStatic;
+	}
+
+	public AbstractStaticObject[][] getWorld() {
+		return world;
+	}
+
+	public void setWorld(AbstractStaticObject[][] world) {
+		this.world = world;
+	}
+
+
+
 }
