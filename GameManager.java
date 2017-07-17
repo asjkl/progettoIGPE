@@ -84,6 +84,7 @@ public class GameManager {
 		playersArray = new LinkedList<>();
 		power = new ArrayList<>();
 		GameManager.offline = false;
+		lock = new ReentrantLock();
 		// crea player
 		if (name.equals("P1")) {
 			playersArray.addFirst(new PlayerTank(19, 8, getMatrix(), name));
@@ -138,7 +139,6 @@ public class GameManager {
 		width = 21;
 		height = 20;
 		currentTime = 0;
-		runnable = null;
 		setPauseOptionDialog(false);
 		setPaused(false);
 		numberOfEnemyOnMap = 0;
@@ -183,7 +183,6 @@ public class GameManager {
 
 		setExit(false);
 		setNumbersOfEnemiesOnline(enemy.size());
-		lock = new ReentrantLock();
 	}
 
 	public class MyTask extends TimerTask {
