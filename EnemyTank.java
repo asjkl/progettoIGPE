@@ -75,10 +75,10 @@ public class EnemyTank extends Tank {
 	@Override
 	public boolean sameObject() {
 
-		if (next instanceof Rocket && ((Rocket) next).getTank() == this) {
-			next = ((Rocket) next).getCurr();
-			return false;
-		}
+//		if (next instanceof Rocket && ((Rocket) next).getTank() == this) {
+//			next = ((Rocket) next).getCurr();
+//			return false;
+//		}
 
 		if (!(next instanceof Wall) && !(next instanceof Tank) && !(next instanceof Water) && !(next instanceof Rocket)
 				&& !(next instanceof Flag)) {

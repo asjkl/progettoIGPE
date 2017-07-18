@@ -816,9 +816,9 @@ public class GameManager {
 
 		countRockets(r);
 
-		if (r.getCurr() != r.getTank())
+		if (!(r.getCurr() instanceof Tank) /*&& !(r.getNext() instanceof Tank)*/)
 			matrix.getWorld()[r.getX()][r.getY()] = r.getCurr();
-
+	
 		if (!effects.contains(r))
 			effects.add(r);
 
