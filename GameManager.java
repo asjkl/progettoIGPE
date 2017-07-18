@@ -169,7 +169,7 @@ public class GameManager {
 		importMap(filename);
 
 		if (singlePlayer)
-			numberOfEnemyToSpawn = 4;
+			numberOfEnemyToSpawn = 1;
 		else 
 			numberOfEnemyToSpawn = 6;
 			
@@ -191,8 +191,8 @@ public class GameManager {
 
 			if (!isPaused()) {
 				// STAMPA
-				// getMatrix().print();
-				// System.out.println();
+//				 getMatrix().print();
+//				 System.out.println();
 
 				// EFFECTS
 				for (int i = 0; i < effects.size(); i++) {
@@ -821,7 +821,7 @@ public class GameManager {
 
 		if (!effects.contains(r))
 			effects.add(r);
-		// System.out.println("destroyRocket");
+
 		rocket.remove(r);
 
 	}

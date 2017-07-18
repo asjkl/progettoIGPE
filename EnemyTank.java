@@ -30,8 +30,8 @@ public class EnemyTank extends Tank {
 	public final int V_H_COST_BRICK;
 	private boolean hasApath; // IL NEMICO CON LA DIFFICOLTA' MASSIMA CI DICE SE HA TROVATO UN PERCORSO O MENO
 	private int randomObject;
-	private int xPast;
-	private int yPast;
+//	private int xPast;
+//	private int yPast;
 	private int shotTimeEverySecond;
 	
 	public EnemyTank(int x, int y, World world, Speed speed, Speed speedShot, Direction direction, int health,
@@ -58,16 +58,16 @@ public class EnemyTank extends Tank {
 		this.switchT = 0;
 		this.easy=true;
 		this.directions = new boolean[4];
-		this.xPast = -1;
-		this.yPast = -1;
+//		this.xPast = -1;
+//		this.yPast = -1;
 		this.shotTimeEverySecond=1;
 		for (int i = 0; i < directions.length; i++) {directions[i] = false;}
 	}
 
 	@Override
 	public void update() {
-		xPast = getX();
-		yPast = getY();
+//		xPast = getX();
+//		yPast = getY();
 		super.update();
 		getWorld().getWorld()[getX()][getY()] = this;
 	}
@@ -499,21 +499,21 @@ public class EnemyTank extends Tank {
 		this.randomObject = randomObject;
 	}
 
-	public int getxPast() {
-		return xPast;
-	}
-
-	public void setxPast(int xPast) {
-		this.xPast = xPast;
-	}
-
-	public int getyPast() {
-		return yPast;
-	}
-
-	public void setyPast(int yPast) {
-		this.yPast = yPast;
-	}
+//	public int getxPast() {
+//		return xPast;
+//	}
+//
+//	public void setxPast(int xPast) {
+//		this.xPast = xPast;
+//	}
+//
+//	public int getyPast() {
+//		return yPast;
+//	}
+//
+//	public void setyPast(int yPast) {
+//		this.yPast = yPast;
+//	}
 
 	public long getSwitchT() {
 		return switchT;
