@@ -75,15 +75,11 @@ public class PlayerTank extends Tank {
 	@Override
 	public boolean sameObject() {
 		
-		// DA CONTROLLARE CAMBIATO THIS PRIMA ERA PLAYERTANK
 		if(next instanceof Rocket && ((Rocket)next).getTank() == this ){
 			next = ((Rocket)next).getCurr();
+			return false;
 		}
 		
-		if(next instanceof Rocket){
-			curr = ((Rocket)next).getCurr();
-			return true;
-		}
 		if (!(next instanceof Wall) && !(next instanceof Tank) && !(next instanceof Water) && !(next instanceof Rocket) && !(next instanceof Flag)) {
 
 			if (next instanceof PowerUp ){

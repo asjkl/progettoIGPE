@@ -77,11 +77,7 @@ public class EnemyTank extends Tank {
 
 		if (next instanceof Rocket && ((Rocket) next).getTank() == this) {
 			next = ((Rocket) next).getCurr();
-		}
-
-		if (next instanceof Rocket) {
-			curr = ((Rocket) next).getCurr();
-			return true;
+			return false;
 		}
 
 		if (!(next instanceof Wall) && !(next instanceof Tank) && !(next instanceof Water) && !(next instanceof Rocket)
