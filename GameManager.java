@@ -169,7 +169,7 @@ public class GameManager {
 		importMap(filename);
 
 		if (singlePlayer)
-			numberOfEnemyToSpawn = 1;
+			numberOfEnemyToSpawn = 4;
 		else 
 			numberOfEnemyToSpawn = 6;
 			
