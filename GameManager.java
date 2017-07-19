@@ -1699,5 +1699,4 @@ public class GameManager {
 	public void setLock(Lock lock) {
 		this.lock = lock;
 	}
-
 }
