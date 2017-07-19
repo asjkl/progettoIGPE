@@ -625,7 +625,7 @@ public class GameManager {
 
 			for (int i = 0; i < enemy.size(); i++)
 				if (enemy.get(i).isAppearsInTheMap()) {
-					((PlayerTank) power.getTank()).getStatistics().calculate(power);
+					((PlayerTank) power.getTank()).getStatistics().calculate(enemy.get(i));
 					destroyEnemyTank(enemy.get(i--));
 				}
 			break;
@@ -1265,6 +1265,17 @@ public class GameManager {
 					((Rocket) getEffects().get(getEffects().size() - 1)).setInc(Integer.parseInt(split[7]));
 					getEffects().get(getEffects().size() - 1).setxGraphics(Double.parseDouble(split[4]));
 					getEffects().get(getEffects().size() - 1).setyGraphics(Double.parseDouble(split[5]));
+					((Rocket)getEffects().get(getEffects().size() - 1)).setOneTimeSound(Boolean.parseBoolean(split[11]));
+					if (split[8].equals("P1") || split[8].equals("P2"))
+						((Rocket)getEffects().get(getEffects().size() - 1)).setTank(new PlayerTank(0, 0, matrix, split[8]));
+					else
+						((Rocket)getEffects().get(getEffects().size() - 1)).setTank(null);
+					if (split[10].equals("[  ]"))
+						((Rocket)getEffects().get(getEffects().size() - 1)).setNext(new BrickWall(0, 0, matrix, 1));
+					else if (split[10].equals("[//]"))
+						((Rocket)getEffects().get(getEffects().size() - 1)).setNext(new SteelWall(0, 0, matrix, 1));
+					((Rocket)getEffects().get(getEffects().size() - 1)).setOnBorder(Boolean.parseBoolean(split[9]));
+					
 				} else if (split[0].equals(" && ")) {
 					getEffects().add(new Flag(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix));
 					((Flag) getEffects().get(getEffects().size() - 1)).setInc(Integer.parseInt(split[5]));
@@ -1441,7 +1452,7 @@ public class GameManager {
 
 			return (r.toString() + ":" + r.getX() + ":" + r.getY() + ":" + r.getDirection() + ":" + r.getxGraphics()
 					+ ":" + r.getyGraphics() + ":" + r.isFirstAnimationNo() + ":" + r.getInc() + ":"
-					+ r.getTank().toString() + ":" + r.isOnBorder() + ":" + s1 + ";");
+					+ r.getTank().toString() + ":" + r.isOnBorder() + ":" + s1 + ":"+r.isOneTimeSound()+";");
 		} else if (ob instanceof PowerUp) {
 			PowerUp pu = (PowerUp) ob;
 			AbstractStaticObject getbef = pu.getBefore();
