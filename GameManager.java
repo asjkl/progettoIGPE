@@ -25,7 +25,7 @@ public class GameManager {
 	public static boolean offline;
 	public static long currentTime;
 	public static boolean singlePlayer;
-	
+
 	private Lock lock;
 	private boolean normal;
 	private boolean exit;
@@ -170,9 +170,9 @@ public class GameManager {
 
 		if (singlePlayer)
 			numberOfEnemyToSpawn = 4;
-		else 
+		else
 			numberOfEnemyToSpawn = 6;
-			
+
 		setTimer(new Timer());
 		task = new MyTask();
 		getTimer().schedule(task, 85, 85);
@@ -191,8 +191,8 @@ public class GameManager {
 
 			if (!isPaused()) {
 				// STAMPA
-//				 getMatrix().print();
-//				 System.out.println();
+				// getMatrix().print();
+				// System.out.println();
 
 				// EFFECTS
 				for (int i = 0; i < effects.size(); i++) {
@@ -303,7 +303,8 @@ public class GameManager {
 									((BrickWall) power.get(a).getBefore()).setBefore(null);
 								else if (power.get(a).getBefore() instanceof SteelWall)
 									((SteelWall) power.get(a).getBefore()).setBefore(null);
-								getMatrix().getWorld()[power.get(a).getX()][power.get(a).getY()] = power.get(a).getBefore();
+								getMatrix().getWorld()[power.get(a).getX()][power.get(a).getY()] = power.get(a)
+										.getBefore();
 							}
 							power.remove(a);
 							a--;
@@ -425,9 +426,9 @@ public class GameManager {
 	}
 
 	public double returnSpeed(Speed speed, AbstractStaticObject object) {
-	
+
 		// SERVE PER CONVERTIRE LA SPEED AD UN INTERO
-		if(GameManager.offline){
+		if (GameManager.offline) {
 			if (speed == Speed.SLOW) {
 				return 0.1d;
 			} else if (speed == Speed.NORMAL) {
@@ -441,8 +442,8 @@ public class GameManager {
 			} else if (speed == Speed.FASTROCKET) {
 				return 0.6d;
 			}
-		}else{
-			
+		} else {
+
 			if (speed == Speed.SLOW) {
 				return 0.8d;
 			} else if (speed == Speed.NORMAL) {
@@ -465,17 +466,21 @@ public class GameManager {
 	private void extendAddPowerUp(PowerUp tmp) {
 
 		tmp.setDropTime(durationPowerUp);
-		tmp.setBefore(getMatrix().getWorld()[getX()][getY()]); // prima di spostare
-															// powerUp mi salvo
-															// l oggetto su cui
-															// �
-															// caduto
-															// precedentemente.
+		tmp.setBefore(getMatrix().getWorld()[getX()][getY()]); // prima di
+																// spostare
+																// powerUp mi
+																// salvo
+																// l oggetto su
+																// cui
+																// �
+																// caduto
+																// precedentemente.
 		if (tmp.getBefore() instanceof Water) {
-			tmp.setBeforeWater(getMatrix().getWorld()[xTmp][yTmp]); // mi salvo l
-																// oggetto che
-																// verr�
-																// sovvraascritto
+			tmp.setBeforeWater(getMatrix().getWorld()[xTmp][yTmp]); // mi salvo
+																	// l
+			// oggetto che
+			// verr�
+			// sovvraascritto
 			tmp.setX(xTmp); // powerUp viene spostato dall acqua alla cella
 							// accanto (pos buona )
 			tmp.setY(yTmp);
@@ -487,8 +492,9 @@ public class GameManager {
 		else if (getMatrix().getWorld()[getX()][getY()] instanceof SteelWall)
 			((SteelWall) getMatrix().getWorld()[getX()][getY()]).setBefore(tmp);
 		else
-			getMatrix().getWorld()[tmp.getX()][tmp.getY()] = tmp; // attenzione al
-																// tmp.getX();
+			getMatrix().getWorld()[tmp.getX()][tmp.getY()] = tmp; // attenzione
+																	// al
+																	// tmp.getX();
 	}
 
 	public void addPowerUp(int t) {
@@ -577,14 +583,17 @@ public class GameManager {
 		while (!flag) {
 			x = random.nextInt(height);
 			y = random.nextInt(width);
-			if (!(getMatrix().getWorld()[x][y] instanceof PlayerTank) && !(getMatrix().getWorld()[x][y] instanceof EnemyTank)
-					&& !(getMatrix().getWorld()[x][y] instanceof PowerUp) && !(getMatrix().getWorld()[x][y] instanceof Rocket)
+			if (!(getMatrix().getWorld()[x][y] instanceof PlayerTank)
+					&& !(getMatrix().getWorld()[x][y] instanceof EnemyTank)
+					&& !(getMatrix().getWorld()[x][y] instanceof PowerUp)
+					&& !(getMatrix().getWorld()[x][y] instanceof Rocket)
 					&& !(getMatrix().getWorld()[x][y] instanceof Flag && getMatrix().getWorld()[x][y] != null)
 					&& !spawnPosition(x, y)) {
 				flag = true;
 			}
-			if (getMatrix().getWorld()[x][y] instanceof Water) // se cade nell'acqua
-															// controlla
+			if (getMatrix().getWorld()[x][y] instanceof Water) // se cade
+																// nell'acqua
+																// controlla
 				if (!movePowerUpInCorrectPosition()) // se la condizione non �
 														// soddisfatta
 					flag = false; // continua a ciclare
@@ -661,11 +670,13 @@ public class GameManager {
 
 				if (!(i == x && j == y) && i >= 0 && j >= 0 && j < width && i < height) {
 					if (S == "steel") {
-						if (!(getMatrix().getWorld()[i][j] instanceof Tank) && !(getMatrix().getWorld()[i][j] instanceof Rocket))
+						if (!(getMatrix().getWorld()[i][j] instanceof Tank)
+								&& !(getMatrix().getWorld()[i][j] instanceof Rocket))
 							recoveryWall.add(getMatrix().getWorld()[i][j]);
 						matrix.getWorld()[i][j] = new SteelWall(i, j, matrix, 4);
 					} else if (S == "brick") {
-						if (!(getMatrix().getWorld()[i][j] instanceof Tank) && !(getMatrix().getWorld()[i][j] instanceof Rocket))
+						if (!(getMatrix().getWorld()[i][j] instanceof Tank)
+								&& !(getMatrix().getWorld()[i][j] instanceof Rocket))
 							recoveryWall.add(getMatrix().getWorld()[i][j]);
 						matrix.getWorld()[i][j] = recoveryWall.get(reset++);
 					} else if (S == "recover" && reset < recoveryWall.size()) {
@@ -775,7 +786,8 @@ public class GameManager {
 
 			// CONTROLLO SE IL ROCKET HA INTERSECATO UN PLAYER TANK
 			for (int a = 0; a < getPlayersArray().size(); a++) {
-				if (!getPlayersArray().get(a).isDied() && rocket.getRect().intersects(getPlayersArray().get(a).getRect())
+				if (!getPlayersArray().get(a).isDied()
+						&& rocket.getRect().intersects(getPlayersArray().get(a).getRect())
 						&& rocket.getTank() != getPlayersArray().get(a)) {
 					if (rocket.getTank() instanceof EnemyTank) {
 						if (!getPlayersArray().get(a).isProtection() && !getPlayersArray().get(a).isReadyToSpawn()) {
@@ -816,9 +828,11 @@ public class GameManager {
 
 		countRockets(r);
 
-		if (!(r.getCurr() instanceof Tank) /*&& !(r.getNext() instanceof Tank)*/)
+		if (!(r.getCurr() instanceof Tank) /*
+											 * && !(r.getNext() instanceof Tank)
+											 */)
 			matrix.getWorld()[r.getX()][r.getY()] = r.getCurr();
-	
+
 		if (!effects.contains(r))
 			effects.add(r);
 
@@ -881,14 +895,14 @@ public class GameManager {
 		if (player.getResume() <= 0) {
 			player.setDied(true);
 			matrix.getWorld()[player.getX()][player.getY()] = null;
-			
+
 			if (playersArray.size() > 1) {
-				int numOfPlayer=0;
-				if(player.toString().equals("P1")){
-					numOfPlayer=1;
+				int numOfPlayer = 0;
+				if (player.toString().equals("P1")) {
+					numOfPlayer = 1;
 				}
-				
-				for (int a = 0; a < enemy.size(); a++) {	
+
+				for (int a = 0; a < enemy.size(); a++) {
 					enemy.get(a).setRandomObject(numOfPlayer);
 				}
 			}
@@ -1056,13 +1070,14 @@ public class GameManager {
 		String[] powerUp = elements[6].split(";");
 		String[] effects = elements[7].split(";");
 		String[] flagElement = elements[8].split(";");
-		String[] sounds = elements[9].split(";");
 
 		for (String s : variableOfSystem) {
 			String[] split = s.split(":");
 			setNumbersOfEnemiesOnline(Integer.parseInt(split[0]));
 			exit = Boolean.parseBoolean(split[1]);
 			setPaused(Boolean.parseBoolean(split[2]));
+			setSoundPowerUp(Boolean.parseBoolean(split[3]));
+			setExplosion(Boolean.parseBoolean(split[4]));
 		}
 
 		int x = 0;
@@ -1119,6 +1134,8 @@ public class GameManager {
 					getPlayersArray().get(a).setDied(Boolean.parseBoolean(split[13]));
 					getPlayersArray().get(a).setLevel(Integer.parseInt(split[14]));
 					getPlayersArray().get(a).setCont(Double.parseDouble(split[15]));
+					getPlayersArray().get(a).setShot(Boolean.parseBoolean(split[16]));
+					getPlayersArray().get(a).setPressed(Boolean.parseBoolean(split[17]));
 				}
 			}
 		}
@@ -1160,11 +1177,20 @@ public class GameManager {
 			rocket.clear();
 			for (String s : rockets) {
 				String[] split = s.split(":");
-				getRocket().add(new Rocket(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix,
-						Direction.valueOf(split[3]), null));
+				if (split[8].equals("P1") || split[8].equals("P2"))
+					getRocket().add(new Rocket(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix,
+							Direction.valueOf(split[3]), new PlayerTank(0, 0, matrix, split[8])));
+				else
+					getRocket().add(new Rocket(Integer.parseInt(split[1]), Integer.parseInt(split[2]), matrix,
+							Direction.valueOf(split[3]), null));
 				getRocket().get(getRocket().size() - 1).setxGraphics(Double.parseDouble(split[4]));
 				getRocket().get(getRocket().size() - 1).setyGraphics(Double.parseDouble(split[5]));
 				getRocket().get(getRocket().size() - 1).setFirstAnimationNo(Boolean.parseBoolean(split[6]));
+				getRocket().get(getRocket().size() - 1).setOnBorder(Boolean.parseBoolean(split[9]));
+				if (split[10].equals("[  ]"))
+					getRocket().get(getRocket().size() - 1).setNext(new BrickWall(0, 0, matrix, 1));
+				else if (split[10].equals("[//]"))
+					getRocket().get(getRocket().size() - 1).setNext(new SteelWall(0, 0, matrix, 1));
 			}
 		}
 		getLock().unlock();
@@ -1299,16 +1325,6 @@ public class GameManager {
 			getMatrix().getWorld()[Integer.parseInt(split[1])][Integer.parseInt(split[2])] = flag;
 		}
 		getLock().unlock();
-
-		for (String s : sounds) {
-			String[] split = s.split(":");
-			setSoundPowerUp(Boolean.parseBoolean(split[0]));
-			setExplosion(Boolean.parseBoolean(split[1]));
-			getPlayersArray().get(0).setShot(Boolean.parseBoolean(split[2]));
-			getPlayersArray().get(1).setShot(Boolean.parseBoolean(split[3]));
-			getPlayersArray().get(0).setShot(Boolean.parseBoolean(split[4]));
-			getPlayersArray().get(1).setShot(Boolean.parseBoolean(split[5]));
-		}
 	}
 
 	// DATA TO STRING
@@ -1316,7 +1332,7 @@ public class GameManager {
 		StringBuilder stringBuilder = new StringBuilder();
 
 		// QUI MANDO VARIABILI DI SISTEMA, COME PER ESEMPIO SIZE DEGLI ENEMY ECC
-		stringBuilder.append(getEnemy().size() + ":" + exit + ":" + isPaused() + ";");
+		stringBuilder.append(getEnemy().size() + ":" + exit + ":" + isPaused() + ":"+isSoundPowerUp() + ":" + isExplosion() + ";");
 		stringBuilder.append("#");
 
 		for (int a = 0; a < getMatrix().getRow(); a++) {
@@ -1384,16 +1400,8 @@ public class GameManager {
 		}
 		stringBuilder.append("#");
 		stringBuilder.append(build(flag));
-		stringBuilder.append("#");
-		stringBuilder.append(sounds());
 
 		return stringBuilder.toString();
-	}
-
-	private Object sounds() {
-		return isSoundPowerUp() + ":" + isExplosion() + ":" + getPlayersArray().get(0).isShot() + ":"
-				+ getPlayersArray().get(1).isShot() + ":" + getPlayersArray().get(0).isPressed() + ":"
-				+ getPlayersArray().get(1).isPressed() + ";";
 	}
 
 	private String build(AbstractStaticObject ob) {
@@ -1403,7 +1411,7 @@ public class GameManager {
 			return (p.toString() + ":" + p.getxGraphics() + ":" + p.getyGraphics() + ":" + p.getTmpDirection() + ":"
 					+ p.getKeyPressedMillis() + ":" + p.isPressed() + ":" + p.isProtection() + ":" + p.isReadyToSpawn()
 					+ ":" + p.getCountdown() + ":" + p.getResume() + ":" + p.getInc() + ":" + p.isExitOnline() + ":"
-					+ p.getNameOfPlayerTank() + ":" + p.isDied() + ":"+ p.getLevel()+":"+p.getCont()+";");
+					+ p.getNameOfPlayerTank() + ":" + p.isDied() + ":" + p.getLevel() + ":" + p.getCont() + ":"+ p.isShot()+":"+p.isPressed()+";");
 		} else if (ob instanceof EnemyTank) {
 			EnemyTank e = ((EnemyTank) ob);
 			return ("ENEMY" + ":" + e.toString() + ":" + e.getX() + ":" + e.getY() + ":" + e.getxGraphics() + ":"
@@ -1411,8 +1419,18 @@ public class GameManager {
 					+ e.isReadyToSpawn() + ":" + e.getInc() + ":" + e.isProtection() + ":" + e.getCountdown() + ";");
 		} else if (ob instanceof Rocket) {
 			Rocket r = ((Rocket) ob);
+
+			AbstractStaticObject getnext = r.getNext();
+			String s1;
+			if (getnext instanceof BrickWall || getnext instanceof SteelWall) {
+				s1 = r.getNext().toString();
+			} else {
+				s1 = "null";
+			}
+
 			return (r.toString() + ":" + r.getX() + ":" + r.getY() + ":" + r.getDirection() + ":" + r.getxGraphics()
-					+ ":" + r.getyGraphics() + ":" + r.isFirstAnimationNo() + ":" + r.getInc() + ";");
+					+ ":" + r.getyGraphics() + ":" + r.isFirstAnimationNo() + ":" + r.getInc() + ":"
+					+ r.getTank().toString() + ":" + r.isOnBorder() + ":" + s1 + ";");
 		} else if (ob instanceof PowerUp) {
 			PowerUp pu = (PowerUp) ob;
 			AbstractStaticObject getbef = pu.getBefore();
@@ -1606,6 +1624,7 @@ public class GameManager {
 		return shotEnabled;
 	}
 
+	
 	public void setShotEnabled(boolean shotEnabled) {
 		this.shotEnabled = shotEnabled;
 	}
