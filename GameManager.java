@@ -1136,6 +1136,9 @@ public class GameManager {
 					getPlayersArray().get(a).setCont(Double.parseDouble(split[15]));
 					getPlayersArray().get(a).setShot(Boolean.parseBoolean(split[16]));
 					getPlayersArray().get(a).setPressed(Boolean.parseBoolean(split[17]));
+					if(split[18].equals("POWERUP")){
+						getPlayersArray().get(a).setNext(new PowerUp(0, 0, matrix, Power.GRENADE));
+					}
 				}
 			}
 		}
@@ -1408,10 +1411,19 @@ public class GameManager {
 
 		if (ob instanceof PlayerTank) {
 			PlayerTank p = ((PlayerTank) ob);
+			AbstractStaticObject getnext = p.getNext();
+			String s1;
+			
+			System.out.println(getnext);
+			if(getnext instanceof PowerUp){
+				s1="POWERUP";
+			}else{
+				s1="null";
+			}
 			return (p.toString() + ":" + p.getxGraphics() + ":" + p.getyGraphics() + ":" + p.getTmpDirection() + ":"
 					+ p.getKeyPressedMillis() + ":" + p.isPressed() + ":" + p.isProtection() + ":" + p.isReadyToSpawn()
 					+ ":" + p.getCountdown() + ":" + p.getResume() + ":" + p.getInc() + ":" + p.isExitOnline() + ":"
-					+ p.getNameOfPlayerTank() + ":" + p.isDied() + ":" + p.getLevel() + ":" + p.getCont() + ":"+ p.isShot()+":"+p.isPressed()+";");
+					+ p.getNameOfPlayerTank() + ":" + p.isDied() + ":" + p.getLevel() + ":" + p.getCont() + ":"+ p.isShot()+":"+p.isPressed()+":"+s1+";");
 		} else if (ob instanceof EnemyTank) {
 			EnemyTank e = ((EnemyTank) ob);
 			return ("ENEMY" + ":" + e.toString() + ":" + e.getX() + ":" + e.getY() + ":" + e.getxGraphics() + ":"
