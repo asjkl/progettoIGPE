@@ -28,6 +28,7 @@ public class PlayerTank extends Tank {
 	private String nameOfPlayerTank;
 	private int currentResume;
 	private int currentLevel;
+	private long currentTimeMillis;
 	
 	public PlayerTank(int x, int y, World world, String id) {
 		super(x, y, world, Speed.NORMAL, Speed.NORMALROCKET, Direction.STOP, 1);
@@ -319,5 +320,13 @@ public class PlayerTank extends Tank {
 
 	public void setCurrentLevel(int currentLevel) {
 		this.currentLevel = currentLevel;
+	}
+
+	public long getCurrentTimeMillis() {
+		return currentTimeMillis;
+	}
+
+	public void setCurrentTimeMillis(long currentTimeMillis) {
+		this.currentTimeMillis = currentTimeMillis;
 	}
 }
