@@ -4,12 +4,14 @@ public class Rocket extends AbstractDynamicObject {
 
 	private AbstractDynamicObject tank;
 	private boolean firstAnimationNo;
-	private boolean rocketForPlayer;	 
+	private boolean rocketForPlayer;	
+	private boolean oneTimeSound;
 
 	public Rocket(int x, int y, World world, Direction direction, AbstractDynamicObject tank) {		
 		super(x, y, world, direction);
 		this.tank = tank;
 		this.curr = tank; 	
+		oneTimeSound = true;
 		this.setFirstAnimationNo(true);
 		rocketForPlayer(); 
 	}
@@ -97,5 +99,13 @@ public class Rocket extends AbstractDynamicObject {
 
 	public void setFirstAnimationNo(boolean firstAnimationNo) {
 		this.firstAnimationNo = firstAnimationNo;
+	}
+
+	public boolean isOneTimeSound() {
+		return oneTimeSound;
+	}
+
+	public void setOneTimeSound(boolean ontTimeSound) {
+		this.oneTimeSound = ontTimeSound;
 	}
 }

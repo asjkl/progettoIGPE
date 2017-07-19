@@ -1414,7 +1414,6 @@ public class GameManager {
 			AbstractStaticObject getnext = p.getNext();
 			String s1;
 			
-			System.out.println(getnext);
 			if(getnext instanceof PowerUp){
 				s1="POWERUP";
 			}else{
