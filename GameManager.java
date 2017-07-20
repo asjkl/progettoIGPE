@@ -69,6 +69,9 @@ public class GameManager {
 	private Timer timer2;
 	private TimerTask task2;
 	public Lock lockEffect=new ReentrantLock();
+	
+	private boolean exitWhileGameLoop;
+	private boolean win;
 
 	// OFFLINE
 	public GameManager(JTextField filename) {
@@ -184,6 +187,8 @@ public class GameManager {
 
 		setExit(false);
 		setNumbersOfEnemiesOnline(enemy.size());
+		exitWhileGameLoop = false;
+		win = false;
 	}
 
 	public class MyTask extends TimerTask {
@@ -1732,4 +1737,21 @@ public class GameManager {
 	public void setLock(Lock lock) {
 		this.lock = lock;
 	}
+	
+	public boolean isExitWhileGameLoop() {
+		return exitWhileGameLoop;
+	}
+
+	public void setExitWhileGameLoop(boolean exitWhileGameLoop) {
+		this.exitWhileGameLoop = exitWhileGameLoop;
+	}
+
+	public boolean isWin() {
+		return win;
+	}
+
+	public void setWin(boolean win) {
+		this.win = win;
+	}
+
 }
