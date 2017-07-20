@@ -624,11 +624,6 @@ public class GameManager {
 
 	private void managePowerUp(PowerUp p) {
 
-		if (p.getTank() instanceof PlayerTank) {
-			System.out.println("statistics power");
-			((PlayerTank) p.getTank()).getStatistics().calculate(p);
-		}
-
 		if (p.getPowerUp() == Power.HELMET) {
 			((Tank) p.getTank()).setProtection(false);
 		} else if (p.getPowerUp() == Power.SHOVEL) {
