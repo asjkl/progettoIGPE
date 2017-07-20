@@ -145,7 +145,7 @@ public class GameManager {
 		normal = false;
 		numberOfEnemyReadyToSpwan = 0;
 		durationPowerUp = 20;
-		numEnemyDropsPowerUp = 1; // indica ogni quanti enemie far cadere
+		numEnemyDropsPowerUp = 4; // indica ogni quanti enemie far cadere
 									// powerUp
 		spawnTimeEnemy = 4;
 		shotEnabled = true; // i nemici possono sparare
