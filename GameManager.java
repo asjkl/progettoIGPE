@@ -68,6 +68,7 @@ public class GameManager {
 	private TimerTask task;
 	private Timer timer2;
 	private TimerTask task2;
+	public Lock lockEffect=new ReentrantLock();
 
 	// OFFLINE
 	public GameManager(JTextField filename) {
@@ -195,39 +196,41 @@ public class GameManager {
 				// System.out.println();
 //				System.out.println(effects.size());
 				// EFFECTS
+				lockEffect.lock();
 				for (int i = 0; i < effects.size(); i++) {
 					if (effects.get(i) instanceof PlayerTank) {
 						 if(((PlayerTank) (effects.get(i))).getInc() <= 5)
 						((PlayerTank) (effects.get(i))).setInc(((PlayerTank) (effects.get(i))).getInc() + 1);
-						else
-							effects.remove(i--);
+//						else
+//							effects.remove(i--);
 					}
 					else if (effects.get(i) instanceof EnemyTank) {
 						 if(((EnemyTank) (effects.get(i))).getInc() <= 12)
 							 ((EnemyTank) (effects.get(i))).setInc(((EnemyTank) (effects.get(i))).getInc() + 1);
-						 else
-							 effects.remove(i--);
+//						 else
+//							 effects.remove(i--);
 							 
 					}
 					else if (effects.get(i) instanceof Rocket) {
 						 if(((Rocket) (effects.get(i))).getInc() <= 3)
 							 ((Rocket) (effects.get(i))).setInc(((Rocket) (effects.get(i))).getInc() + 1);
-						 else
-							 effects.remove(i--);
+//						 else
+//							 effects.remove(i--);
 					}
 					else if (effects.get(i) instanceof PowerUp) {
 						 if(((PowerUp) (effects.get(i))).getInc() <= 12)
 							 ((PowerUp) (effects.get(i))).setInc(((PowerUp) (effects.get(i))).getInc() + 1);
-						 else
-							 effects.remove(i--);
+//						 else
+//							 effects.remove(i--);
 					}
 					else if (effects.get(i) instanceof Flag) {
 						 if(((Flag) (effects.get(i))).getInc() <= 5)
 							 ((Flag) (effects.get(i))).setInc(((Flag) (effects.get(i))).getInc() + 1);
-						 else
-							 effects.remove(i--);
+//						 else
+//							 effects.remove(i--);
 					}
 				}
+				lockEffect.unlock();
 
 				for (int i = 0; i < getEnemy().size(); i++) {
 					// EFFETTO SPAWN ENEMY
