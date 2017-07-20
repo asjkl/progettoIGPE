@@ -1105,6 +1105,7 @@ public class GameManager {
 			setPaused(Boolean.parseBoolean(split[2]));
 			setSoundPowerUp(Boolean.parseBoolean(split[3]));
 			setExplosion(Boolean.parseBoolean(split[4]));
+			exit=Boolean.parseBoolean(split[5]);
 		}
 
 		int x = 0;
@@ -1373,7 +1374,7 @@ public class GameManager {
 		StringBuilder stringBuilder = new StringBuilder();
 
 		// QUI MANDO VARIABILI DI SISTEMA, COME PER ESEMPIO SIZE DEGLI ENEMY ECC
-		stringBuilder.append(getEnemy().size() + ":" + exitWhileGameLoop + ":" + isPaused() + ":"+isSoundPowerUp() + ":" + isExplosion() + ";");
+		stringBuilder.append(getEnemy().size() + ":" + exitWhileGameLoop + ":" + isPaused() + ":"+isSoundPowerUp() + ":" + isExplosion() + ":"+isExit()+";");
 		stringBuilder.append("#");
 
 		for (int a = 0; a < getMatrix().getRow(); a++) {
