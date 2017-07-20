@@ -193,17 +193,40 @@ public class GameManager {
 				// STAMPA
 				// getMatrix().print();
 				// System.out.println();
-
+//				System.out.println(effects.size());
 				// EFFECTS
 				for (int i = 0; i < effects.size(); i++) {
-					if (effects.get(i) instanceof Tank)
-						((Tank) (effects.get(i))).setInc(((Tank) (effects.get(i))).getInc() + 1);
-					else if (effects.get(i) instanceof Rocket)
-						((Rocket) (effects.get(i))).setInc(((Rocket) (effects.get(i))).getInc() + 1);
-					else if (effects.get(i) instanceof PowerUp)
-						((PowerUp) (effects.get(i))).setInc(((PowerUp) (effects.get(i))).getInc() + 1);
-					else if (effects.get(i) instanceof Flag)
-						((Flag) (effects.get(i))).setInc(((Flag) (effects.get(i))).getInc() + 1);
+					if (effects.get(i) instanceof PlayerTank) {
+						 if(((PlayerTank) (effects.get(i))).getInc() <= 5)
+						((PlayerTank) (effects.get(i))).setInc(((PlayerTank) (effects.get(i))).getInc() + 1);
+						else
+							effects.remove(i--);
+					}
+					else if (effects.get(i) instanceof EnemyTank) {
+						 if(((EnemyTank) (effects.get(i))).getInc() <= 12)
+							 ((EnemyTank) (effects.get(i))).setInc(((EnemyTank) (effects.get(i))).getInc() + 1);
+						 else
+							 effects.remove(i--);
+							 
+					}
+					else if (effects.get(i) instanceof Rocket) {
+						 if(((Rocket) (effects.get(i))).getInc() <= 3)
+							 ((Rocket) (effects.get(i))).setInc(((Rocket) (effects.get(i))).getInc() + 1);
+						 else
+							 effects.remove(i--);
+					}
+					else if (effects.get(i) instanceof PowerUp) {
+						 if(((PowerUp) (effects.get(i))).getInc() <= 12)
+							 ((PowerUp) (effects.get(i))).setInc(((PowerUp) (effects.get(i))).getInc() + 1);
+						 else
+							 effects.remove(i--);
+					}
+					else if (effects.get(i) instanceof Flag) {
+						 if(((Flag) (effects.get(i))).getInc() <= 5)
+							 ((Flag) (effects.get(i))).setInc(((Flag) (effects.get(i))).getInc() + 1);
+						 else
+							 effects.remove(i--);
+					}
 				}
 
 				for (int i = 0; i < getEnemy().size(); i++) {
@@ -443,7 +466,6 @@ public class GameManager {
 				return 0.6d;
 			}
 		} else {
-
 			if (speed == Speed.SLOW) {
 				return 0.8d;
 			} else if (speed == Speed.NORMAL) {
@@ -451,11 +473,11 @@ public class GameManager {
 			} else if (speed == Speed.FAST) {
 				return 1.2d;
 			} else if (speed == Speed.SLOWROCKET) {
-				return 2.4d;
+				return 3.4d;
 			} else if (speed == Speed.NORMALROCKET) {
-				return 2.6d;
+				return 3.6d;
 			} else if (speed == Speed.FASTROCKET) {
-				return 2.8d;
+				return 3.8d;
 			}
 		}
 		return 0.0d;
@@ -602,8 +624,10 @@ public class GameManager {
 
 	private void managePowerUp(PowerUp p) {
 
-		if (p.getTank() instanceof PlayerTank)
+		if (p.getTank() instanceof PlayerTank) {
+			System.out.println("statistics power");
 			((PlayerTank) p.getTank()).getStatistics().calculate(p);
+		}
 
 		if (p.getPowerUp() == Power.HELMET) {
 			((Tank) p.getTank()).setProtection(false);
