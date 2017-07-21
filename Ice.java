@@ -1,4 +1,4 @@
-package progettoIGPE.davide.giovanni.unical2016;
+package core;
 
 public class Ice extends AllWall {
 

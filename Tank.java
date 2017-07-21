@@ -1,4 +1,4 @@
-package progettoIGPE.davide.giovanni.unical2016;
+package core;
 
 public abstract class Tank extends AbstractDynamicObject{
 

@@ -1,4 +1,4 @@
-package progettoIGPE.davide.giovanni.unical2016;
+package core;
 
 public enum Power {
 	GRENADE, HELMET, SHOVEL, STAR, TANK, TIMER;
