@@ -69,9 +69,6 @@ public class GameManager {
 	private Timer timer2;
 	private TimerTask task2;
 	public Lock lockEffect=new ReentrantLock();
-	
-	private boolean exitWhileGameLoop;
-	private boolean win;
 
 	// OFFLINE
 	public GameManager(JTextField filename) {
@@ -187,8 +184,6 @@ public class GameManager {
 
 		setExit(false);
 		setNumbersOfEnemiesOnline(enemy.size());
-		exitWhileGameLoop = false;
-		win = false;
 	}
 
 	public class MyTask extends TimerTask {
@@ -1101,11 +1096,10 @@ public class GameManager {
 		for (String s : variableOfSystem) {
 			String[] split = s.split(":");
 			setNumbersOfEnemiesOnline(Integer.parseInt(split[0]));
-			exitWhileGameLoop = Boolean.parseBoolean(split[1]);
+			exit = Boolean.parseBoolean(split[1]);
 			setPaused(Boolean.parseBoolean(split[2]));
 			setSoundPowerUp(Boolean.parseBoolean(split[3]));
 			setExplosion(Boolean.parseBoolean(split[4]));
-			exit=Boolean.parseBoolean(split[5]);
 		}
 
 		int x = 0;
@@ -1374,7 +1368,7 @@ public class GameManager {
 		StringBuilder stringBuilder = new StringBuilder();
 
 		// QUI MANDO VARIABILI DI SISTEMA, COME PER ESEMPIO SIZE DEGLI ENEMY ECC
-		stringBuilder.append(getEnemy().size() + ":" + exitWhileGameLoop + ":" + isPaused() + ":"+isSoundPowerUp() + ":" + isExplosion() + ":"+isExit()+";");
+		stringBuilder.append(getEnemy().size() + ":" + exit + ":" + isPaused() + ":"+isSoundPowerUp() + ":" + isExplosion() + ";");
 		stringBuilder.append("#");
 
 		for (int a = 0; a < getMatrix().getRow(); a++) {
@@ -1738,21 +1732,4 @@ public class GameManager {
 	public void setLock(Lock lock) {
 		this.lock = lock;
 	}
-	
-	public boolean isExitWhileGameLoop() {
-		return exitWhileGameLoop;
-	}
-
-	public void setExitWhileGameLoop(boolean exitWhileGameLoop) {
-		this.exitWhileGameLoop = exitWhileGameLoop;
-	}
-
-	public boolean isWin() {
-		return win;
-	}
-
-	public void setWin(boolean win) {
-		this.win = win;
-	}
-
 }
